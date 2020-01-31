@@ -39,7 +39,7 @@ return [
             'deleted' => 'This offer has been deleted.',
         ],
 
-        'enable' => 'Enable the offer'
+        'enable' => 'Enable the offer',
     ],
 
     'packages' => [
@@ -52,7 +52,7 @@ return [
             'updated' => 'This package has been modified.',
             'deleted' => 'This package has been deleted.',
 
-            'order-updated' => 'The packages have been updated.'
+            'order-updated' => 'The packages have been updated.',
         ],
 
         'commands-info' => 'You can use <code>{player}</code> to use the player name.',
@@ -90,7 +90,7 @@ return [
 
         'paypal-email' => 'PayPal E-Mail Address',
 
-        'enable' => 'Enable the gateway'
+        'enable' => 'Enable the gateway',
     ],
 
     'payments' => [
@@ -99,7 +99,7 @@ return [
         'fields' => [
             'status' => 'Status',
             'payment-id' => 'Payment ID',
-        ]
+        ],
     ],
 
     'purchases' => [
@@ -108,5 +108,5 @@ return [
 
     'settings' => [
         'use-site-money' => 'Activate purchases with the site currency.',
-    ]
+    ],
 ];

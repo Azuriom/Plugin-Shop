@@ -39,7 +39,7 @@ return [
             'deleted' => 'L\'offre a été supprimée.',
         ],
 
-        'enable' => 'Activer cette offre.'
+        'enable' => 'Activer cette offre.',
     ],
 
     'packages' => [
@@ -52,7 +52,7 @@ return [
             'updated' => 'Le produit a été mis à jour.',
             'deleted' => 'Le produit a été supprimé.',
 
-            'order-updated' => 'Les produits ont été mis à jours.'
+            'order-updated' => 'Les produits ont été mis à jours.',
         ],
 
         'commands-info' => 'Vous pouvez utiliser la variable <code>{player}</code> pour utiliser le pseudo du joueur.',
@@ -90,7 +90,7 @@ return [
 
         'paypal-email' => 'Adresse E-Mail PayPal',
 
-        'enable' => 'Activer ce moyen de paiement'
+        'enable' => 'Activer ce moyen de paiement',
     ],
 
     'payments' => [
@@ -99,7 +99,7 @@ return [
         'fields' => [
             'status' => 'Status',
             'payment-id' => 'ID Paiement',
-        ]
+        ],
     ],
 
     'purchases' => [
@@ -108,5 +108,5 @@ return [
 
     'settings' => [
         'use-site-money' => 'Activer les achats avec l\'argent du site.',
-    ]
+    ],
 ];

@@ -30,7 +30,7 @@ class OfferRequest extends FormRequest
             'price' => ['required', 'numeric', 'min:0'],
             'money' => ['required', 'integer', 'min:0'],
             'gateways' => ['required', 'array'],
-            'is_enabled' => ['filled', 'boolean']
+            'is_enabled' => ['filled', 'boolean'],
         ];
     }
 }

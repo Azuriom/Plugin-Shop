@@ -15,7 +15,7 @@ class PurchaseController extends Controller
     public function index()
     {
         return view('shop::admin.purchases.index', [
-            'purchases' => Purchase::with('user')->paginate()
+            'purchases' => Purchase::with('user')->paginate(),
         ]);
     }
 }

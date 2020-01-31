@@ -20,7 +20,7 @@ class PackageController extends Controller
     public function index()
     {
         return view('shop::admin.packages.index', [
-            'categories' => Category::with('packages')->orderBy('position')->get()
+            'categories' => Category::with('packages')->orderBy('position')->get(),
         ]);
     }
 
@@ -34,7 +34,7 @@ class PackageController extends Controller
     public function updateOrder(Request $request)
     {
         $this->validate($request, [
-            'categories' => ['required', 'array']
+            'categories' => ['required', 'array'],
         ]);
 
         $categories = $request->input('categories');
@@ -46,7 +46,7 @@ class PackageController extends Controller
             $packages = $category['packages'] ?? [];
 
             Category::whereKey($id)->update([
-                'position' => $categoryPosition++
+                'position' => $categoryPosition++,
             ]);
 
             $packagePosition = 1;
@@ -54,14 +54,14 @@ class PackageController extends Controller
             foreach ($packages as $package) {
                 Package::whereKey($package)->update([
                     'position' => $packagePosition++,
-                    'category_id' => $id
+                    'category_id' => $id,
                 ]);
             }
         }
 
         return $request->expectsJson() ? response()->json([
             'status' => 'success',
-            'message' => trans('shop.packages.status.order-updated')
+            'message' => trans('shop.packages.status.order-updated'),
         ]) : redirect()->route('shop::admin.packages.index');
     }
 

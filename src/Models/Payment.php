@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @property int $id
  * @property int $user_id
- * @property double $price
+ * @property float $price
  * @property string $currency
  * @property string $type
  * @property string $status
@@ -60,7 +60,7 @@ class Payment extends Model
     ];
 
     /**
-     * Get the category of this package
+     * Get the category of this package.
      */
     public function user()
     {

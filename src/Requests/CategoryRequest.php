@@ -27,7 +27,7 @@ class CategoryRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:100'],
-            'is_enabled' => ['filled', 'boolean']
+            'is_enabled' => ['filled', 'boolean'],
         ];
     }
 }

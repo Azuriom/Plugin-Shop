@@ -47,7 +47,7 @@ class Category extends Model
     ];
 
     /**
-     * Get the packages in this category
+     * Get the packages in this category.
      */
     public function packages()
     {

@@ -57,7 +57,7 @@ class OfferController extends Controller
     {
         return view('shop::admin.offers.edit', [
             'offer' => $offer->load('gateways'),
-            'gateways' => Gateway::all()
+            'gateways' => Gateway::all(),
         ]);
     }
 

@@ -19,7 +19,7 @@ use Azuriom\Plugin\Shop\Payment\Method\StripeMethod;
 class PaymentManager
 {
     /**
-     * @var \Illuminate\Support\Collection $paymentMethods
+     * @var \Illuminate\Support\Collection
      */
     protected $paymentMethods;
 
@@ -40,7 +40,7 @@ class PaymentManager
     }
 
     /**
-     * Get the payment methods
+     * Get the payment methods.
      *
      * @return \Illuminate\Support\Collection
      */

@@ -16,7 +16,7 @@ return [
     ],
 
     'categories' => [
-        'empty' => 'Cette catégorie est vide.'
+        'empty' => 'Cette catégorie est vide.',
     ],
 
     'cart' => [

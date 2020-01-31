@@ -47,7 +47,7 @@ class GatewayController extends Controller
 
         return view('shop::admin.gateways.index', [
             'gateways' => $gateways,
-            'paymentMethods' => $paymentMethods
+            'paymentMethods' => $paymentMethods,
         ]);
     }
 
@@ -78,9 +78,9 @@ class GatewayController extends Controller
         $data = $this->validate($request, $method->rules());
 
         Gateway::create([
-                'data' => $data,
-                'type' => $type
-            ] + $request->validated());
+            'data' => $data,
+            'type' => $type,
+        ] + $request->validated());
 
         return redirect()->route('shop.admin.gateways.index')
             ->with('success', trans('shop::admin.gateways.status.created'));
@@ -96,7 +96,7 @@ class GatewayController extends Controller
     {
         return view('shop::admin.gateways.edit', [
             'type' => $gateway->paymentMethod(),
-            'gateway' => $gateway
+            'gateway' => $gateway,
         ]);
     }
 

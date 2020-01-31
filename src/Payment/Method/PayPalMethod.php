@@ -57,7 +57,7 @@ class PayPalMethod extends PaymentMethod
         $data = ['cmd' => '_notify-validate'] + $request->all();
 
         $response = $client->post($url, [
-            'form_params' => $data
+            'form_params' => $data,
         ]);
 
         if ($response->getBody()->getContents() !== 'VERIFIED') {
@@ -104,7 +104,7 @@ class PayPalMethod extends PaymentMethod
     public function rules()
     {
         return [
-            'email' => ['required', 'email']
+            'email' => ['required', 'email'],
         ];
     }
 }

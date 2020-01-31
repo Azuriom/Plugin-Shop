@@ -20,7 +20,7 @@ class PaysafecardMethod extends PaymentMethod
      * @var array
      */
     protected const ENVIRONMENTS = [
-        'test', 'production'
+        'test', 'production',
     ];
 
     /**
@@ -41,12 +41,12 @@ class PaysafecardMethod extends PaymentMethod
     {
         $successUrl = route('shop.payments.success', [
             'gateway' => 'paysafecard',
-            'paymentId' => rawurlencode('{payment_id}')
+            'paymentId' => rawurlencode('{payment_id}'),
         ]);
 
         $failureUrl = route('shop.payments.failure', [
             'gateway' => 'paysafecard',
-            'paymentId' => rawurlencode('{payment_id}')
+            'paymentId' => rawurlencode('{payment_id}'),
         ]);
 
         $options = [
@@ -59,8 +59,8 @@ class PaysafecardMethod extends PaymentMethod
             ],
             'notification_url' => route('shop.payments.notification', [$this->id, rawurlencode('{payment_id}')]),
             'customer' => [
-                'id' => Auth::id()
-            ]
+                'id' => Auth::id(),
+            ],
         ];
 
         $response = $this->sendRequest('POST', '', $options);
@@ -140,9 +140,9 @@ class PaysafecardMethod extends PaymentMethod
         $client = new Client(['timeout' => 60]);
 
         $request = new GuzzleRequest($method, $url, $headers + [
-                'Authorization: Basic '.base64_encode($this->gateway->data['key']),
-                'Content-Type: application/json',
-            ], $params ? json_encode($params) : null);
+            'Authorization: Basic '.base64_encode($this->gateway->data['key']),
+            'Content-Type: application/json',
+        ], $params ? json_encode($params) : null);
 
         $response = $client->send($request);
 

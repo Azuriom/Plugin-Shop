@@ -92,7 +92,7 @@ class StripeMethod extends PaymentMethod
         return [
             'secret-key' => ['required', 'string'],
             'public-key' => ['required', 'string'],
-            'endpoint-secret' => ['nullable', 'string']
+            'endpoint-secret' => ['nullable', 'string'],
         ];
     }
 

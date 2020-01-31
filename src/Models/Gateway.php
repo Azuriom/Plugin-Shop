@@ -3,7 +3,6 @@
 namespace Azuriom\Plugin\Shop\Models;
 
 use Azuriom\Models\Traits\HasTablePrefix;
-use Azuriom\Plugin\Shop\Payment\PaymentManager;
 use Azuriom\Plugin\Shop\Payment\PaymentMethod;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -58,7 +57,6 @@ class Gateway extends Model
     {
         return $this->belongsToMany(Offer::class, 'shop_offer_gateways');
     }
-
 
     /**
      * Get the associated payment method.

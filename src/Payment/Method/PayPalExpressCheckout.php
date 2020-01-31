@@ -128,7 +128,7 @@ class PayPalExpressCheckout extends PaymentMethod
     {
         return [
             'client-id' => ['required', 'string'],
-            'secret' => ['required', 'string']
+            'secret' => ['required', 'string'],
         ];
     }
 

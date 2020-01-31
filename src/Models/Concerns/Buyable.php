@@ -35,7 +35,7 @@ interface Buyable
     public function getDescription();
 
     /**
-     * Deliver this buyable once it is paid
+     * Deliver this buyable once it is paid.
      *
      * @param  User  $user
      * @param  int  $quantity

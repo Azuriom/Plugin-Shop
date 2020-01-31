@@ -93,7 +93,7 @@ class PayGolMethod extends PaymentMethod
     {
         return [
             'key' => ['required', 'string'],
-            'service-id' => ['required', 'string']
+            'service-id' => ['required', 'string'],
         ];
     }
 

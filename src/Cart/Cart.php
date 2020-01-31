@@ -52,6 +52,7 @@ class Cart
 
         if ($cartItem !== null) {
             $cartItem->setQuantity($cartItem->quantity + $quantity);
+
             return;
         }
 
@@ -70,6 +71,7 @@ class Cart
 
         if ($cartItem !== null) {
             $cartItem->setQuantity($quantity);
+
             return;
         }
 

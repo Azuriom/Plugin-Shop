@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @property int $id
  * @property int $user_id
- * @property double $price
+ * @property float $price
  * @property int $quantity
  * @property int $package_id
  * @property \Carbon\Carbon $created_at

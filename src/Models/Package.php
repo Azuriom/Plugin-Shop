@@ -19,7 +19,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $description
  * @property string|null $image
  * @property int $position
- * @property double $price
+ * @property float $price
  * @property array $required_packages
  * @property bool $has_quantity
  * @property array $commands
@@ -70,7 +70,7 @@ class Package extends Model implements Buyable
     ];
 
     /**
-     * Get the category of this package
+     * Get the category of this package.
      */
     public function category()
     {

@@ -45,7 +45,7 @@ class PaymentWallMethod extends PaymentMethod
                     $currency,
                     'Payment on '.site_name(),
                     Product::TYPE_FIXED
-                )
+                ),
             ],
             [
                 'email' => $user->email,
@@ -91,7 +91,7 @@ class PaymentWallMethod extends PaymentMethod
     {
         return [
             'private-key' => ['required', 'string'],
-            'public-key' => ['required', 'string']
+            'public-key' => ['required', 'string'],
         ];
     }
 
