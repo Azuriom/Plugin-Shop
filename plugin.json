@@ -1,0 +1,14 @@
+{
+    "name": "Shop",
+    "description": "Complete shop plugin for your server",
+    "version": "0.1.0",
+    "url": "https://azuriom.com",
+    "authors": [
+        "Azuriom"
+    ],
+    "providers": [
+        "\\Azuriom\\Plugin\\Shop\\Providers\\ShopServiceProvider",
+        "\\Azuriom\\Plugin\\Shop\\Providers\\RouteServiceProvider"
+    ],
+	"apiId": 1
+}

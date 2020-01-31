@@ -1,0 +1,22 @@
+{
+    "name": "azuriom/shop",
+    "type": "azuriom-plugin",
+    "description": "Complete shop plugin for your server",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Azuriom\\Plugin\\Shop\\": "src/"
+        },
+        "files": [
+            "src/helpers.php"
+        ]
+    },
+    "require": {
+        "php": "^7.2",
+        "mollie/mollie-api-php": "^2.12.0",
+        "paymentwall/paymentwall-php": "^2.2",
+        "paygol/php-sdk": "^1.0",
+        "paypal/rest-api-sdk-php": "^1.14.0",
+        "stripe/stripe-php": "^7.14"
+    }
+}
