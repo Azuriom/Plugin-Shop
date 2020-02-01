@@ -24,7 +24,6 @@ class BrainblocksMethod extends PaymentMethod
      */
     protected $name = 'NANO via Brainblocks';
 
-
     /**
      * The payment method image.
      *
@@ -92,5 +91,4 @@ class BrainblocksMethod extends PaymentMethod
             'public-key' => ['required', 'string'],
         ];
     }
-    
 }
