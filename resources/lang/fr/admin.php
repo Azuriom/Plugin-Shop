@@ -6,15 +6,15 @@ return [
 
         'settings' => 'Paramètres',
         'packages' => 'Produits',
-        'gateways' => 'Moyens de paiements',
+        'gateways' => 'Moyens de paiement',
         'offers' => 'Offres',
-        'payments' => 'Payements',
+        'payments' => 'Paiements',
         'purchases' => 'Achats',
     ],
 
     'categories' => [
         'title' => 'Catégories',
-        'title-edit' => 'Edition de la catégorie :category',
+        'title-edit' => 'Édition de la catégorie :category',
         'title-create' => 'Création d\'une catégorie',
 
         'status' => [
@@ -30,7 +30,7 @@ return [
 
     'offers' => [
         'title' => 'Offres',
-        'title-edit' => 'Edition de l\'offre :offer',
+        'title-edit' => 'Édition de l\'offre :offer',
         'title-create' => 'Création d\'une offre.',
 
         'status' => [
@@ -44,7 +44,7 @@ return [
 
     'packages' => [
         'title' => 'Produits',
-        'title-edit' => 'Edition du produit :package',
+        'title-edit' => 'Édition du produit :package',
         'title-create' => 'Création d\'un produit.',
 
         'status' => [
@@ -52,12 +52,12 @@ return [
             'updated' => 'Le produit a été mis à jour.',
             'deleted' => 'Le produit a été supprimé.',
 
-            'order-updated' => 'Les produits ont été mis à jours.',
+            'order-updated' => 'Les produits ont été mis à jour.',
         ],
 
         'commands-info' => 'Vous pouvez utiliser la variable <code>{player}</code> pour utiliser le pseudo du joueur.',
 
-        'need-online' => 'L\'utilisateur doit être en ligne pour recevoir le paquet (uniquement disponible avec AzLink)',
+        'need-online' => 'L\'utilisateur doit être en ligne pour reçevoir le paquet (uniquement disponible avec AzLink)',
         'enable-quantity' => 'Activer la quantité',
 
         'create-category' => 'Créer une catégorie',
@@ -67,7 +67,7 @@ return [
     ],
 
     'gateways' => [
-        'title' => 'Moyens de paiements',
+        'title' => 'Moyens de paiement',
         'title-edit' => 'Edition du moyen de paiement :gateway',
         'title-create' => 'Ajout d\'un moyen de paiement',
 
@@ -86,7 +86,7 @@ return [
         'secret-key' => 'Clé Secrète',
         'service-id' => 'ID Service',
         'client-id' => 'ID Client',
-        'env' => 'Environnent',
+        'env' => 'Environnement',
 
         'paypal-email' => 'Adresse E-Mail PayPal',
 
