@@ -34,7 +34,7 @@ return [
         'clear' => 'Vider le panier',
         'pay' => 'Payer',
 
-        'total' => 'Total: :total',
+        'total' => 'Total : :total',
 
         'credit' => 'Crédit',
     ],
