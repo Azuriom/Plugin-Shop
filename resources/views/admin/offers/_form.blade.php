@@ -1,4 +1,3 @@
-
 @csrf
 
 <div class="form-row">
@@ -29,7 +28,7 @@
         <label for="priceInput">{{ trans('shop::messages.fields.price') }}</label>
 
         <div class="input-group mb-3">
-            <input type="number" min="0" class="form-control @error('price') is-invalid @enderror" id="priceInput" name="price" value="{{ old('price', $offer->price ?? '') }}" required>
+            <input type="number" min="0" step="0.01" class="form-control @error('price') is-invalid @enderror" id="priceInput" name="price" value="{{ old('price', $offer->price ?? '') }}" required>
             <div class="input-group-append">
                 <span class="input-group-text">{{ currency_display() }}</span>
             </div>
