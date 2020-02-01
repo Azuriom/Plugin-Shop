@@ -21,7 +21,7 @@ class CreateShopPaymentsTable extends Migration
             $table->string('payment_type');
             $table->enum('status', ['CREATED', 'CANCELLED', 'PENDING', 'EXPIRED', 'SUCCESS', 'DELIVERED', 'ERROR']);
             $table->string('type');
-            $table->string('payment_id')->nullable();
+            $table->string('payment_id', 300)->nullable();
             $table->text('items');
             $table->timestamps();
 
