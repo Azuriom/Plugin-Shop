@@ -8,6 +8,7 @@ use Azuriom\Plugin\Shop\Models\Offer;
 use Azuriom\Plugin\Shop\Models\Package;
 use Azuriom\Plugin\Shop\Models\Payment;
 use Azuriom\Plugin\Shop\Models\Purchase;
+use Azuriom\Plugin\Shop\Payment\Method\BrainblocksMethod;
 use Azuriom\Plugin\Shop\Payment\Method\MollieMethod;
 use Azuriom\Plugin\Shop\Payment\Method\PayGolMethod;
 use Azuriom\Plugin\Shop\Payment\Method\PaymentWallMethod;
@@ -15,7 +16,6 @@ use Azuriom\Plugin\Shop\Payment\Method\PayPalExpressCheckout;
 use Azuriom\Plugin\Shop\Payment\Method\PayPalMethod;
 use Azuriom\Plugin\Shop\Payment\Method\PaysafecardMethod;
 use Azuriom\Plugin\Shop\Payment\Method\StripeMethod;
-use Azuriom\Plugin\Shop\Payment\Method\BrainblocksMethod;
 
 class PaymentManager
 {
@@ -37,7 +37,7 @@ class PaymentManager
             'paygol' => PayGolMethod::class,
             'stripe' => StripeMethod::class,
             'paymentwall' => PaymentWallMethod::class,
-            'brainblocks' => BrainblocksMethod::class
+            'brainblocks' => BrainblocksMethod::class,
         ]);
     }
 

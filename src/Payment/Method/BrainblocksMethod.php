@@ -92,4 +92,5 @@ class BrainblocksMethod extends PaymentMethod
             'public-key' => ['required', 'string'],
         ];
     }
+    
 }
