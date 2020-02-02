@@ -107,6 +107,7 @@ return [
     ],
 
     'settings' => [
+        'title' => 'Paramètres de la boutique',
         'use-site-money' => 'Activer les achats avec l\'argent du site.',
     ],
 ];
