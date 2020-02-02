@@ -1,6 +1,6 @@
 @extends('admin.layouts.admin')
 
-@section('title', {{ trans('shop::admin.settings.title') }})
+@section('title', trans('shop::admin.settings.title'))
 
 @section('content')
     <div class="card shadow mb-4">
