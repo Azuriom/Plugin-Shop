@@ -76,7 +76,7 @@
                             <span aria-hidden="true">×</span>
                         </button>
                     </div>
-                    <div class="modal-body">{{ trans('shop::messages.cart.pay-confirm-title', ['price' => shop_format_amount($cart->total())]) }}</div>
+                    <div class="modal-body">{{ trans('shop::messages.cart.pay-confirm', ['price' => shop_format_amount($cart->total())]) }}</div>
                     <div class="modal-footer">
                         <button class="btn btn-secondary" type="button" data-dismiss="modal">{{ trans('messages.actions.cancel') }}</button>
 

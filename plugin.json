@@ -1,6 +1,7 @@
 {
+    "id": "shop",
     "name": "Shop",
-    "description": "Complete shop plugin for your server",
+    "description": "A shop plugin to sell in-game items on your website.",
     "version": "0.1.0",
     "url": "https://azuriom.com",
     "authors": [
