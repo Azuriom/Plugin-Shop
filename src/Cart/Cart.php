@@ -30,7 +30,7 @@ class Cart
     private $items;
 
     /**
-     * Cart constructor.
+     * Create a new cart instance.
      *
      * @param  \Illuminate\Session\Store  $session
      */

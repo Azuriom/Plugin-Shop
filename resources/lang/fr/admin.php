@@ -6,7 +6,7 @@ return [
 
         'settings' => 'Paramètres',
         'packages' => 'Produits',
-        'gateways' => 'Moyens de paiement',
+        'gateways' => 'Moyens de paiements',
         'offers' => 'Offres',
         'payments' => 'Paiements',
         'purchases' => 'Achats',
@@ -57,7 +57,7 @@ return [
 
         'commands-info' => 'Vous pouvez utiliser la variable <code>{player}</code> pour utiliser le pseudo du joueur.',
 
-        'need-online' => 'L\'utilisateur doit être en ligne pour reçevoir le paquet (uniquement disponible avec AzLink)',
+        'need-online' => 'L\'utilisateur doit être en ligne pour recevoir le paquet (uniquement disponible avec AzLink)',
         'enable-quantity' => 'Activer la quantité',
 
         'create-category' => 'Créer une catégorie',
@@ -67,8 +67,8 @@ return [
     ],
 
     'gateways' => [
-        'title' => 'Moyens de paiement',
-        'title-edit' => 'Edition du moyen de paiement :gateway',
+        'title' => 'Moyens de paiements',
+        'title-edit' => 'Édition du moyen de paiement :gateway',
         'title-create' => 'Ajout d\'un moyen de paiement',
 
         'subtitle-current' => 'Moyen de paiement actuel',

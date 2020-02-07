@@ -51,7 +51,7 @@ class CartItem
     private $associatedModel = null;
 
     /**
-     * CartItem constructor.
+     * Create a new item instance.
      *
      * @param  Buyable  $buyable
      * @param  string  $itemId

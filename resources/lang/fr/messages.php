@@ -25,7 +25,7 @@ return [
         'purchase' => 'Votre achat a été effectué avec succès.',
 
         'pay-confirm-title' => 'Payer ?',
-        'pay-confirm' => 'Vous êtes sûr de vouloir acheter le contenu du panier pour :price.',
+        'pay-confirm' => 'Êtes vous sûr de vouloir acheter le contenu du panier pour :price ?',
 
         'empty' => 'Votre panier est vide.',
 
@@ -34,7 +34,10 @@ return [
         'clear' => 'Vider le panier',
         'pay' => 'Payer',
 
-        'total' => 'Total : :total',
+        'back' => 'Retour à la boutique',
+
+        'total' => 'Total : :total
+',
 
         'credit' => 'Crédit',
     ],
