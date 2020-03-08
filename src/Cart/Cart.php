@@ -85,7 +85,7 @@ class Cart
     /**
      * Remove the cart item with the given rowId from the cart.
      *
-     * @param  Buyable  $buyable
+     * @param  \Azuriom\Plugin\Shop\Models\Concerns\Buyable  $buyable
      */
     public function remove(Buyable $buyable)
     {
@@ -97,7 +97,7 @@ class Cart
     /**
      * Get a cart item from the cart by its rowId.
      *
-     * @param  Buyable  $buyable
+     * @param  \Azuriom\Plugin\Shop\Models\Concerns\Buyable  $buyable
      * @return \Azuriom\Plugin\Shop\Cart\CartItem|null
      */
     public function get(Buyable $buyable)

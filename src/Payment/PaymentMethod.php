@@ -24,8 +24,9 @@ abstract class PaymentMethod
     protected $gateway;
 
     /**
-     * PaymentMethod constructor.
-     * @param  Gateway|null  $gateway
+     * Create a new method instance.
+     *
+     * @param  \Azuriom\Plugin\Shop\Models\Gateway|null  $gateway
      */
     public function __construct(?Gateway $gateway)
     {
@@ -35,7 +36,7 @@ abstract class PaymentMethod
     /**
      * Start a new payment with this method.
      *
-     * @param  Cart  $cart
+     * @param  \Azuriom\Plugin\Shop\Cart\Cart  $cart
      * @param  float  $amount
      * @param  string  $currency
      * @return \Illuminate\Http\Response
@@ -43,20 +44,20 @@ abstract class PaymentMethod
     abstract public function startPayment(Cart $cart, float $amount, string $currency);
 
     /**
-     * @param  Request  $request
+     * @param  \Illuminate\Http\Request  $request
      * @param  string|null  $paymentId
      * @return \Illuminate\Http\Response
      */
     abstract public function notification(Request $request, ?string $paymentId);
 
     /**
-     * @param  Request  $request
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     abstract public function success(Request $request);
 
     /**
-     * @param  Request  $request
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function failure(Request $request)

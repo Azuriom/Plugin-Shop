@@ -73,6 +73,7 @@ class CategoryController extends Controller
      *
      * @param  \Azuriom\Plugin\Shop\Models\Category  $category
      * @return \Illuminate\Http\Response
+     *
      * @throws \Exception
      */
     public function destroy(Category $category)

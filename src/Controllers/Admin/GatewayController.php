@@ -19,7 +19,7 @@ class GatewayController extends Controller
     /**
      * Create a new controller instance.
      *
-     * @param  PaymentManager  $paymentManager
+     * @param  \Azuriom\Plugin\Shop\Payment\PaymentManager  $paymentManager
      */
     public function __construct(PaymentManager $paymentManager)
     {
@@ -67,6 +67,7 @@ class GatewayController extends Controller
      *
      * @param  \Azuriom\Plugin\Shop\Requests\GatewayRequest  $request
      * @return \Illuminate\Http\Response
+     *
      * @throws \Illuminate\Validation\ValidationException
      */
     public function store(GatewayRequest $request)
@@ -106,6 +107,7 @@ class GatewayController extends Controller
      * @param  \Azuriom\Plugin\Shop\Requests\GatewayRequest  $request
      * @param  \Azuriom\Plugin\Shop\Models\Gateway  $gateway
      * @return \Illuminate\Http\Response
+     *
      * @throws \Illuminate\Validation\ValidationException
      */
     public function update(GatewayRequest $request, Gateway $gateway)
@@ -123,6 +125,7 @@ class GatewayController extends Controller
      *
      * @param  \Azuriom\Plugin\Shop\Models\Gateway  $gateway
      * @return \Illuminate\Http\Response
+     *
      * @throws \Exception
      */
     public function destroy(Gateway $gateway)

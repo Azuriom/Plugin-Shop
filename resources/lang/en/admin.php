@@ -100,6 +100,16 @@ return [
             'status' => 'Status',
             'payment-id' => 'Payment ID',
         ],
+
+        'payment-status' => [
+            'created' => 'Created',
+            'cancelled' => 'Cancelled',
+            'pending' => 'Pending',
+            'expired' => 'Expired',
+            'success' => 'Success',
+            'delivered' => 'Delivered',
+            'error' => 'Error',
+        ],
     ],
 
     'purchases' => [

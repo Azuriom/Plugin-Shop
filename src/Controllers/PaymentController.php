@@ -23,14 +23,12 @@ class PaymentController extends Controller
     /**
      * Make a new payment.
      *
-     * @param  Request  $request
-     * @param  string  $gateway
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Azuriom\Plugin\Shop\Models\Gateway  $gateway
      * @return \Illuminate\Http\Response
      */
-    public function pay(Request $request, string $gateway)
+    public function pay(Request $request, Gateway $gateway)
     {
-        $gateway = Gateway::where('type', $gateway)->firstOrFail();
-
         $cart = new Cart($request->session());
 
         if ($cart->isEmpty()) {
@@ -40,10 +38,8 @@ class PaymentController extends Controller
         return $gateway->paymentMethod()->startPayment($cart, $cart->total(), currency());
     }
 
-    public function success(Request $request, string $gateway)
+    public function success(Request $request, Gateway $gateway)
     {
-        $gateway = Gateway::where('type', $gateway)->firstOrFail();
-
         $response = $gateway->paymentMethod()->success($request);
 
         $cart = new Cart($request->session());

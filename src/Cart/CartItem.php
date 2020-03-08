@@ -53,7 +53,7 @@ class CartItem
     /**
      * Create a new item instance.
      *
-     * @param  Buyable  $buyable
+     * @param  \Azuriom\Plugin\Shop\Models\Concerns\Buyable  $buyable
      * @param  string  $itemId
      * @param  int  $quantity
      */

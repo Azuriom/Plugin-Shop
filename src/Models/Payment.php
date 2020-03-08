@@ -5,6 +5,7 @@ namespace Azuriom\Plugin\Shop\Models;
 use Azuriom\Models\Traits\HasTablePrefix;
 use Azuriom\Models\Traits\HasUser;
 use Azuriom\Models\User;
+use Azuriom\Plugin\Shop\Payment\PaymentManager;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
@@ -15,6 +16,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $currency
  * @property string $type
  * @property string $status
+ * @property string $payment_type
  * @property string $payment_id
  * @property array $items
  * @property \Carbon\Carbon $created_at
@@ -70,6 +72,16 @@ class Payment extends Model
     public static function status()
     {
         return self::STATUS_LIST;
+    }
+
+    public function getTypeName() {
+        $paymentManager = app(PaymentManager::class);
+
+        if (! $paymentManager->hasPaymentMethod($this->payment_type)) {
+            return $this->payment_type;
+        }
+
+        return $paymentManager->getPaymentMethod($this->payment_type)->name();
     }
 
     public function isPending()

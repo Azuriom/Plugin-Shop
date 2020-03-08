@@ -5,8 +5,8 @@ namespace Azuriom\Plugin\Shop\Payment\Method;
 use Azuriom\Plugin\Shop\Cart\Cart;
 use Azuriom\Plugin\Shop\Models\Payment;
 use Azuriom\Plugin\Shop\Payment\PaymentMethod;
-use GuzzleHttp\Client;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class PayPalMethod extends PaymentMethod
 {
@@ -51,16 +51,11 @@ class PayPalMethod extends PaymentMethod
     {
         $payment = Payment::findOrFail($request->input('custom'));
 
-        $url = 'https://ipnpb.paypal.com/cgi-bin/webscr';
-        $client = new Client(['timeout' => 60]);
-
         $data = ['cmd' => '_notify-validate'] + $request->all();
 
-        $response = $client->post($url, [
-            'form_params' => $data,
-        ]);
+        $response = Http::asForm()->post('https://ipnpb.paypal.com/cgi-bin/webscr', $data);
 
-        if ($response->getBody()->getContents() !== 'VERIFIED') {
+        if ($response->body() !== 'VERIFIED') {
             return response()->json('Invalid response');
         }
 

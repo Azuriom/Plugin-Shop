@@ -19,8 +19,7 @@
                     }).then(function (html) {
                         $('#itemModal').html(html.data).modal('show');
                     }).catch(function (error) {
-                        console.log(error);
-                        // createAlert('danger', error, true); TODO
+                        createAlert('danger', error, true); TODO
                     });
                 });
             });

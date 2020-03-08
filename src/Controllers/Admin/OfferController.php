@@ -85,6 +85,7 @@ class OfferController extends Controller
      *
      * @param  \Azuriom\Plugin\Shop\Models\Offer  $offer
      * @return \Illuminate\Http\Response
+     *
      * @throws \Exception
      */
     public function destroy(Offer $offer)

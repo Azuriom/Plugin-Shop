@@ -2,6 +2,7 @@
 
 namespace Azuriom\Plugin\Shop\Models;
 
+use Azuriom\Events\PackageDelivered;
 use Azuriom\Models\Server;
 use Azuriom\Models\Traits\HasImage;
 use Azuriom\Models\Traits\HasTablePrefix;
@@ -105,5 +106,7 @@ class Package extends Model implements Buyable
                 $server->bridge()->executeCommands($this->commands, $user->name, $this->need_online);
             }
         }
+
+        event(new PackageDelivered($this, $quantity));
     }
 }

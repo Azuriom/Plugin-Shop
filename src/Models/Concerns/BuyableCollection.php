@@ -16,12 +16,14 @@ class BuyableCollection extends Collection
     private $type;
 
     /**
-     * BuyableCollection constructor.
+     * Create a new collection instance.
      *
      * @param $type
      */
     public function __construct($type)
     {
+        parent::__construct([]);
+
         $this->type = $type;
     }
 

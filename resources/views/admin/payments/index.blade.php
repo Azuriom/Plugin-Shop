@@ -28,8 +28,8 @@
                                 <a href="{{ route('admin.users.edit', $payment->user) }}">{{ $payment->user->name }}</a>
                             </td>
                             <td>{{ $payment->price }} {{ currency_display($payment->currency) }}</td>
-                            <td>{{ $payment->payment_type }}</td>
-                            <td>{{ $payment->status }}</td>
+                            <td>{{ $payment->getTypeName() }}</td>
+                            <td>{{ trans('shop::admin.payments.payment-status.'.strtolower($payment->status)) }}</td>
                             <td>{{ $payment->payment_id }}</td>
                             <td>{{ format_date_compact($payment->created_at) }}</td>
                         </tr>

@@ -1,6 +1,6 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Edit package'.$package->id)
+@section('title', trans('shop::admin.packages.title-edit', ['package' => $package->id]))
 
 @include('admin.elements.editor')
 

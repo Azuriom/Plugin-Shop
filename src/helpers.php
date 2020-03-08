@@ -58,6 +58,6 @@ if (! function_exists('shop_active_currency')) {
 if (! function_exists('shop_format_amount')) {
     function shop_format_amount(float $amount)
     {
-        return $amount.' '.shop_active_currency($amount != 1);
+        return $amount.' '.shop_active_currency($amount !== 1);
     }
 }

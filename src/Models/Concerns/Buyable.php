@@ -37,7 +37,7 @@ interface Buyable
     /**
      * Deliver this buyable once it is paid.
      *
-     * @param  User  $user
+     * @param  \Azuriom\Models\User  $user
      * @param  int  $quantity
      * @return bool
      */

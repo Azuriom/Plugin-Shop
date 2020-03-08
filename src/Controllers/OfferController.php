@@ -34,9 +34,9 @@ class OfferController extends Controller
         return view('shop::offers.payment', ['gateways' => $gateways]);
     }
 
-    public function buy(string $gateway)
+    public function buy(Gateway $gateway)
     {
-        $gateway = Gateway::with('offers')->where('type', $gateway)->firstOrFail();
+        $gateway->load('offers');
 
         if ($gateway->paymentMethod()->hasFixedAmount()) {
             return $gateway->paymentMethod()->startPayment(new Cart(), 0, currency());
@@ -48,10 +48,8 @@ class OfferController extends Controller
         ]);
     }
 
-    public function pay(Offer $offer, string $gateway)
+    public function pay(Offer $offer, Gateway $gateway)
     {
-        $gateway = Gateway::where('type', $gateway)->firstOrFail();
-
         $cart = new Cart();
 
         $cart->add($offer);

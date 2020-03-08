@@ -45,7 +45,7 @@ return [
     'packages' => [
         'title' => 'Produits',
         'title-edit' => 'Édition du produit :package',
-        'title-create' => 'Création d\'un produit.',
+        'title-create' => 'Création d\'un produit',
 
         'status' => [
             'created' => 'Le produit a été ajouté.',
@@ -99,6 +99,16 @@ return [
         'fields' => [
             'status' => 'Status',
             'payment-id' => 'ID Paiement',
+        ],
+
+        'payment-status' => [
+            'created' => 'Créé',
+            'cancelled' => 'Annulé',
+            'pending' => 'En attente',
+            'expired' => 'Expiré',
+            'success' => 'Validé',
+            'delivered' => 'Livré',
+            'error' => 'Erreur',
         ],
     ],
 

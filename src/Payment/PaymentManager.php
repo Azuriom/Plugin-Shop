@@ -3,6 +3,7 @@
 namespace Azuriom\Plugin\Shop\Payment;
 
 use Azuriom\Plugin\Shop\Cart\Cart;
+use Azuriom\Plugin\Shop\Events\PaymentPaid;
 use Azuriom\Plugin\Shop\Models\Gateway;
 use Azuriom\Plugin\Shop\Models\Offer;
 use Azuriom\Plugin\Shop\Models\Package;
@@ -87,6 +88,8 @@ class PaymentManager
     public function deliverPayment(Payment $payment)
     {
         $payment->update(['status' => 'SUCCESS']);
+
+        event(new PaymentPaid($payment));
 
         $ids = $payment->items;
 

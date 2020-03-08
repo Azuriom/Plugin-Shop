@@ -13,4 +13,4 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::any('/payments/{gateway}/notification/{id?}', 'PaymentController@notification')->name('payments.notification');
+Route::any('/payments/{gateway:type}/notification/{id?}', 'PaymentController@notification')->name('payments.notification');

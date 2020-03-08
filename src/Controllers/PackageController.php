@@ -29,6 +29,7 @@ class PackageController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @param  \Azuriom\Plugin\Shop\Models\Package  $package
      * @return \Illuminate\Http\Response
+     *
      * @throws \Illuminate\Validation\ValidationException
      */
     public function buy(Request $request, Package $package)

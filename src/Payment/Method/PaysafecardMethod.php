@@ -5,10 +5,9 @@ namespace Azuriom\Plugin\Shop\Payment\Method;
 use Azuriom\Plugin\Shop\Cart\Cart;
 use Azuriom\Plugin\Shop\Models\Payment;
 use Azuriom\Plugin\Shop\Payment\PaymentMethod;
-use GuzzleHttp\Client;
-use GuzzleHttp\Psr7\Request as GuzzleRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Validation\Rule;
 use RuntimeException;
 
@@ -83,7 +82,7 @@ class PaysafecardMethod extends PaymentMethod
 
     public function processPscPayment(string $paymentId)
     {
-        $payment = Payment::where('payment_id', $paymentId)->first();
+        $payment = Payment::firstWhere('payment_id', $paymentId);
 
         $response = $this->retrievePayment($paymentId);
 
@@ -135,22 +134,16 @@ class PaysafecardMethod extends PaymentMethod
     private function sendRequest(string $method, string $endpoint, array $params = [], array $headers = [])
     {
         $domain = $this->gateway->data['environment'] === 'PRODUCTION' ? 'api' : 'apitest';
-        $url = "https://{$domain}.paysafecard.com/v1/payments/{$endpoint}";
 
-        $client = new Client(['timeout' => 60]);
+        $response = Http::withHeaders($headers)
+            ->withToken(base64_encode($this->gateway->data['key']), 'Basic')
+            ->post("https://{$domain}.paysafecard.com/v1/payments/{$endpoint}", $params);
 
-        $request = new GuzzleRequest($method, $url, $headers + [
-            'Authorization: Basic '.base64_encode($this->gateway->data['key']),
-            'Content-Type: application/json',
-        ], $params ? json_encode($params) : null);
-
-        $response = $client->send($request);
-
-        if ($response->getStatusCode() !== 200) {
+        if (! $response->successful()) {
             return null;
         }
 
-        return json_decode($response->getBody()->getContents());
+        return $response->json();
     }
 
     private function capturePayment(string $paymentId)

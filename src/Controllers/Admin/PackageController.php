@@ -29,6 +29,7 @@ class PackageController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
+     *
      * @throws \Illuminate\Validation\ValidationException
      */
     public function updateOrder(Request $request)
@@ -143,6 +144,7 @@ class PackageController extends Controller
      *
      * @param  \Azuriom\Plugin\Shop\Models\Package  $package
      * @return \Illuminate\Http\Response
+     *
      * @throws \Exception
      */
     public function destroy(Package $package)
