@@ -3,7 +3,6 @@
 namespace Azuriom\Plugin\Shop\View\Composers;
 
 use Azuriom\Extensions\Plugin\AdminDashboardCardComposer;
-use Azuriom\Plugin\Forum\Models\Discussion;
 use Azuriom\Plugin\Shop\Models\Payment;
 
 class ShopAdminDashboardComposer extends AdminDashboardCardComposer
