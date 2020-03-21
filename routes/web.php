@@ -30,7 +30,6 @@ Route::prefix('cart')->name('cart.')->middleware('auth')->group(function () {
     Route::get('/', 'CartController@index')->name('index');
     Route::get('/remove/{package}', 'CartController@remove')->name('remove');
     Route::post('/clear', 'CartController@clear')->name('clear');
-    Route::post('/checkout', 'CartController@checkout')->name('checkout');
     Route::post('/payment', 'CartController@payment')->name('payment')->middleware('auth');
 });
 

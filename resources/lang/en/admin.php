@@ -101,6 +101,8 @@ return [
             'payment-id' => 'Payment ID',
         ],
 
+        'card' => 'Shop payments',
+
         'payment-status' => [
             'created' => 'Created',
             'cancelled' => 'Cancelled',

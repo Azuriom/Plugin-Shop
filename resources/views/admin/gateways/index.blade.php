@@ -22,7 +22,7 @@
                                     </div>
 
                                     <a href="{{ route('shop.admin.gateways.edit', $gateway) }}" class="btn btn-primary">
-                                        <i class="fas fa-pen"></i> {{ trans('messages.actions.edit') }}
+                                        <i class="fas fa-edit"></i> {{ trans('messages.actions.edit') }}
                                     </a>
                                     <a href="{{ route('shop.admin.gateways.destroy', $gateway) }}" class="btn btn-danger" data-confirm="delete">
                                         <i class="fas fa-trash"></i> {{ trans('messages.actions.delete') }}

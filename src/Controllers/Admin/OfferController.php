@@ -26,7 +26,11 @@ class OfferController extends Controller
      */
     public function create()
     {
-        return view('shop::admin.offers.create', ['gateways' => Gateway::all()]);
+        $gateways = Gateway::all()->filter(function (Gateway $gateway) {
+            return payment_manager()->hasPaymentMethod($gateway->type) && ! $gateway->paymentMethod()->hasFixedAmount();
+        });
+
+        return view('shop::admin.offers.create', ['gateways' => $gateways]);
     }
 
     /**

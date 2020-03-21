@@ -4,6 +4,8 @@ namespace Azuriom\Plugin\Shop\Providers;
 
 use Azuriom\Extensions\Plugin\BasePluginServiceProvider;
 use Azuriom\Plugin\Shop\Payment\PaymentManager;
+use Azuriom\Plugin\Shop\View\Composers\ShopAdminDashboardComposer;
+use Illuminate\Support\Facades\View;
 
 class ShopServiceProvider extends BasePluginServiceProvider
 {
@@ -68,6 +70,8 @@ class ShopServiceProvider extends BasePluginServiceProvider
         $this->registerRouteDescriptions();
 
         $this->registerAdminNavigation();
+
+        View::composer('admin.dashboard', ShopAdminDashboardComposer::class);
     }
 
     /**

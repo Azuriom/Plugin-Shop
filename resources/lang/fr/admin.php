@@ -101,6 +101,8 @@ return [
             'payment-id' => 'ID Paiement',
         ],
 
+        'card' => 'Paiements sur la boutique',
+
         'payment-status' => [
             'created' => 'Créé',
             'cancelled' => 'Annulé',

@@ -74,8 +74,7 @@ class Payment extends Model
         return self::STATUS_LIST;
     }
 
-    public function getTypeName()
-    {
+    public function getTypeName() {
         $paymentManager = app(PaymentManager::class);
 
         if (! $paymentManager->hasPaymentMethod($this->payment_type)) {
