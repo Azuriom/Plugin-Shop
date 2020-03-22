@@ -31,21 +31,7 @@
     <div class="container content">
         <div class="row">
             <div class="col-lg-3">
-                <div class="list-group mb-3">
-                    @foreach($categories as $subCategory)
-                        <a href="{{ route('shop.categories.show', $subCategory) }}" class="list-group-item @if($category->is($subCategory)) active @endif">{{ $subCategory->name }}</a>
-                    @endforeach
-                </div>
-
-                @auth
-                    @if(use_site_money())
-                        <p class="text-center">{{ trans('messages.fields.money') }}: {{ format_money(auth()->user()->money) }}</p>
-
-                        <a href="{{ route('shop.offers.select') }}" class="btn btn-primary btn-block">{{ trans('shop::messages.cart.credit') }}</a>
-                    @endif
-
-                    <a href="{{ route('shop.cart.index') }}" class="btn btn-primary btn-block">{{ trans('shop::messages.cart.title') }}</a>
-                @endauth
+                @include('shop::categories.sidebar')
             </div>
 
             <div class="col-lg-9">

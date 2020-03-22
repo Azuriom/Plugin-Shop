@@ -4,6 +4,7 @@ namespace Azuriom\Plugin\Shop\Controllers;
 
 use Azuriom\Http\Controllers\Controller;
 use Azuriom\Plugin\Shop\Models\Category;
+use Azuriom\Plugin\Shop\Models\Payment;
 
 class CategoryController extends Controller
 {
@@ -40,6 +41,20 @@ class CategoryController extends Controller
         return view('shop::categories.show', [
             'category' => $category->load('packages'),
             'categories' => $categories,
+            'goal' => $this->getMonthGoal(),
         ]);
+    }
+
+    protected function getMonthGoal()
+    {
+        if (! setting('shop.month-goal')) {
+            return false;
+        }
+
+        $total = Payment::completed()
+            ->where('created_at', '>', now()->startOfMonth())
+            ->sum('price');
+
+        return ($total / setting('shop.month-goal')) * 100;
     }
 }

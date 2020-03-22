@@ -5,6 +5,9 @@ return [
 
     'buy' => 'Buy',
 
+    'month-goal' => 'Goal of the month',
+    'month-goal-current' => ':count% completed',
+
     'fields' => [
         'price' => 'Price',
         'quantity' => 'Quantity',

@@ -20,6 +20,7 @@ class SettingController extends Controller
         return view('shop::admin.settings', [
             'currencies' => Currencies::all(),
             'currentCurrency' => setting('currency', 'USD'),
+            'goal' => (int) setting('goal', 0),
         ]);
     }
 
@@ -27,9 +28,13 @@ class SettingController extends Controller
     {
         Setting::updateSettings($this->validate($request, [
             'currency' => ['required', Rule::in(Currencies::codes())],
+            'goal' => ['nullable', 'integer', 'min:0'],
         ]));
 
-        Setting::updateSettings('shop.use-site-money', $request->has('use-site-money'));
+        Setting::updateSettings([
+            'shop.use-site-money' => $request->has('use-site-money'),
+            'shop.month-goal' => $request->input('goal'),
+        ]);
 
         return redirect()->route('shop.admin.settings')
             ->with('success', trans('admin.settings.status.updated'));

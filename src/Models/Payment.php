@@ -25,6 +25,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Azuriom\Models\User $user
  *
  * @method static \Illuminate\Database\Eloquent\Builder success()
+ * @method static \Illuminate\Database\Eloquent\Builder completed()
  * @method static \Illuminate\Database\Eloquent\Builder pending()
  */
 class Payment extends Model
@@ -98,6 +99,11 @@ class Payment extends Model
     public function scopeSuccess(Builder $query)
     {
         return $query->where('status', 'SUCCESS');
+    }
+
+    public function scopeCompleted(Builder $query)
+    {
+        return $query->whereIn('status', ['SUCCESS', 'DELIVERED']);
     }
 
     public function scopePending(Builder $query)

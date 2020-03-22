@@ -26,6 +26,21 @@
                     </div>
                 </div>
 
+                <div class="form-group">
+                    <label for="goalInput">{{ trans('shop::messages.month-goal') }}</label>
+
+                    <div class="input-group">
+                        <input type="number" min="0" class="form-control @error('goal') is-invalid @enderror" id="goalInput" name="goal" value="{{ old('goal', $goal ?? '') }}">
+                        <div class="input-group-append">
+                            <span class="input-group-text">{{ currency_display() }}</span>
+                        </div>
+                    </div>
+
+                    @error('goal')
+                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                    @enderror
+                </div>
+
                 <button type="submit" class="btn btn-primary">
                     <i class="fas fa-save"></i> {{ trans('messages.actions.save') }}
                 </button>
