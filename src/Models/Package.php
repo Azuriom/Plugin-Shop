@@ -2,7 +2,7 @@
 
 namespace Azuriom\Plugin\Shop\Models;
 
-use Azuriom\Events\PackageDelivered;
+use Azuriom\Plugin\Shop\Events\PackageDelivered;
 use Azuriom\Models\Server;
 use Azuriom\Models\Traits\HasImage;
 use Azuriom\Models\Traits\HasTablePrefix;

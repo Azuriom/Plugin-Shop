@@ -59,6 +59,7 @@ class CartItem
      */
     public function __construct(Buyable $buyable, string $itemId, int $quantity = 1)
     {
+        $this->associatedModel = $buyable;
         $this->id = $buyable->id;
         $this->itemId = $itemId;
         $this->type = get_class($buyable);

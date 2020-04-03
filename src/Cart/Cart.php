@@ -3,6 +3,7 @@
 namespace Azuriom\Plugin\Shop\Cart;
 
 use Azuriom\Plugin\Shop\Models\Concerns\Buyable;
+use Azuriom\Plugin\Shop\Models\Package;
 use Illuminate\Session\Store as Session;
 
 /**
@@ -37,7 +38,15 @@ class Cart
     public function __construct(Session $session = null)
     {
         $this->session = $session;
-        $this->items = collect($this->session ? $this->session->get('shop.cart', []) : []);
+        $this->items = collect([]);
+
+        $sessionItems = $this->session ? $this->session->get('shop.cart', []) : [];
+        $this->session->remove('shop.cart');
+
+        foreach ($sessionItems as $sessionItem) {
+            $refreshedPackage = Package::where("id", "=", $sessionItem->id)->get()->first();
+            $this->add($refreshedPackage, $sessionItem->quantity);
+        }
     }
 
     /**
@@ -56,7 +65,7 @@ class Cart
             return;
         }
 
-        $this->set($buyable, 1);
+        $this->set($buyable, $quantity);
     }
 
     /**
