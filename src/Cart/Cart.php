@@ -4,6 +4,7 @@ namespace Azuriom\Plugin\Shop\Cart;
 
 use Azuriom\Plugin\Shop\Models\Concerns\Buyable;
 use Illuminate\Session\Store as Session;
+use Illuminate\Support\Collection;
 
 /**
  * Laravel cart.
@@ -37,7 +38,7 @@ class Cart
     public function __construct(Session $session = null)
     {
         $this->session = $session;
-        $this->items = collect($this->session ? $this->session->get('shop.cart', []) : []);
+        $this->items = $session ? $this->loadFromSession($this->session) : collect();
     }
 
     /**
@@ -50,13 +51,14 @@ class Cart
     {
         $cartItem = $this->get($buyable);
 
-        if ($cartItem !== null) {
-            $cartItem->setQuantity($cartItem->quantity + $quantity);
+        if ($cartItem === null) {
+            $this->set($buyable, $quantity);
 
             return;
         }
 
-        $this->set($buyable, 1);
+        $cartItem->setQuantity($cartItem->quantity + $quantity);
+        $this->saveToSession();
     }
 
     /**
@@ -171,5 +173,29 @@ class Cart
         if ($this->session) {
             $this->session->put('shop.cart', $this->items->toArray());
         }
+    }
+
+    protected function loadFromSession(Session $session)
+    {
+        $items = $session->get('shop.cart', []);
+
+        if (empty($items)) {
+            return collect();
+        }
+
+        return collect($items)->groupBy('type')->flatMap(function (Collection $items, string $type) {
+            /** @var \Illuminate\Database\Eloquent\Collection $models */
+            $models = $type::findMany($items->pluck('id'))->keyBy('id');
+
+            return $items->mapWithKeys(function ($item) use ($models) {
+                if (! $models->has($item['id'])) {
+                    return [];
+                }
+
+                $cartItem = new CartItem($models->get($item['id']), $item['itemId'], $item['quantity']);
+
+                return [$item['itemId'] => $cartItem];
+            });
+        });
     }
 }

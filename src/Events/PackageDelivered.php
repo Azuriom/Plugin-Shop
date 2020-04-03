@@ -1,6 +1,6 @@
 <?php
 
-namespace Azuriom\Events;
+namespace Azuriom\Plugin\Shop\Events;
 
 use Azuriom\Plugin\Shop\Models\Package;
 use Illuminate\Queue\SerializesModels;

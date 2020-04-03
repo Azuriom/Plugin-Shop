@@ -2,11 +2,11 @@
 
 namespace Azuriom\Plugin\Shop\Models;
 
-use Azuriom\Events\PackageDelivered;
 use Azuriom\Models\Server;
 use Azuriom\Models\Traits\HasImage;
 use Azuriom\Models\Traits\HasTablePrefix;
 use Azuriom\Models\User;
+use Azuriom\Plugin\Shop\Events\PackageDelivered;
 use Azuriom\Plugin\Shop\Models\Concerns\Buyable;
 use Azuriom\Plugin\Shop\Models\Concerns\IsBuyable;
 use Illuminate\Database\Eloquent\Builder;

@@ -3,6 +3,7 @@
 namespace Azuriom\Plugin\Shop\Cart;
 
 use Azuriom\Plugin\Shop\Models\Concerns\Buyable;
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -13,7 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @author Rob Gloudemans
  */
-class CartItem
+class CartItem implements Arrayable
 {
     /**
      * The ID of the cart item.
@@ -23,7 +24,7 @@ class CartItem
     public $itemId;
 
     /**
-     * The Id of the item.
+     * The ID of the item.
      *
      * @var int
      */
@@ -48,7 +49,7 @@ class CartItem
      *
      * @var \Azuriom\Plugin\Shop\Models\Concerns\Buyable
      */
-    private $associatedModel = null;
+    private $buyable;
 
     /**
      * Create a new item instance.
@@ -63,6 +64,7 @@ class CartItem
         $this->itemId = $itemId;
         $this->type = get_class($buyable);
         $this->quantity = $quantity;
+        $this->buyable = $buyable;
     }
 
     /**
@@ -82,18 +84,7 @@ class CartItem
      */
     public function buyable()
     {
-        if ($this->associatedModel !== null) {
-            return $this->associatedModel;
-        }
-
-        $this->associatedModel = (new $this->type())->find($this->id);
-
-        return $this->associatedModel;
-    }
-
-    protected function associateModel(Model $model)
-    {
-        $this->associatedModel = $model;
+        return $this->buyable;
     }
 
     public function price()
@@ -110,12 +101,9 @@ class CartItem
     {
         return [
             'id' => $this->id,
+            'itemId' => $this->itemId,
             'type' => $this->type,
             'quantity' => $this->quantity,
         ];
-    }
-
-    public static function fromArray(array $array)
-    {
     }
 }

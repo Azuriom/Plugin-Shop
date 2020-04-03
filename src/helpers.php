@@ -1,7 +1,9 @@
 <?php
 
+use Azuriom\Plugin\Shop\Cart\Cart;
 use Azuriom\Plugin\Shop\Payment\Currencies;
 use Azuriom\Plugin\Shop\Payment\PaymentManager;
+use Illuminate\Support\Facades\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -59,5 +61,12 @@ if (! function_exists('shop_format_amount')) {
     function shop_format_amount(float $amount)
     {
         return $amount.' '.shop_active_currency($amount !== 1);
+    }
+}
+
+if (! function_exists('shop_cart')) {
+    function shop_cart()
+    {
+        return new Cart(Request::session());
     }
 }
