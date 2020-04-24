@@ -78,8 +78,8 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        if ($category->packages()->doesntExist()) {
-            return redirect()->back()->with('error', trans('shop.category.status.delete-items'));
+        if ($category->packages()->exists()) {
+            return redirect()->back()->with('error', trans('shop::category.status.delete-items'));
         }
 
         $category->delete();

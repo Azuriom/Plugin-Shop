@@ -22,7 +22,7 @@ class BuyableCollection extends Collection
      */
     public function __construct($type)
     {
-        parent::__construct([]);
+        parent::__construct();
 
         $this->type = $type;
     }

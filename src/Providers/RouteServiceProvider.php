@@ -39,7 +39,7 @@ class RouteServiceProvider extends BaseRouteServiceProvider
 
     protected function mapApiRoutes()
     {
-        Route::prefix($this->plugin->id.'/api')
+        Route::prefix('api/'.$this->plugin->id)
             ->middleware('api')
             ->namespace($this->namespace.'\Api')
             ->name($this->plugin->id.'.')

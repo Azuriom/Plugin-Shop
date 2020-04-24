@@ -99,7 +99,7 @@ class PackageController extends Controller
         $package->servers()->sync($servers);
 
         return redirect()->route('shop.admin.packages.index')
-            ->with('success', trans('shop::admin.packages.status.updated'));
+            ->with('success', trans('shop::admin.packages.status.created'));
     }
 
     /**
@@ -136,7 +136,7 @@ class PackageController extends Controller
         $package->servers()->sync($servers);
 
         return redirect()->route('shop.admin.packages.index')
-            ->with('success', trans('shop::admin.packages.status.created'));
+            ->with('success', trans('shop::admin.packages.status.updated'));
     }
 
     /**
@@ -152,6 +152,6 @@ class PackageController extends Controller
         $package->delete();
 
         return redirect()->route('shop.admin.packages.index')
-            ->with('success', trans('shop::admin.packages.status.created'));
+            ->with('success', trans('shop::admin.packages.status.deleted'));
     }
 }

@@ -68,7 +68,7 @@ class StripeMethod extends PaymentMethod
 
         $event = Webhook::constructEvent($request->getContent(), $stripeSignature, $endpointSecret);
 
-        if ($event->type != 'checkout.session.completed') {
+        if ($event->type !== 'checkout.session.completed') {
             return response()->json(['status' => 'unknown']);
         }
 

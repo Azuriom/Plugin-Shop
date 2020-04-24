@@ -57,10 +57,10 @@ class MollieMethod extends PaymentMethod
             return response()->json(['status' => 'error', 'message' => 'Invalid Mollie payment status']);
         }
 
-        $paymentId = $molliePayment->metadata->order_id;
-        $payment = Payment::find($paymentId);
+        $orderId = $molliePayment->metadata->order_id;
+        $payment = Payment::find($orderId);
 
-        return $this->processPayment($payment, $paymentId);
+        return $this->processPayment($payment, $orderId);
     }
 
     public function success(Request $request)

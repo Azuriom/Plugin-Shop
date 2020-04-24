@@ -6,6 +6,7 @@ use Azuriom\Plugin\Shop\Cart\Cart;
 use Azuriom\Plugin\Shop\Models\Payment;
 use Azuriom\Plugin\Shop\Payment\PaymentMethod;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Http;
 
 class PayPalMethod extends PaymentMethod
@@ -44,7 +45,7 @@ class PayPalMethod extends PaymentMethod
             'bn' => 'Azuriom',
         ];
 
-        return redirect()->away('https://www.paypal.com/cgi-bin/webscr?'.http_build_query($attributes));
+        return redirect()->away('https://www.paypal.com/cgi-bin/webscr?'.Arr::query($attributes));
     }
 
     public function notification(Request $request, ?string $rawPaymentId)

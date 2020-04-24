@@ -4,23 +4,18 @@
 
 @push('footer-scripts')
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            document.querySelectorAll('[data-package-url]').forEach(function (el) {
+        document.querySelectorAll('[data-package-url]').forEach(function (el) {
+            el.addEventListener('click', function (ev) {
+                ev.preventDefault();
 
-                el.addEventListener('click', function (ev) {
-                    ev.preventDefault();
-
-                    const url = this.dataset['packageUrl'];
-
-                    axios.get(url, {
-                        headers: {
-                            'X-PJAX': 'true'
-                        }
-                    }).then(function (html) {
-                        $('#itemModal').html(html.data).modal('show');
-                    }).catch(function (error) {
-                        createAlert('danger', error, true); TODO
-                    });
+                axios.get(el.dataset.packageUrl, {
+                    headers: {
+                        'X-PJAX': 'true'
+                    }
+                }).then(function(response) {
+                    $('#itemModal').html(response.data).modal('show');
+                }).catch(function (error) {
+                    createAlert('danger', error, true);
                 });
             });
         });

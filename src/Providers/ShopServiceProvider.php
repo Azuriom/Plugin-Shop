@@ -10,33 +10,6 @@ use Illuminate\Support\Facades\View;
 class ShopServiceProvider extends BasePluginServiceProvider
 {
     /**
-     * The plugin's global HTTP middleware stack.
-     *
-     * @var array
-     */
-    protected $middleware = [
-        // \Azuriom\Plugins\Example\Middleware\ExampleMiddleware::class,
-    ];
-
-    /**
-     * The plugin's route middleware groups.
-     *
-     * @var array
-     */
-    protected $middlewareGroups = [
-        // 'example' => \Azuriom\Plugins\Example\Middleware\ExampleRouteMiddleware::class,
-    ];
-
-    /**
-     * The policy mappings for this plugin.
-     *
-     * @var array
-     */
-    protected $policies = [
-        // User::class => UserPolicy::class,
-    ];
-
-    /**
      * Register any plugin services.
      *
      * @return void
@@ -44,8 +17,6 @@ class ShopServiceProvider extends BasePluginServiceProvider
     public function register()
     {
         require_once __DIR__.'/../../vendor/autoload.php';
-
-        $this->registerMiddlewares();
 
         $this->app->singleton(PaymentManager::class, function () {
             return new PaymentManager();
