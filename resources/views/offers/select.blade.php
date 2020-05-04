@@ -24,7 +24,7 @@
             @foreach($offers as $offer)
                 <div class="col-md-3">
                     <div class="card shadow-sm mb-3">
-                        <a href="{{ route('shop.offers.pay', [$offer, $gateway->type]) }}" class="payment-method">
+                        <a href="{{ route('shop.offers.pay', [$offer, $gateway]) }}" class="payment-method">
                             <div class="card-body text-center">
                                 <h3>{{ $offer->name }}</h3>
                                 <h4>{{ $offer->price }} {{ currency_display() }}</h4>

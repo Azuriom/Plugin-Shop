@@ -16,6 +16,7 @@ return [
         'package' => 'Produit',
         'gateways' => 'Moyens de paiements',
         'servers' => 'Serveurs',
+        'commands' => 'Commandes',
     ],
 
     'categories' => [
@@ -39,10 +40,9 @@ return [
 
         'back' => 'Retour à la boutique',
 
-        'total' => 'Total : :total
-',
+        'total' => 'Total : :total',
 
-        'credit' => 'Crédit',
+        'credit' => 'Créditer',
     ],
 
     'payment' => [
@@ -55,7 +55,7 @@ return [
     ],
 
     'offers' => [
-        'title-payment' => 'Type de paiement',
+        'title-payment' => 'Moyen de paiement',
         'title-select' => 'Montant',
     ],
 ];

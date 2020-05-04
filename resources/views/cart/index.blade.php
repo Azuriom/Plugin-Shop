@@ -23,7 +23,9 @@
                         <td>{{ shop_format_amount($cartItem->total()) }}</td>
                         <td>{{ $cartItem->quantity }}</td>
                         <td>
-                            <a href="{{ route('shop.cart.remove', $cartItem->id) }}">{{ trans('shop::messages.cart.remove') }}</a>
+                            <a href="{{ route('shop.cart.remove', $cartItem->id) }}" class="btn btn-sm btn-danger">
+                                {{ trans('shop::messages.cart.remove') }}
+                            </a>
                         </td>
                     </tr>
                 @endforeach
@@ -48,13 +50,19 @@
                     <form method="POST" action="{{ route('shop.cart.clear') }}" class="d-inline-block">
                         @csrf
 
-                        <button type="submit" class="btn btn-danger">{{ trans('shop::messages.cart.clear') }}</button>
+                        <button type="submit" class="btn btn-danger">
+                            {{ trans('shop::messages.cart.clear') }}
+                        </button>
                     </form>
 
                     @if(use_site_money())
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#confirmBuyModal">{{ trans('shop::messages.buy') }}</button>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#confirmBuyModal">
+                            {{ trans('shop::messages.buy') }}
+                        </button>
                     @else
-                        <a href="{{ route('shop.payments.payment') }}" class="btn btn-primary">{{ trans('shop::messages.cart.checkout') }}</a>
+                        <a href="{{ route('shop.payments.payment') }}" class="btn btn-primary">
+                            {{ trans('shop::messages.cart.checkout') }}
+                        </a>
                     @endif
                 </div>
             </div>
@@ -63,6 +71,10 @@
             <div class="alert alert-warning" role="alert">
                 {{ trans('shop::messages.cart.empty') }}
             </div>
+
+            <a href="{{ route('shop.home') }}" class="btn btn-info">
+                {{ trans('shop::messages.cart.back') }}
+            </a>
         @endif
     </div>
 
@@ -76,14 +88,20 @@
                             <span aria-hidden="true">×</span>
                         </button>
                     </div>
-                    <div class="modal-body">{{ trans('shop::messages.cart.pay-confirm', ['price' => shop_format_amount($cart->total())]) }}</div>
+
+                    <div class="modal-body">
+                        {{ trans('shop::messages.cart.pay-confirm', ['price' => shop_format_amount($cart->total())]) }}
+                    </div>
+
                     <div class="modal-footer">
                         <button class="btn btn-secondary" type="button" data-dismiss="modal">{{ trans('messages.actions.cancel') }}</button>
 
                         <form method="POST" action="{{ route('shop.cart.payment') }}">
                             @csrf
 
-                            <button class="btn btn-success" type="submit">{{ trans('shop::messages.cart.pay') }}</button>
+                            <button class="btn btn-success" type="submit">
+                                {{ trans('shop::messages.cart.pay') }}
+                            </button>
                         </form>
                     </div>
                 </div>

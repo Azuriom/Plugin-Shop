@@ -51,16 +51,16 @@ if (! function_exists('currency_display')) {
 }
 
 if (! function_exists('shop_active_currency')) {
-    function shop_active_currency(bool $plural = true)
+    function shop_active_currency($amount = 2)
     {
-        return use_site_money() ? money_name($plural) : currency_display();
+        return use_site_money() ? money_name($amount) : currency_display();
     }
 }
 
 if (! function_exists('shop_format_amount')) {
     function shop_format_amount(float $amount)
     {
-        return $amount.' '.shop_active_currency($amount !== 1);
+        return $amount.' '.shop_active_currency($amount);
     }
 }
 

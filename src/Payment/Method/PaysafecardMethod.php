@@ -68,9 +68,9 @@ class PaysafecardMethod extends PaymentMethod
             throw new RuntimeException('Invalid response from paysafecard');
         }
 
-        $this->createPayment($cart, $amount, $currency, $response->id);
+        $this->createPayment($cart, $amount, $currency, $response['id']);
 
-        return redirect()->away($response->redirect->auth_url);
+        return redirect()->away($response['redirect']['auth_url']);
     }
 
     public function notification(Request $request, ?string $paymentId)

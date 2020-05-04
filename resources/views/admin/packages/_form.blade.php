@@ -110,7 +110,7 @@
 </div>
 
 <div class="form-group">
-    <label>Commands</label>
+    <label>{{ trans('shop::messages.fields.commands') }}</label>
 
     <div id="commands">
 

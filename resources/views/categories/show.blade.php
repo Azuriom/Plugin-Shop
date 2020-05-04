@@ -8,7 +8,7 @@
             el.addEventListener('click', function (ev) {
                 ev.preventDefault();
 
-                axios.get(el.dataset.packageUrl, {
+                axios.get(el.dataset['packageUrl'], {
                     headers: {
                         'X-PJAX': 'true'
                     }

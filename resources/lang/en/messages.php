@@ -16,6 +16,7 @@ return [
         'package' => 'Package',
         'gateways' => 'Gateways',
         'servers' => 'Servers',
+        'commands' => 'Commands',
     ],
 
     'categories' => [

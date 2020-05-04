@@ -3,6 +3,7 @@
 namespace Azuriom\Plugin\Shop\Providers;
 
 use Azuriom\Extensions\Plugin\BasePluginServiceProvider;
+use Azuriom\Models\Permission;
 use Azuriom\Plugin\Shop\Payment\PaymentManager;
 use Azuriom\Plugin\Shop\View\Composers\ShopAdminDashboardComposer;
 use Illuminate\Support\Facades\View;
@@ -43,6 +44,8 @@ class ShopServiceProvider extends BasePluginServiceProvider
         $this->registerAdminNavigation();
 
         View::composer('admin.dashboard', ShopAdminDashboardComposer::class);
+
+        Permission::registerPermissions(['shop.admin' => 'shop::admin.permissions.admin']);
     }
 
     /**
@@ -70,6 +73,7 @@ class ShopServiceProvider extends BasePluginServiceProvider
                 'type' => 'dropdown',
                 'icon' => 'fas fa-shopping-cart',
                 'route' => 'shop.admin.*',
+                'permission' => 'shop.admin',
                 'items' => [
                     'shop.admin.settings' => 'shop::admin.nav.settings',
                     'shop.admin.packages.index' => 'shop::admin.nav.packages',

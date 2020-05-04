@@ -12,6 +12,10 @@ return [
         'purchases' => 'Purchases',
     ],
 
+    'permissions' => [
+        'admin' => 'View and manage shop plugin',
+    ],
+
     'categories' => [
         'title' => 'Categories',
         'title-edit' => 'Edit category :category',
