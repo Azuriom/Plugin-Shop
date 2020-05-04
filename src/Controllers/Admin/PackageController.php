@@ -63,7 +63,7 @@ class PackageController extends Controller
         return $request->expectsJson() ? response()->json([
             'status' => 'success',
             'message' => trans('shop.packages.status.order-updated'),
-        ]) : redirect()->route('shop::admin.packages.index');
+        ]) : redirect()->route('shop.admin.packages.index');
     }
 
     /**

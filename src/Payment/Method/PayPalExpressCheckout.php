@@ -109,14 +109,14 @@ class PayPalExpressCheckout extends PaymentMethod
 
             payment_manager()->deliverPayment($payment);
 
-            return view('shop.payments.success');
+            return view('shop::payments.success');
         }
 
         if (! $payment->isCompleted()) {
             return $this->errorResponse();
         }
 
-        return view('shop.payments.success');
+        return view('shop::payments.success');
     }
 
     public function view()

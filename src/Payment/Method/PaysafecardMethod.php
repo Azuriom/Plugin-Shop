@@ -38,25 +38,21 @@ class PaysafecardMethod extends PaymentMethod
 
     public function startPayment(Cart $cart, float $amount, string $currency)
     {
-        $successUrl = route('shop.payments.success', [
-            'gateway' => 'paysafecard',
-            'paymentId' => rawurlencode('{payment_id}'),
-        ]);
+        $successUrl = route('shop.payments.success', $this->id);
 
-        $failureUrl = route('shop.payments.failure', [
-            'gateway' => 'paysafecard',
-            'paymentId' => rawurlencode('{payment_id}'),
-        ]);
+        $failureUrl = route('shop.payments.failure', $this->id);
+
+        $notificationUrl = route('shop.payments.notification', [$this->id, '%id%']);
 
         $options = [
             'type' => 'PAYSAFECARD',
             'amount' => $amount,
             'currency' => $currency,
             'redirect' => [
-                'success_url' => $successUrl,
-                'failure_url' => $failureUrl,
+                'success_url' => "{$successUrl}?id={payment_id}",
+                'failure_url' => "{$failureUrl}?id={payment_id}",
             ],
-            'notification_url' => route('shop.payments.notification', [$this->id, rawurlencode('{payment_id}')]),
+            'notification_url' => str_replace('%id%', '{payment_id}', $notificationUrl),
             'customer' => [
                 'id' => Auth::id(),
             ],
@@ -86,24 +82,32 @@ class PaysafecardMethod extends PaymentMethod
 
         $response = $this->retrievePayment($paymentId);
 
-        if ($response->status !== 'AUTHORIZED') {
-            return ['status' => 'error', 'message' => 'Invalid payment response'];
+        if ($response === null) {
+            return ['status' => false, 'message' => 'Invalid response from paysafecard'];
+        }
+
+        if ($response['status'] === 'SUCCESS') {
+            return ['status' => true];
+        }
+
+        if ($response['status'] !== 'AUTHORIZED') {
+            return ['status' => false, 'message' => 'Invalid payment response'];
         }
 
         $response = $this->capturePayment($paymentId);
 
-        if ($response->status !== 'SUCCESS') {
-            return ['status' => 'error', 'message' => 'Invalid capture response'];
+        if ($response['status'] !== 'SUCCESS') {
+            return ['status' => false, 'message' => 'Invalid capture response'];
         }
 
         payment_manager()->deliverPayment($payment);
 
-        return ['status' => 'success'];
+        return ['status' => true];
     }
 
     public function success(Request $request)
     {
-        $paymentId = $request->input('paymentId');
+        $paymentId = $request->input('id');
 
         if ($paymentId === null) {
             return $this->errorResponse();
@@ -115,7 +119,7 @@ class PaysafecardMethod extends PaymentMethod
             return $this->errorResponse();
         }
 
-        return view('shop.payments.success');
+        return view('shop::payments.success');
     }
 
     public function view()

@@ -149,7 +149,7 @@ abstract class PaymentMethod
 
     protected function errorResponse(bool $json = false)
     {
-        return redirect()->route('shop.cart')->with('error', trans('shop::messages.payment.error'));
+        return redirect()->route('shop.cart.index')->with('error', trans('shop::messages.payment.error'));
     }
 
     protected function getPurchaseDescription(int $id)
