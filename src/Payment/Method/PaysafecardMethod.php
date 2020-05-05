@@ -135,15 +135,14 @@ class PaysafecardMethod extends PaymentMethod
         ];
     }
 
-    private function sendRequest(string $method, string $endpoint, array $params = [], array $headers = [])
+    private function sendRequest(string $method, string $endpoint, array $params = [])
     {
         $domain = $this->gateway->data['environment'] === 'PRODUCTION' ? 'api' : 'apitest';
 
         $method = strtolower($method);
 
         /** @var \Illuminate\Http\Client\Response $response */
-        $response = Http::withHeaders($headers)
-            ->withToken(base64_encode($this->gateway->data['key']), 'Basic')
+        $response = Http::withToken(base64_encode($this->gateway->data['key']), 'Basic')
             ->$method("https://{$domain}.paysafecard.com/v1/payments/{$endpoint}", $params);
 
         if (! $response->successful()) {

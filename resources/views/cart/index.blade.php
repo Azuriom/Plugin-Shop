@@ -99,7 +99,7 @@
                         <form method="POST" action="{{ route('shop.cart.payment') }}">
                             @csrf
 
-                            <button class="btn btn-success" type="submit">
+                            <button class="btn btn-primary" type="submit">
                                 {{ trans('shop::messages.cart.pay') }}
                             </button>
                         </form>

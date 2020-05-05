@@ -26,11 +26,7 @@ class OfferController extends Controller
      */
     public function create()
     {
-        $gateways = Gateway::all()->filter(function (Gateway $gateway) {
-            return payment_manager()->hasPaymentMethod($gateway->type) && ! $gateway->paymentMethod()->hasFixedAmount();
-        });
-
-        return view('shop::admin.offers.create', ['gateways' => $gateways]);
+        return view('shop::admin.offers.create', ['gateways' => $this->getGateways()]);
     }
 
     /**
@@ -61,7 +57,7 @@ class OfferController extends Controller
     {
         return view('shop::admin.offers.edit', [
             'offer' => $offer->load('gateways'),
-            'gateways' => Gateway::all(),
+            'gateways' => $this->getGateways(),
         ]);
     }
 
@@ -98,5 +94,12 @@ class OfferController extends Controller
 
         return redirect()->route('shop.admin.offers.index')
             ->with('success', trans('shop::admin.offers.status.deleted'));
+    }
+
+    private function getGateways()
+    {
+        return Gateway::all()->filter(function (Gateway $gateway) {
+            return payment_manager()->hasPaymentMethod($gateway->type) && ! $gateway->paymentMethod()->hasFixedAmount();
+        });
     }
 }
