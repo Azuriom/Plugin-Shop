@@ -18,5 +18,8 @@
         "paygol/php-sdk": "^1.0",
         "paypal/rest-api-sdk-php": "^1.14.0",
         "stripe/stripe-php": "^7.14"
+    },
+    "replace": {
+        "guzzlehttp/guzzle": "*"
     }
 }
