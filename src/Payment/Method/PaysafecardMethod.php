@@ -58,6 +58,7 @@ class PaysafecardMethod extends PaymentMethod
 
         if (! $response->successful()) {
             Log::warning("[Shop] Paysafecard - Invalid init response from {$response->effectiveUri()} : {$response->json()['message']}");
+
             return $this->errorResponse();
         }
 
@@ -85,6 +86,7 @@ class PaysafecardMethod extends PaymentMethod
 
         if ($payment['status'] !== true) {
             Log::warning("[Shop] Paysafecard - {$payment['message']}");
+
             return $this->errorResponse();
         }
 
