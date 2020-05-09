@@ -54,7 +54,7 @@ class MollieMethod extends PaymentMethod
         $molliePayment = $mollie->payments->get($request->input('id'));
 
         if (! $molliePayment->isPaid() || $molliePayment->hasRefunds() || $molliePayment->hasChargebacks()) {
-            return response()->json(['status' => 'error', 'message' => 'Invalid Mollie payment status']);
+            return response()->json(['status' => false, 'message' => 'Invalid Mollie payment status']);
         }
 
         $orderId = $molliePayment->metadata->order_id;

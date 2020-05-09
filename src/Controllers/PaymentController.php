@@ -17,6 +17,10 @@ class PaymentController extends Controller
                 return payment_manager()->hasPaymentMethod($gateway->type) && ! $gateway->paymentMethod()->hasFixedAmount();
             });
 
+        if ($gateways->isEmpty()) {
+            return redirect()->route('shop.cart.index'); // TODO nice message to explain
+        }
+
         return view('shop::payments.pay', ['gateways' => $gateways]);
     }
 

@@ -103,7 +103,7 @@ abstract class PaymentMethod
     {
         $payment->update(['status' => 'ERROR', 'payment_id' => $paymentId]);
 
-        return response()->json(['status' => 'error', 'message' => $message]);
+        return response()->json(['status' => false, 'message' => $message]);
     }
 
     protected function serializeCart(Cart $cart)
@@ -127,15 +127,15 @@ abstract class PaymentMethod
     protected function processPayment(?Payment $payment, string $paymentId = null)
     {
         if ($payment === null) {
-            return response()->json(['status' => 'error', 'message' => 'Unable to retrieve the payment']);
+            return response()->json(['status' => false, 'message' => 'Unable to retrieve the payment']);
         }
 
         if ($payment->isCompleted()) {
-            return response()->json(['status' => 'success', 'message' => 'Payment already completed']);
+            return response()->json(['status' => true, 'message' => 'Payment already completed']);
         }
 
         if (! $payment->isPending()) {
-            return response()->json(['status' => 'error', 'message' => 'Invalid payment status: '.$payment->status]);
+            return response()->json(['status' => false, 'message' => 'Invalid payment status: '.$payment->status]);
         }
 
         if ($paymentId !== null) {
@@ -144,10 +144,10 @@ abstract class PaymentMethod
 
         payment_manager()->deliverPayment($payment);
 
-        return response()->json(['status' => 'success']);
+        return response()->json(['status' => true]);
     }
 
-    protected function errorResponse(bool $json = false)
+    protected function errorResponse()
     {
         return redirect()->route('shop.cart.index')->with('error', trans('shop::messages.payment.error'));
     }

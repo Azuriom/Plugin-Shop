@@ -34,11 +34,11 @@
                         <div class="input-group-append">
                             <span class="input-group-text">{{ currency_display() }}</span>
                         </div>
-                    </div>
 
-                    @error('goal')
-                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
-                    @enderror
+                        @error('goal')
+                        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                        @enderror
+                    </div>
                 </div>
 
                 <button type="submit" class="btn btn-primary">

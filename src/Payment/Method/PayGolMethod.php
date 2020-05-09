@@ -71,7 +71,7 @@ class PayGolMethod extends PaymentMethod
         $transactionId = $params['transaction_id'];
 
         if ($params['status'] !== 'completed') {
-            return response()->json(['status' => 'error', 'message' => 'Invalid PayGol payment status']);
+            return response()->json(['status' => false, 'message' => 'Invalid PayGol payment status']);
         }
 
         $payment = Payment::find($params['custom']);

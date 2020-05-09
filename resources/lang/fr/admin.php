@@ -88,8 +88,8 @@ return [
         'public-key' => 'Clé Publique',
         'private-key' => 'Clé Privée',
         'secret-key' => 'Clé Secrète',
-        'service-id' => 'ID Service',
-        'client-id' => 'ID Client',
+        'service-id' => 'ID du Service',
+        'client-id' => 'ID du Client',
         'env' => 'Environnement',
 
         'paypal-email' => 'Adresse E-Mail PayPal',
@@ -102,7 +102,7 @@ return [
 
         'fields' => [
             'status' => 'Status',
-            'payment-id' => 'ID Paiement',
+            'payment-id' => 'ID du Paiement',
         ],
 
         'card' => 'Paiements sur la boutique',

@@ -27,6 +27,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder success()
  * @method static \Illuminate\Database\Eloquent\Builder completed()
  * @method static \Illuminate\Database\Eloquent\Builder pending()
+ * @method static \Illuminate\Database\Eloquent\Builder notPending()
  */
 class Payment extends Model
 {
@@ -109,5 +110,10 @@ class Payment extends Model
     public function scopePending(Builder $query)
     {
         return $query->whereIn('status', ['CREATED', 'PENDING']);
+    }
+
+    public function scopeNotPending(Builder $query)
+    {
+        return $query->whereNotIn('status', ['CREATED', 'PENDING']);
     }
 }

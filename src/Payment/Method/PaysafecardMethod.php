@@ -8,8 +8,8 @@ use Azuriom\Plugin\Shop\Payment\PaymentMethod;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
-use RuntimeException;
 
 class PaysafecardMethod extends PaymentMethod
 {
@@ -39,12 +39,10 @@ class PaysafecardMethod extends PaymentMethod
     public function startPayment(Cart $cart, float $amount, string $currency)
     {
         $successUrl = route('shop.payments.success', $this->id);
-
         $failureUrl = route('shop.payments.failure', $this->id);
-
         $notificationUrl = route('shop.payments.notification', [$this->id, '%id%']);
 
-        $options = [
+        $response = $this->prepareRequest()->post('', [
             'type' => 'PAYSAFECARD',
             'amount' => $amount,
             'currency' => $currency,
@@ -56,12 +54,11 @@ class PaysafecardMethod extends PaymentMethod
             'customer' => [
                 'id' => Auth::id(),
             ],
-        ];
+        ]);
 
-        $response = $this->sendRequest('POST', '', $options);
-
-        if ($response === null) {
-            throw new RuntimeException('Invalid response from paysafecard');
+        if (! $response->successful()) {
+            Log::warning("[Shop] Paysafecard - Invalid init response from {$response->effectiveUri()} : {$response->json()['message']}");
+            return $this->errorResponse();
         }
 
         $this->createPayment($cart, $amount, $currency, $response['id']);
@@ -76,35 +73,6 @@ class PaysafecardMethod extends PaymentMethod
         return response()->json($this->processPscPayment($paymentId));
     }
 
-    public function processPscPayment(string $paymentId)
-    {
-        $payment = Payment::firstWhere('payment_id', $paymentId);
-
-        $response = $this->retrievePayment($paymentId);
-
-        if ($response === null) {
-            return ['status' => false, 'message' => 'Invalid response from paysafecard'];
-        }
-
-        if ($response['status'] === 'SUCCESS') {
-            return ['status' => true];
-        }
-
-        if ($response['status'] !== 'AUTHORIZED') {
-            return ['status' => false, 'message' => 'Invalid payment response'];
-        }
-
-        $response = $this->capturePayment($paymentId);
-
-        if ($response['status'] !== 'SUCCESS') {
-            return ['status' => false, 'message' => 'Invalid capture response'];
-        }
-
-        payment_manager()->deliverPayment($payment);
-
-        return ['status' => true];
-    }
-
     public function success(Request $request)
     {
         $paymentId = $request->input('id');
@@ -116,10 +84,62 @@ class PaysafecardMethod extends PaymentMethod
         $payment = $this->processPscPayment($paymentId);
 
         if ($payment['status'] !== true) {
+            Log::warning("[Shop] Paysafecard - {$payment['message']}");
             return $this->errorResponse();
         }
 
         return view('shop::payments.success');
+    }
+
+    private function processPscPayment(string $paymentId)
+    {
+        $payment = Payment::firstWhere('payment_id', $paymentId);
+
+        $response = $this->retrievePayment($paymentId);
+
+        if (! $response->successful()) {
+            return [
+                'status' => false,
+                'message' => "Invalid payment response from {$response->effectiveUri()}: {$response->json()['message']}",
+            ];
+        }
+
+        $status = $response->json()['status'];
+
+        if ($status === 'SUCCESS') {
+            // Payment already successfully completed
+            return ['status' => true];
+        }
+
+        if ($status !== 'AUTHORIZED') {
+            return [
+                'status' => false,
+                'message' => "Invalid payment status: {$status}",
+            ];
+        }
+
+        $response = $this->prepareRequest()
+            ->post("{$paymentId}/capture", ['id' => $paymentId]);
+
+        if (! $response->successful()) {
+            return [
+                'status' => false,
+                'message' => "Invalid capture response: {$response->body()}",
+            ];
+        }
+
+        $status = $response->json()['status'];
+
+        if ($status !== 'SUCCESS') {
+            return [
+                'status' => false,
+                'message' => "Invalid capture status: {$status}",
+            ];
+        }
+
+        payment_manager()->deliverPayment($payment);
+
+        return ['status' => true];
     }
 
     public function view()
@@ -135,31 +155,18 @@ class PaysafecardMethod extends PaymentMethod
         ];
     }
 
-    private function sendRequest(string $method, string $endpoint, array $params = [])
+    private function prepareRequest()
     {
-        $domain = $this->gateway->data['environment'] === 'PRODUCTION' ? 'api' : 'apitest';
+        $domain = $this->gateway->data['environment'] === 'production' ? 'api' : 'apitest';
+        $url = "https://{$domain}.paysafecard.com/v1/payments";
+        $token = base64_encode($this->gateway->data['key']);
 
-        $method = strtolower($method);
-
-        /** @var \Illuminate\Http\Client\Response $response */
-        $response = Http::withToken(base64_encode($this->gateway->data['key']), 'Basic')
-            ->$method("https://{$domain}.paysafecard.com/v1/payments/{$endpoint}", $params);
-
-        if (! $response->successful()) {
-            return null;
-        }
-
-        return $response->json();
-    }
-
-    private function capturePayment(string $paymentId)
-    {
-        return $this->sendRequest('POST', $paymentId.'/capture', ['id' => $paymentId]);
+        return Http::withToken($token, 'Basic')->baseUrl($url);
     }
 
     private function retrievePayment(string $paymentId)
     {
-        return $this->sendRequest('GET', $paymentId);
+        return $this->prepareRequest()->get($paymentId);
     }
 
     public static function environments()

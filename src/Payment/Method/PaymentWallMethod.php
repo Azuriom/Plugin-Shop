@@ -43,7 +43,7 @@ class PaymentWallMethod extends PaymentMethod
                     'payment_'.$payment->id,
                     $amount,
                     $currency,
-                    'Payment on '.site_name(),
+                    $this->getPurchaseDescription($payment->id),
                     Product::TYPE_FIXED
                 ),
             ],
@@ -65,11 +65,11 @@ class PaymentWallMethod extends PaymentMethod
         $pingback = new Pingback($request->all(), $request->ip());
 
         if (! $pingback->validate()) {
-            return response()->json(['status' => 'error', 'message' => 'Payment not validated']);
+            return response()->json(['status' => false, 'message' => 'Payment not validated']);
         }
 
         if (! $pingback->isDeliverable()) {
-            return response()->json(['status' => 'error', 'message' => 'Payment not deliverable']);
+            return response()->json(['status' => false, 'message' => 'Payment not deliverable']);
         }
 
         $payment = Payment::find(str_replace('payment_', '', $pingback->getProduct()->getId()));

@@ -77,11 +77,11 @@
         <div class="input-group-append">
             <span class="input-group-text">{{ shop_active_currency() }}</span>
         </div>
-    </div>
 
-    @error('price')
-    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
-    @enderror
+        @error('price')
+        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+        @enderror
+    </div>
 </div>
 
 <div class="form-group">
@@ -144,7 +144,7 @@
 </div>
 
 <div class="form-group custom-control custom-switch">
-    <input type="checkbox" class="custom-control-input" id="needOnlineSwitch" name="need_online" @if($reward->need_online ?? true) checked @endif>
+    <input type="checkbox" class="custom-control-input" id="needOnlineSwitch" name="need_online" @if($package->need_online ?? true) checked @endif>
     <label class="custom-control-label" for="needOnlineSwitch">{{ trans('shop::admin.packages.need-online') }}</label>
 </div>
 

@@ -15,7 +15,7 @@ class PaymentController extends Controller
     public function index()
     {
         return view('shop::admin.payments.index', [
-            'payments' => Payment::with('user')->latest()->paginate(),
+            'payments' => Payment::notPending()->with('user')->latest()->paginate(),
         ]);
     }
 }
