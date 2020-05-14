@@ -127,6 +127,7 @@ class PaymentManager
                 'description' => $cartItem->buyable()->getDescription() ?? '',
             ];
         }
+        
         return $tmp_array;
     }
 }
