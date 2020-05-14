@@ -96,20 +96,20 @@ class PaymentManager
         if ($payment->type === 'OFFER') {
             $offers = Offer::findMany(array_keys($ids))->keyBy('id');
 
-            foreach ($ids as $packageId => $quantity) {
+            foreach ($ids as $packageId => $object) {
                 $offer = $offers[$packageId];
 
-                $offer->deliver($payment->user, $quantity);
+                $offer->deliver($payment->user, $object['quantity']);
             }
         } elseif ($payment->type === 'PACKAGE') {
             $packages = Package::with('servers')
                 ->findMany(array_keys($ids))
                 ->keyBy('id');
 
-            foreach ($ids as $packageId => $quantity) {
+            foreach ($ids as $packageId => $object) {
                 $package = $packages[$packageId];
 
-                $package->deliver($payment->user, $quantity);
+                $package->deliver($payment->user, $object['quantity']);
             }
         }
 
@@ -118,6 +118,15 @@ class PaymentManager
 
     public function serializeCart(Cart $cart)
     {
-        return $cart->content()->pluck('quantity', 'id');
+        $tmp_array = [];
+        foreach ($cart->content() as $cartItem) {
+            $tmp_array[$cartItem->id] = [
+                'name' => $cartItem->buyable()->getName(),
+                'price' => $cartItem->buyable()->getPrice(),
+                'quantity' => $cartItem->quantity,
+                'description' => $cartItem->buyable()->getDescription() ?? '',
+            ];
+        }
+        return $tmp_array;
     }
 }
