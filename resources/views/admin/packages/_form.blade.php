@@ -137,8 +137,7 @@
 
     <div class="mb-1">
         <button type="button" id="addCommandButton" class="btn btn-sm btn-success">
-            <i class="fas fa-plus"></i>
-            {{ trans('messages.actions.add') }}
+            <i class="fas fa-plus"></i> {{ trans('messages.actions.add') }}
         </button>
     </div>
 </div>

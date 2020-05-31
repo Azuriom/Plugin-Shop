@@ -48,6 +48,8 @@ return [
     'payment' => [
         'title' => 'Paiement',
 
+        'empty' => 'Aucun moyen de paiement n\'est disponible actuellement.',
+
         'info' => 'Achat #:id sur :website',
         'error' => 'Le paiement n\'a pas pu être effectué.',
 
@@ -57,5 +59,7 @@ return [
     'offers' => [
         'title-payment' => 'Moyen de paiement',
         'title-select' => 'Montant',
+
+        'empty' => 'Aucune offre n\'est disponible actuellement.',
     ],
 ];

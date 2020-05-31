@@ -48,6 +48,8 @@ return [
     'payment' => [
         'title' => 'Payment',
 
+        'empty' => 'No payment methods currently available.',
+
         'info' => 'Purchase #:id on :website',
         'error' => 'The payment could not be completed.',
 
@@ -57,5 +59,7 @@ return [
     'offers' => [
         'title-payment' => 'Payment type',
         'title-select' => 'Amount',
+
+        'empty' => 'No offers are currently available.',
     ],
 ];

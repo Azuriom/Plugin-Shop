@@ -22,3 +22,8 @@
         @enderror
     </div>
 </div>
+
+<div class="alert alert-info" role="alert">
+    <i class="fas fa-info-circle"></i> @lang('shop::admin.gateways.paysafecard-info')
+</div>
+

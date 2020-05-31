@@ -4,8 +4,8 @@
 
 @section('content')
     <div class="container content">
-        <h1>Success</h1>
+        <h1>{{ trans('shop::messages.payments.success') }}</h1>
 
-        <p>Your payment has been completed. You will receive your purchase in few minutes.</p>
+        <p>{{ trans('shop::messages.payments.success-info') }}</p>
     </div>
 @endsection

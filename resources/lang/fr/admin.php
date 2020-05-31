@@ -93,6 +93,9 @@ return [
         'env' => 'Environnement',
 
         'paypal-email' => 'Adresse E-Mail PayPal',
+        'paysafecard-info' => 'Pour pouvoir accepter les paiements par paysafecard, vous devez être un <a href="https://www.paysafecard.com/fr/business/" target="_blank" rel="noopener noreferrer">partenaire paysafecard</a>. D\'autres méthodes existent, mais celle-ci est la seule autorisée par paysafecard.',
+        'stripe-info' => 'Sur le tableau de bord Stripe, vous devez définir l\'URL du webhook sur <code>:url</code>.',
+        'paymentwall-info' => 'Dans le tableau de bord PaymentWall, vous devez définir l\'URL de pingback sur <code>:url</code>.',
 
         'enable' => 'Activer ce moyen de paiement',
     ],
