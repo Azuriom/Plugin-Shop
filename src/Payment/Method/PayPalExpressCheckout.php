@@ -134,11 +134,11 @@ class PayPalExpressCheckout extends PaymentMethod
 
     private function getApiContext()
     {
-        return new ApiContext(
-            new OAuthTokenCredential(
-                $this->gateway->data['client-id'],
-                $this->gateway->data['secret']
-            )
-        );
+        $id = $this->gateway->data['client-id'];
+        $secret = $this->gateway->data['secret'];
+
+        $apiContext = new ApiContext(new OAuthTokenCredential($id, $secret));
+
+        return tap($apiContext)->setConfig(['mode' => 'live']);
     }
 }
