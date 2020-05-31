@@ -31,6 +31,7 @@ return [
         'pay-confirm-title' => 'Payer ?',
         'pay-confirm' => 'Êtes vous sûr de vouloir acheter le contenu du panier pour :price ?',
 
+        'guest' => 'Vous devez être connecté pour effectuer un achat.',
         'empty' => 'Votre panier est vide.',
 
         'checkout' => 'Procéder au paiement',

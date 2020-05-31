@@ -31,6 +31,7 @@ return [
         'pay-confirm-title' => 'Pay ?',
         'pay-confirm' => 'Are you sure you want to buy this cart for :price.',
 
+        'guest' => 'You must be login to make a purchase.',
         'empty' => 'Your cart is empty.',
 
         'checkout' => 'Checkout',

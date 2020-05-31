@@ -11,8 +11,11 @@
                 @include('shop::admin.offers._form')
 
                 <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-save"></i> {{ trans('messages.actions.save') }}</button>
-                <a href="{{ route('shop.admin.offers.destroy', $offer) }}" class="btn btn-danger" data-confirm="delete"><i class="fas fa-trash"></i> {{ trans('messages.actions.delete') }}
+                    <i class="fas fa-save"></i> {{ trans('messages.actions.save') }}
+                </button>
+
+                <a href="{{ route('shop.admin.offers.destroy', $offer) }}" class="btn btn-danger" data-confirm="delete">
+                    <i class="fas fa-trash"></i> {{ trans('messages.actions.delete') }}
                 </a>
             </form>
         </div>
