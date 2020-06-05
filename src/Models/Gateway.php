@@ -71,7 +71,7 @@ class Gateway extends Model
     }
 
     /**
-     * Scope a query to only include enabled payment gateways
+     * Scope a query to only include enabled payment gateways.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @return \Illuminate\Database\Eloquent\Builder
