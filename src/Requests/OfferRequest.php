@@ -26,7 +26,7 @@ class OfferRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required', 'string', 'max:100'],
+            'name' => ['required', 'string', 'max:50'],
             'price' => ['required', 'numeric', 'min:0.01'],
             'money' => ['required', 'integer', 'min:0'],
             'gateways' => ['required', 'array'],

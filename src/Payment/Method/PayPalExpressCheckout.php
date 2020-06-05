@@ -95,7 +95,7 @@ class PayPalExpressCheckout extends PaymentMethod
 
         $paypalPayment = PayPalPayment::get($paymentId, $apiContext);
 
-        $payment = Payment::find($paypalPayment->getId());
+        $payment = Payment::firstWhere('payment_id', $paypalPayment->getId());
 
         if ($payment === null) {
             return $this->errorResponse();

@@ -27,7 +27,7 @@ class PackageRequest extends FormRequest
     {
         return [
             'category_id' => ['required', 'exists:shop_categories,id'],
-            'name' => ['required', 'string', 'max:100'],
+            'name' => ['required', 'string', 'max:50'],
             'short_description' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string'],
             'price' => ['required', 'numeric', 'min:0.01'],

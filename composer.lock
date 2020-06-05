@@ -74,16 +74,16 @@
         },
         {
             "name": "mollie/mollie-api-php",
-            "version": "v2.17.0",
+            "version": "v2.18.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mollie/mollie-api-php.git",
-                "reference": "ee22d0301aee55a41ef2e7d201ef29f86550d1f7"
+                "reference": "f2cf1ccb6d3cf85e2ab33232d909866444323077"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mollie/mollie-api-php/zipball/ee22d0301aee55a41ef2e7d201ef29f86550d1f7",
-                "reference": "ee22d0301aee55a41ef2e7d201ef29f86550d1f7",
+                "url": "https://api.github.com/repos/mollie/mollie-api-php/zipball/f2cf1ccb6d3cf85e2ab33232d909866444323077",
+                "reference": "f2cf1ccb6d3cf85e2ab33232d909866444323077",
                 "shasum": ""
             },
             "require": {
@@ -156,7 +156,7 @@
                 "sofortbanking",
                 "subscriptions"
             ],
-            "time": "2020-02-25T12:19:37+00:00"
+            "time": "2020-05-29T12:48:05+00:00"
         },
         {
             "name": "paygol/php-sdk",
@@ -294,6 +294,7 @@
                 "rest",
                 "sdk"
             ],
+            "abandoned": true,
             "time": "2019-01-04T20:04:25+00:00"
         },
         {
@@ -345,16 +346,16 @@
         },
         {
             "name": "stripe/stripe-php",
-            "version": "v7.31.0",
+            "version": "v7.36.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stripe/stripe-php.git",
-                "reference": "993b58f73572b415c476548134e71e07d96ac3f0"
+                "reference": "a8981c169e6842fc6a4d4e7028b706b8291ad4ec"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/993b58f73572b415c476548134e71e07d96ac3f0",
-                "reference": "993b58f73572b415c476548134e71e07d96ac3f0",
+                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/a8981c169e6842fc6a4d4e7028b706b8291ad4ec",
+                "reference": "a8981c169e6842fc6a4d4e7028b706b8291ad4ec",
                 "shasum": ""
             },
             "require": {
@@ -398,7 +399,7 @@
                 "payment processing",
                 "stripe"
             ],
-            "time": "2020-05-01T19:45:41+00:00"
+            "time": "2020-06-03T19:16:18+00:00"
         }
     ],
     "packages-dev": [],

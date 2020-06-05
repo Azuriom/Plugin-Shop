@@ -61,7 +61,7 @@ class PackageController extends Controller
         }
 
         return response()->json([
-            'message' => trans('shop.packages.status.order-updated'),
+            'message' => trans('shop::admin.packages.status.order-updated'),
         ]);
     }
 

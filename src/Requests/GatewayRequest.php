@@ -26,7 +26,7 @@ class GatewayRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required', 'string', 'max:100'],
+            'name' => ['required', 'string', 'max:50'],
             //'fees' => ['required', 'integer', 'min:0', 'max:100'],
             'is_enabled' => ['filled', 'boolean'],
         ];
