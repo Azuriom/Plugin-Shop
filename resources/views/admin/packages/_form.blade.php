@@ -133,9 +133,9 @@
         @endforelse
     </div>
 
-    <p class="mb-1"><small>@lang('shop::admin.packages.commands-info')</small></p>
+    <small class="form-text">@lang('shop::admin.packages.commands-info')</small>
 
-    <div class="mb-1">
+    <div class="my-1">
         <button type="button" id="addCommandButton" class="btn btn-sm btn-success">
             <i class="fas fa-plus"></i> {{ trans('messages.actions.add') }}
         </button>
