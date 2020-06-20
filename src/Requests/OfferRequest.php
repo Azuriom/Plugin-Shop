@@ -3,7 +3,9 @@
 namespace Azuriom\Plugin\Shop\Requests;
 
 use Azuriom\Http\Requests\Traits\ConvertCheckbox;
+use Azuriom\Plugin\Shop\Models\Offer;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class OfferRequest extends FormRequest
 {
@@ -26,7 +28,7 @@ class OfferRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required', 'string', 'max:50'],
+            'name' => ['required', 'string', 'max:50', Rule::unique(Offer::class)->ignore($this->offer, 'name')],
             'price' => ['required', 'numeric', 'min:0.01'],
             'money' => ['required', 'integer', 'min:0'],
             'gateways' => ['required', 'array'],
