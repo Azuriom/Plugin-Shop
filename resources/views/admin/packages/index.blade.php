@@ -45,7 +45,7 @@
         }
 
         const saveButton = document.getElementById('save');
-        const saveButtonIcon = saveButton.querySelector('.btn-spinner');
+        const saveButtonIcon = saveButton.querySelector('.btn-animation');
 
         saveButton.addEventListener('click', function () {
             saveButton.setAttribute('disabled', '');
@@ -118,7 +118,7 @@
 
                 <button type="button" class="btn btn-success" id="save">
                     <i class="fas fa-save"></i> {{ trans('messages.actions.save') }}
-                    <span class="spinner-border spinner-border-sm btn-spinner d-none" role="status"></span>
+                    <i class="fas fa-sync fa-spin d-none btn-animation"></i>
                 </button>
             @endif
         </div>

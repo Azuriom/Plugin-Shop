@@ -27,6 +27,7 @@
     @enderror
 </div>
 
-<div class="alert alert-info" role="alert">
-    <i class="fas fa-info-circle"></i> @lang('shop::admin.gateways.stripe-info', ['url' => route('shop.payments.notification', 'stripe')])
+<div class="alert alert-info">
+    On the Stripe dashboard you need to set the webhook URL to
+    <code>{{ route('shop.payments.notification', 'stripe') }}</code>.
 </div>

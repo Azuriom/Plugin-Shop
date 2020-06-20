@@ -18,6 +18,7 @@
     </div>
 </div>
 
-<div class="alert alert-info" role="alert">
-    <i class="fas fa-info-circle"></i> @lang('shop::admin.gateways.paymentwall-info', ['url' => route('shop.payments.notification', 'paymentwall')])
+<div class="alert alert-info">
+    On your PaymentWall panel you need to set the pingback URL to
+    <code>{{ route('shop.payments.notification', 'paymentwall') }}</code>.
 </div>

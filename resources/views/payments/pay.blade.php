@@ -21,7 +21,7 @@
         <h1>{{ trans('shop::messages.payment.title') }}</h1>
 
         <div class="row">
-            @forelse($gateways as $gateway)
+            @foreach($gateways as $gateway)
                 <div class="col-md-3">
                     <div class="card shadow-sm mb-3">
                         <a href="{{ route('shop.payments.pay', $gateway->type) }}" class="payment-method">
@@ -31,13 +31,7 @@
                         </a>
                     </div>
                 </div>
-            @empty
-                <div class="col">
-                    <div class="alert alert-warning" role="alert">
-                        {{ trans('shop::messages.payments.empty') }}
-                    </div>
-                </div>
-            @endforelse
+            @endforeach
         </div>
     </div>
 
