@@ -8,9 +8,7 @@
             <form action="{{ route('shop.admin.offers.store') }}" method="POST">
                 @include('shop::admin.offers._form')
 
-                <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-save"></i> {{ trans('messages.actions.save') }}
-                </button>
+                <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> {{ trans('messages.actions.save') }}</button>
             </form>
         </div>
     </div>

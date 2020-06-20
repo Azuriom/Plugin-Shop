@@ -133,11 +133,12 @@
         @endforelse
     </div>
 
-    <small class="form-text">@lang('shop::admin.packages.commands-info')</small>
+    <p class="mb-1"><small>@lang('shop::admin.packages.commands-info')</small></p>
 
-    <div class="my-1">
+    <div class="mb-1">
         <button type="button" id="addCommandButton" class="btn btn-sm btn-success">
-            <i class="fas fa-plus"></i> {{ trans('messages.actions.add') }}
+            <i class="fas fa-plus"></i>
+            {{ trans('messages.actions.add') }}
         </button>
     </div>
 </div>

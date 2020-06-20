@@ -19,10 +19,6 @@
                         {{ trans('shop::messages.buy') }}
                     </button>
                 </form>
-            @else
-                <div class="alert alert-info" role="alert">
-                    {{ trans('shop::messages.cart.guest') }}
-                </div>
             @endauth
         </div>
     </div>

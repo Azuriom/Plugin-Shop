@@ -7,6 +7,7 @@
             <li class="breadcrumb-item"><a href="{{ $breadcrumbLink }}">{{ $breadcrumbName }}</a></li>
         @endforeach
     </ol>
+    <h2 style="font-family: poppins,sans-serif;"><B>{{ site_name() }}</B></h2>
 </nav>
 
 @push('styles')

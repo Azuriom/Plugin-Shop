@@ -24,6 +24,7 @@
 
 @section('content')
     <div class="container content">
+        @include('shop::navbar.nav')
         <div class="row">
             <div class="col-lg-3">
                 @include('shop::categories.sidebar')
