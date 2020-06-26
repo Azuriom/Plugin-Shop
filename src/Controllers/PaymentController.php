@@ -14,7 +14,7 @@ class PaymentController extends Controller
         $gateways = Gateway::enabled()
             ->get()
             ->filter(function ($gateway) {
-                if(! payment_manager()->hasPaymentMethod($gateway->type)){
+                if (! payment_manager()->hasPaymentMethod($gateway->type)) {
                     return false;
                 }
 

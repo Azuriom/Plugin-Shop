@@ -42,6 +42,7 @@ class Cart
 
         if ($session === null) {
             $this->items = collect();
+
             return;
         }
 

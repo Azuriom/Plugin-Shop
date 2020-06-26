@@ -3,10 +3,7 @@
 namespace Azuriom\Plugin\Shop\Payment;
 
 use Azuriom\Plugin\Shop\Cart\Cart;
-use Azuriom\Plugin\Shop\Events\PaymentPaid;
 use Azuriom\Plugin\Shop\Models\Gateway;
-use Azuriom\Plugin\Shop\Models\Offer;
-use Azuriom\Plugin\Shop\Models\Package;
 use Azuriom\Plugin\Shop\Models\Payment;
 use Azuriom\Plugin\Shop\Models\Purchase;
 use Azuriom\Plugin\Shop\Payment\Method\MollieMethod;
