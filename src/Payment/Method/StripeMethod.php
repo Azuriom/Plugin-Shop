@@ -33,7 +33,7 @@ class StripeMethod extends PaymentMethod
 
         $items = $cart->content()->map(function (CartItem $item) use ($currency) {
             return [
-                'name' => $item->buyable()->getName(),
+                'name' => $item->name(),
                 'amount' => (int) $item->buyable()->getPrice() * 100,
                 'description' => $item->buyable()->getDescription(),
                 'currency' => $currency,

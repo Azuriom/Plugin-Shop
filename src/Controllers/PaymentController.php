@@ -14,12 +14,12 @@ class PaymentController extends Controller
         $gateways = Gateway::enabled()
             ->get()
             ->filter(function ($gateway) {
-                return payment_manager()->hasPaymentMethod($gateway->type) && ! $gateway->paymentMethod()->hasFixedAmount();
-            });
+                if(! payment_manager()->hasPaymentMethod($gateway->type)){
+                    return false;
+                }
 
-        if ($gateways->isEmpty()) {
-            return redirect()->route('shop.cart.index'); // TODO nice message to explain
-        }
+                return ! $gateway->paymentMethod()->hasFixedAmount();
+            });
 
         return view('shop::payments.pay', ['gateways' => $gateways]);
     }
@@ -33,7 +33,7 @@ class PaymentController extends Controller
      */
     public function pay(Request $request, Gateway $gateway)
     {
-        $cart = new Cart($request->session());
+        $cart = Cart::fromSession($request->session());
 
         if ($cart->isEmpty()) {
             return redirect()->route('shop.cart.index');
@@ -46,7 +46,7 @@ class PaymentController extends Controller
     {
         $response = $gateway->paymentMethod()->success($request);
 
-        $cart = new Cart($request->session());
+        $cart = Cart::fromSession($request->session());
 
         $cart->clear();
 

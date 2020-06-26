@@ -18,7 +18,9 @@ class CategoryController extends Controller
         $category = Category::enabled()->first();
 
         if ($category === null) {
-            return view('shop::categories.index');
+            return view('shop::categories.index', [
+                'goal' => $this->getMonthGoal(),
+            ]);
         }
 
         return $this->show($category);
@@ -32,10 +34,11 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        $categories = Category::enabled()->withCount('packages')
+        $categories = Category::enabled()
+            ->withCount('packages')
             ->get()
             ->filter(function (Category $cat) use ($category) {
-                return $cat->is($category) || $cat->packages_count !== 0;
+                return $cat->is($category) || $cat->packages_count > 0;
             });
 
         return view('shop::categories.show', [

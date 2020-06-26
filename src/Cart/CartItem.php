@@ -86,6 +86,11 @@ class CartItem implements Arrayable
         return $this->buyable;
     }
 
+    public function name()
+    {
+        return $this->buyable->getName();
+    }
+
     public function price()
     {
         return $this->buyable()->getPrice();

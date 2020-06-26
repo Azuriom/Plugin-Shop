@@ -36,7 +36,7 @@ class PackageController extends Controller
     {
         $this->validate($request, ['quantity' => 'nullable|integer']);
 
-        $cart = new Cart($request->session());
+        $cart = Cart::fromSession($request->session());
 
         if ($package->has_quantity) {
             $cart->add($package, $request->input('quantity', 1));

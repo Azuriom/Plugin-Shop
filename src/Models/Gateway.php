@@ -51,7 +51,7 @@ class Gateway extends Model
     ];
 
     /**
-     * Get the offers that has this gateway.
+     * Get the offers that can be used with this gateway.
      */
     public function offers()
     {
@@ -65,9 +65,7 @@ class Gateway extends Model
      */
     public function paymentMethod()
     {
-        $paymentManager = payment_manager();
-
-        return $paymentManager->getPaymentMethodOrFail($this->type, $this);
+        return payment_manager()->getPaymentMethodOrFail($this->type, $this);
     }
 
     /**

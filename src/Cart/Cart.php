@@ -3,7 +3,7 @@
 namespace Azuriom\Plugin\Shop\Cart;
 
 use Azuriom\Plugin\Shop\Models\Concerns\Buyable;
-use Illuminate\Session\Store as Session;
+use Illuminate\Contracts\Session\Session;
 use Illuminate\Support\Collection;
 
 /**
@@ -17,9 +17,9 @@ use Illuminate\Support\Collection;
 class Cart
 {
     /**
-     * The session manager instance.
+     * The session where this cart is stored.
      *
-     * @var \Illuminate\Session\Store
+     * @var \Illuminate\Contracts\Session\Session
      */
     private $session;
 
@@ -33,12 +33,19 @@ class Cart
     /**
      * Create a new cart instance.
      *
-     * @param  \Illuminate\Session\Store  $session
+     * @param  \Illuminate\Contracts\Session\Session  $session
+     * @deprecated Use Cart::fromSession() or Cart::empty()
      */
     public function __construct(Session $session = null)
     {
         $this->session = $session;
-        $this->items = $session ? $this->loadFromSession($this->session) : collect();
+
+        if ($session === null) {
+            $this->items = collect();
+            return;
+        }
+
+        $this->loadFromSession($this->session);
     }
 
     /**
@@ -49,6 +56,10 @@ class Cart
      */
     public function add(Buyable $buyable, int $quantity = 1)
     {
+        if ($quantity <= 0) {
+            return;
+        }
+
         $cartItem = $this->get($buyable);
 
         if ($cartItem === null) {
@@ -58,7 +69,7 @@ class Cart
         }
 
         $cartItem->setQuantity($cartItem->quantity + $quantity);
-        $this->saveToSession();
+        $this->save();
     }
 
     /**
@@ -69,6 +80,12 @@ class Cart
      */
     public function set(Buyable $buyable, int $quantity = 1)
     {
+        if ($quantity <= 0) {
+            $this->remove($buyable);
+
+            return;
+        }
+
         $cartItem = $this->get($buyable);
 
         if ($cartItem !== null) {
@@ -81,11 +98,11 @@ class Cart
 
         $this->items->put($id, new CartItem($buyable, $id, $quantity));
 
-        $this->saveToSession();
+        $this->save();
     }
 
     /**
-     * Remove the cart item with the given rowId from the cart.
+     * Remove the given model from cart.
      *
      * @param  \Azuriom\Plugin\Shop\Models\Concerns\Buyable  $buyable
      */
@@ -93,11 +110,12 @@ class Cart
     {
         $this->items->forget($this->getItemId($buyable));
 
-        $this->saveToSession();
+        $this->save();
     }
 
     /**
-     * Get a cart item from the cart by its rowId.
+     * Get from the cart the cart items associated to this model.
+     * Return null if this model is not in this cart.
      *
      * @param  \Azuriom\Plugin\Shop\Models\Concerns\Buyable  $buyable
      * @return \Azuriom\Plugin\Shop\Cart\CartItem|null
@@ -105,6 +123,17 @@ class Cart
     public function get(Buyable $buyable)
     {
         return $this->items->get($this->getItemId($buyable));
+    }
+
+    /**
+     * Determine if a cart item is in the cart.
+     *
+     * @param  \Azuriom\Plugin\Shop\Models\Concerns\Buyable  $buyable
+     * @return bool
+     */
+    public function has(Buyable $buyable)
+    {
+        return $this->items->has($this->getItemId($buyable));
     }
 
     /**
@@ -116,7 +145,7 @@ class Cart
     {
         $this->items = collect();
 
-        $this->saveToSession();
+        $this->save();
     }
 
     public function isEmpty()
@@ -137,13 +166,11 @@ class Cart
     /**
      * Get the number of items in the cart.
      *
-     * @return int|float
+     * @return int
      */
     public function count()
     {
-        return $this->content()->sum(function ($item) {
-            return $item->quantity;
-        });
+        return $this->content()->sum('quantity');
     }
 
     /**
@@ -168,11 +195,44 @@ class Cart
         return strtoupper(class_basename($this->items->first()->buyable()));
     }
 
-    protected function saveToSession()
+    protected function save()
     {
         if ($this->session) {
             $this->session->put('shop.cart', $this->items->toArray());
         }
+    }
+
+    /**
+     * Clear the items and remove the current cart from the session.
+     */
+    public function destroy()
+    {
+        $this->items = collect();
+
+        if ($this->session) {
+            $this->session->remove('shop.cart');
+        }
+    }
+
+    /**
+     * Create a new empty cart without associated session.
+     *
+     * @return self
+     */
+    public static function createEmpty()
+    {
+        return new self(null);
+    }
+
+    /**
+     * Create a new cart instance and load the content of the associated session.
+     *
+     * @param  \Illuminate\Contracts\Session\Session  $session
+     * @return self
+     */
+    public static function fromSession(Session $session)
+    {
+        return new self($session);
     }
 
     protected function loadFromSession(Session $session)
@@ -180,10 +240,10 @@ class Cart
         $items = $session->get('shop.cart', []);
 
         if (empty($items)) {
-            return collect();
+            return;
         }
 
-        return collect($items)->groupBy('type')->flatMap(function (Collection $items, string $type) {
+        $this->items = collect($items)->groupBy('type')->flatMap(function (Collection $items, string $type) {
             /** @var \Illuminate\Database\Eloquent\Collection $models */
             $models = $type::findMany($items->pluck('id'))->keyBy('id');
 

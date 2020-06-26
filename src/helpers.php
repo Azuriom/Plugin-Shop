@@ -67,6 +67,6 @@ if (! function_exists('shop_format_amount')) {
 if (! function_exists('shop_cart')) {
     function shop_cart()
     {
-        return new Cart(Request::session());
+        return Cart::fromSession(Request::session());
     }
 }

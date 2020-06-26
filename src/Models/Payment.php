@@ -5,6 +5,7 @@ namespace Azuriom\Plugin\Shop\Models;
 use Azuriom\Models\Traits\HasTablePrefix;
 use Azuriom\Models\Traits\HasUser;
 use Azuriom\Models\User;
+use Azuriom\Plugin\Shop\Events\PaymentPaid;
 use Azuriom\Plugin\Shop\Payment\PaymentManager;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -85,6 +86,35 @@ class Payment extends Model
         }
 
         return $paymentManager->getPaymentMethod($this->payment_type)->name();
+    }
+
+    public function deliver()
+    {
+        $this->update(['status' => 'SUCCESS']);
+
+        event(new PaymentPaid($this));
+
+        if ($this->type === 'OFFER') {
+            $offers = Offer::findMany(array_keys($this->items))->keyBy('id');
+
+            foreach ($this->items as $packageId => $quantity) {
+                $offer = $offers[$packageId];
+
+                $offer->deliver($this->user, $quantity);
+            }
+        } elseif ($this->type === 'PACKAGE') {
+            $packages = Package::with('servers')
+                ->findMany(array_keys($this->items))
+                ->keyBy('id');
+
+            foreach ($this->items as $packageId => $quantity) {
+                $package = $packages[$packageId];
+
+                $package->deliver($this->user, $quantity);
+            }
+        }
+
+        $this->update(['status' => 'DELIVERED']);
     }
 
     public function isPending()

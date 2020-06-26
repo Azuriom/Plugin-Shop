@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @property int $id
  * @property string $name
+ * @property string $description
+ * @property int $position
  * @property bool $is_enabled
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at

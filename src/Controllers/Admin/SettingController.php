@@ -11,7 +11,7 @@ use Illuminate\Validation\Rule;
 class SettingController extends Controller
 {
     /**
-     * Display the settings.
+     * Display the shop settings.
      *
      * @return \Illuminate\Http\Response
      */
@@ -24,6 +24,14 @@ class SettingController extends Controller
         ]);
     }
 
+    /**
+     * Update the shop settings.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     *
+     * @throws \Illuminate\Validation\ValidationException
+     */
     public function save(Request $request)
     {
         Setting::updateSettings($this->validate($request, [

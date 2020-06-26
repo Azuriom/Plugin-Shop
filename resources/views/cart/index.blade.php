@@ -19,7 +19,7 @@
 
                 @foreach($cart->content() as $cartItem)
                     <tr>
-                        <th scope="row">{{ $cartItem->buyable()->getName() }}</th>
+                        <th scope="row">{{ $cartItem->name() }}</th>
                         <td>{{ shop_format_amount($cartItem->total()) }}</td>
                         <td>{{ $cartItem->quantity }}</td>
                         <td>

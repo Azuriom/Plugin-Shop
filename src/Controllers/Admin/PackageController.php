@@ -19,9 +19,9 @@ class PackageController extends Controller
      */
     public function index()
     {
-        return view('shop::admin.packages.index', [
-            'categories' => Category::with('packages')->orderBy('position')->get(),
-        ]);
+        $categories = Category::with('packages')->orderBy('position')->get();
+
+        return view('shop::admin.packages.index', ['categories' => $categories]);
     }
 
     /**
@@ -63,6 +63,21 @@ class PackageController extends Controller
         return response()->json([
             'message' => trans('shop::admin.packages.status.order-updated'),
         ]);
+    }
+
+    /**
+     * Clone the specified package.
+     *
+     * @param  \Azuriom\Plugin\Shop\Models\Package  $package
+     * @return \Illuminate\Http\Response
+     */
+    public function clone(Package $package)
+    {
+        $clone = $package->replicate();
+
+        $clone->update(['image' => null]);
+
+        return redirect()->route('shop.admin.packages.edit', $clone);
     }
 
     /**

@@ -48,7 +48,7 @@ class PayPalExpressCheckout extends PaymentMethod
 
         foreach ($cart->content() as $cartItem) {
             $item = new Item();
-            $item->setName($cartItem->buyable()->getName())
+            $item->setName($cartItem->name())
                 ->setDescription($cartItem->buyable()->getDescription())
                 ->setQuantity($cartItem->quantity)
                 ->setPrice($cartItem->buyable()->getPrice());

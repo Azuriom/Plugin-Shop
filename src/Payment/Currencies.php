@@ -9,7 +9,6 @@ class Currencies
         'EUR' => 'Euro',
         'GBP' => 'Pound sterling',
         'JPY' => 'Japanese yen',
-
         'AUD' => 'Australian dollar',
         'BRL' => 'Brazilian real',
         'CAD' => 'Canadian dollar',

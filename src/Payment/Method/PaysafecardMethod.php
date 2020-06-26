@@ -152,7 +152,7 @@ class PaysafecardMethod extends PaymentMethod
     public function rules()
     {
         return [
-            'key' => ['required', 'string'],
+            'key' => ['required', 'string', 'starts_with:psc_'],
             'environment' => ['required', Rule::in(self::ENVIRONMENTS)],
         ];
     }

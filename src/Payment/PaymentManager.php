@@ -20,12 +20,14 @@ use Azuriom\Plugin\Shop\Payment\Method\StripeMethod;
 class PaymentManager
 {
     /**
+     * The loaded payment methods.
+     *
      * @var \Illuminate\Support\Collection
      */
     protected $paymentMethods;
 
     /**
-     * Create a new PaymentManager instance.
+     * Construct a new payment manager instance.
      */
     public function __construct()
     {
@@ -85,35 +87,12 @@ class PaymentManager
         }
     }
 
+    /**
+     * @deprecated Use Payment::deliver()
+     */
     public function deliverPayment(Payment $payment)
     {
-        $payment->update(['status' => 'SUCCESS']);
-
-        event(new PaymentPaid($payment));
-
-        $ids = $payment->items;
-
-        if ($payment->type === 'OFFER') {
-            $offers = Offer::findMany(array_keys($ids))->keyBy('id');
-
-            foreach ($ids as $packageId => $quantity) {
-                $offer = $offers[$packageId];
-
-                $offer->deliver($payment->user, $quantity);
-            }
-        } elseif ($payment->type === 'PACKAGE') {
-            $packages = Package::with('servers')
-                ->findMany(array_keys($ids))
-                ->keyBy('id');
-
-            foreach ($ids as $packageId => $quantity) {
-                $package = $packages[$packageId];
-
-                $package->deliver($payment->user, $quantity);
-            }
-        }
-
-        $payment->update(['status' => 'DELIVERED']);
+        $payment->deliver();
     }
 
     public function serializeCart(Cart $cart)

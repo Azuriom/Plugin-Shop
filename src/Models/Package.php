@@ -107,6 +107,6 @@ class Package extends Model implements Buyable
             }
         }
 
-        event(new PackageDelivered($this, $quantity));
+        event(new PackageDelivered($user, $this, $quantity));
     }
 }

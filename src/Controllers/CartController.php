@@ -17,7 +17,7 @@ class CartController extends Controller
      */
     public function index(Request $request)
     {
-        $cart = new Cart($request->session());
+        $cart = Cart::fromSession($request->session());
 
         return view('shop::cart.index', [
             'cart' => $cart,
@@ -33,7 +33,7 @@ class CartController extends Controller
      */
     public function remove(Request $request, Package $package)
     {
-        $cart = new Cart($request->session());
+        $cart = Cart::fromSession($request->session());
 
         $cart->remove($package);
 
@@ -65,7 +65,7 @@ class CartController extends Controller
             return redirect()->route('shop.cart.index');
         }
 
-        $cart = new Cart($request->session());
+        $cart = Cart::fromSession($request->session());
 
         if ($cart->isEmpty()) {
             return redirect()->route('shop.cart.index');

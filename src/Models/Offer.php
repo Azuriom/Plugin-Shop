@@ -49,7 +49,7 @@ class Offer extends Model implements Buyable
     ];
 
     /**
-     * The gateways that this offer have.
+     * The payments gateways with which this offer can be purchased.
      */
     public function gateways()
     {
@@ -58,9 +58,7 @@ class Offer extends Model implements Buyable
 
     public function deliver(User $user, int $quantity = 1)
     {
-        for ($i = 0; $i < $quantity; $i++) {
-            $user->addMoney($this->money);
-        }
+        $user->addMoney($this->money * $quantity);
         $user->save();
     }
 }

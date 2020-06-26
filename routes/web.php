@@ -31,6 +31,12 @@ Route::prefix('cart')->name('cart.')->middleware('auth')->group(function () {
     Route::get('/remove/{package}', 'CartController@remove')->name('remove');
     Route::post('/clear', 'CartController@clear')->name('clear');
     Route::post('/payment', 'CartController@payment')->name('payment')->middleware('auth');
+
+    Route::prefix('coupons')->name('coupons.')->group(function () {
+        Route::post('/add', 'CouponController@add')->name('add');
+        Route::post('/remove/{coupon}', 'CouponController@remove')->name('remove');
+        Route::post('/clear', 'CouponController@clear')->name('clear');
+    });
 });
 
 Route::prefix('payments')->name('payments.')->middleware('auth')->group(function () {

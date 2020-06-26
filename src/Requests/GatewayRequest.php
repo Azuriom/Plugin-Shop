@@ -27,7 +27,7 @@ class GatewayRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:50'],
-            //'fees' => ['required', 'integer', 'min:0', 'max:100'],
+            //'fees' => ['required', 'integer', 'between:0,100'],
             'is_enabled' => ['filled', 'boolean'],
         ];
     }

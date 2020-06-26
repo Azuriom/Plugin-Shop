@@ -12,7 +12,7 @@
                     headers: {
                         'X-PJAX': 'true'
                     }
-                }).then(function(response) {
+                }).then(function (response) {
                     $('#itemModal').html(response.data).modal('show');
                 }).catch(function (error) {
                     createAlert('danger', error, true);
@@ -36,9 +36,10 @@
                             <div class="card h-100">
                                 @if($package->image !== null)
                                     <a href="#" data-package-url="{{ route('shop.packages.show', $package) }}">
-                                        <img class="card-img-top" src="{{ $package->imageUrl() }}" alt="">
+                                        <img class="card-img-top" src="{{ $package->imageUrl() }}" alt="{{ $package->name }}">
                                     </a>
                                 @endif
+
                                 <div class="card-body">
                                     <h4 class="card-title">{{ $package->name }}</h4>
                                     <h5>{{ shop_format_amount($package->price) }}</h5>
@@ -47,7 +48,7 @@
                             </div>
                         </div>
                     @empty
-                        <div class="col p-0">
+                        <div class="col">
                             <div class="alert alert-warning" role="alert">
                                 {{ trans('shop::messages.categories.empty') }}
                             </div>

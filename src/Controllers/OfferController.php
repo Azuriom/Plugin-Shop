@@ -10,7 +10,7 @@ use Azuriom\Plugin\Shop\Models\Offer;
 class OfferController extends Controller
 {
     /**
-     * Construct a new OfferController instance.
+     * Construct a new controller instance.
      */
     public function __construct()
     {
@@ -39,7 +39,7 @@ class OfferController extends Controller
         $gateway->load('offers');
 
         if ($gateway->paymentMethod()->hasFixedAmount()) {
-            return $gateway->paymentMethod()->startPayment(new Cart(), 0, currency());
+            return $gateway->paymentMethod()->startPayment(Cart::createEmpty(), 0, currency());
         }
 
         return view('shop::offers.select', [
@@ -50,7 +50,7 @@ class OfferController extends Controller
 
     public function pay(Offer $offer, Gateway $gateway)
     {
-        $cart = new Cart();
+        $cart = Cart::createEmpty();
 
         $cart->add($offer);
 
