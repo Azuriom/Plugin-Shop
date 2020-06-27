@@ -6,7 +6,6 @@ use Azuriom\Models\Traits\HasTablePrefix;
 use Azuriom\Models\Traits\HasUser;
 use Azuriom\Models\User;
 use Azuriom\Plugin\Shop\Events\PaymentPaid;
-use Azuriom\Plugin\Shop\Payment\PaymentManager;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
