@@ -48,7 +48,7 @@ class PaymentController extends Controller
 
         $cart = Cart::fromSession($request->session());
 
-        $cart->clear();
+        $cart->destroy();
 
         return $response;
     }

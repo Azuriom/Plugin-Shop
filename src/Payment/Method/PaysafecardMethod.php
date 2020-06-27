@@ -139,7 +139,7 @@ class PaysafecardMethod extends PaymentMethod
             ];
         }
 
-        payment_manager()->deliverPayment($payment);
+        $payment->deliver();
 
         return ['status' => true];
     }

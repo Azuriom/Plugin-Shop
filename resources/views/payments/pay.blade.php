@@ -34,7 +34,7 @@
             @empty
                 <div class="col">
                     <div class="alert alert-warning" role="alert">
-                        {{ trans('shop::messages.payments.empty') }}
+                        {{ trans('shop::messages.payment.empty') }}
                     </div>
                 </div>
             @endforelse

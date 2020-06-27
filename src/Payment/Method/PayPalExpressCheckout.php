@@ -107,7 +107,7 @@ class PayPalExpressCheckout extends PaymentMethod
 
             $paypalPayment->execute($execution, $apiContext);
 
-            payment_manager()->deliverPayment($payment);
+            $payment->deliver();
 
             return view('shop::payments.success');
         }

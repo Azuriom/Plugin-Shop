@@ -4,8 +4,8 @@
 
 @section('content')
     <div class="container content">
-        <h1>{{ trans('shop::messages.payments.success') }}</h1>
+        <h1>{{ trans('shop::messages.payment.success') }}</h1>
 
-        <p>{{ trans('shop::messages.payments.success-info') }}</p>
+        <p>{{ trans('shop::messages.payment.success-info') }}</p>
     </div>
 @endsection

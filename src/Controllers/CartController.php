@@ -48,7 +48,7 @@ class CartController extends Controller
      */
     public function clear(Request $request)
     {
-        $request->session()->remove('shop.cart');
+        Cart::fromSession($request->session())->clear();
 
         return redirect()->route('shop.cart.index');
     }
@@ -82,7 +82,7 @@ class CartController extends Controller
 
         payment_manager()->buyPackages($cart);
 
-        $cart->clear();
+        $cart->destroy();
 
         return redirect()->route('shop.home')->with('success', trans('shop::messages.cart.purchase'));
     }

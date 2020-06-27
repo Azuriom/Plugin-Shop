@@ -79,7 +79,7 @@ class Payment extends Model
 
     public function getTypeName()
     {
-        $paymentManager = app(PaymentManager::class);
+        $paymentManager = payment_manager();
 
         if (! $paymentManager->hasPaymentMethod($this->payment_type)) {
             return $this->payment_type;

@@ -25,8 +25,8 @@ class CreateShopPackagesTable extends Migration
             $table->unsignedDecimal('price');
             $table->text('commands');
             $table->boolean('need_online')->default(false);
-            $table->text('required_packages')->nullable();
             $table->unsignedInteger('user_limit')->nullable();
+            $table->text('required_packages')->nullable();
             $table->boolean('has_quantity')->default(true);
             $table->boolean('is_enabled')->default(true);
             $table->timestamps();

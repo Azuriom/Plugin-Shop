@@ -142,7 +142,7 @@ abstract class PaymentMethod
             $payment->fill(['payment_id' => $paymentId]);
         }
 
-        payment_manager()->deliverPayment($payment);
+        $payment->deliver();
 
         return response()->json(['status' => true]);
     }
