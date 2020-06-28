@@ -10,13 +10,23 @@ return [
 
     'fields' => [
         'price' => 'Prix',
+        'total' => 'Total',
         'quantity' => 'Quantité',
         'currency' => 'Devise',
         'category' => 'Catégorie',
         'package' => 'Produit',
         'gateways' => 'Moyens de paiements',
         'servers' => 'Serveurs',
+        'code' => 'Code',
+        'discount' => 'Promotion',
+        'start_date' => 'Date de début',
+        'expire_date' => 'Date de fin',
         'commands' => 'Commandes',
+        'packages' => 'Articles actifs',
+    ],
+
+    'actions' => [
+        'remove' => 'Retirer',
     ],
 
     'categories' => [
@@ -57,6 +67,9 @@ return [
 
         'info' => 'Achat #:id sur :website',
         'error' => 'Le paiement n\'a pas pu être effectué.',
+
+        'success' => 'Paiement effectué',
+        'success-info' => 'Vous recevrez votre achat dans le jeu en moins d\'une minute.',
 
         'redirect-info' => 'Si vous n\'êtes pas redirigé automatiquement, vérifiez que le javascript est activé sur votre navigateur.',
     ],

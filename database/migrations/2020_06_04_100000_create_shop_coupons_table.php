@@ -20,7 +20,7 @@ class CreateShopCouponsTable extends Migration
 
         Schema::create('shop_coupons', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('code');
+            $table->string('code')->unique();
             $table->unsignedInteger('discount');
             $table->boolean('is_enabled')->default(true);
             $table->boolean('is_global')->default(false);

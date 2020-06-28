@@ -3,7 +3,9 @@
 namespace Azuriom\Plugin\Shop\Requests;
 
 use Azuriom\Http\Requests\Traits\ConvertCheckbox;
+use Azuriom\Plugin\Shop\Models\Coupon;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class CouponRequest extends FormRequest
 {
@@ -26,11 +28,11 @@ class CouponRequest extends FormRequest
     public function rules()
     {
         return [
-            'code' => ['required', 'string', 'max:100'],
+            'code' => ['required', 'string', 'max:50', Rule::unique(Coupon::class)->ignore($this->coupon, 'code')],
             'discount' => ['required', 'integer', 'between:0,100'],
             'packages' => ['required_without:is_global', 'array'],
-            'start_at' => ['nullable', 'date'],
-            'expire_at' => ['nullable', 'date', 'after:start_at'],
+            'start_at' => ['required', 'date'],
+            'expire_at' => ['required', 'date', 'after:start_at'],
             'is_enabled' => ['filled', 'boolean'],
             'is_global' => ['filled', 'boolean'],
         ];
