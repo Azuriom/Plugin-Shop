@@ -8,6 +8,8 @@ return [
         'packages' => 'Packages',
         'gateways' => 'Gateways',
         'offers' => 'Offers',
+        'coupons' => 'Coupons',
+        'discounts' => 'Discounts',
         'payments' => 'Payments',
         'purchases' => 'Purchases',
     ],
@@ -44,6 +46,40 @@ return [
         ],
 
         'enable' => 'Enable the offer',
+    ],
+
+    'coupons' => [
+        'title' => 'Coupons',
+        'title-edit' => 'Edit coupon :coupon',
+        'title-create' => 'Create coupon',
+
+        'status' => [
+            'created' => 'The coupon has been created.',
+            'updated' => 'This coupon has been modified.',
+            'deleted' => 'This coupon has been deleted.',
+        ],
+
+        'global' => 'Should the coupon be active on all the shop ?',
+
+        'active' => 'Active',
+        'enable' => 'Enable the coupon',
+    ],
+
+    'discounts' => [
+        'title' => 'Discounts',
+        'title-edit' => 'Edit discount :discount',
+        'title-create' => 'Create discount',
+
+        'status' => [
+            'created' => 'The discount has been created.',
+            'updated' => 'This discount has been modified.',
+            'deleted' => 'This discount has been deleted.',
+        ],
+
+        'global' => 'Should the discount be active on all the shop ?',
+
+        'active' => 'Active',
+        'enable' => 'Enable the discount',
     ],
 
     'packages' => [

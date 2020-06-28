@@ -23,4 +23,14 @@ trait IsBuyable
     {
         return $this->description;
     }
+
+    public function hasQuantity()
+    {
+        return $this->has_quantity ?? false;
+    }
+
+    public function getMaxQuantity()
+    {
+        return 1;
+    }
 }

@@ -3,18 +3,18 @@
 namespace Azuriom\Plugin\Shop\Cart;
 
 use Azuriom\Plugin\Shop\Models\Concerns\Buyable;
+use Azuriom\Plugin\Shop\Models\Coupon;
+use Azuriom\Plugin\Shop\Models\Package;
 use Illuminate\Contracts\Session\Session;
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
 
 /**
- * Laravel cart.
+ * Represent a cart content, with the items and coupons.
  *
- * This class is based on https://github.com/Crinsane/LaravelShoppingcart, under MIT license.
- * Adapted to Azuriom since original package is not compatible with Laravel 6.x.
- *
- * @author Rob Gloudemans
+ * This class is originally inspired by https://github.com/Crinsane/LaravelShoppingcart, under MIT license.
  */
-class Cart
+class Cart implements Arrayable
 {
     /**
      * The session where this cart is stored.
@@ -31,6 +31,13 @@ class Cart
     private $items;
 
     /**
+     * The coupons applied to the cart.
+     *
+     * @var \Illuminate\Support\Collection
+     */
+    private $coupons;
+
+    /**
      * Create a new cart instance.
      *
      * @param  \Illuminate\Contracts\Session\Session  $session
@@ -42,6 +49,7 @@ class Cart
 
         if ($session === null) {
             $this->items = collect();
+            $this->coupons = collect();
 
             return;
         }
@@ -97,7 +105,7 @@ class Cart
 
         $id = $this->getItemId($buyable);
 
-        $this->items->put($id, new CartItem($buyable, $id, $quantity));
+        $this->items->put($id, new CartItem($this, $buyable, $id, $quantity));
 
         $this->save();
     }
@@ -124,6 +132,11 @@ class Cart
     public function get(Buyable $buyable)
     {
         return $this->items->get($this->getItemId($buyable));
+    }
+
+    public function getById(string $id)
+    {
+        return $this->items->get($id);
     }
 
     /**
@@ -175,15 +188,28 @@ class Cart
     }
 
     /**
+     * Get the total price of the items in the cart without
+     * applying coupons discounts.
+     *
+     * @return float
+     */
+    public function originalTotal()
+    {
+        return $this->content()->sum(function (CartItem $cartItem) {
+            return $cartItem->originalPrice();
+        });
+    }
+
+    /**
      * Get the total price of the items in the cart.
      *
      * @return float
      */
     public function total()
     {
-        return $this->content()->sum(function (CartItem $cartItem) {
+        return round($this->content()->sum(function (CartItem $cartItem) {
             return $cartItem->total();
-        });
+        }), 2);
     }
 
     protected function getItemId(Buyable $buyable)
@@ -191,24 +217,70 @@ class Cart
         return class_basename($buyable).'-'.$buyable->getId();
     }
 
+    /**
+     * Get the coupons applied to the cart.
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function coupons()
+    {
+        return $this->coupons;
+    }
+
+    /**
+     * Add a coupon to the cart.
+     *
+     * @param  \Azuriom\Plugin\Shop\Models\Coupon  $coupon
+     */
+    public function addCoupon(Coupon $coupon)
+    {
+        $this->coupons->put($coupon->id, $coupon);
+
+        $this->save();
+    }
+
+    /**
+     * Remove a coupon from the cart.
+     *
+     * @param  \Azuriom\Plugin\Shop\Models\Coupon  $coupon
+     */
+    public function removeCoupon(Coupon $coupon)
+    {
+        $this->coupons->forget($coupon->id);
+
+        $this->save();
+    }
+
+    /**
+     * Remove all the coupons in the cart.
+     */
+    public function clearCoupon()
+    {
+        $this->coupons = collect();
+
+        $this->save();
+    }
+
     public function type()
     {
         return strtoupper(class_basename($this->items->first()->buyable()));
     }
 
-    protected function save()
+    public function save()
     {
         if ($this->session) {
-            $this->session->put('shop.cart', $this->items->toArray());
+            $this->session->put('shop.cart', $this->toArray());
         }
     }
 
     /**
-     * Clear the items and remove the current cart from the session.
+     * Clear the items and the coupons and remove the current cart
+     * from the session.
      */
     public function destroy()
     {
         $this->items = collect();
+        $this->coupons = collect();
 
         if ($this->session) {
             $this->session->remove('shop.cart');
@@ -238,25 +310,48 @@ class Cart
 
     protected function loadFromSession(Session $session)
     {
-        $items = $session->get('shop.cart', []);
+        $this->items = collect();
 
-        if (empty($items)) {
+        $content = $session->get('shop.cart', []);
+
+        if (! empty($content['coupons'])) {
+            $this->coupons = Coupon::whereIn('code', $content['coupons'])->get()->keyBy('id');
+        } else {
+            $this->coupons = collect();
+        }
+
+        if (empty($content['items'])) {
             return;
         }
 
-        $this->items = collect($items)->groupBy('type')->flatMap(function (Collection $items, string $type) {
+        collect($content['items'])->groupBy('type')->each(function (Collection $items, string $type) {
             /** @var \Illuminate\Database\Eloquent\Collection $models */
             $models = $type::findMany($items->pluck('id'))->keyBy('id');
 
-            return $items->mapWithKeys(function ($item) use ($models) {
+            if ($type === Package::class) {
+                $models->load('discounts');
+            }
+
+            $items->each(function ($item) use ($models) {
                 if (! $models->has($item['id'])) {
-                    return [];
+                    return;
                 }
 
-                $cartItem = new CartItem($models->get($item['id']), $item['itemId'], $item['quantity']);
+                $cartItem = new CartItem($this, $models->get($item['id']), $item['itemId'], $item['quantity']);
 
-                return [$item['itemId'] => $cartItem];
+                $this->items->put($item['itemId'], $cartItem);
             });
         });
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function toArray()
+    {
+        return [
+            'items' => $this->items->toArray(),
+            'coupons' => $this->coupons->pluck('code')->all(),
+        ];
     }
 }

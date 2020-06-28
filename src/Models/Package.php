@@ -32,6 +32,7 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @property \Azuriom\Plugin\Shop\Models\Category $category
  * @property \Illuminate\Support\Collection|\Azuriom\Models\Server[] $servers
+ * @property \Illuminate\Support\Collection|\Azuriom\Plugin\Shop\Models\Discount[] $discounts
  *
  * @method static \Illuminate\Database\Eloquent\Builder enabled()
  */
@@ -64,6 +65,7 @@ class Package extends Model implements Buyable
      * @var array
      */
     protected $casts = [
+        'price' => 'float',
         'commands' => 'array',
         'required_packages' => 'array',
         'has_quantity' => 'boolean',
@@ -83,20 +85,55 @@ class Package extends Model implements Buyable
         return $this->belongsToMany(Server::class, 'shop_package_server');
     }
 
+    public function discounts()
+    {
+        return $this->belongsToMany(Discount::class, 'shop_discount_package');
+    }
+
     public function getDescription()
     {
         return $this->short_description;
     }
 
-    /**
-     * Scope a query to only include enabled packages.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeEnabled(Builder $query)
+    public function getPrice()
     {
-        return $query->where('is_enabled', true)->orderBy('position');
+        // TODO not the best way to do this...
+        static $globalDiscounts = null;
+
+        if ($globalDiscounts === null) {
+            $globalDiscounts = Discount::scopes(['active', 'global'])->get();
+        }
+
+        $price = $this->discounts
+            ->where('is_global', false)
+            ->merge($globalDiscounts)
+            ->filter(function (Discount $discount) {
+                return $discount->isActive();
+            })->reduce(function ($result, Discount $discount) {
+                return $result - ($discount->discount / 100) * $result;
+            }, $this->price);
+
+        return max($price, 0);
+    }
+
+    public function getOriginalPrice()
+    {
+        return $this->price;
+    }
+
+    public function getMaxQuantity()
+    {
+        return 100;
+    }
+
+    public function isInCart()
+    {
+        return shop_cart()->has($this);
+    }
+
+    public function isDiscounted()
+    {
+        return $this->getPrice() !== $this->getOriginalPrice();
     }
 
     public function deliver(User $user, int $quantity = 1)
@@ -108,5 +145,16 @@ class Package extends Model implements Buyable
         }
 
         event(new PackageDelivered($user, $this, $quantity));
+    }
+
+    /**
+     * Scope a query to only include enabled packages.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeEnabled(Builder $query)
+    {
+        return $query->where('is_enabled', true)->orderBy('position');
     }
 }

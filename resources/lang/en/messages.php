@@ -10,13 +10,23 @@ return [
 
     'fields' => [
         'price' => 'Price',
+        'total' => 'Total',
         'quantity' => 'Quantity',
         'currency' => 'Currency',
         'category' => 'Category',
         'package' => 'Package',
         'gateways' => 'Gateways',
         'servers' => 'Servers',
+        'code' => 'Code',
+        'discount' => 'Discount',
         'commands' => 'Commands',
+        'start_date' => 'Start date',
+        'expire_date' => 'Expire date',
+        'packages' => 'Active packages',
+    ],
+
+    'actions' => [
+        'remove' => 'Remove',
     ],
 
     'categories' => [
@@ -39,6 +49,10 @@ return [
         'clear' => 'Clear the cart',
         'pay' => 'Pay',
 
+        'coupons' => 'Coupons',
+        'add-coupon' => 'Add a coupon',
+        'invalid-coupon' => 'This coupon does not exist or has expired.',
+
         'back' => 'Back to shop',
 
         'total' => 'Total: :total',
@@ -53,6 +67,9 @@ return [
 
         'info' => 'Purchase #:id on :website',
         'error' => 'The payment could not be completed.',
+
+        'success' => 'Payment completed',
+        'success-info' => 'You\'ll receive your purchase in-game in less than a minute.',
 
         'redirect-info' => 'If you are not redirected automatically check that javascript is enabled on your browser.',
     ],

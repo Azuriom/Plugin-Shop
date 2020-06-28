@@ -8,6 +8,8 @@ return [
         'packages' => 'Produits',
         'gateways' => 'Moyens de paiements',
         'offers' => 'Offres',
+        'coupons' => 'Codes promo',
+        'discounts' => 'Réductions',
         'payments' => 'Paiements',
         'purchases' => 'Achats',
     ],
@@ -44,6 +46,40 @@ return [
         ],
 
         'enable' => 'Activer cette offre.',
+    ],
+
+    'coupons' => [
+        'title' => 'Codes promotionnels',
+        'title-edit' => 'Modifier le code promotionnel :coupon',
+        'title-create' => 'Ajouter un code promotionnel',
+
+        'status' => [
+            'created' => 'Le code promotionnel a été ajouté.',
+            'updated' => 'Le code promotionnel a été mis à jour.',
+            'deleted' => 'Le code promotionnel a été supprimé.',
+        ],
+
+        'global' => 'Est ce que ce code promotionnel doit être actif sur toute la boutique ?',
+
+        'active' => 'Actif',
+        'enable' => 'Activer ce code promotionnel',
+    ],
+
+    'discounts' => [
+        'title' => 'Réductions',
+        'title-edit' => 'Édition de la réduction :discount',
+        'title-create' => 'Création d\'une réduction.',
+
+        'status' => [
+            'created' => 'La réduction a été ajoutée.',
+            'updated' => 'La réduction a été mise à jour.',
+            'deleted' => 'La réduction a été supprimée.',
+        ],
+
+        'global' => 'La réduction doit-elle être active sur toute la boutique ?',
+
+        'active' => 'Active',
+        'enable' => 'Activer cette réduction',
     ],
 
     'packages' => [

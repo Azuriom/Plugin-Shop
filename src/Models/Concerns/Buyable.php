@@ -35,6 +35,20 @@ interface Buyable
     public function getDescription();
 
     /**
+     * Get the whether the buyable can be purchased multiple times.
+     *
+     * @return bool
+     */
+    public function hasQuantity();
+
+    /**
+     * Get the maximum purchase quantity of this buyable.
+     *
+     * @return int
+     */
+    public function getMaxQuantity();
+
+    /**
      * Deliver this buyable once it is paid.
      *
      * @param  \Azuriom\Models\User  $user

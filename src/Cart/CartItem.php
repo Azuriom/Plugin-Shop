@@ -3,18 +3,25 @@
 namespace Azuriom\Plugin\Shop\Cart;
 
 use Azuriom\Plugin\Shop\Models\Concerns\Buyable;
+use Azuriom\Plugin\Shop\Models\Coupon;
+use Azuriom\Plugin\Shop\Models\Package;
 use Illuminate\Contracts\Support\Arrayable;
 
 /**
  * Laravel cart item.
  *
- * This class is based on https://github.com/Crinsane/LaravelShoppingcart, under MIT license.
- * Adapted to Azuriom since original package is not compatible with Laravel 6.x.
- *
- * @author Rob Gloudemans
+ * This class is originally based on https://github.com/Crinsane/LaravelShoppingcart, under MIT license.
  */
 class CartItem implements Arrayable
 {
+    /**
+     * The cart where this item is stored.
+     * The cart *may* not contain this item if it was removed.
+     *
+     * @var \Azuriom\Plugin\Shop\Cart\Cart
+     */
+    private $cart;
+
     /**
      * The ID of the cart item.
      *
@@ -53,17 +60,19 @@ class CartItem implements Arrayable
     /**
      * Create a new item instance.
      *
+     * @param  \Azuriom\Plugin\Shop\Cart\Cart  $cart
      * @param  \Azuriom\Plugin\Shop\Models\Concerns\Buyable  $buyable
      * @param  string  $itemId
      * @param  int  $quantity
      */
-    public function __construct(Buyable $buyable, string $itemId, int $quantity = 1)
+    public function __construct(Cart $cart, Buyable $buyable, string $itemId, int $quantity = 1)
     {
+        $this->cart = $cart;
         $this->id = $buyable->id;
         $this->itemId = $itemId;
         $this->type = get_class($buyable);
-        $this->quantity = $quantity;
         $this->buyable = $buyable;
+        $this->setQuantity($quantity);
     }
 
     /**
@@ -73,7 +82,7 @@ class CartItem implements Arrayable
      */
     public function setQuantity(int $quantity)
     {
-        $this->quantity = $quantity;
+        $this->quantity = $this->hasQuantity() ? $quantity : 1;
     }
 
     /**
@@ -86,14 +95,47 @@ class CartItem implements Arrayable
         return $this->buyable;
     }
 
+    public function hasQuantity()
+    {
+        return $this->buyable->hasQuantity();
+    }
+
+    public function maxQuantity()
+    {
+        return $this->buyable->getMaxQuantity();
+    }
+
     public function name()
     {
         return $this->buyable->getName();
     }
 
+    public function singlePrice()
+    {
+        return $this->buyable->getPrice();
+    }
+
+    public function originalPrice()
+    {
+        return $this->singlePrice() * $this->quantity;
+    }
+
     public function price()
     {
-        return $this->buyable()->getPrice();
+        $package = $this->buyable;
+
+        if (! $package instanceof Package) {
+            return $this->originalPrice();
+        }
+
+        $coupons = $this->cart->coupons()
+            ->filter(function (Coupon $coupon) use ($package) {
+                return $coupon->isActiveOn($package);
+            });
+
+        return $coupons->reduce(function ($price, Coupon $coupon) {
+            return $price - ($coupon->discount / 100) * $price;
+        }, $this->originalPrice());
     }
 
     public function total()
@@ -101,6 +143,9 @@ class CartItem implements Arrayable
         return $this->price() * $this->quantity;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function toArray()
     {
         return [

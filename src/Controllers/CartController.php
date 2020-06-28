@@ -41,6 +41,29 @@ class CartController extends Controller
     }
 
     /**
+     * Update the quantity of the items in the cart.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request)
+    {
+        $cart = Cart::fromSession($request->session());
+
+        foreach ($request->input('quantities', []) as $id => $quantity) {
+            $item = $cart->getById($id);
+
+            if ($item !== null && $quantity > 0) {
+                $item->setQuantity($quantity);
+            }
+
+            $cart->save();
+        }
+
+        return redirect()->route('shop.cart.index');
+    }
+
+    /**
      * Clear the user cart.
      *
      * @param  \Illuminate\Http\Request  $request

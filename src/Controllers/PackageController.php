@@ -20,6 +20,8 @@ class PackageController extends Controller
     {
         abort_if(! $request->pjax(), 403);
 
+        $package->load('discounts');
+
         return view('shop::packages.show', ['package' => $package]);
     }
 

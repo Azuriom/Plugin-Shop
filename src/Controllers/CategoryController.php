@@ -8,6 +8,7 @@ use Azuriom\Plugin\Shop\Models\Payment;
 
 class CategoryController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -42,7 +43,7 @@ class CategoryController extends Controller
             });
 
         return view('shop::categories.show', [
-            'category' => $category->load('packages'),
+            'category' => $category->load('packages.discounts'),
             'categories' => $categories,
             'goal' => $this->getMonthGoal(),
         ]);
@@ -58,6 +59,6 @@ class CategoryController extends Controller
             ->where('created_at', '>', now()->startOfMonth())
             ->sum('price');
 
-        return ($total / setting('shop.month-goal')) * 100;
+        return round(($total / setting('shop.month-goal')) * 100, 2);
     }
 }

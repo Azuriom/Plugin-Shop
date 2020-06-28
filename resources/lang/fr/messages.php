@@ -39,6 +39,10 @@ return [
         'clear' => 'Vider le panier',
         'pay' => 'Payer',
 
+        'coupons' => 'Codes promo',
+        'add-coupon' => 'Ajouter un code promo',
+        'invalid-coupon' => 'Ce code promo n\'existe pas ou est expiré',
+
         'back' => 'Retour à la boutique',
 
         'total' => 'Total : :total',

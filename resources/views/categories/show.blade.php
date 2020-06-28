@@ -42,8 +42,16 @@
 
                                 <div class="card-body">
                                     <h4 class="card-title">{{ $package->name }}</h4>
-                                    <h5>{{ shop_format_amount($package->price) }}</h5>
-                                    <a href="#" class="btn btn-primary btn-block" data-package-url="{{ route('shop.packages.show', $package) }}">{{ trans('shop::messages.buy') }}</a>
+                                    <h5>
+                                        @if($package->isDiscounted())
+                                            <del class="small">{{ $package->getOriginalPrice() }}</del>
+                                        @endif
+                                        {{ shop_format_amount($package->getPrice()) }}
+                                    </h5>
+
+                                    <a href="#" class="btn btn-primary btn-block" data-package-url="{{ route('shop.packages.show', $package) }}">
+                                        {{ trans('shop::messages.buy') }}
+                                    </a>
                                 </div>
                             </div>
                         </div>

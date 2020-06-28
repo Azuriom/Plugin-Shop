@@ -8,6 +8,7 @@ use Azuriom\Plugin\Shop\Payment\PaymentMethod;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
 
 class PayPalMethod extends PaymentMethod
 {
@@ -50,8 +51,6 @@ class PayPalMethod extends PaymentMethod
 
     public function notification(Request $request, ?string $rawPaymentId)
     {
-        $payment = Payment::findOrFail($request->input('custom'));
-
         $data = ['cmd' => '_notify-validate'] + $request->all();
 
         $response = Http::asForm()->post('https://ipnpb.paypal.com/cgi-bin/webscr', $data);
@@ -66,6 +65,8 @@ class PayPalMethod extends PaymentMethod
         $status = $request->input('payment_status');
         $receiverEmail = $request->input('receiver_email');
 
+        $payment = Payment::findOrFail($request->input('custom'));
+
         if ($status !== 'Completed') {
             logger()->warning("[Shop] Invalid payment status for #{$paymentId}: {$status}");
 
@@ -78,7 +79,7 @@ class PayPalMethod extends PaymentMethod
             return $this->invalidPayment($payment, $paymentId, 'Invalid amount/currency');
         }
 
-        if (strcasecmp($this->gateway->data['email'], $receiverEmail) !== 0) {
+        if (Str::lower($this->gateway->data['email']) === $receiverEmail) {
             logger()->warning("[Shop] Invalid email for #{$paymentId}: {$receiverEmail}");
 
             return $this->invalidPayment($payment, $paymentId, 'Invalid email');

@@ -21,8 +21,11 @@ Route::middleware('can:shop.admin')->group(function () {
     Route::resource('payments', 'PaymentController')->only('index');
     Route::resource('purchases', 'PurchaseController')->only('index');
     Route::resource('offers', 'OfferController')->except('show');
+    Route::resource('coupons', 'CouponController')->except('show');
+    Route::resource('discounts', 'DiscountController')->except('show');
     Route::resource('gateways', 'GatewayController')->except(['show', 'create']);
 
     Route::post('/packages/update-order', 'PackageController@updateOrder')->name('packages.update-order');
+    Route::post('/packages/{package}/clone', 'PackageController@clone')->name('packages.clone');
     Route::get('/gateways/create/{type}', 'GatewayController@create')->name('gateways.create');
 });
