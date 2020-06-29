@@ -6,7 +6,6 @@ use Azuriom\Http\Controllers\Controller;
 use Azuriom\Plugin\Shop\Cart\Cart;
 use Azuriom\Plugin\Shop\Models\Coupon;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 class CouponController extends Controller
@@ -29,7 +28,7 @@ class CouponController extends Controller
 
         if ($coupon === null) {
             throw ValidationException::withMessages([
-               'code' => trans('shop::messages.cart.invalid-coupon'),
+                'code' => trans('shop::messages.cart.invalid-coupon'),
             ]);
         }
 

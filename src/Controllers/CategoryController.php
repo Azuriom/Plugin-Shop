@@ -8,7 +8,6 @@ use Azuriom\Plugin\Shop\Models\Payment;
 
 class CategoryController extends Controller
 {
-
     /**
      * Display a listing of the resource.
      *

@@ -3,7 +3,6 @@
 namespace Azuriom\Plugin\Shop\Models;
 
 use Azuriom\Models\Traits\HasTablePrefix;
-use Azuriom\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
@@ -40,7 +39,7 @@ class Coupon extends Model
      * @var array
      */
     protected $fillable = [
-        'code', 'discount', 'start_at', 'expire_at', 'is_enabled', 'is_global'
+        'code', 'discount', 'start_at', 'expire_at', 'is_enabled', 'is_global',
     ];
 
     /**

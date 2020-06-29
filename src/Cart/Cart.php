@@ -201,7 +201,8 @@ class Cart implements Arrayable
     }
 
     /**
-     * Get the total price of the items in the cart.
+     * Get the total price of the items in the cart after
+     * applying coupons discounts.
      *
      * @return float
      */
@@ -266,6 +267,9 @@ class Cart implements Arrayable
         return strtoupper(class_basename($this->items->first()->buyable()));
     }
 
+    /**
+     * Save the cart content to the associated session (if any).
+     */
     public function save()
     {
         if ($this->session) {
@@ -345,7 +349,7 @@ class Cart implements Arrayable
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function toArray()
     {

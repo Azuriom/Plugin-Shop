@@ -23,7 +23,7 @@ class CartItem implements Arrayable
     private $cart;
 
     /**
-     * The ID of the cart item.
+     * The ID of the cart item with the format '{model class}-{model id}'.
      *
      * @var string
      */
@@ -144,7 +144,7 @@ class CartItem implements Arrayable
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function toArray()
     {

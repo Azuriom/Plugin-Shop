@@ -31,7 +31,6 @@ Route::prefix('cart')->name('cart.')->middleware('auth')->group(function () {
     Route::post('/', 'CartController@update')->name('update');
     // TODO Match multiple methods is not really good here...
     Route::match(['GET', 'POST'], '/remove/{package}', 'CartController@remove')->name('remove');
-    Route::get('/remove/{package}', 'CartController@remove')->name('remove');
     Route::post('/clear', 'CartController@clear')->name('clear');
     Route::post('/payment', 'CartController@payment')->name('payment')->middleware('auth');
 
