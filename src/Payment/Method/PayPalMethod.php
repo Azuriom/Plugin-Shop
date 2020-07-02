@@ -79,7 +79,7 @@ class PayPalMethod extends PaymentMethod
             return $this->invalidPayment($payment, $paymentId, 'Invalid amount/currency');
         }
 
-        if (Str::lower($this->gateway->data['email']) === $receiverEmail) {
+        if (Str::lower($this->gateway->data['email']) !== $receiverEmail) {
             logger()->warning("[Shop] Invalid email for #{$paymentId}: {$receiverEmail}");
 
             return $this->invalidPayment($payment, $paymentId, 'Invalid email');

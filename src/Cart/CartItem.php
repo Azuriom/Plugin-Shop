@@ -110,14 +110,9 @@ class CartItem implements Arrayable
         return $this->buyable->getName();
     }
 
-    public function singlePrice()
-    {
-        return $this->buyable->getPrice();
-    }
-
     public function originalPrice()
     {
-        return $this->singlePrice() * $this->quantity;
+        return $this->buyable->getPrice();
     }
 
     public function price()
@@ -136,6 +131,11 @@ class CartItem implements Arrayable
         return $coupons->reduce(function ($price, Coupon $coupon) {
             return $price - ($coupon->discount / 100) * $price;
         }, $this->originalPrice());
+    }
+
+    public function originalTotal()
+    {
+        return $this->originalPrice() * $this->quantity;
     }
 
     public function total()
