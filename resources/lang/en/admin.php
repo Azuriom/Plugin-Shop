@@ -167,7 +167,6 @@ return [
         'use-site-money' => 'Activate purchases with the site currency.',
     ],
 
-
     'statistics' => [
         'title' => 'Statistics',
         'stats' => [

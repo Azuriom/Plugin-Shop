@@ -3,7 +3,6 @@
 
 namespace Azuriom\Plugin\Shop\Controllers\Admin;
 
-
 use Azuriom\Http\Controllers\Controller;
 use Azuriom\Plugin\Shop\Models\Payment;
 
@@ -36,6 +35,7 @@ class StatisticsController extends Controller
     private function getEstimatedEarningsMonth()
     {
         $date = now()->startOfMonth();
+
         return Payment::completed()->where('created_at', '>=', $date)->sum('price');
     }
 
@@ -45,6 +45,7 @@ class StatisticsController extends Controller
     private function getPaymentMonth()
     {
         $date = now()->startOfMonth();
+
         return Payment::completed()->where('created_at', '>=', $date)->count();
     }
 
@@ -53,7 +54,6 @@ class StatisticsController extends Controller
      */
     private function getPaymentsMonth()
     {
-
         $date = now()->subMonths(1);
         $payments = [];
 
@@ -77,7 +77,6 @@ class StatisticsController extends Controller
      */
     private function getPaymentsCountMonth()
     {
-
         $date = now()->subMonths(1);
         $payments = [];
 
@@ -89,5 +88,4 @@ class StatisticsController extends Controller
 
         return collect($payments);
     }
-
 }
