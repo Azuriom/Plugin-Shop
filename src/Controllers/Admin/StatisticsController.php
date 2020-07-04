@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Azuriom\Plugin\Shop\Controllers\Admin;
 
 use Azuriom\Http\Controllers\Controller;
@@ -8,7 +7,6 @@ use Azuriom\Plugin\Shop\Models\Payment;
 
 class StatisticsController extends Controller
 {
-
     public function index()
     {
         return view('shop::admin.statistics', [
