@@ -170,6 +170,11 @@ return [
 
     'statistics' => [
         'title' => 'Statistics',
+        'stats' => [
+            'global' => 'Shop payments',
+            'estimated' => 'Estimated earnings',
+            'month' => 'Shop payments this month',
+        ]
     ],
 
 ];

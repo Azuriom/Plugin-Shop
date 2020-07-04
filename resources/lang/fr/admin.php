@@ -169,6 +169,11 @@ return [
 
     'statistics' => [
         'title' => 'Statistiques',
+        'stats' => [
+            'global' => 'Paiements sur la boutique',
+            'estimated' => 'Estimation des gains',
+            'month' => 'Paiements sur la boutique ce mois ci',
+        ]
 
     ]
 
