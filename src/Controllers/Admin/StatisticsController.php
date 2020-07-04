@@ -14,8 +14,11 @@ class StatisticsController
     {
         return view("shop::admin.statistics", [
             'payment' => Payment::completed()->count(),
+            'payment_month' => $this->getPaymentMonth(),
             'payments' => $this->getPaymentsMonth(),
             'estimated' => $this->getEstimatedEarnings(),
+            'estimated_month' => $this->getEstimatedEarningsMonth(),
+            'payments_estimated' => $this->getPaymentsCountMonth(),
         ]);
     }
 
@@ -25,6 +28,23 @@ class StatisticsController
     private function getEstimatedEarnings()
     {
         return Payment::completed()->sum('price');
+    }
+
+    /**
+     * @return mixed
+     */
+    private function getEstimatedEarningsMonth()
+    {
+        $date = now()->subMonths(1);
+        return Payment::completed()->where('created_at', '>=', $date)->sum('price');
+    }
+    /**
+     * @return mixed
+     */
+    private function getPaymentMonth()
+    {
+        $date = now()->subMonths(1);
+        return Payment::completed()->where('created_at', '>=', $date)->count();
     }
 
     /**
@@ -42,10 +62,28 @@ class StatisticsController
                 return $payment->created_at->translatedFormat('l j F Y');
             });
 
-        for ($i = 0; $i < 30; $i++) {
-            $date->addDay();
+        for ($i = 0; $i < 31; $i++) {
             $time = $date->translatedFormat('l j F Y');
             $payments[$time] = $queryPayments->get($time, 0);
+            $date->addDay();
+        }
+
+        return collect($payments);
+    }
+
+    /**
+     * @return \Illuminate\Support\Collection
+     */
+    private function getPaymentsCountMonth()
+    {
+
+        $date = now()->subMonths(1);
+        $payments = [];
+
+        for ($i = 0; $i < 31; $i++) {
+            $time = $date->translatedFormat('l j F Y');
+            $payments[$time] = Payment::completed()->whereDate('created_at', '=', $date)->sum('price');
+            $date->addDay();
         }
 
         return collect($payments);

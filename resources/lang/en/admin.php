@@ -174,6 +174,7 @@ return [
             'global' => 'Shop payments',
             'estimated' => 'Estimated earnings',
             'month' => 'Shop payments this month',
+            'month-estimated' => 'Estimated earnings this month',
         ]
     ],
 

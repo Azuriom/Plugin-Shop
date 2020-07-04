@@ -172,7 +172,8 @@ return [
         'stats' => [
             'global' => 'Paiements sur la boutique',
             'estimated' => 'Estimation des gains',
-            'month' => 'Paiements sur la boutique ce mois ci',
+            'month-estimated' => 'Estimation des gains ce mois-ci',
+            'month' => 'Paiements sur la boutique ce mois-ci',
         ]
 
     ]
