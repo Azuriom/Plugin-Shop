@@ -173,7 +173,9 @@ return [
             'global' => 'Paiements sur la boutique',
             'estimated' => 'Estimation des gains',
             'month-estimated' => 'Estimation des gains ce mois-ci',
+            'month-day-estimated' => 'Estimation des gains ces 30 derniers jours',
             'month' => 'Paiements sur la boutique ce mois-ci',
+            'month-day' => 'Paiements sur la boutique ces 30 derniers jours',
         ]
 
     ]

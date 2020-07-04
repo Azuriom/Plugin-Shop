@@ -35,7 +35,7 @@ class StatisticsController
      */
     private function getEstimatedEarningsMonth()
     {
-        $date = now()->subMonths(1);
+        $date = now()->startOfMonth();
         return Payment::completed()->where('created_at', '>=', $date)->sum('price');
     }
     /**
@@ -43,7 +43,7 @@ class StatisticsController
      */
     private function getPaymentMonth()
     {
-        $date = now()->subMonths(1);
+        $date = now()->startOfMonth();
         return Payment::completed()->where('created_at', '>=', $date)->count();
     }
 

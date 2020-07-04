@@ -62,7 +62,7 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">{{ trans('shop::admin.statistics.stats.month-estimated') }}</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $estimated_month }}</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ number_format($estimated_month, 0, '.', ' ') }} {{currency_display(currency())}}</div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -79,7 +79,7 @@
         <div class="col-xl-12 col-lg-7">
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">{{ trans('shop::admin.statistics.stats.month') }}</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">{{ trans('shop::admin.statistics.stats.month-day') }}</h6>
                 </div>
                 <div class="card-body">
                     <div class="chart-area">
@@ -93,7 +93,7 @@
         <div class="col-xl-12 col-lg-7">
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">{{ trans('shop::admin.statistics.stats.month-estimated') }}</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">{{ trans('shop::admin.statistics.stats.month-day-estimated') }}</h6>
                 </div>
                 <div class="card-body">
                     <div class="chart-area">
