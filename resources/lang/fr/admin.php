@@ -12,6 +12,7 @@ return [
         'discounts' => 'Réductions',
         'payments' => 'Paiements',
         'purchases' => 'Achats',
+        'statistics' => 'Statistique',
     ],
 
     'permissions' => [
@@ -165,4 +166,10 @@ return [
         'title' => 'Paramètres de la boutique',
         'use-site-money' => 'Activer les achats avec l\'argent du site.',
     ],
+
+    'statistics' => [
+        'title' => 'Statistiques',
+
+    ]
+
 ];

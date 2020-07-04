@@ -12,6 +12,7 @@ return [
         'discounts' => 'Discounts',
         'payments' => 'Payments',
         'purchases' => 'Purchases',
+        'statistics' => 'Statistics',
     ],
 
     'permissions' => [
@@ -165,4 +166,10 @@ return [
         'title' => 'Shop settings',
         'use-site-money' => 'Activate purchases with the site currency.',
     ],
+
+
+    'statistics' => [
+        'title' => 'Statistics',
+    ],
+
 ];

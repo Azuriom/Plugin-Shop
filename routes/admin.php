@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('can:shop.admin')->group(function () {
     Route::get('/settings', 'SettingController@show')->name('settings');
     Route::post('/settings', 'SettingController@save')->name('settings.save');
+    Route::get('/statistics', 'StatisticsController@index')->name('statistics');
 
     Route::resource('categories', 'CategoryController')->except(['index', 'show']);
     Route::resource('packages', 'PackageController')->except('show');
