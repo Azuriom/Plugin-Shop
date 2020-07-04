@@ -4,15 +4,15 @@
 namespace Azuriom\Plugin\Shop\Controllers\Admin;
 
 
+use Azuriom\Http\Controllers\Controller;
 use Azuriom\Plugin\Shop\Models\Payment;
-use Azuriom\Plugin\Vote\Models\Vote;
 
-class StatisticsController
+class StatisticsController extends Controller
 {
 
     public function index()
     {
-        return view("shop::admin.statistics", [
+        return view('shop::admin.statistics', [
             'payment' => Payment::completed()->count(),
             'payment_month' => $this->getPaymentMonth(),
             'payments' => $this->getPaymentsMonth(),
@@ -38,6 +38,7 @@ class StatisticsController
         $date = now()->startOfMonth();
         return Payment::completed()->where('created_at', '>=', $date)->sum('price');
     }
+
     /**
      * @return mixed
      */

@@ -177,7 +177,7 @@ return [
             'month-day' => 'Shop payments last 30 days',
             'month-estimated' => 'Estimated earnings this months',
             'month-day-estimated' => 'Estimated earnings last 30 days',
-        ]
+        ],
     ],
 
 ];

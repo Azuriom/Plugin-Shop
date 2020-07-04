@@ -176,8 +176,7 @@ return [
             'month-day-estimated' => 'Estimation des gains ces 30 derniers jours',
             'month' => 'Paiements sur la boutique ce mois-ci',
             'month-day' => 'Paiements sur la boutique ces 30 derniers jours',
-        ]
-
-    ]
+        ],
+    ],
 
 ];
