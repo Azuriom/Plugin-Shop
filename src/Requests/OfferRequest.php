@@ -29,7 +29,7 @@ class OfferRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:50', Rule::unique(Offer::class)->ignore($this->offer, 'name')],
-            'price' => ['required', 'numeric', 'min:0.01'],
+            'price' => ['required', 'numeric', 'min:0'],
             'money' => ['required', 'integer', 'min:0'],
             'gateways' => ['required', 'array'],
             'is_enabled' => ['filled', 'boolean'],

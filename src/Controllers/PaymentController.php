@@ -9,8 +9,20 @@ use Illuminate\Http\Request;
 
 class PaymentController extends Controller
 {
-    public function payment()
+    public function payment(Request $request)
     {
+        $cart =  Cart::fromSession($request->session());
+
+        // If the cart isn't empty and the total is 0, just complete
+        // the payment now as gateways won't accept null payment
+        if (! $cart->isEmpty() && $cart->total() === 0.0) {
+            payment_manager()->buyPackages($cart);
+
+            $cart->destroy();
+
+            return redirect()->route('shop.home')->with('success', trans('shop::messages.cart.purchase'));
+        }
+
         $gateways = Gateway::enabled()
             ->get()
             ->filter(function ($gateway) {

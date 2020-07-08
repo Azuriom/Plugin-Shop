@@ -49,6 +49,13 @@ class PaymentManager
         return $this->paymentMethods;
     }
 
+    /**
+     * Get a payment method.
+     *
+     * @param  string  $type
+     * @param  \Azuriom\Plugin\Shop\Models\Gateway|null  $gateway
+     * @return \Azuriom\Plugin\Shop\Payment\PaymentMethod|null
+     */
     public function getPaymentMethod(string $type, Gateway $gateway = null)
     {
         return app($this->paymentMethods->get($type), $gateway ? ['gateway' => $gateway] : []);

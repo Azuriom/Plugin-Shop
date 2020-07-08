@@ -30,7 +30,7 @@ class PackageRequest extends FormRequest
             'name' => ['required', 'string', 'max:50'],
             'short_description' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string'],
-            'price' => ['required', 'numeric', 'min:0.01'],
+            'price' => ['required', 'numeric', 'min:0'],
             'commands' => ['sometimes', 'nullable', 'array'],
             'need_online' => ['filled', 'boolean'],
             'is_enabled' => ['filled', 'boolean'],
