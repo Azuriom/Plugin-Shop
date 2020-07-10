@@ -113,7 +113,7 @@ class Package extends Model implements Buyable
                 return $result - ($discount->discount / 100) * $result;
             }, $this->price);
 
-        return max($price, 0);
+        return round(max($price, 0), 2);
     }
 
     public function getOriginalPrice()

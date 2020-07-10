@@ -17,10 +17,8 @@ class CartController extends Controller
      */
     public function index(Request $request)
     {
-        $cart = Cart::fromSession($request->session());
-
         return view('shop::cart.index', [
-            'cart' => $cart,
+            'cart' => Cart::fromSession($request->session()),
         ]);
     }
 

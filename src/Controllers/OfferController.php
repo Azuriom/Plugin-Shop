@@ -27,9 +27,7 @@ class OfferController extends Controller
             ->get()
             ->filter(function ($gateway) {
                 return payment_manager()->hasPaymentMethod($gateway->type);
-            });
-
-        $gateways->load('offers');
+            })->load('offers');
 
         return view('shop::offers.payment', ['gateways' => $gateways]);
     }

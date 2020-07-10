@@ -18,8 +18,6 @@ class PackageController extends Controller
      */
     public function show(Request $request, Package $package)
     {
-        abort_if(! $request->pjax(), 403);
-
         $package->load('discounts');
 
         return view('shop::packages.show', ['package' => $package]);

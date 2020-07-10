@@ -11,7 +11,7 @@ class PaymentController extends Controller
 {
     public function payment(Request $request)
     {
-        $cart =  Cart::fromSession($request->session());
+        $cart = Cart::fromSession($request->session());
 
         // If the cart isn't empty and the total is 0, just complete
         // the payment now as gateways won't accept null payment

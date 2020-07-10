@@ -59,7 +59,9 @@ class GatewayController extends Controller
      */
     public function create(string $type)
     {
-        return view('shop::admin.gateways.create', ['type' => $this->paymentManager->getPaymentMethodOrFail($type)]);
+        return view('shop::admin.gateways.create', [
+            'type' => $this->paymentManager->getPaymentMethodOrFail($type),
+        ]);
     }
 
     /**
