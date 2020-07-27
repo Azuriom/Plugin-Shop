@@ -46,6 +46,7 @@ class Purchase extends Model
      * @var array
      */
     protected $casts = [
+        'price' => 'float',
         'packages' => 'array',
     ];
 

@@ -19,9 +19,7 @@ class ShopServiceProvider extends BasePluginServiceProvider
     {
         require_once __DIR__.'/../../vendor/autoload.php';
 
-        $this->app->singleton(PaymentManager::class, function () {
-            return new PaymentManager();
-        });
+        $this->app->singleton(PaymentManager::class);
     }
 
     /**

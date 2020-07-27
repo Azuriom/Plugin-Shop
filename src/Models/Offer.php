@@ -45,6 +45,7 @@ class Offer extends Model implements Buyable
      * @var array
      */
     protected $casts = [
+        'price' => 'float',
         'is_enabled' => 'boolean',
     ];
 

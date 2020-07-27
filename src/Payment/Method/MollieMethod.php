@@ -76,7 +76,7 @@ class MollieMethod extends PaymentMethod
     public function rules()
     {
         return [
-            'key' => ['required', 'string'],
+            'key' => ['required', 'string', 'starts_with:test_,live_', 'min:30'],
         ];
     }
 

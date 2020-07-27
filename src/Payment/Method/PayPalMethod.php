@@ -60,12 +60,18 @@ class PayPalMethod extends PaymentMethod
         }
 
         $paymentId = $request->input('txn_id');
-        $amount = $request->input('mc_gross');
+        $amount = (float) $request->input('mc_gross');
         $currency = $request->input('mc_currency');
         $status = $request->input('payment_status');
-        $receiverEmail = $request->input('receiver_email');
+        $receiverEmail = Str::lower($request->input('receiver_email'));
 
         $payment = Payment::findOrFail($request->input('custom'));
+
+        if ($status === 'Pending') {
+            $payment->update(['status' => 'PENDING', 'payment_id' => $paymentId]);
+
+            return response()->noContent();
+        }
 
         if ($status !== 'Completed') {
             logger()->warning("[Shop] Invalid payment status for #{$paymentId}: {$status}");
@@ -79,8 +85,10 @@ class PayPalMethod extends PaymentMethod
             return $this->invalidPayment($payment, $paymentId, 'Invalid amount/currency');
         }
 
-        if (Str::lower($this->gateway->data['email']) !== $receiverEmail) {
-            logger()->warning("[Shop] Invalid email for #{$paymentId}: {$receiverEmail}");
+        $email = Str::lower($this->gateway->data['email']);
+
+        if ($email !== $receiverEmail) {
+            logger()->warning("[Shop] Invalid email for #{$paymentId}: expected {$email} but got {$receiverEmail}.");
 
             return $this->invalidPayment($payment, $paymentId, 'Invalid email');
         }

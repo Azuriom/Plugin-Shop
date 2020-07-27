@@ -26,7 +26,7 @@
                             <td>
                                 <a href="{{ route('admin.users.edit', $purchase->user) }}">{{ $purchase->user->name }}</a>
                             </td>
-                            <th>{{ $purchase->package->name }}</th>
+                            <th>{{ $purchase->package->name ?? '?' }}</th>
                             <td>{{ format_money($purchase->price) }}</td>
                             <td>{{ $purchase->quantity }}</td>
                             <td>{{ format_date_compact($purchase->created_at) }}</td>

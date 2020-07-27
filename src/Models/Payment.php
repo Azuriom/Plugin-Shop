@@ -60,6 +60,7 @@ class Payment extends Model
      * @var array
      */
     protected $casts = [
+        'price' => 'float',
         'items' => 'array',
     ];
 

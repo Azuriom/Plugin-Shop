@@ -80,6 +80,11 @@ class Package extends Model implements Buyable
         return $this->belongsTo(Category::class);
     }
 
+    public function purchases()
+    {
+        return $this->hasMany(Purchase::class);
+    }
+
     public function servers()
     {
         return $this->belongsToMany(Server::class, 'shop_package_server');

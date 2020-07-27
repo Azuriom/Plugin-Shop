@@ -95,7 +95,7 @@ return [
             'order-updated' => 'Les produits ont été mis à jour.',
         ],
 
-        'commands-info' => 'Vous pouvez utiliser la variable <code>{player}</code> pour utiliser le pseudo du joueur.',
+        'commands-info' => 'Vous pouvez utiliser la variable <code>{player}</code> pour utiliser le pseudo du joueur. La commande ne doit pas contenir de <code>/</code> au début.',
 
         'need-online' => 'L\'utilisateur doit être en ligne pour recevoir le paquet (uniquement disponible avec AzLink)',
         'enable-quantity' => 'Activer la quantité',

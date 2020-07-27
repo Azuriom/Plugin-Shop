@@ -95,7 +95,7 @@ return [
             'order-updated' => 'The packages have been updated.',
         ],
 
-        'commands-info' => 'You can use <code>{player}</code> to use the player name.',
+        'commands-info' => 'You can use <code>{player}</code> to use the player name. The command must not start with <code>/</code>.',
 
         'need-online' => 'The user must be online to receive the package (only available with AzLink)',
         'enable-quantity' => 'Enable the quantity',
