@@ -41,9 +41,12 @@ Route::prefix('cart')->name('cart.')->middleware('auth')->group(function () {
     });
 });
 
-Route::prefix('payments')->name('payments.')->middleware('auth')->group(function () {
-    Route::get('/payment', 'PaymentController@payment')->name('payment');
-    Route::post('/{gateway:type}/pay', 'PaymentController@pay')->name('pay');
+Route::prefix('payments')->name('payments.')->group(function () {
+    Route::middleware('auth')->group(function () {
+        Route::get('/payment', 'PaymentController@payment')->name('payment');
+        Route::post('/{gateway:type}/pay', 'PaymentController@pay')->name('pay');
+    });
+
     Route::get('/{gateway:type}/success', 'PaymentController@success')->name('success');
     Route::get('/{gateway:type}/failure', 'PaymentController@failure')->name('failure');
 });

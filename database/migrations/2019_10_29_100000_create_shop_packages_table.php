@@ -20,7 +20,6 @@ class CreateShopPackagesTable extends Migration
             $table->string('short_description');
             $table->text('description');
             $table->unsignedInteger('position')->default(0);
-            $table->unsignedInteger('discount')->default(0);
             $table->string('image')->nullable();
             $table->unsignedDecimal('price');
             $table->text('commands');
