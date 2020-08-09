@@ -3,26 +3,25 @@
 namespace Azuriom\Plugin\Shop\Models;
 
 use Azuriom\Models\Traits\HasTablePrefix;
-use Azuriom\Models\Traits\HasUser;
-use Azuriom\Models\User;
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property int $id
- * @property int $user_id
- * @property float $price
+ * @property int $payment_id
+ * @property string $name
+ * @property double $price
  * @property int $quantity
- * @property int $package_id
+ * @property string $buyable_type
+ * @property int $buyable_id
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
  *
- * @property \Azuriom\Models\User $user
- * @property \Azuriom\Plugin\Shop\Models\Package $package
+ * @property \Azuriom\Plugin\Shop\Models\Payment $payment
+ * @property \Azuriom\Plugin\Shop\Models\Package|\Azuriom\Plugin\Shop\Models\Offer|null $buyable
  */
-class Purchase extends Model
+class PaymentItem extends Model
 {
     use HasTablePrefix;
-    use HasUser;
 
     /**
      * The table prefix associated with the model.
@@ -37,7 +36,7 @@ class Purchase extends Model
      * @var array
      */
     protected $fillable = [
-        'price', 'quantity', 'package_id',
+        'name', 'price', 'quantity',
     ];
 
     /**
@@ -51,18 +50,25 @@ class Purchase extends Model
     ];
 
     /**
-     * Get the user who made the purchase.
+     * Get the payment associated to this payment item.
      */
-    public function user()
+    public function payment()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Payment::class);
     }
 
     /**
-     * Get the purchased package.
+     * Get the purchased model.
      */
-    public function package()
+    public function buyable()
     {
-        return $this->belongsTo(Package::class);
+        return $this->morphTo('buyable');
+    }
+
+    public function deliver()
+    {
+        if ($this->buyable !== null) {
+            $this->buyable->deliver($this->payment->user, $this->quantity);
+        }
     }
 }

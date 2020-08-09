@@ -101,27 +101,33 @@ abstract class PaymentMethod
 
     protected function invalidPayment(Payment $payment, string $paymentId, string $message)
     {
-        $payment->update(['status' => 'ERROR', 'payment_id' => $paymentId]);
+        $payment->update(['status' => 'error', 'transaction_id' => $paymentId]);
 
         return response()->json(['status' => false, 'message' => $message]);
     }
 
-    protected function serializeCart(Cart $cart)
-    {
-        return payment_manager()->serializeCart($cart);
-    }
-
     protected function createPayment(Cart $cart, float $price, string $currency, string $paymentId = null)
     {
-        return Payment::create([
+        $payment = Payment::create([
             'price' => $price,
             'currency' => $currency,
-            'payment_type' => $this->id,
-            'status' => 'CREATED',
-            'items' => $this->serializeCart($cart),
-            'payment_id' => $paymentId,
-            'type' => $cart->type(),
+            'gateway_type' => $this->id,
+            'status' => 'pending',
+            'transaction_id' => $paymentId,
         ]);
+
+        return tap($payment, function (Payment $payment) use ($cart) {
+            foreach ($cart->content() as $item) {
+                $payment->items()
+                    ->make([
+                        'name' => $item->name(),
+                        'price' => $item->price(),
+                        'quantity' => $item->quantity,
+                    ])
+                    ->buyable()->associate($item->buyable())
+                    ->save();
+            }
+        });
     }
 
     protected function processPayment(?Payment $payment, string $paymentId = null)
@@ -139,7 +145,7 @@ abstract class PaymentMethod
         }
 
         if ($paymentId !== null) {
-            $payment->fill(['payment_id' => $paymentId]);
+            $payment->fill(['transaction_id' => $paymentId]);
         }
 
         $payment->deliver();

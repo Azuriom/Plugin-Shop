@@ -43,7 +43,7 @@ class MollieMethod extends PaymentMethod
             ],
         ]);
 
-        $payment->update(['payment_id' => $molliePayment->id]);
+        $payment->update(['transaction_id' => $molliePayment->id]);
 
         return redirect()->away($molliePayment->getCheckoutUrl());
     }

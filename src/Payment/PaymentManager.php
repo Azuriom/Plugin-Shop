@@ -5,7 +5,6 @@ namespace Azuriom\Plugin\Shop\Payment;
 use Azuriom\Plugin\Shop\Cart\Cart;
 use Azuriom\Plugin\Shop\Models\Gateway;
 use Azuriom\Plugin\Shop\Models\Payment;
-use Azuriom\Plugin\Shop\Models\Purchase;
 use Azuriom\Plugin\Shop\Payment\Method\MollieMethod;
 use Azuriom\Plugin\Shop\Payment\Method\PayGolMethod;
 use Azuriom\Plugin\Shop\Payment\Method\PaymentWallMethod;
@@ -80,27 +79,24 @@ class PaymentManager
 
     public function buyPackages(Cart $cart)
     {
+        $purchase = Payment::create([
+            'price' => $cart->total(),
+            'gateway_type' => 'azuriom',
+            'status' => 'completed',
+            'currency' => 'XXX',
+        ]);
+
         foreach ($cart->content() as $cartItem) {
             $cartItem->buyable()->deliver(auth()->user(), $cartItem->quantity);
 
-            Purchase::create([
-                'price' => $cartItem->total(),
-                'package_id' => $cartItem->id,
-                'quantity' => $cartItem->quantity,
-            ]);
+            $purchase->items()
+                ->make([
+                    'name' => $cartItem->name(),
+                    'price' => $cartItem->price(),
+                    'quantity' => $cartItem->quantity,
+                ])
+                ->buyable()->associate($cartItem->buyable())
+                ->save();
         }
-    }
-
-    /**
-     * @deprecated Use Payment::deliver()
-     */
-    public function deliverPayment(Payment $payment)
-    {
-        $payment->deliver();
-    }
-
-    public function serializeCart(Cart $cart)
-    {
-        return $cart->content()->pluck('quantity', 'id');
     }
 }

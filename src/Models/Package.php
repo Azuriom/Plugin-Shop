@@ -80,9 +80,9 @@ class Package extends Model implements Buyable
         return $this->belongsTo(Category::class);
     }
 
-    public function purchases()
+    public function payments()
     {
-        return $this->hasMany(Purchase::class);
+        return $this->hasManyThrough(Payment::class, PaymentItem::class);
     }
 
     public function servers()

@@ -3,7 +3,9 @@
 namespace Azuriom\Plugin\Shop\Requests;
 
 use Azuriom\Http\Requests\Traits\ConvertCheckbox;
+use Azuriom\Plugin\Shop\Models\Gateway;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class GatewayRequest extends FormRequest
 {
@@ -26,7 +28,7 @@ class GatewayRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required', 'string', 'max:50'],
+            'name' => ['required', 'string', 'max:50', Rule::unique(Gateway::class)->ignore($this->gateway, 'name')],
             //'fees' => ['required', 'integer', 'between:0,100'],
             'is_enabled' => ['filled', 'boolean'],
         ];

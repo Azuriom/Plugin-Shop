@@ -54,7 +54,7 @@ class StripeMethod extends PaymentMethod
             'client_reference_id' => $payment->id,
         ]);
 
-        $payment->update(['payment_id' => $payment->id]);
+        $payment->update(['transaction_id' => $payment->id]);
 
         return view('shop::payments.stripe', [
             'checkoutSessionId' => $session->id,

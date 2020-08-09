@@ -147,12 +147,11 @@ return [
         'card' => 'Paiements sur la boutique',
 
         'payment-status' => [
-            'created' => 'Créé',
-            'cancelled' => 'Annulé',
             'pending' => 'En attente',
             'expired' => 'Expiré',
-            'success' => 'Validé',
-            'delivered' => 'Livré',
+            'chargeback' => 'Litige',
+            'completed' => 'Complété',
+            'refunded' => 'Remboursé',
             'error' => 'Erreur',
         ],
     ],

@@ -147,12 +147,11 @@ return [
         'card' => 'Shop payments',
 
         'payment-status' => [
-            'created' => 'Created',
-            'cancelled' => 'Cancelled',
             'pending' => 'Pending',
             'expired' => 'Expired',
-            'success' => 'Success',
-            'delivered' => 'Delivered',
+            'chargeback' => 'Chargeback',
+            'completed' => 'Completed',
+            'refunded' => 'Refunded',
             'error' => 'Error',
         ],
     ],

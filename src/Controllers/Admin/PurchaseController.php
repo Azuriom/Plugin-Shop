@@ -3,7 +3,7 @@
 namespace Azuriom\Plugin\Shop\Controllers\Admin;
 
 use Azuriom\Http\Controllers\Controller;
-use Azuriom\Plugin\Shop\Models\Purchase;
+use Azuriom\Plugin\Shop\Models\Payment;
 
 class PurchaseController extends Controller
 {
@@ -15,7 +15,7 @@ class PurchaseController extends Controller
     public function index()
     {
         return view('shop::admin.purchases.index', [
-            'purchases' => Purchase::with('user')->paginate(),
+            'purchases' => Payment::withSiteMoney()->with('user')->latest()->paginate(),
         ]);
     }
 }

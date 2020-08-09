@@ -4,8 +4,11 @@ namespace Azuriom\Plugin\Shop\Providers;
 
 use Azuriom\Extensions\Plugin\BasePluginServiceProvider;
 use Azuriom\Models\Permission;
+use Azuriom\Plugin\Shop\Models\Offer;
+use Azuriom\Plugin\Shop\Models\Package;
 use Azuriom\Plugin\Shop\Payment\PaymentManager;
 use Azuriom\Plugin\Shop\View\Composers\ShopAdminDashboardComposer;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\View;
 
 class ShopServiceProvider extends BasePluginServiceProvider
@@ -20,6 +23,11 @@ class ShopServiceProvider extends BasePluginServiceProvider
         require_once __DIR__.'/../../vendor/autoload.php';
 
         $this->app->singleton(PaymentManager::class);
+
+        Relation::morphMap([
+            'shop.offers' => Offer::class,
+            'shop.packages' => Package::class,
+        ]);
     }
 
     /**

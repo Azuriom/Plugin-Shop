@@ -14,8 +14,6 @@ use PayPal\Api\Payment as PayPalPayment;
 use PayPal\Api\PaymentExecution;
 use PayPal\Api\RedirectUrls;
 use PayPal\Api\Transaction;
-use PayPal\Auth\OAuthTokenCredential;
-use PayPal\Rest\ApiContext;
 
 class PayPalExpressCheckout extends PaymentMethod
 {
@@ -78,7 +76,7 @@ class PayPalExpressCheckout extends PaymentMethod
             ->setRedirectUrls($redirectUrls)
             ->create($this->getApiContext());
 
-        $payment->update(['payment_id' => $paypalPayment->getId()]);
+        $payment->update(['transaction_id' => $paypalPayment->getId()]);
 
         return redirect()->away($paypalPayment->getApprovalLink());
     }
@@ -95,9 +93,11 @@ class PayPalExpressCheckout extends PaymentMethod
 
         $paypalPayment = PayPalPayment::get($paymentId, $apiContext);
 
-        $payment = Payment::firstWhere('payment_id', $paypalPayment->getId());
+        $payment = Payment::firstWhere('transaction_id', $paypalPayment->getId());
 
         if ($payment === null) {
+            logger()->warning('Invalid payment id: '.$paymentId);
+
             return $this->errorResponse();
         }
 
@@ -113,6 +113,8 @@ class PayPalExpressCheckout extends PaymentMethod
         }
 
         if (! $payment->isCompleted()) {
+            logger()->warning('Invalid payment status for '.$paymentId);
+
             return $this->errorResponse();
         }
 

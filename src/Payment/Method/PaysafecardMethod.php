@@ -95,7 +95,7 @@ class PaysafecardMethod extends PaymentMethod
 
     private function processPscPayment(string $paymentId)
     {
-        $payment = Payment::firstWhere('payment_id', $paymentId);
+        $payment = Payment::firstWhere('transaction_id', $paymentId);
 
         $response = $this->retrievePayment($paymentId);
 

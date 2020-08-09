@@ -16,18 +16,19 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $currency
  * @property string $type
  * @property string $status
- * @property string $payment_type
- * @property string $payment_id
- * @property array $items
+ * @property string $gateway_type
+ * @property string $transaction_id
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
  *
  * @property \Azuriom\Models\User $user
+ * @property \Illuminate\Support\Collection|\Azuriom\Plugin\Shop\Models\PaymentItem[] $items
  *
- * @method static \Illuminate\Database\Eloquent\Builder success()
  * @method static \Illuminate\Database\Eloquent\Builder completed()
  * @method static \Illuminate\Database\Eloquent\Builder pending()
  * @method static \Illuminate\Database\Eloquent\Builder notPending()
+ * @method static \Illuminate\Database\Eloquent\Builder withSiteMoney()
+ * @method static \Illuminate\Database\Eloquent\Builder withRealMoney()
  */
 class Payment extends Model
 {
@@ -35,7 +36,7 @@ class Payment extends Model
     use HasUser;
 
     protected const STATUS_LIST = [
-        'CREATED', 'CANCELLED', 'PENDING', 'EXPIRED', 'SUCCESS', 'DELIVERED', 'ERROR',
+        'pending', 'expired', 'completed', 'chargeback', 'refund', 'error',
     ];
 
     /**
@@ -51,7 +52,7 @@ class Payment extends Model
      * @var array
      */
     protected $fillable = [
-        'price', 'currency', 'status', 'payment_type', 'payment_id', 'type', 'items',
+        'price', 'currency', 'status', 'gateway_type', 'transaction_id', 'type',
     ];
 
     /**
@@ -72,78 +73,94 @@ class Payment extends Model
         return $this->belongsTo(User::class);
     }
 
-    public static function status()
+    /**
+     * Get the items purchased in this payment.
+     */
+    public function items()
     {
-        return self::STATUS_LIST;
+        return $this->hasMany(PaymentItem::class);
     }
 
     public function getTypeName()
     {
         $paymentManager = payment_manager();
 
-        if (! $paymentManager->hasPaymentMethod($this->payment_type)) {
-            return $this->payment_type;
+        if (! $paymentManager->hasPaymentMethod($this->gateway_type)) {
+            return $this->gateway_type;
         }
 
-        return $paymentManager->getPaymentMethod($this->payment_type)->name();
+        return $paymentManager->getPaymentMethod($this->gateway_type)->name();
     }
 
     public function deliver()
     {
-        $this->update(['status' => 'SUCCESS']);
+        $this->update(['status' => 'completed']);
 
         event(new PaymentPaid($this));
 
-        if ($this->type === 'OFFER') {
-            $offers = Offer::findMany(array_keys($this->items))->keyBy('id');
-
-            foreach ($this->items as $packageId => $quantity) {
-                $offer = $offers[$packageId];
-
-                $offer->deliver($this->user, $quantity);
-            }
-        } elseif ($this->type === 'PACKAGE') {
-            $packages = Package::with('servers')
-                ->findMany(array_keys($this->items))
-                ->keyBy('id');
-
-            foreach ($this->items as $packageId => $quantity) {
-                $package = $packages[$packageId];
-
-                $package->deliver($this->user, $quantity);
-            }
+        foreach ($this->items as $item) {
+            $item->deliver();
         }
+    }
 
-        $this->update(['status' => 'DELIVERED']);
+    public function statusColor()
+    {
+        switch ($this->status) {
+            case 'pending':
+            case 'expired':
+                return 'warning';
+            case 'chargeback':
+            case 'error':
+                return 'danger';
+            case 'completed':
+                return 'success';
+            default:
+                return 'secondary';
+        }
     }
 
     public function isPending()
     {
-        return $this->status === 'CREATED' || $this->status === 'PENDING';
+        return $this->status === 'pending';
     }
 
     public function isCompleted()
     {
-        return $this->status === 'SUCCESS' || $this->status === 'DELIVERED';
-    }
-
-    public function scopeSuccess(Builder $query)
-    {
-        return $query->where('status', 'SUCCESS');
+        return $this->status === 'completed';
     }
 
     public function scopeCompleted(Builder $query)
     {
-        return $query->whereIn('status', ['SUCCESS', 'DELIVERED']);
+        return $query->where('status', 'completed');
     }
 
     public function scopePending(Builder $query)
     {
-        return $query->whereIn('status', ['CREATED', 'PENDING']);
+        return $query->where('status', 'pending');
     }
 
     public function scopeNotPending(Builder $query)
     {
-        return $query->whereNotIn('status', ['CREATED', 'PENDING']);
+        return $query->where('status', '!=', 'pending');
+    }
+
+    public function scopeWithSiteMoney(Builder $query)
+    {
+        return $query->where('gateway_type', '=', 'azuriom');
+    }
+
+    public function scopeWithRealMoney(Builder $query)
+    {
+        return $query->where('gateway_type', '!=', 'azuriom');
+    }
+
+    public function getPaymentIdAttribute()
+    {
+        return $this->transaction_id;
+    }
+
+    public function setPaymentIdAttribute($value)
+    {
+        $this->transaction_id = $value;
     }
 }

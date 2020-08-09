@@ -13,7 +13,7 @@ class ShopAdminDashboardComposer extends AdminDashboardCardComposer
             'shop_payments' => [
                 'color' => 'info',
                 'name' => trans('shop::admin.payments.card'),
-                'value' => Payment::completed()->count(),
+                'value' => Payment::scopes(['completed', 'withSiteMoney'])->count(),
                 'icon' => 'fas fa-money-bill-wave',
             ],
         ];

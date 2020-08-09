@@ -73,7 +73,7 @@
     <label for="priceInput">{{ trans('shop::messages.fields.price') }}</label>
 
     <div class="input-group">
-        <input type="number" min="0" step="0.01" class="form-control @error('price') is-invalid @enderror" id="priceInput" name="price" value="{{ old('price', $package->price ?? '') }}" required>
+        <input type="number" min="0" step="0.01" max="999999" class="form-control @error('price') is-invalid @enderror" id="priceInput" name="price" value="{{ old('price', $package->price ?? '') }}" required>
         <div class="input-group-append">
             <span class="input-group-text">{{ shop_active_currency() }}</span>
         </div>

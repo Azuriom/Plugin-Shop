@@ -68,7 +68,7 @@ class PayPalMethod extends PaymentMethod
         $payment = Payment::findOrFail($request->input('custom'));
 
         if ($status === 'Pending') {
-            $payment->update(['status' => 'PENDING', 'payment_id' => $paymentId]);
+            $payment->update(['status' => 'pending', 'transaction_id' => $paymentId]);
 
             return response()->noContent();
         }

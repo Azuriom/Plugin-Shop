@@ -20,7 +20,7 @@ class PaymentController extends Controller
     {
         $search = $request->input('search');
 
-        $payments = Payment::notPending()
+        $payments = Payment::scopes(['notPending', 'withRealMoney'])
             ->with('user')
             ->latest()
             ->when($search, function (Builder $query, string $search) {
@@ -29,7 +29,7 @@ class PaymentController extends Controller
                     ->get()
                     ->modelKeys();
 
-                $query->where('payment_id', 'LIKE', "%{$search}%");
+                $query->where('transaction_id', 'LIKE', "%{$search}%");
 
                 if ($users) {
                     $query->orWhereIn('user_id', $users);

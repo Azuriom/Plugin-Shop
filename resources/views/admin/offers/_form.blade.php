@@ -13,7 +13,7 @@
     <div class="form-group col-md-4">
         <label for="moneyInput">{{ trans('messages.fields.money') }}</label>
         <div class="input-group">
-            <input type="number" min="0" step="0.01" class="form-control @error('money') is-invalid @enderror" id="moneyInput" name="money" value="{{ old('money', $offer->money ?? '') }}" required>
+            <input type="number" min="0" step="0.01" max="999999" class="form-control @error('money') is-invalid @enderror" id="moneyInput" name="money" value="{{ old('money', $offer->money ?? '') }}" required>
             <div class="input-group-append">
                 <span class="input-group-text">{{ money_name() }}</span>
             </div>
@@ -28,7 +28,7 @@
         <label for="priceInput">{{ trans('shop::messages.fields.price') }}</label>
 
         <div class="input-group mb-3">
-            <input type="number" min="0" step="0.01" class="form-control @error('price') is-invalid @enderror" id="priceInput" name="price" value="{{ old('price', $offer->price ?? '') }}" required>
+            <input type="number" min="0" step="0.01" max="999999" class="form-control @error('price') is-invalid @enderror" id="priceInput" name="price" value="{{ old('price', $offer->price ?? '') }}" required>
             <div class="input-group-append">
                 <span class="input-group-text">{{ currency_display() }}</span>
             </div>
