@@ -2,7 +2,7 @@
     "id": "shop",
     "name": "Shop",
     "description": "A shop plugin to sell in-game items on your website.",
-    "version": "0.2.1",
+    "version": "0.2.2",
     "url": "https://azuriom.com/market/resources/1",
     "authors": [
         "Azuriom"

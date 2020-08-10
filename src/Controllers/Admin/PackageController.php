@@ -163,8 +163,6 @@ class PackageController extends Controller
      */
     public function destroy(Package $package)
     {
-        $package->purchases()->delete();
-
         $package->delete();
 
         return redirect()->route('shop.admin.packages.index')
