@@ -93,6 +93,9 @@ class CreateShopPaymentsTable extends Migration
             ->get()
             ->map(function ($payment) use ($packages, $offers) {
                 $items = collect(json_decode($payment->items) ?? [])
+                    ->filter(function ($quantity, $itemId) {
+                        return is_numeric($quantity) && is_numeric($itemId);
+                    })
                     ->map(function ($quantity, $itemId) use ($payment, $packages, $offers) {
                         $buyable = ($payment->type === 'PACKAGE' ? $packages : $offers)->get($itemId);
 

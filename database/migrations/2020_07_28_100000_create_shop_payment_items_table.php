@@ -55,6 +55,10 @@ class CreateShopPaymentItemsTable extends Migration
             $paymentID = DB::table('shop_payments')->insertGetId(Arr::except($payment, 'items'));
 
             foreach ($payment['items'] ?? [] as $item) {
+                if (! is_numeric($item['quantity']) || ! is_numeric($item['buyable_id'])) {
+                    continue;
+                }
+
                 DB::table('shop_payment_items')->insert(array_merge($item, [
                     'payment_id' => $paymentID,
                     'created_at' => $payment['created_at'],
