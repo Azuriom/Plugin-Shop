@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id
  * @property int $payment_id
  * @property string $name
- * @property double $price
+ * @property float $price
  * @property int $quantity
  * @property string $buyable_type
  * @property int $buyable_id

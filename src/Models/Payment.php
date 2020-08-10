@@ -14,7 +14,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $user_id
  * @property float $price
  * @property string $currency
- * @property string $type
  * @property string $status
  * @property string $gateway_type
  * @property string $transaction_id

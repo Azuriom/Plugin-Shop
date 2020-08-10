@@ -55,7 +55,7 @@ class CreateShopPaymentsTable extends Migration
     }
 
     /**
-     * Backup old payments/purchases to a local .json file before deleting tables
+     * Backup old payments/purchases to a local .json file before deleting tables.
      *
      * @return void
      */
