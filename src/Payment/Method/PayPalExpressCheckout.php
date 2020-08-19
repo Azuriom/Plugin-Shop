@@ -14,6 +14,8 @@ use PayPal\Api\Payment as PayPalPayment;
 use PayPal\Api\PaymentExecution;
 use PayPal\Api\RedirectUrls;
 use PayPal\Api\Transaction;
+use PayPal\Auth\OAuthTokenCredential;
+use PayPal\Rest\ApiContext;
 
 class PayPalExpressCheckout extends PaymentMethod
 {
