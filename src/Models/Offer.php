@@ -3,6 +3,7 @@
 namespace Azuriom\Plugin\Shop\Models;
 
 use Azuriom\Models\Traits\HasTablePrefix;
+use Azuriom\Models\Traits\Loggable;
 use Azuriom\Models\User;
 use Azuriom\Plugin\Shop\Models\Concerns\Buyable;
 use Azuriom\Plugin\Shop\Models\Concerns\IsBuyable;
@@ -22,6 +23,7 @@ class Offer extends Model implements Buyable
 {
     use IsBuyable;
     use HasTablePrefix;
+    use Loggable;
 
     /**
      * The table prefix associated with the model.

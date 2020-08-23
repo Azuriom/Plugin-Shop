@@ -17,9 +17,11 @@
         "paymentwall/paymentwall-php": "^2.2",
         "paygol/php-sdk": "^1.0",
         "paypal/rest-api-sdk-php": "^1.14.0",
-        "stripe/stripe-php": "^7.14"
+        "stripe/stripe-php": "^7.14",
+        "xsolla/xsolla-sdk-php": "^4.1"
     },
     "replace": {
-        "guzzlehttp/guzzle": "*"
+        "guzzlehttp/guzzle": "*",
+        "symfony/http-foundation": "*"
     }
 }

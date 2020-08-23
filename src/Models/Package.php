@@ -5,6 +5,7 @@ namespace Azuriom\Plugin\Shop\Models;
 use Azuriom\Models\Server;
 use Azuriom\Models\Traits\HasImage;
 use Azuriom\Models\Traits\HasTablePrefix;
+use Azuriom\Models\Traits\Loggable;
 use Azuriom\Models\User;
 use Azuriom\Plugin\Shop\Events\PackageDelivered;
 use Azuriom\Plugin\Shop\Models\Concerns\Buyable;
@@ -41,6 +42,7 @@ class Package extends Model implements Buyable
     use IsBuyable;
     use HasImage;
     use HasTablePrefix;
+    use Loggable;
 
     /**
      * The table prefix associated with the model.
@@ -102,7 +104,6 @@ class Package extends Model implements Buyable
 
     public function getPrice()
     {
-        // TODO not the best way to do this...
         static $globalDiscounts = null;
 
         if ($globalDiscounts === null) {

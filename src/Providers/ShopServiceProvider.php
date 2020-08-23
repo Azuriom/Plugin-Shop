@@ -3,7 +3,9 @@
 namespace Azuriom\Plugin\Shop\Providers;
 
 use Azuriom\Extensions\Plugin\BasePluginServiceProvider;
+use Azuriom\Models\ActionLog;
 use Azuriom\Models\Permission;
+use Azuriom\Plugin\Shop\Models\Gateway;
 use Azuriom\Plugin\Shop\Models\Offer;
 use Azuriom\Plugin\Shop\Models\Package;
 use Azuriom\Plugin\Shop\Payment\PaymentManager;
@@ -52,6 +54,12 @@ class ShopServiceProvider extends BasePluginServiceProvider
         View::composer('admin.dashboard', ShopAdminDashboardComposer::class);
 
         Permission::registerPermissions(['shop.admin' => 'shop::admin.permissions.admin']);
+
+        ActionLog::registerLogModels([
+            Offer::class,
+            Package::class,
+            Gateway::class,
+        ], 'shop::admin.logs');
     }
 
     /**

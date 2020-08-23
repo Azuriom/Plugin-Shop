@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "877bb6273f81424f688aa2cadead75ba",
+    "content-hash": "4c954bf0514e0a3249bde3c048093aa0",
     "packages": [
         {
             "name": "composer/ca-bundle",
@@ -400,6 +400,54 @@
                 "stripe"
             ],
             "time": "2020-06-03T19:16:18+00:00"
+        },
+        {
+            "name": "xsolla/xsolla-sdk-php",
+            "version": "v4.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/xsolla/xsolla-sdk-php.git",
+                "reference": "f1f369258cd948352dc4992a859dd8805efa6372"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/xsolla/xsolla-sdk-php/zipball/f1f369258cd948352dc4992a859dd8805efa6372",
+                "reference": "f1f369258cd948352dc4992a859dd8805efa6372",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "guzzlehttp/guzzle": "~6.0",
+                "php": ">=7.1.3 <=7.4.5",
+                "symfony/http-foundation": "~2.3 || ~3.0 || ~4.0 || ~5.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "~2.13",
+                "mtdowling/burgomaster": "^0.0.3",
+                "phpunit/phpunit": "~7.3",
+                "symfony/process": "~4.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Xsolla\\SDK\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Xsolla SDK for PHP. Xsolla is the authorized reseller and merchant providing e-commerce services for online games.",
+            "homepage": "http://xsolla.com",
+            "keywords": [
+                "api",
+                "games",
+                "payment",
+                "sdk",
+                "xsolla"
+            ],
+            "time": "2020-07-16T09:35:21+00:00"
         }
     ],
     "packages-dev": [],
