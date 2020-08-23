@@ -50,7 +50,7 @@ class XsollaMethod extends PaymentMethod
 
         $xsollaClient = XsollaClient::factory([
             'merchant_id' => $this->gateway->data['merchant-id'],
-            'api_key' => $this->gateway->data['api-key']
+            'api_key' => $this->gateway->data['api-key'],
         ]);
 
         $token = $xsollaClient->createPaymentUITokenFromRequest($tokenRequest);
@@ -73,7 +73,6 @@ class XsollaMethod extends PaymentMethod
 
             if ($message->isPayment()) {
                 /** @var \Xsolla\SDK\Webhook\Message\PaymentMessage $message */
-
                 $payment = Payment::find($message->getExternalPaymentId());
 
                 if ($payment === null) {
