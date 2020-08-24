@@ -15,6 +15,7 @@ return [
         'currency' => 'Currency',
         'category' => 'Category',
         'package' => 'Package',
+        'packages' => 'Packages',
         'gateways' => 'Gateways',
         'servers' => 'Servers',
         'code' => 'Code',
@@ -22,7 +23,6 @@ return [
         'commands' => 'Commands',
         'start_date' => 'Start date',
         'expire_date' => 'Expire date',
-        'packages' => 'Active packages',
     ],
 
     'actions' => [

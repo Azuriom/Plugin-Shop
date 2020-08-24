@@ -34,10 +34,6 @@ class Payment extends Model
     use HasTablePrefix;
     use HasUser;
 
-    protected const STATUS_LIST = [
-        'pending', 'expired', 'completed', 'chargeback', 'refund', 'error',
-    ];
-
     /**
      * The table prefix associated with the model.
      *
@@ -51,7 +47,7 @@ class Payment extends Model
      * @var array
      */
     protected $fillable = [
-        'price', 'currency', 'status', 'gateway_type', 'transaction_id', 'type',
+        'price', 'currency', 'status', 'gateway_type', 'transaction_id', 'user_id',
     ];
 
     /**
@@ -95,7 +91,9 @@ class Payment extends Model
     {
         $this->update(['status' => 'completed']);
 
-        event(new PaymentPaid($this));
+        if ($this->gateway_type !== 'azuriom') {
+            event(new PaymentPaid($this));
+        }
 
         foreach ($this->items as $item) {
             $item->deliver();

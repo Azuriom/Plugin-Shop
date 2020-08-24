@@ -81,7 +81,7 @@ class PaymentManager
 
     public function buyPackages(Cart $cart)
     {
-        $purchase = Payment::create([
+        $payment = Payment::create([
             'price' => $cart->total(),
             'gateway_type' => 'azuriom',
             'status' => 'completed',
@@ -89,9 +89,7 @@ class PaymentManager
         ]);
 
         foreach ($cart->content() as $cartItem) {
-            $cartItem->buyable()->deliver(auth()->user(), $cartItem->quantity);
-
-            $purchase->items()
+            $payment->items()
                 ->make([
                     'name' => $cartItem->name(),
                     'price' => $cartItem->price(),
@@ -100,5 +98,7 @@ class PaymentManager
                 ->buyable()->associate($cartItem->buyable())
                 ->save();
         }
+
+        $payment->deliver();
     }
 }

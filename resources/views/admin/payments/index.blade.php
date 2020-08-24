@@ -32,6 +32,7 @@
                         <th scope="col">{{ trans('messages.fields.type') }}</th>
                         <th scope="col">{{ trans('shop::admin.payments.fields.status') }}</th>
                         <th scope="col">{{ trans('shop::admin.payments.fields.payment-id') }}</th>
+                        <th scope="col">{{ trans('shop::messages.fields.packages') }}</th>
                         <th scope="col">{{ trans('messages.fields.date') }}</th>
                     </tr>
                     </thead>
@@ -51,6 +52,13 @@
                                 </span>
                             </td>
                             <td>{{ $payment->transaction_id ?? trans('messages.unknown') }}</td>
+                            <td>
+                                <ul class="pl-4" style="font-size: 90%">
+                                    @foreach($payment->items as $item)
+                                        <li>{{ $item->name }} x{{ $item->quantity }}</li>
+                                    @endforeach
+                                </ul>
+                            </td>
                             <td>{{ format_date_compact($payment->created_at) }}</td>
                         </tr>
                     @endforeach

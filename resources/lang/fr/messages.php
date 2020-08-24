@@ -15,6 +15,7 @@ return [
         'currency' => 'Devise',
         'category' => 'Catégorie',
         'package' => 'Produit',
+        'packages' => 'Produits',
         'gateways' => 'Moyens de paiements',
         'servers' => 'Serveurs',
         'code' => 'Code',
@@ -22,7 +23,6 @@ return [
         'start_date' => 'Date de début',
         'expire_date' => 'Date de fin',
         'commands' => 'Commandes',
-        'packages' => 'Articles actifs',
     ],
 
     'actions' => [
