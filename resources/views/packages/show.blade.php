@@ -18,7 +18,17 @@
             </span>
 
             @auth
-                @if(! $package->isInCart())
+                @if($package->isInCart())
+                    <form action="{{ route('shop.cart.remove', $package) }}" method="POST" class="form-inline">
+                        @csrf
+
+                        <button type="submit" class="btn btn-primary">
+                            {{ trans('shop::messages.actions.remove') }}
+                        </button>
+                    </form>
+                @elseif($package->getMaxQuantity() < 1)
+                    {{ trans('shop::messages.packages.limit') }}
+                @else
                     <form action="{{ route('shop.packages.buy', $package) }}" method="POST" class="form-inline">
                         @csrf
 
@@ -34,14 +44,6 @@
 
                         <button type="submit" class="btn btn-primary">
                             {{ trans('shop::messages.buy') }}
-                        </button>
-                    </form>
-                @else
-                    <form action="{{ route('shop.cart.remove', $package) }}" method="POST" class="form-inline">
-                        @csrf
-
-                        <button type="submit" class="btn btn-primary">
-                            {{ trans('shop::messages.actions.remove') }}
                         </button>
                     </form>
                 @endif

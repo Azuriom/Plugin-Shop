@@ -23,6 +23,7 @@ return [
         'start_date' => 'Date de début',
         'expire_date' => 'Date de fin',
         'commands' => 'Commandes',
+        'user_limit' => 'Limite d\'achats par utilisateur',
     ],
 
     'actions' => [
@@ -72,6 +73,10 @@ return [
         'success-info' => 'Vous recevrez votre achat dans le jeu en moins d\'une minute.',
 
         'redirect-info' => 'Si vous n\'êtes pas redirigé automatiquement, vérifiez que le javascript est activé sur votre navigateur.',
+    ],
+
+    'packages' => [
+        'limit' => 'Vous avez acheté le maximum possible pour cet article.',
     ],
 
     'offers' => [

@@ -42,7 +42,7 @@ interface Buyable
     public function hasQuantity();
 
     /**
-     * Get the maximum purchase quantity of this buyable.
+     * Get the maximum purchase quantity that the current user can purchase.
      *
      * @return int
      */

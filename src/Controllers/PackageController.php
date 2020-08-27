@@ -38,11 +38,11 @@ class PackageController extends Controller
 
         $cart = Cart::fromSession($request->session());
 
-        if ($package->has_quantity) {
-            $cart->add($package, $request->input('quantity', 1));
-        } else {
-            $cart->set($package);
+        if ($package->getMaxQuantity() < 1) {
+            return redirect()->back()->with('error', trans('shop::messages.packages.limit'));
         }
+
+        $cart->add($package, $request->input('quantity', 1));
 
         return redirect()->route('shop.cart.index');
     }

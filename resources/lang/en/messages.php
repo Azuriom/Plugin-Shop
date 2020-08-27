@@ -23,6 +23,7 @@ return [
         'commands' => 'Commands',
         'start_date' => 'Start date',
         'expire_date' => 'Expire date',
+        'user_limit' => 'User purchase limit',
     ],
 
     'actions' => [
@@ -72,6 +73,10 @@ return [
         'success-info' => 'You\'ll receive your purchase in-game in less than a minute.',
 
         'redirect-info' => 'If you are not redirected automatically check that javascript is enabled on your browser.',
+    ],
+
+    'packages' => [
+      'limit' => 'You have purchased the maximum possible for this item.',
     ],
 
     'offers' => [

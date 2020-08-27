@@ -104,8 +104,11 @@ class Cart implements Arrayable
         }
 
         $id = $this->getItemId($buyable);
+        $item = new CartItem($this, $buyable, $id, $quantity);
 
-        $this->items->put($id, new CartItem($this, $buyable, $id, $quantity));
+        if ($item->quantity > 0) {
+            $this->items->put($id, $item);
+        }
 
         $this->save();
     }

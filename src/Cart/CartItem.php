@@ -82,7 +82,13 @@ class CartItem implements Arrayable
      */
     public function setQuantity(int $quantity)
     {
-        $this->quantity = $this->hasQuantity() ? $quantity : 1;
+        $maxQuantity = $this->buyable->getMaxQuantity();
+
+        $this->quantity = min($this->hasQuantity() ? $quantity : 1, $maxQuantity);
+
+        if ($this->quantity <= 0) {
+            $this->cart->remove($this->buyable);
+        }
     }
 
     /**

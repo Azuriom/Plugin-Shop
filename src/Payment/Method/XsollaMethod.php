@@ -7,7 +7,6 @@ use Azuriom\Plugin\Shop\Cart\Cart;
 use Azuriom\Plugin\Shop\Models\Payment;
 use Azuriom\Plugin\Shop\Payment\PaymentMethod;
 use Illuminate\Http\Request;
-use Illuminate\Support\HtmlString;
 use Xsolla\SDK\API\PaymentUI\TokenRequest;
 use Xsolla\SDK\API\XsollaClient;
 use Xsolla\SDK\Exception\Webhook\InvalidInvoiceException;

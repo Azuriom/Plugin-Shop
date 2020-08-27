@@ -10,6 +10,7 @@ use Azuriom\Models\User;
 use Azuriom\Plugin\Shop\Events\PackageDelivered;
 use Azuriom\Plugin\Shop\Models\Concerns\Buyable;
 use Azuriom\Plugin\Shop\Models\Concerns\IsBuyable;
+use Azuriom\Plugin\Shop\Models\User as ShopUser;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
@@ -122,6 +123,31 @@ class Package extends Model implements Buyable
         return round(max($price, 0), 2);
     }
 
+    /**
+     * Get the total purchases for this package for the current user.
+     *
+     * @return int
+     */
+    public function getUserTotalPurchases()
+    {
+        static $purchases = null;
+
+        if ($purchases === null) {
+            $purchases = ShopUser::ofUser(auth()->user())
+                ->items()
+                ->where('buyable_type', 'shop.packages')
+                ->get()
+                ->countBy('buyable_id');
+        }
+
+        return $purchases->get($this->id, 0);
+    }
+
+    public function getRemainingUserPurchases()
+    {
+        return max($this->getMaxQuantity() - $this->getUserTotalPurchases(), 0);
+    }
+
     public function getOriginalPrice()
     {
         return $this->price;
@@ -129,7 +155,11 @@ class Package extends Model implements Buyable
 
     public function getMaxQuantity()
     {
-        return 100;
+        if ($this->user_limit === 0) {
+            return 100;
+        }
+
+        return max($this->user_limit - $this->getUserTotalPurchases(), 0);
     }
 
     public function isInCart()
