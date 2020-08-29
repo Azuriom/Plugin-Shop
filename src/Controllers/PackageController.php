@@ -42,6 +42,10 @@ class PackageController extends Controller
             return redirect()->back()->with('error', trans('shop::messages.packages.limit'));
         }
 
+        if (! $package->hasBoughtRequirements()) {
+            return redirect()->back()->with('error', trans('shop::messages.packages.requirements'));
+        }
+
         $cart->add($package, $request->input('quantity', 1));
 
         return redirect()->route('shop.cart.index');

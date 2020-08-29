@@ -23,6 +23,7 @@ return [
         'commands' => 'Commands',
         'start_date' => 'Start date',
         'expire_date' => 'Expire date',
+        'required_packages' => 'Required Packages',
         'user_limit' => 'User purchase limit',
     ],
 
@@ -76,7 +77,8 @@ return [
     ],
 
     'packages' => [
-      'limit' => 'You have purchased the maximum possible for this item.',
+        'limit' => 'You have purchased the maximum possible for this packages.',
+        'requirements' => 'You have not purchased the necessary packages to purchase this package.',
     ],
 
     'offers' => [

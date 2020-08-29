@@ -1,3 +1,5 @@
+@include('shop::admin.elements.select')
+
 @push('footer-scripts')
     <script>
         function addCommandListener(el) {
@@ -84,6 +86,26 @@
             @enderror
         </div>
     </div>
+</div>
+
+<div class="form-group mb-0">
+    <label for="requiredPackagesSelect">{{ trans('shop::messages.fields.required_packages') }}</label>
+
+    <select class="custom-select @error('required_packages') is-invalid @enderror" id="requiredPackagesSelect" name="required_packages[]" multiple>
+        @foreach($categories as $category)
+            <optgroup label="{{ $category->name }}">
+                @foreach($category->packages as $categoryPackage)
+                    @if(! isset($package) || ! $categoryPackage->is($package))
+                        <option value="{{ $categoryPackage->id }}" @if(isset($package) && optional($package->required_packages)->contains($categoryPackage->id)) selected @endif>{{ $categoryPackage->name }}</option>
+                    @endif
+                @endforeach
+            </optgroup>
+        @endforeach
+    </select>
+
+    @error('required_packages')
+    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+    @enderror
 </div>
 
 <div class="form-row">

@@ -23,7 +23,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $image
  * @property int $position
  * @property float $price
- * @property array $required_packages
+ * @property \Illuminate\Support\Collection|null $required_packages
  * @property bool $has_quantity
  * @property array $commands
  * @property bool $need_online
@@ -70,7 +70,7 @@ class Package extends Model implements Buyable
     protected $casts = [
         'price' => 'float',
         'commands' => 'array',
-        'required_packages' => 'array',
+        'required_packages' => 'collection',
         'has_quantity' => 'boolean',
         'is_enabled' => 'boolean',
     ];
@@ -123,6 +123,19 @@ class Package extends Model implements Buyable
         return round(max($price, 0), 2);
     }
 
+    public function hasBoughtRequirements()
+    {
+        if ($this->required_packages === null || $this->required_packages->isEmpty()) {
+            return true;
+        }
+
+        $packages = self::findMany($this->required_packages);
+
+        return ! $packages->contains(function (Package $package) {
+            return $package->getUserTotalPurchases() < 1;
+        });
+    }
+
     /**
      * Get the total purchases for this package for the current user.
      *
@@ -155,7 +168,7 @@ class Package extends Model implements Buyable
 
     public function getMaxQuantity()
     {
-        if ($this->user_limit === 0) {
+        if ($this->user_limit < 1) {
             return 100;
         }
 

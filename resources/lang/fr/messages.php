@@ -23,6 +23,7 @@ return [
         'start_date' => 'Date de début',
         'expire_date' => 'Date de fin',
         'commands' => 'Commandes',
+        'required_packages' => 'Articles pré-requis',
         'user_limit' => 'Limite d\'achats par utilisateur',
     ],
 
@@ -77,6 +78,7 @@ return [
 
     'packages' => [
         'limit' => 'Vous avez acheté le maximum possible pour cet article.',
+        'requirements' => 'Vous n\'avez pas acheté les articles nécessaires pour l\'achat de cet article.',
     ],
 
     'offers' => [

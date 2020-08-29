@@ -28,6 +28,8 @@
                     </form>
                 @elseif($package->getMaxQuantity() < 1)
                     {{ trans('shop::messages.packages.limit') }}
+                @elseif(! $package->hasBoughtRequirements())
+                    {{ trans('shop::messages.packages.requirements') }}
                 @else
                     <form action="{{ route('shop.packages.buy', $package) }}" method="POST" class="form-inline">
                         @csrf
