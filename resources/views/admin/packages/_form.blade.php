@@ -88,7 +88,7 @@
     </div>
 </div>
 
-<div class="form-group mb-0">
+<div class="form-group">
     <label for="requiredPackagesSelect">{{ trans('shop::messages.fields.required_packages') }}</label>
 
     <select class="custom-select @error('required_packages') is-invalid @enderror" id="requiredPackagesSelect" name="required_packages[]" multiple>

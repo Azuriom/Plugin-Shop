@@ -31,6 +31,7 @@ return [
             'delete-items' => 'Une catégorie contenant des produits ne peut pas être supprimée',
         ],
 
+        'cumulate_purchases' => 'Cumuler les achats de cette catégorie',
         'enable' => 'Activer cette catégorie',
     ],
 

@@ -12,13 +12,12 @@ class PackageController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @param  \Azuriom\Plugin\Shop\Models\Package  $package
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, Package $package)
+    public function show(Package $package)
     {
-        $package->load('discounts');
+        $package->load(['category.packages', 'discounts']);
 
         return view('shop::packages.show', ['package' => $package]);
     }

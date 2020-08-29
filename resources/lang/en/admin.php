@@ -31,6 +31,7 @@ return [
             'delete-items' => 'A category with packages can\'t be deleted.',
         ],
 
+        'cumulate_purchases' => 'Cumulate purchases from this category',
         'enable' => 'Enable the category',
     ],
 

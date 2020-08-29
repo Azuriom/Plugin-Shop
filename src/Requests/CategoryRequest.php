@@ -15,7 +15,7 @@ class CategoryRequest extends FormRequest
      * @var array
      */
     protected $checkboxes = [
-        'is_enabled',
+        'cumulate_purchases', 'is_enabled',
     ];
 
     /**
@@ -27,6 +27,7 @@ class CategoryRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:50'],
+            'cumulate_purchases' => ['filled', 'boolean'],
             'is_enabled' => ['filled', 'boolean'],
         ];
     }

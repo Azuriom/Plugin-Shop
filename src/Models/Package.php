@@ -118,9 +118,27 @@ class Package extends Model implements Buyable
                 return $discount->isActive();
             })->reduce(function ($result, Discount $discount) {
                 return $result - ($discount->discount / 100) * $result;
-            }, $this->price);
+            }, $this->price - $this->getCumulatedPurchasesTotal());
 
         return round(max($price, 0), 2);
+    }
+
+    protected function getCumulatedPurchasesTotal()
+    {
+        if (! $this->category->cumulate_purchases) {
+            return 0;
+        }
+
+        $purchasedPackage = $this->category->packages
+            ->filter(function (Package $package) {
+                return $package->price < $this->price;
+            })
+            ->sortByDesc('price')
+            ->first(function (Package $package) {
+                return $package->getUserTotalPurchases() > 0;
+            });
+
+        return $purchasedPackage->price ?? 0;
     }
 
     public function hasBoughtRequirements()
@@ -148,7 +166,8 @@ class Package extends Model implements Buyable
         if ($purchases === null) {
             $purchases = ShopUser::ofUser(auth()->user())
                 ->items()
-                ->where('buyable_type', 'shop.packages')
+                ->where('shop_payments.status', 'completed')
+                ->where('shop_payment_items.buyable_type', 'shop.packages')
                 ->get()
                 ->countBy('buyable_id');
         }

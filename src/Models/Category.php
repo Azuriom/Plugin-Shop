@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $name
  * @property string $description
  * @property int $position
+ * @property bool $cumulate_purchases
  * @property bool $is_enabled
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
@@ -36,7 +37,7 @@ class Category extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'position', 'is_enabled',
+        'name', 'position', 'cumulate_purchases', 'is_enabled',
     ];
 
     /**

@@ -41,8 +41,14 @@ class CategoryController extends Controller
                 return $cat->is($category) || $cat->packages_count > 0;
             });
 
+        $category->load('packages.discounts');
+
+        foreach ($category->packages as $package) {
+            $package->setRelation('category', $category);
+        }
+
         return view('shop::categories.show', [
-            'category' => $category->load('packages.discounts'),
+            'category' => $category,
             'categories' => $categories,
             'goal' => $this->getMonthGoal(),
         ]);
