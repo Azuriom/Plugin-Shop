@@ -18,7 +18,7 @@ Route::middleware('can:shop.admin')->group(function () {
 
     Route::resource('categories', 'CategoryController')->except(['index', 'show']);
     Route::resource('packages', 'PackageController')->except('show');
-    Route::resource('payments', 'PaymentController')->only('index');
+    Route::resource('payments', 'PaymentController')->only(['index', 'show']);
     Route::resource('purchases', 'PurchaseController')->only('index');
     Route::resource('offers', 'OfferController')->except('show');
     Route::resource('coupons', 'CouponController')->except('show');

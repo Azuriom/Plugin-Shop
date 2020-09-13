@@ -88,24 +88,40 @@
     </div>
 </div>
 
-<div class="form-group">
-    <label for="requiredPackagesSelect">{{ trans('shop::messages.fields.required_packages') }}</label>
+<div class="form-row">
+    <div class="form-group col-md-6">
+        <label for="serversSelect">{{ trans('shop::messages.fields.servers') }}</label>
 
-    <select class="custom-select @error('required_packages') is-invalid @enderror" id="requiredPackagesSelect" name="required_packages[]" multiple>
-        @foreach($categories as $category)
-            <optgroup label="{{ $category->name }}">
-                @foreach($category->packages as $categoryPackage)
-                    @if(! isset($package) || ! $categoryPackage->is($package))
-                        <option value="{{ $categoryPackage->id }}" @if(isset($package) && optional($package->required_packages)->contains($categoryPackage->id)) selected @endif>{{ $categoryPackage->name }}</option>
-                    @endif
-                @endforeach
-            </optgroup>
-        @endforeach
-    </select>
+        <select class="custom-select @error('servers') is-invalid @enderror" id="serversSelect" name="servers[]" multiple>
+            @foreach($servers as $server)
+                <option value="{{ $server->id }}" @if(isset($package) && $package->servers->contains($server) ?? false) selected @endif>{{ $server->name }}</option>
+            @endforeach
+        </select>
 
-    @error('required_packages')
-    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
-    @enderror
+        @error('servers')
+        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+        @enderror
+    </div>
+
+    <div class="form-group col-md-6">
+        <label for="requiredPackagesSelect">{{ trans('shop::messages.fields.required_packages') }}</label>
+
+        <select class="custom-select @error('required_packages') is-invalid @enderror" id="requiredPackagesSelect" name="required_packages[]" multiple>
+            @foreach($categories as $category)
+                <optgroup label="{{ $category->name }}">
+                    @foreach($category->packages as $categoryPackage)
+                        @if(! isset($package) || ! $categoryPackage->is($package))
+                            <option value="{{ $categoryPackage->id }}" @if(isset($package) && optional($package->required_packages)->contains($categoryPackage->id)) selected @endif>{{ $categoryPackage->name }}</option>
+                        @endif
+                    @endforeach
+                </optgroup>
+            @endforeach
+        </select>
+
+        @error('required_packages')
+        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+        @enderror
+    </div>
 </div>
 
 <div class="form-row">
@@ -132,17 +148,6 @@
         <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
         @enderror
     </div>
-</div>
-
-<div class="form-group">
-    <label>{{ trans('shop::messages.fields.servers') }}</label>
-
-    @foreach($servers as $server)
-        <div class="form-group custom-control custom-switch">
-            <input type="checkbox" class="custom-control-input" id="server{{ $server->id }}" name="servers[{{ $server->id }}]" @if(isset($package) && $package->servers->contains($server) ?? false) checked @endif>
-            <label class="custom-control-label" for="server{{ $server->id }}">{{ $server->name }}</label>
-        </div>
-    @endforeach
 </div>
 
 <div class="form-group">

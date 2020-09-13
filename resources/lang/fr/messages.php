@@ -74,6 +74,8 @@ return [
         'success-info' => 'Vous recevrez votre achat dans le jeu en moins d\'une minute.',
 
         'redirect-info' => 'Si vous n\'êtes pas redirigé automatiquement, vérifiez que le javascript est activé sur votre navigateur.',
+
+        'webhook' => 'Nouveau paiement effectué sur la boutique',
     ],
 
     'packages' => [

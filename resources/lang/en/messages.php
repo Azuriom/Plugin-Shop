@@ -74,6 +74,8 @@ return [
         'success-info' => 'You\'ll receive your purchase in-game in less than a minute.',
 
         'redirect-info' => 'If you are not redirected automatically check that javascript is enabled on your browser.',
+
+        'webhook' => 'New payment on the shop',
     ],
 
     'packages' => [

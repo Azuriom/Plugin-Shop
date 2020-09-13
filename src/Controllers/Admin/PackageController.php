@@ -101,16 +101,13 @@ class PackageController extends Controller
      */
     public function store(PackageRequest $request)
     {
-        $servers = array_keys($request->input('servers', []));
-
-        $package = new Package(Arr::except($request->validated(), 'image'));
+        $package = Package::create(Arr::except($request->validated(), 'image'));
 
         if ($request->hasFile('image')) {
-            $package->storeImage($request->file('image'));
+            $package->storeImage($request->file('image'), true);
         }
 
-        $package->save();
-        $package->servers()->sync($servers);
+        $package->servers()->sync($request->input('servers', []));
 
         return redirect()->route('shop.admin.packages.index')
             ->with('success', trans('shop::admin.packages.status.created'));
@@ -144,10 +141,9 @@ class PackageController extends Controller
             $package->storeImage($request->file('image'));
         }
 
-        $servers = array_keys($request->input('servers', []));
-
         $package->update(Arr::except($request->validated(), 'image'));
-        $package->servers()->sync($servers);
+
+        $package->servers()->sync($request->input('servers', []));
 
         return redirect()->route('shop.admin.packages.index')
             ->with('success', trans('shop::admin.packages.status.updated'));

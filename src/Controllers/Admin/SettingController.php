@@ -6,6 +6,7 @@ use Azuriom\Http\Controllers\Controller;
 use Azuriom\Models\Setting;
 use Azuriom\Plugin\Shop\Payment\Currencies;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Validation\Rule;
 
 class SettingController extends Controller
@@ -20,7 +21,7 @@ class SettingController extends Controller
         return view('shop::admin.settings', [
             'currencies' => Currencies::all(),
             'currentCurrency' => setting('currency', 'USD'),
-            'goal' => (int) setting('goal', 0),
+            'goal' => (int) setting('shop.month-goal', 0),
         ]);
     }
 
@@ -34,14 +35,18 @@ class SettingController extends Controller
      */
     public function save(Request $request)
     {
-        Setting::updateSettings($this->validate($request, [
+        $data = $this->validate($request, [
             'currency' => ['required', Rule::in(Currencies::codes())],
             'goal' => ['nullable', 'integer', 'min:0'],
-        ]));
+            'webhook' => ['nullable', 'url'],
+        ]);
+
+        Setting::updateSettings(Arr::only($data, 'currency'));
 
         Setting::updateSettings([
             'shop.use-site-money' => $request->has('use-site-money'),
             'shop.month-goal' => $request->input('goal'),
+            'shop.webhook' => $request->input('webhook'),
         ]);
 
         return redirect()->route('shop.admin.settings')

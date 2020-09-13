@@ -135,13 +135,17 @@ return [
         'paysafecard-info' => 'In order to be able to accept payments by paysafecard, you must be a <a href="https://www.paysafecard.com/en/business/" target="_blank" rel="noopener noreferrer">paysafecard partner</a>. Other methods exist but only this one is allowed by paysafecard.',
         'stripe-info' => 'On the Stripe dashboard you need to set the webhook URL to <code>:url</code> and select the event <code>checkout.session.completed</code>.',
         'paymentwall-info' => 'On the PaymentWall dashboard you need to set the pingback URL to <code>:url</code>.',
-        'xsolla' =>  'On the Xsolla dashboard you need to set the webhook URL to <code>:url</code>, enable \'Transaction external ID\' in the \'Pay station\' settings, test the webhooks and then enable \'Checkout\' in the \'Pay Station\' settings.',
+        'xsolla' => 'On the Xsolla dashboard you need to set the webhook URL to <code>:url</code>, enable \'Transaction external ID\' in the \'Pay station\' settings, test the webhooks and then enable \'Checkout\' in the \'Pay Station\' settings.',
 
         'enable' => 'Enable the gateway',
     ],
 
     'payments' => [
         'title' => 'Payments',
+        'title-show' => 'Payment #:payment',
+
+        'info' => 'Payment information',
+        'items' => 'Purchased items',
 
         'fields' => [
             'status' => 'Status',
@@ -167,6 +171,8 @@ return [
     'settings' => [
         'title' => 'Shop settings',
         'use-site-money' => 'Enable purchases with the site currency.',
+        'webhook' => 'Discord Webhook URL',
+        'webhook-info' => 'When an user make a payment it will create a notification on this webhook. Leave empty to disable',
     ],
 
     'logs' => [

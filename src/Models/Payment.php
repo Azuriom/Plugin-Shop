@@ -2,10 +2,14 @@
 
 namespace Azuriom\Plugin\Shop\Models;
 
+use Azuriom\Azuriom;
 use Azuriom\Models\Traits\HasTablePrefix;
 use Azuriom\Models\Traits\HasUser;
 use Azuriom\Models\User;
+use Azuriom\Plugin\Shop\Notifications\PaymentPaid as PaymentPaidNotification;
 use Azuriom\Plugin\Shop\Events\PaymentPaid;
+use Azuriom\Support\Discord\DiscordWebhook;
+use Azuriom\Support\Discord\Embed;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
@@ -57,7 +61,6 @@ class Payment extends Model
      */
     protected $casts = [
         'price' => 'float',
-        'items' => 'array',
     ];
 
     /**
@@ -91,12 +94,30 @@ class Payment extends Model
     {
         $this->update(['status' => 'completed']);
 
-        if ($this->gateway_type !== 'azuriom') {
-            event(new PaymentPaid($this));
-        }
-
         foreach ($this->items as $item) {
             $item->deliver();
+        }
+
+        if ($this->gateway_type !== 'azuriom') {
+            event(new PaymentPaid($this));
+
+            if (($webhookUrl = setting('shop.webhook')) !== null) {
+                $embed = Embed::create()
+                    ->title(trans('shop::messages.payment.webhook'))
+                    ->author($this->user->name, null, $this->user->getAvatar())
+                    ->addField(trans('shop::messages.fields.price'), $this->price.' '.currency_display($this->currency))
+                    ->addField(trans('messages.fields.type'), $this->getTypeName())
+                    ->addField(trans('shop::admin.payments.fields.payment-id'), $this->transaction_id)
+                    ->url(route('shop.admin.payments.show', $this))
+                    ->footer('Azuriom v'.Azuriom::version())
+                    ->timestamp(now());
+
+                rescue(function () use ($embed, $webhookUrl) {
+                    DiscordWebhook::create()->addEmbed($embed)->send($webhookUrl);
+                });
+            }
+
+            $this->user->notify(new PaymentPaidNotification($this));
         }
     }
 

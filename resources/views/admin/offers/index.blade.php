@@ -33,11 +33,11 @@
 
                     </tbody>
                 </table>
-
-                <a class="btn btn-primary" href="{{ route('shop.admin.offers.create') }}">
-                    <i class="fas fa-plus"></i> {{ trans('messages.actions.add') }}
-                </a>
             </div>
+
+            <a class="btn btn-primary" href="{{ route('shop.admin.offers.create') }}">
+                <i class="fas fa-plus"></i> {{ trans('messages.actions.add') }}
+            </a>
         </div>
     </div>
 @endsection

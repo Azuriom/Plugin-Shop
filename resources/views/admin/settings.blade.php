@@ -30,7 +30,7 @@
                     <label for="goalInput">{{ trans('shop::messages.month-goal') }}</label>
 
                     <div class="input-group">
-                        <input type="number" min="0" class="form-control @error('goal') is-invalid @enderror" id="goalInput" name="goal" value="{{ old('goal', $goal ?? '') }}">
+                        <input type="number" min="0" class="form-control @error('goal') is-invalid @enderror" id="goalInput" name="goal" value="{{ old('goal', $goal) }}">
                         <div class="input-group-append">
                             <span class="input-group-text">{{ currency_display() }}</span>
                         </div>
@@ -39,6 +39,17 @@
                         <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                         @enderror
                     </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="webhookInput">{{ trans('shop::admin.settings.webhook') }}</label>
+                    <input type="text" class="form-control @error('webhook') is-invalid @enderror" id="webhookInput" name="webhook" placeholder="https://discordapp.com/api/webhooks/.../..." value="{{ old('webhook', setting('shop.webhook')) }}" aria-describedby="webhookInfo">
+
+                    @error('webhook')
+                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                    @enderror
+
+                    <small id="webhookInfo" class="form-text">{{ trans('shop::admin.settings.webhook-info') }}</small>
                 </div>
 
                 <button type="submit" class="btn btn-primary">

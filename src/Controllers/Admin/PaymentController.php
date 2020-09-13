@@ -24,26 +24,37 @@ class PaymentController extends Controller
             ->with('user')
             ->latest()
             ->when($search, function (Builder $query, string $search) {
-                $users = User::where('name', 'LIKE', "%{$search}")
-                    ->orWhere('game_id', 'LIKE', "%{$search}")
-                    ->get()
-                    ->modelKeys();
+                $users = User::search($search)->get();
 
-                $query->where('transaction_id', 'LIKE', "%{$search}%");
+                $query->where(function (Builder $query) use ($users, $search) {
+                    $query->where('transaction_id', 'LIKE', "%{$search}%");
 
-                if ($users) {
-                    $query->orWhereIn('user_id', $users);
-                }
+                    if (! $users->isEmpty()) {
+                        $query->orWhereIn('user_id', $users->modelKeys());
+                    }
 
-                if (is_numeric($search)) {
-                    $query->orWhere('id', $search)
-                        ->orWhere('user_id', 'LIKE', "%{$search}%");
-                }
+                    if (is_numeric($search)) {
+                        $query->orWhere('id', $search);
+                    }
+                });
             })->paginate();
 
         return view('shop::admin.payments.index', [
             'payments' => $payments,
             'search' => $search,
         ]);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \Azuriom\Plugin\Shop\Models\Payment  $payment
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Payment $payment)
+    {
+        $payment->load(['user', 'items']);
+
+        return view('shop::admin.payments.show', ['payment' => $payment]);
     }
 }

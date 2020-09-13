@@ -60,7 +60,7 @@ class CategoryController extends Controller
             return false;
         }
 
-        $total = Payment::completed()
+        $total = Payment::scopes(['completed', 'withSiteMoney'])
             ->where('created_at', '>', now()->startOfMonth())
             ->sum('price');
 
