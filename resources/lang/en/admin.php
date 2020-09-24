@@ -121,6 +121,8 @@ return [
             'deleted' => 'This gateway has been deleted.',
         ],
 
+        'country' => 'Country',
+        'sandbox' => 'Sandbox',
         'api-key' => 'API key',
         'public-key' => 'Public key',
         'private-key' => 'Private key',

@@ -4,12 +4,14 @@ namespace Azuriom\Plugin\Shop\Payment\Method;
 
 use Azuriom\Plugin\Shop\Cart\Cart;
 use Azuriom\Plugin\Shop\Models\Payment;
+use Azuriom\Plugin\Shop\Payment\Countries;
 use Azuriom\Plugin\Shop\Payment\PaymentMethod;
 use Illuminate\Http\Request;
-use Paygol\API;
+use Illuminate\Validation\Rule;
 use Paygol\Models\Payer;
 use Paygol\Models\RedirectUrls;
 use Paygol\Notification;
+use Paygol\Webcheckout;
 
 class PayGolMethod extends PaymentMethod
 {
@@ -37,22 +39,25 @@ class PayGolMethod extends PaymentMethod
     public function startPayment(Cart $cart, float $amount, string $currency)
     {
         $payment = $this->createPayment($cart, $amount, $currency);
+        $user = auth()->user();
 
-        $paygol = $this->createApi();
+        $paygol = $this->createWebcheckout();
 
         $redirectUrls = new RedirectUrls();
         $redirectUrls->setRedirects(
-            route('shop.payments.success'),
-            route('shop.payments.failure')
+            route('shop.payments.success', $this->id),
+            route('shop.payments.failure', $this->id)
         );
         $paygol->setRedirects($redirectUrls);
 
+        $paygol->setCountry($this->gateway->data['country']);
         $paygol->setPrice($amount, $currency);
 
         $payer = new Payer();
-        $payer->setEmail(auth()->user()->email);
-        $payer->setPersonalID(auth()->id());
+        $payer->setEmail($user->email);
+        $payer->setPersonalID($user->id);
         $paygol->setPayer($payer);
+        $paygol->setName($this->getPurchaseDescription($payment->id));
         $paygol->setCustom($payment->id);
 
         $payGolPayment = $paygol->createPayment();
@@ -94,12 +99,18 @@ class PayGolMethod extends PaymentMethod
         return [
             'key' => ['required', 'string'],
             'service-id' => ['required', 'string'],
+            'country' => ['required', Rule::in(Countries::codes())],
         ];
     }
 
-    private function createApi()
+    public function countries()
     {
-        return new API($this->gateway->data['service-id'], $this->gateway->data['key']);
+        return Countries::countries();
+    }
+
+    private function createWebcheckout()
+    {
+        return new Webcheckout($this->gateway->data['service-id'], $this->gateway->data['key']);
     }
 
     private function createNotification()

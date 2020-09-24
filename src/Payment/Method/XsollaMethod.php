@@ -34,7 +34,7 @@ class XsollaMethod extends PaymentMethod
 
     public function startPayment(Cart $cart, float $amount, string $currency)
     {
-        $sandbox = true;
+        $sandbox = ($this->gateway->data['sandbox'] === 'true');
         $user = auth()->user();
 
         $payment = $this->createPayment($cart, $amount, $currency);
@@ -116,6 +116,7 @@ class XsollaMethod extends PaymentMethod
             'api-key' => ['required', 'string'],
             'project-id' => ['required', 'string'],
             'secret-key' => ['required', 'string'],
+            'sandbox' => ['required', 'in:true,false'],
         ];
     }
 }

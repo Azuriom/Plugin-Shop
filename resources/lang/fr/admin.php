@@ -121,6 +121,8 @@ return [
             'deleted' => 'Le moyen de paiement a été supprimé.',
         ],
 
+        'country' => 'Pays',
+        'sandbox' => 'Sandbox',
         'api-key' => 'Clé API',
         'public-key' => 'Clé Publique',
         'private-key' => 'Clé Privée',
