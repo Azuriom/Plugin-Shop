@@ -53,7 +53,7 @@ return [
 
         'coupons' => 'Coupons',
         'add-coupon' => 'Add a coupon',
-        'invalid-coupon' => 'This coupon does not exist or has expired.',
+        'invalid-coupon' => 'This coupon does not exist, has expired or can no longer be used.',
 
         'back' => 'Back to shop',
 

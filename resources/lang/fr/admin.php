@@ -62,6 +62,9 @@ return [
 
         'global' => 'Est ce que ce code promotionnel doit être actif sur toute la boutique ?',
 
+        'user_limit' => 'Limite d\'utilisations par utilisateur',
+        'global_limit' => 'Limite d\'utilisations globale',
+
         'active' => 'Actif',
         'enable' => 'Activer ce code promotionnel',
     ],

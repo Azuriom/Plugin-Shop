@@ -3,6 +3,7 @@
 namespace Azuriom\Plugin\Shop\Models;
 
 use Azuriom\Models\Traits\HasTablePrefix;
+use Azuriom\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
@@ -10,6 +11,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id
  * @property string $code
  * @property int $discount
+ * @property int $user_limit
+ * @property int $global_limit
  * @property bool $is_enabled
  * @property bool $is_global
  * @property \Carbon\Carbon|null $start_at
@@ -18,6 +21,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Carbon\Carbon $updated_at
  *
  * @property \Illuminate\Support\Collection|\Azuriom\Plugin\Shop\Models\Package[] $packages
+ * @property \Illuminate\Support\Collection|\Azuriom\Plugin\Shop\Models\Payment[] $payments
  *
  * @method static \Illuminate\Database\Eloquent\Builder active()
  * @method static \Illuminate\Database\Eloquent\Builder enabled()
@@ -39,7 +43,7 @@ class Coupon extends Model
      * @var array
      */
     protected $fillable = [
-        'code', 'discount', 'start_at', 'expire_at', 'is_enabled', 'is_global',
+        'code', 'discount', 'start_at', 'expire_at', 'user_limit', 'global_limit', 'is_enabled', 'is_global',
     ];
 
     /**
@@ -48,7 +52,6 @@ class Coupon extends Model
      * @var array
      */
     protected $casts = [
-        'packages' => 'array',
         'start_at' => 'datetime',
         'expire_at' => 'datetime',
         'is_enabled' => 'boolean',
@@ -61,6 +64,44 @@ class Coupon extends Model
     public function packages()
     {
         return $this->belongsToMany(Package::class, 'shop_coupon_package');
+    }
+
+    /**
+     * Get the payments made with this coupon.
+     */
+    public function payments()
+    {
+        return $this->belongsToMany(Payment::class, 'shop_coupon_payment');
+    }
+
+    public function hasReachLimit(User $user)
+    {
+        return $this->hasReachGlobalLimit() || $this->hasReachUserLimit($user);
+    }
+
+    protected function hasReachUserLimit(User $user)
+    {
+        if (! $this->user_limit) {
+            return false;
+        }
+
+        $count = $this->payments()
+            ->scopes('completed')
+            ->where('user_id', $user->id)
+            ->count();
+
+        return $count >= $this->user_limit;
+    }
+
+    protected function hasReachGlobalLimit()
+    {
+        if (! $this->global_limit) {
+            return false;
+        }
+
+        $count = $this->payments()->scopes('completed')->count();
+
+        return $count >= $this->global_limit;
     }
 
     /**

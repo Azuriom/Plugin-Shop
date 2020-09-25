@@ -26,6 +26,7 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @property \Azuriom\Models\User $user
  * @property \Illuminate\Support\Collection|\Azuriom\Plugin\Shop\Models\PaymentItem[] $items
+ * @property \Illuminate\Support\Collection|\Azuriom\Plugin\Shop\Models\Coupon[] $coupons
  *
  * @method static \Illuminate\Database\Eloquent\Builder completed()
  * @method static \Illuminate\Database\Eloquent\Builder pending()
@@ -79,6 +80,14 @@ class Payment extends Model
         return $this->hasMany(PaymentItem::class);
     }
 
+    /**
+     * Get the coupons used in this payment.
+     */
+    public function coupons()
+    {
+        return $this->belongsToMany(Coupon::class, 'shop_coupon_payment');
+    }
+
     public function getTypeName()
     {
         $paymentManager = payment_manager();
@@ -109,6 +118,7 @@ class Payment extends Model
                     ->addField(trans('messages.fields.type'), $this->getTypeName())
                     ->addField(trans('shop::admin.payments.fields.payment-id'), $this->transaction_id)
                     ->url(route('shop.admin.payments.show', $this))
+                    ->color('#004de6')
                     ->footer('Azuriom v'.Azuriom::version())
                     ->timestamp(now());
 

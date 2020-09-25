@@ -30,6 +30,22 @@
                             <a href="{{ route('admin.users.edit', $payment->user) }}">{{ $payment->user->name }}</a>
                         </li>
                         <li>{{ trans('messages.fields.date') }}: {{ format_date_compact($payment->created_at, true) }}</li>
+
+                        @if(!$payment->coupons->isEmpty())
+                            <li>
+                                {{ trans('shop::messages.cart.coupons') }}:
+
+                                <ul>
+                                    @foreach($payment->coupons as $coupon)
+                                        <li>
+                                            <a href="{{ route('shop.admin.coupons.edit', $coupon) }}">
+                                                {{ $coupon->code }}
+                                            </a>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </li>
+                        @endif
                     </ul>
                 </div>
             </div>

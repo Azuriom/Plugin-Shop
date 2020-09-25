@@ -62,6 +62,9 @@ return [
 
         'global' => 'Should the coupon be active on all the shop ?',
 
+        'user_limit' => 'User limit',
+        'global_limit' => 'Global limit',
+
         'active' => 'Active',
         'enable' => 'Enable the coupon',
     ],

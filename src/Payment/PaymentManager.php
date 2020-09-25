@@ -99,6 +99,8 @@ class PaymentManager
                 ->save();
         }
 
+        $payment->coupons()->sync($cart->coupons());
+
         $payment->deliver();
     }
 }

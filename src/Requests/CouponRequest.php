@@ -31,6 +31,8 @@ class CouponRequest extends FormRequest
             'code' => ['required', 'string', 'max:50', Rule::unique(Coupon::class)->ignore($this->coupon, 'code')],
             'discount' => ['required', 'integer', 'between:0,100'],
             'packages' => ['required_without:is_global', 'array'],
+            'user_limit' => ['nullable', 'integer', 'min:0'],
+            'global_limit' => ['nullable', 'integer', 'min:0'],
             'start_at' => ['required', 'date'],
             'expire_at' => ['required', 'date', 'after:start_at'],
             'is_enabled' => ['filled', 'boolean'],

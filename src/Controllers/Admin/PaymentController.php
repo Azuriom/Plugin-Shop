@@ -53,7 +53,7 @@ class PaymentController extends Controller
      */
     public function show(Payment $payment)
     {
-        $payment->load(['user', 'items']);
+        $payment->load(['user', 'items', 'coupons']);
 
         return view('shop::admin.payments.show', ['payment' => $payment]);
     }

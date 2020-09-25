@@ -30,6 +30,26 @@
 
 <div class="form-row">
     <div class="form-group col-md-6">
+        <label for="userLimitInput">{{ trans('shop::admin.coupons.user_limit') }}</label>
+        <input type="number" min="0" class="form-control @error('user_limit') is-invalid @enderror" id="userLimitInput" name="user_limit" value="{{ old('user_limit', $coupon->user_limit ?? '') }}">
+
+        @error('user_limit')
+        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+        @enderror
+    </div>
+
+    <div class="form-group col-md-6">
+        <label for="globalLimitInput">{{ trans('shop::admin.coupons.global_limit') }}</label>
+        <input type="number" min="0" class="form-control @error('global_limit') is-invalid @enderror" id="globalLimitInput" name="global_limit" value="{{ old('global_limit', $coupon->global_limit ?? '') }}">
+
+        @error('global_limit')
+        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+        @enderror
+    </div>
+</div>
+
+<div class="form-row">
+    <div class="form-group col-md-6">
         <label for="startInput">{{ trans('shop::messages.fields.start_date') }}</label>
         <input type="text" class="form-control date-picker @error('start_at') is-invalid @enderror" id="startInput" name="start_at" value="{{ old('start_at', $coupon->start_at ?? now()) }}" required>
 

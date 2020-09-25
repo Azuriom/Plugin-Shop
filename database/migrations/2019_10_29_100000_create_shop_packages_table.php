@@ -50,6 +50,6 @@ class CreateShopPackagesTable extends Migration
     public function down()
     {
         Schema::dropIfExists('shop_packages');
-        Schema::dropIfExists('shop_server_package');
+        Schema::dropIfExists('shop_package_server');
     }
 }

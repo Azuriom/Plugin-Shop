@@ -46,7 +46,6 @@ class PaymentItem extends Model
      */
     protected $casts = [
         'price' => 'float',
-        'packages' => 'array',
     ];
 
     /**

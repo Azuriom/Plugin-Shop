@@ -12,7 +12,7 @@
         <div class="modal-footer">
             <span class="flex-md-fill font-weight-bold">
                 @if($package->isDiscounted())
-                    <del class="small">{{ $package->getOriginalPrice() }}</del>
+                    <del class="small">{{ shop_format_amount($package->getOriginalPrice()) }}</del>
                 @endif
                 {{ shop_format_amount($package->getPrice()) }}
             </span>

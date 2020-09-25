@@ -49,7 +49,6 @@ class Discount extends Model
      * @var array
      */
     protected $casts = [
-        'packages' => 'array',
         'start_at' => 'datetime',
         'end_at' => 'datetime',
         'is_global' => 'boolean',

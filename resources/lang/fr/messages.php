@@ -53,7 +53,7 @@ return [
 
         'coupons' => 'Codes promo',
         'add-coupon' => 'Ajouter un code promo',
-        'invalid-coupon' => 'Ce code promo n\'existe pas ou est expiré',
+        'invalid-coupon' => 'Ce code promo n\'existe pas, est expiré ou ne peut plus être utilisé.',
 
         'back' => 'Retour à la boutique',
 

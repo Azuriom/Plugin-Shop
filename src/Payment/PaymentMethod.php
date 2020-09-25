@@ -116,18 +116,20 @@ abstract class PaymentMethod
             'transaction_id' => $paymentId,
         ]);
 
-        return tap($payment, function (Payment $payment) use ($cart) {
-            foreach ($cart->content() as $item) {
-                $payment->items()
-                    ->make([
-                        'name' => $item->name(),
-                        'price' => $item->price(),
-                        'quantity' => $item->quantity,
-                    ])
-                    ->buyable()->associate($item->buyable())
-                    ->save();
-            }
-        });
+        foreach ($cart->content() as $item) {
+            $payment->items()
+                ->make([
+                    'name' => $item->name(),
+                    'price' => $item->price(),
+                    'quantity' => $item->quantity,
+                ])
+                ->buyable()->associate($item->buyable())
+                ->save();
+        }
+
+        $payment->coupons()->sync($cart->coupons());
+
+        return $payment;
     }
 
     protected function processPayment(?Payment $payment, string $paymentId = null)
