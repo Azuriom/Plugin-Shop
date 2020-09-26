@@ -161,6 +161,10 @@ class Package extends Model implements Buyable
      */
     public function getUserTotalPurchases()
     {
+        if (auth()->guest()) {
+            return 0;
+        }
+
         static $purchases = null;
 
         if ($purchases === null) {
