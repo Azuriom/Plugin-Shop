@@ -3,87 +3,27 @@
 namespace Azuriom\Plugin\Shop\Controllers\Admin;
 
 use Azuriom\Http\Controllers\Controller;
+use Azuriom\Models\User;
 use Azuriom\Plugin\Shop\Models\Payment;
+use Azuriom\Support\Charts;
 
 class StatisticsController extends Controller
 {
     public function index()
     {
         return view('shop::admin.statistics', [
-            'payment' => Payment::completed()->count(),
-            'payment_month' => $this->getPaymentMonth(),
-            'payments' => $this->getPaymentsMonth(),
-            'estimated' => $this->getEstimatedEarnings(),
-            'estimated_month' => $this->getEstimatedEarningsMonth(),
-            'payments_estimated' => $this->getPaymentsCountMonth(),
+            'monthPaymentsCount' => $this->getCompletedPayments()->where('created_at', '>', now()->startOfMonth())->count(),
+            'monthPaymentsTotal' => $this->getCompletedPayments()->where('created_at', '>', now()->startOfMonth())->sum('price'),
+            'paymentsCount' => $this->getCompletedPayments()->count(),
+            'paymentsTotal' => $this->getCompletedPayments()->sum('price'),
+            'paymentsPerMonths' => Charts::sumByMonths($this->getCompletedPayments(), 'price'),
+            'paymentsPerDays' => Charts::sumByDays($this->getCompletedPayments(), 'price'),
+            'gatewaysChart' => Charts::count($this->getCompletedPayments(), 'gateway_type'),
         ]);
     }
 
-    /**
-     * @return mixed
-     */
-    private function getEstimatedEarnings()
+    protected function getCompletedPayments()
     {
-        return Payment::completed()->sum('price');
-    }
-
-    /**
-     * @return mixed
-     */
-    private function getEstimatedEarningsMonth()
-    {
-        $date = now()->startOfMonth();
-
-        return Payment::completed()->where('created_at', '>=', $date)->sum('price');
-    }
-
-    /**
-     * @return mixed
-     */
-    private function getPaymentMonth()
-    {
-        $date = now()->startOfMonth();
-
-        return Payment::completed()->where('created_at', '>=', $date)->count();
-    }
-
-    /**
-     * @return \Illuminate\Support\Collection
-     */
-    private function getPaymentsMonth()
-    {
-        $date = now()->subMonths(1);
-        $payments = [];
-
-        $queryPayments = Payment::completed()->whereDate('created_at', '>=', $date)
-            ->get(['id', 'created_at'])
-            ->countBy(function ($payment) {
-                return $payment->created_at->translatedFormat('l j F Y');
-            });
-
-        for ($i = 0; $i < 31; $i++) {
-            $time = $date->translatedFormat('l j F Y');
-            $payments[$time] = $queryPayments->get($time, 0);
-            $date->addDay();
-        }
-
-        return collect($payments);
-    }
-
-    /**
-     * @return \Illuminate\Support\Collection
-     */
-    private function getPaymentsCountMonth()
-    {
-        $date = now()->subMonths(1);
-        $payments = [];
-
-        for ($i = 0; $i < 31; $i++) {
-            $time = $date->translatedFormat('l j F Y');
-            $payments[$time] = Payment::completed()->whereDate('created_at', '=', $date)->sum('price');
-            $date->addDay();
-        }
-
-        return collect($payments);
+        return Payment::scopes(['completed', 'withRealMoney']);
     }
 }

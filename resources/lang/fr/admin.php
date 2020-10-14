@@ -12,7 +12,7 @@ return [
         'discounts' => 'Réductions',
         'payments' => 'Paiements',
         'purchases' => 'Achats',
-        'statistics' => 'Statistique',
+        'statistics' => 'Statistiques',
     ],
 
     'permissions' => [
@@ -169,14 +169,12 @@ return [
 
     'statistics' => [
         'title' => 'Statistiques',
-        'stats' => [
-            'global' => 'Paiements sur la boutique',
-            'estimated' => 'Estimation des gains',
-            'month-estimated' => 'Estimation des gains ce mois-ci',
-            'month-day-estimated' => 'Estimation des gains ces 30 derniers jours',
-            'month' => 'Paiements sur la boutique ce mois-ci',
-            'month-day' => 'Paiements sur la boutique ces 30 derniers jours',
-        ],
+        'total' => 'Total',
+        'recent-payments' => 'Paiements récents',
+        'count' => 'Nombre de paiements',
+        'estimated' => 'Estimation des revenus',
+        'month' => 'Paiements sur la boutique ce mois-ci',
+        'month-estimated' => 'Estimation des gains ce mois-ci',
     ],
 
 ];

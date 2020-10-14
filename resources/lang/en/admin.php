@@ -169,14 +169,12 @@ return [
 
     'statistics' => [
         'title' => 'Statistics',
-        'stats' => [
-            'global' => 'Shop payments',
-            'estimated' => 'Estimated earnings',
-            'month' => 'Shop payments this month',
-            'month-day' => 'Shop payments last 30 days',
-            'month-estimated' => 'Estimated earnings this months',
-            'month-day-estimated' => 'Estimated earnings last 30 days',
-        ],
+        'total' => 'Total',
+        'recent-payments' => 'Recent payments',
+        'count' => 'Payments count',
+        'estimated' => 'Estimated earnings',
+        'month' => 'Payments during this month',
+        'month-estimated' => 'Estimated earnings this month',
     ],
 
 ];
