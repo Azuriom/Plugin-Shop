@@ -16,6 +16,8 @@ Route::middleware('can:shop.admin')->group(function () {
     Route::get('/settings', 'SettingController@show')->name('settings');
     Route::post('/settings', 'SettingController@save')->name('settings.save');
 
+    Route::get('/stats', 'StatisticsController@index')->name('statistics');
+
     Route::resource('categories', 'CategoryController')->except(['index', 'show']);
     Route::resource('packages', 'PackageController')->except('show');
     Route::resource('payments', 'PaymentController')->only(['index', 'show']);

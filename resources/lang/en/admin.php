@@ -12,6 +12,7 @@ return [
         'discounts' => 'Discounts',
         'payments' => 'Payments',
         'purchases' => 'Purchases',
+        'statistics' => 'Statistics',
     ],
 
     'permissions' => [
@@ -199,4 +200,15 @@ return [
             'deleted' => 'Deleted offer #:id',
         ],
     ],
+
+    'statistics' => [
+        'title' => 'Statistics',
+        'total' => 'Total',
+        'recent-payments' => 'Recent payments',
+        'count' => 'Payments count',
+        'estimated' => 'Estimated earnings',
+        'month' => 'Payments during this month',
+        'month-estimated' => 'Estimated earnings this month',
+    ],
+
 ];

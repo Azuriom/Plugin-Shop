@@ -12,6 +12,7 @@ return [
         'discounts' => 'Réductions',
         'payments' => 'Paiements',
         'purchases' => 'Achats',
+        'statistics' => 'Statistiques',
     ],
 
     'permissions' => [
@@ -199,4 +200,15 @@ return [
             'deleted' => 'Suppression l\'offre #:id',
         ],
     ],
+
+    'statistics' => [
+        'title' => 'Statistiques',
+        'total' => 'Total',
+        'recent-payments' => 'Paiements récents',
+        'count' => 'Nombre de paiements',
+        'estimated' => 'Estimation des revenus',
+        'month' => 'Paiements sur la boutique ce mois-ci',
+        'month-estimated' => 'Estimation des gains ce mois-ci',
+    ],
+
 ];
