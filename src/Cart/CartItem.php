@@ -134,9 +134,9 @@ class CartItem implements Arrayable
                 return $coupon->isActiveOn($package);
             });
 
-        return $coupons->reduce(function ($price, Coupon $coupon) {
+        return round($coupons->reduce(function ($price, Coupon $coupon) {
             return $price - ($coupon->discount / 100) * $price;
-        }, $this->originalPrice());
+        }, $this->originalPrice()), 2);
     }
 
     public function originalTotal()

@@ -3,7 +3,6 @@
 namespace Azuriom\Plugin\Shop\Controllers\Admin;
 
 use Azuriom\Http\Controllers\Controller;
-use Azuriom\Models\User;
 use Azuriom\Plugin\Shop\Models\Payment;
 use Azuriom\Support\Charts;
 
