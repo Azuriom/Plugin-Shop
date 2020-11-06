@@ -179,6 +179,7 @@ return [
         'use-site-money' => 'Activer les achats avec l\'argent du site.',
         'webhook' => 'URL de webhook Discord',
         'webhook-info' => 'Lorsqu\'un utilisateur fait un paiement sur la boutique, cela va créer une notification sur ce webhook. Laissez vide pour ne pas utiliser de webhook.',
+        'commands' => 'Commandes globales',
     ],
 
     'logs' => [

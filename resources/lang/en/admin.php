@@ -179,6 +179,7 @@ return [
         'use-site-money' => 'Enable purchases with the site currency.',
         'webhook' => 'Discord Webhook URL',
         'webhook-info' => 'When an user make a payment it will create a notification on this webhook. Leave empty to disable',
+        'commands' => 'Global commands',
     ],
 
     'logs' => [

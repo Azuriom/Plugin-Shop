@@ -206,9 +206,9 @@ class Package extends Model implements Buyable
     public function deliver(User $user, int $quantity = 1)
     {
         foreach ($this->servers as $server) {
-            for ($i = 0; $i < $quantity; $i++) {
-                $server->bridge()->executeCommands($this->commands, $user->name, $this->need_online);
-            }
+            $commands = $this->getCommandsToDispatch($quantity);
+
+            $server->bridge()->executeCommands($commands, $user->name, $this->need_online);
         }
 
         event(new PackageDelivered($user, $this, $quantity));
@@ -223,5 +223,22 @@ class Package extends Model implements Buyable
     public function scopeEnabled(Builder $query)
     {
         return $query->where('is_enabled', true)->orderBy('position');
+    }
+
+    protected function getCommandsToDispatch(int $quantity)
+    {
+        $commands = [];
+
+        for ($i = 0; $i < $quantity; $i++) {
+            $commands[] = $this->commands;
+        }
+
+        if ($globalCommands = setting('shop.commands')) {
+            $commands[] = json_decode($globalCommands);
+        }
+
+        return array_map(function (string $command) use ($quantity) {
+            return str_replace('{quantity}', $quantity, $command);
+        }, array_merge([], ...$commands));
     }
 }

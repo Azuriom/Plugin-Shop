@@ -16,7 +16,7 @@
     </div>
 @endauth
 
-@if($goal)
+@if($goal !== false)
     <div class="mb-4">
         <h4>{{ trans('shop::messages.month-goal') }}</h4>
 

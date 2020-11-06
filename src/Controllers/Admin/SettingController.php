@@ -18,10 +18,13 @@ class SettingController extends Controller
      */
     public function show()
     {
+        $commands = setting('shop.commands');
+
         return view('shop::admin.settings', [
             'currencies' => Currencies::all(),
             'currentCurrency' => setting('currency', 'USD'),
             'goal' => (int) setting('shop.month-goal', 0),
+            'commands' => $commands ? json_decode($commands) : [],
         ]);
     }
 
@@ -39,7 +42,10 @@ class SettingController extends Controller
             'currency' => ['required', Rule::in(Currencies::codes())],
             'goal' => ['nullable', 'integer', 'min:0'],
             'webhook' => ['nullable', 'url'],
+            'commands' => ['sometimes', 'nullable', 'array'],
         ]);
+
+        $commands = $request->input('commands');
 
         Setting::updateSettings(Arr::only($data, 'currency'));
 
@@ -47,6 +53,7 @@ class SettingController extends Controller
             'shop.use-site-money' => $request->has('use-site-money'),
             'shop.month-goal' => $request->input('goal'),
             'shop.webhook' => $request->input('webhook'),
+            'shop.commands' => is_array($commands) ? json_encode(array_filter($commands)) : null,
         ]);
 
         return redirect()->route('shop.admin.settings')
