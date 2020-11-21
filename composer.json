@@ -12,7 +12,7 @@
         ]
     },
     "require": {
-        "php": "^7.2",
+        "php": ">=7.2",
         "mollie/mollie-api-php": "^2.12.0",
         "paymentwall/paymentwall-php": "^2.2",
         "paygol/php-sdk": "^1.0",
@@ -22,6 +22,11 @@
     },
     "replace": {
         "guzzlehttp/guzzle": "*",
+        "psr/log": "*",
         "symfony/http-foundation": "*"
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "platform-check": false
     }
 }

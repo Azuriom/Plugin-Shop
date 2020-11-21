@@ -238,7 +238,11 @@ class Package extends Model implements Buyable
         }
 
         return array_map(function (string $command) use ($quantity) {
-            return str_replace('{quantity}', $quantity, $command);
+            return str_replace([
+                '{quantity}',
+                '{package_id}',
+                '{package_name}',
+            ], [$quantity, $this->id, $this->name], $command);
         }, array_merge([], ...$commands));
     }
 }
