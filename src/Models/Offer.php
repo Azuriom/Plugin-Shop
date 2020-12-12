@@ -3,6 +3,7 @@
 namespace Azuriom\Plugin\Shop\Models;
 
 use Azuriom\Models\Traits\HasTablePrefix;
+use Azuriom\Models\Traits\HasTranslations;
 use Azuriom\Models\Traits\Loggable;
 use Azuriom\Models\User;
 use Azuriom\Plugin\Shop\Models\Concerns\Buyable;
@@ -21,8 +22,9 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Offer extends Model implements Buyable
 {
-    use IsBuyable;
     use HasTablePrefix;
+    use HasTranslations;
+    use IsBuyable;
     use Loggable;
 
     /**
@@ -40,6 +42,13 @@ class Offer extends Model implements Buyable
     protected $fillable = [
         'name', 'price', 'money', 'is_enabled',
     ];
+
+    /**
+     * The attributes that are translatable.
+     *
+     * @var array
+     */
+    public $translatable = ['name'];
 
     /**
      * The attributes that should be cast to native types.

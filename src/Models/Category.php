@@ -3,6 +3,7 @@
 namespace Azuriom\Plugin\Shop\Models;
 
 use Azuriom\Models\Traits\HasTablePrefix;
+use Azuriom\Models\Traits\HasTranslations;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
@@ -23,6 +24,7 @@ use Illuminate\Database\Eloquent\Model;
 class Category extends Model
 {
     use HasTablePrefix;
+    use HasTranslations;
 
     /**
      * The table prefix associated with the model.
@@ -39,6 +41,13 @@ class Category extends Model
     protected $fillable = [
         'name', 'position', 'cumulate_purchases', 'is_enabled',
     ];
+
+    /**
+     * The attributes that are translatable.
+     *
+     * @var array
+     */
+    public $translatable = ['name'];
 
     /**
      * The attributes that should be cast to native types.
