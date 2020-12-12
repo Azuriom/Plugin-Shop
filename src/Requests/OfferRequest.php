@@ -28,8 +28,8 @@ class OfferRequest extends FormRequest
     public function rules()
     {
         return [
-            'tranlations.*.locale' => ['required', 'string', 'max:50'],
-            'tranlations.*.name' => ['required', 'string', 'max:50'],
+            'translations.*.locale' => ['required', 'string', 'max:50'],
+            'translations.*.name' => ['required', 'string', 'max:50'],
             'price' => ['required', 'numeric', 'min:0'],
             'money' => ['required', 'integer', 'min:0'],
             'gateways' => ['required', 'array'],
