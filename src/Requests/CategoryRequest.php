@@ -26,7 +26,8 @@ class CategoryRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required', 'string', 'max:50'],
+            'tranlations.*.locale' => ['required', 'string', 'max:50'],
+            'tranlations.*.name' => ['required', 'string', 'max:50'],
             'cumulate_purchases' => ['filled', 'boolean'],
             'is_enabled' => ['filled', 'boolean'],
         ];
