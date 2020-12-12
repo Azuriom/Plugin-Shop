@@ -101,7 +101,12 @@ class PackageController extends Controller
      */
     public function store(PackageRequest $request)
     {
-        $package = Package::create(Arr::except($request->validated(), 'image'));
+        $data = $request->validated();
+        $package = new Package(Arr::except($data, ['translations','image']));
+
+        set_spatie_translations($package, $data['translations']);
+
+        $question->save();
 
         if ($request->hasFile('image')) {
             $package->storeImage($request->file('image'), true);
@@ -141,7 +146,10 @@ class PackageController extends Controller
             $package->storeImage($request->file('image'));
         }
 
-        $package->update(Arr::except($request->validated(), 'image'));
+        $data = $request->validated();
+        set_spatie_translations($package, $data['translations']);
+
+        $package->update(Arr::except($data, ['translations','image']));
 
         $package->servers()->sync($request->input('servers', []));
 

@@ -2,9 +2,10 @@
 
 namespace Azuriom\Plugin\Shop\Controllers\Admin;
 
-use Azuriom\Http\Controllers\Controller;
-use Azuriom\Plugin\Shop\Models\Gateway;
+use Illuminate\Support\Arr;
 use Azuriom\Plugin\Shop\Models\Offer;
+use Azuriom\Plugin\Shop\Models\Gateway;
+use Azuriom\Http\Controllers\Controller;
 use Azuriom\Plugin\Shop\Requests\OfferRequest;
 
 class OfferController extends Controller
@@ -37,7 +38,12 @@ class OfferController extends Controller
      */
     public function store(OfferRequest $request)
     {
-        $offer = Offer::create($request->validated());
+        $data = $request->validated();
+        $offer = new Offer(Arr::except($data, 'translations'));
+
+        set_spatie_translations($offer, $data['translations']);
+
+        $question->save();
 
         $gateways = array_keys($request->input('gateways', []));
 
@@ -70,7 +76,10 @@ class OfferController extends Controller
      */
     public function update(OfferRequest $request, Offer $offer)
     {
-        $offer->update($request->validated());
+        $data = $request->validated();
+        set_spatie_translations($offer, $data['translations']);
+
+        $offer->update(Arr::except($data, 'translations'));
 
         $gateways = array_keys($request->input('gateways', []));
 
