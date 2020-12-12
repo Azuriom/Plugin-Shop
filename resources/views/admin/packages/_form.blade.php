@@ -2,32 +2,131 @@
 
 @csrf
 
-<div class="form-group">
-    <label for="nameInput">{{ trans('messages.fields.name') }}</label>
-    <input type="text" class="form-control @error('name') is-invalid @enderror" id="nameInput" name="name" value="{{ old('name', $package->name ?? '') }}" required>
+@php
+    $translations = $package->translations ?? [];
+    $locales = array_keys($translations['name'] ?? []);
+@endphp
 
-    @error('name')
-    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
-    @enderror
+@push('footer-scripts')
+    <script>
+        numberOfTranslatedElements = parseInt({{count($locales)}});
+
+        document.addEventListener('DOMContentLoaded', function() {
+
+            document.querySelectorAll('.translation-remove').forEach(function (el) {
+            addCommandListenerToTranslations(el);
+            });
+
+            document.getElementById('addCommandButton').addEventListener('click', function () {
+            
+            let form = `
+            <div class="form-group">
+                <label for="translationInput-`+numberOfTranslatedElements+`">Translation</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="translationInput-`+numberOfTranslatedElements+`" name="translations[`+numberOfTranslatedElements+`][locale]" value="" required>
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-danger translation-remove" type="button"><i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="nameInput-`+numberOfTranslatedElements+`">{{ trans('messages.fields.name') }}</label>
+                <input type="text" class="form-control" id="nameInput-`+numberOfTranslatedElements+`" name="translations[`+numberOfTranslatedElements+`][name]" value="" required>
+            </div>
+
+            <div class="form-group">
+                <label for="short_descriptionInput-`+numberOfTranslatedElements+`">{{ trans('messages.fields.short-description') }}</label>
+                <input type="text" class="form-control" id="short_descriptionInput-`+numberOfTranslatedElements+`" name="translations[`+numberOfTranslatedElements+`][short_description]" value="" required>
+            </div>
+
+            <div class="form-group">
+                <label for="textArea-`+numberOfTranslatedElements+`">{{ trans('messages.fields.description') }}</label>
+                <textarea class="form-control" id="textArea-`+numberOfTranslatedElements+`" name="translations[`+numberOfTranslatedElements+`][description]" rows="5"></textarea>
+            </div>
+            `;
+
+            addNodeToTranslationsDom(form);
+            });
+        });
+    </script>
+@endpush
+
+<div id="translations">
+    @forelse ($locales as $locale)
+    <div>
+        <div class="form-group">
+            <label for="translationInput-{{$loop->index}}">Translation</label>
+            <div class="input-group">
+                <input type="text" class="form-control" id="translationInput-{{$loop->index}}" name="translations[{{$loop->index}}][locale]" value="{{ old('translations.'.$loop->index.'.locale', $locale ?? '') }}" required>
+                <div class="input-group-append">
+                    <button class="btn btn-outline-danger translation-remove" type="button"><i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    
+        <div class="form-group">
+            <label for="nameInput-{{$loop->index}}">{{ trans('messages.fields.name') }}</label>
+            <input type="text" class="form-control @error('name-'.$loop->index) is-invalid @enderror" id="nameInput-{{$loop->index}}" name="translations[{{$loop->index}}][name]" value="{{ old('translations.'.$loop->index.'.name', $translations['name'][$locale] ?? '') }}" required>
+    
+            @error('name-'.$loop->index)
+            <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+            @enderror
+        </div>
+    
+        <div class="form-group">
+            <label for="short_descriptionInput-{{$loop->index}}">{{ trans('messages.fields.short-description') }}</label>
+            <input type="text" class="form-control @error('short_description-'.$loop->index) is-invalid @enderror" id="short_descriptionInput-{{$loop->index}}" name="translations[{{$loop->index}}][short_description]" value="{{ old('translations.'.$loop->index.'.short_description', $translations['short_description'][$locale] ?? '') }}" required>
+    
+            @error('short_description-'.$loop->index)
+            <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+            @enderror
+        </div>
+    
+        <div class="form-group">
+            <label for="textArea-{{$loop->index}}">{{ trans('messages.fields.description') }}</label>
+            <textarea class="form-control html-editor @error('description-'.$loop->index) is-invalid @enderror" id="textArea-{{$loop->index}}" name="translations[{{$loop->index}}][description]" rows="5">{{ old('translations.'.$loop->index.'.description', $translations['description'][$locale] ?? '') }}</textarea>
+    
+            @error('description-'.$loop->index)
+            <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+            @enderror
+        </div>
+    </div>
+@empty
+    <div class="form-group">
+        <label for="nameInput">{{ trans('messages.fields.name') }}</label>
+        <input type="text" class="form-control @error('name') is-invalid @enderror" id="nameInput" name="name" value="{{ old('name', $package->name ?? '') }}" required>
+    
+        @error('name')
+        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+        @enderror
+    </div>
+    
+    <div class="form-group">
+        <label for="shortDescriptionInput">{{ trans('messages.fields.short-description') }}</label>
+        <input type="text" class="form-control @error('short_description') is-invalid @enderror" id="shortDescriptionInput" name="short_description" value="{{ old('short_description', $package->short_description ?? '') }}" required>
+    
+        @error('short_description')
+        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+        @enderror
+    </div>
+    
+    <div class="form-group">
+        <label for="descriptionArea">{{ trans('messages.fields.description') }}</label>
+        <textarea class="form-control html-editor @error('description') is-invalid @enderror" id="descriptionArea" name="description" rows="5">{{ old('description', $package->description ?? '') }}</textarea>
+    
+        @error('description')
+        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+        @enderror
+    </div>
+    @endforelse
 </div>
 
-<div class="form-group">
-    <label for="shortDescriptionInput">{{ trans('messages.fields.short-description') }}</label>
-    <input type="text" class="form-control @error('short_description') is-invalid @enderror" id="shortDescriptionInput" name="short_description" value="{{ old('short_description', $package->short_description ?? '') }}" required>
-
-    @error('short_description')
-    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
-    @enderror
-</div>
-
-<div class="form-group">
-    <label for="descriptionArea">{{ trans('messages.fields.description') }}</label>
-    <textarea class="form-control html-editor @error('description') is-invalid @enderror" id="descriptionArea" name="description" rows="5">{{ old('content', $package->description ?? '') }}</textarea>
-
-    @error('description')
-    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
-    @enderror
-</div>
+<button type="button" id="addCommandButton" class="btn btn-sm btn-success my-2">
+    <i class="fas fa-plus"></i> {{ trans('messages.actions.add') }}
+</button>
 
 <div class="form-row">
     <div class="form-group col-md-6">
