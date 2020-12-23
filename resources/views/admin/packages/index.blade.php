@@ -2,12 +2,23 @@
 
 @section('title', trans('shop::admin.packages.title'))
 
+@push('styles')
+    <style>
+        #categories > .sortable-dropdown {
+            padding-bottom: 1rem;
+        }
+    </style>
+@endpush
+
 @push('footer-scripts')
     <script src="{{ asset('vendor/sortablejs/Sortable.min.js') }}"></script>
     <script>
         const sortable = Sortable.create(document.getElementById('categories'), {
             group: {
-                name: 'categories',
+                name: 'packages',
+                put: function (to, sortable, drag) {
+                    return drag.classList.contains('category-parent');
+                },
             },
             animation: 150,
             handle: '.sortable-handle'
@@ -17,31 +28,47 @@
             Sortable.create(el, {
                 group: {
                     name: 'packages',
+                    put: function (to, sortable, drag) {
+                        if (!drag.classList.contains('category-parent')) {
+                            return true;
+                        }
+
+                        return !drag.querySelector('.category-parent .category-parent')
+                            && drag.parentNode.id === 'categories';
+                    },
                 },
                 animation: 150,
                 handle: '.sortable-handle'
             });
         });
 
-        function serialize(categories) {
-            const serialized = [];
+        function serializeCategory(category, preventNested = false) {
+            const packagesId = [];
+            const subCategories = [];
+            const packages = category.querySelector('.category-list');
 
-            [].slice.call(categories.children).forEach(function (category) {
-                const packagesId = [];
-
-                const packages = category.querySelector('.category-list');
-
-                [].slice.call(packages.children).forEach(function (categoryPackage) {
+            [].slice.call(packages.children).forEach(function (categoryPackage) {
+                if (!categoryPackage.classList.contains('category-parent')) {
                     packagesId.push(categoryPackage.dataset['packageId']);
-                });
+                    return;
+                }
 
-                serialized.push({
-                    id: category.dataset['categoryId'],
-                    packages: packagesId
-                });
+                if (!preventNested) {
+                    subCategories.push(serializeCategory(categoryPackage, true));
+                }
             });
 
-            return serialized
+            return {
+                id: category.dataset['categoryId'],
+                categories: subCategories,
+                packages: packagesId
+            };
+        }
+
+        function serialize(categories) {
+            return [].slice.call(categories.children).map(function (category) {
+                return serializeCategory(category);
+            });
         }
 
         const saveButton = document.getElementById('save');
@@ -73,40 +100,7 @@
         <div class="card-body">
 
             <ol class="list-unstyled sortable" id="categories">
-                @foreach($categories as $category)
-                    <li class="sortable-item sortable-dropdown mb-5" data-category-id="{{ $category->id }}">
-                        <div class="card">
-                            <div class="card-body d-flex justify-content-between">
-                                <span>
-                                    <i class="fas fa-arrows-alt sortable-handle"></i>
-                                    <a href="{{ route('shop.categories.show', $category) }}">{{ $category->name }}</a>
-                                </span>
-                                <span>
-                                    <a href="{{ route('shop.admin.categories.edit', $category) }}" class="mx-1" title="{{ trans('messages.actions.edit') }}" data-toggle="tooltip"><i class="fas fa-edit"></i></a>
-                                    <a href="{{ route('shop.admin.categories.destroy', $category) }}" class="mx-1" title="{{ trans('messages.actions.delete') }}" data-toggle="tooltip" data-confirm="delete"><i class="fas fa-trash"></i></a>
-                                </span>
-                            </div>
-                        </div>
-                        <ol class="list-unstyled sortable sortable-list category-list">
-                            @foreach($category->packages as $package)
-                                <li class="sortable-item" data-package-id="{{ $package->id }}">
-                                    <div class="card">
-                                        <div class="card-body d-flex justify-content-between">
-                                            <span>
-                                                <i class="fas fa-arrows-alt sortable-handle"></i>
-                                                {{ $package->name }}
-                                            </span>
-                                            <span>
-                                                <a href="{{ route('shop.admin.packages.edit', $package) }}" class="mx-1" title="{{ trans('messages.actions.edit') }}" data-toggle="tooltip"><i class="fas fa-edit"></i></a>
-                                                <a href="{{ route('shop.admin.packages.destroy', $package) }}" class="mx-1" title="{{ trans('messages.actions.delete') }}" data-toggle="tooltip" data-confirm="delete"><i class="fas fa-trash"></i></a>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </li>
-                            @endforeach
-                        </ol>
-                    </li>
-                @endforeach
+                @each('shop::admin.packages._category', $categories, 'category')
             </ol>
 
             <a href="{{ route('shop.admin.categories.create') }}" class="btn btn-primary"><i class="fas fa-plus"></i> {{ trans('shop::admin.packages.create-category') }}

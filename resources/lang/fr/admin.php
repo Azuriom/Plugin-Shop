@@ -16,7 +16,7 @@ return [
     ],
 
     'permissions' => [
-        'admin' => 'Voir et gérer le plugin boutique',
+        'admin' => 'Gérer le plugin boutique',
     ],
 
     'categories' => [
@@ -141,7 +141,7 @@ return [
         'paysafecard-info' => 'Pour pouvoir accepter les paiements par paysafecard, vous devez être un <a href="https://www.paysafecard.com/fr/business/" target="_blank" rel="noopener noreferrer">partenaire paysafecard</a>. D\'autres méthodes existent, mais celle-ci est la seule autorisée par paysafecard.',
         'stripe-info' => 'Sur le tableau de bord Stripe, vous devez définir l\'URL du webhook sur <code>:url</code> et séléctionner l\'événement <code>checkout.session.completed</code>.',
         'paymentwall-info' => 'Dans le tableau de bord PaymentWall, vous devez définir l\'URL de pingback sur <code>:url</code>.',
-        'xsolla' =>  'Dans le tableau de bord Xsolla dashboard vous devez définir l\'URL de webhook URL sur <code>:url</code>, activer \'Transaction external ID\' dans les paramètres de la \'Pay station\', tester les webhooks et ensuite activer \'Checkout\' dans les paramètres de la \'Pay Station\'.',
+        'xsolla' => 'Dans le tableau de bord Xsolla dashboard vous devez définir l\'URL de webhook URL sur <code>:url</code>, activer \'Transaction external ID\' dans les paramètres de la \'Pay station\', tester les webhooks et ensuite activer \'Checkout\' dans les paramètres de la \'Pay Station\'.',
 
         'enable' => 'Activer ce moyen de paiement',
     ],
@@ -152,11 +152,6 @@ return [
 
         'info' => 'Informations du paiement',
         'items' => 'Objets achetés',
-
-        'fields' => [
-            'status' => 'Status',
-            'payment-id' => 'ID du Paiement',
-        ],
 
         'card' => 'Paiements sur la boutique',
 

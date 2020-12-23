@@ -49,6 +49,8 @@ class ShopServiceProvider extends BasePluginServiceProvider
 
         $this->registerRouteDescriptions();
 
+        $this->registerUserNavigation();
+
         $this->registerAdminNavigation();
 
         View::composer('admin.dashboard', ShopAdminDashboardComposer::class);
@@ -99,6 +101,21 @@ class ShopServiceProvider extends BasePluginServiceProvider
                     'shop.admin.purchases.index' => 'shop::admin.nav.purchases',
                     'shop.admin.statistics' => 'shop::admin.nav.statistics',
                 ],
+            ],
+        ];
+    }
+
+    /**
+     * Return the user navigations routes to register in the user menu.
+     *
+     * @return array
+     */
+    protected function userNavigation()
+    {
+        return [
+            'shop' => [
+                'route' => 'shop.profile',
+                'name' => 'shop::messages.profile.payments',
             ],
         ];
     }

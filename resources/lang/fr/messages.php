@@ -25,6 +25,8 @@ return [
         'commands' => 'Commandes',
         'required_packages' => 'Articles pré-requis',
         'user_limit' => 'Limite d\'achats par utilisateur',
+        'status' => 'Status',
+        'payment-id' => 'ID du Paiement',
     ],
 
     'actions' => [
@@ -88,5 +90,9 @@ return [
         'title-select' => 'Montant',
 
         'empty' => 'Aucune offre n\'est disponible actuellement.',
+    ],
+
+    'profile' => [
+        'payments' => 'Vos achats',
     ],
 ];

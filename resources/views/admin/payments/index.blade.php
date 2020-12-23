@@ -30,8 +30,8 @@
                         <th scope="col">{{ trans('messages.fields.user') }}</th>
                         <th scope="col">{{ trans('shop::messages.fields.price') }}</th>
                         <th scope="col">{{ trans('messages.fields.type') }}</th>
-                        <th scope="col">{{ trans('shop::admin.payments.fields.status') }}</th>
-                        <th scope="col">{{ trans('shop::admin.payments.fields.payment-id') }}</th>
+                        <th scope="col">{{ trans('messages.fields.status') }}</th>
+                        <th scope="col">{{ trans('shop::messages.fields.payment-id') }}</th>
                         <th scope="col">{{ trans('messages.fields.date') }}</th>
                         <th scope="col">{{ trans('messages.fields.action') }}</th>
                     </tr>

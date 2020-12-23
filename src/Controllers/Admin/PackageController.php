@@ -19,7 +19,7 @@ class PackageController extends Controller
      */
     public function index()
     {
-        $categories = Category::with('packages')->orderBy('position')->get();
+        $categories = Category::parents()->with('packages')->get();
 
         return view('shop::admin.packages.index', ['categories' => $categories]);
     }
@@ -45,12 +45,28 @@ class PackageController extends Controller
         foreach ($categories as $category) {
             $id = $category['id'];
             $packages = $category['packages'] ?? [];
+            $subCategories = $category['categories'] ?? [];
 
             Category::whereKey($id)->update([
                 'position' => $categoryPosition++,
+                'parent_id' => null,
             ]);
 
             $packagePosition = 1;
+
+            foreach ($subCategories as $subCategory) {
+                Category::whereKey($subCategory['id'])->update([
+                    'position' => $packagePosition++,
+                    'parent_id' => $id,
+                ]);
+
+                foreach ($subCategory['packages'] ?? [] as $package) {
+                    Package::whereKey($package)->update([
+                        'position' => $packagePosition++,
+                        'category_id' => $subCategory['id'],
+                    ]);
+                }
+            }
 
             foreach ($packages as $package) {
                 Package::whereKey($package)->update([

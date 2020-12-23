@@ -15,12 +15,12 @@
                             <li>{{ trans('shop::messages.fields.price') }}: {{ $payment->price }} {{ currency_display($payment->currency) }}</li>
                             <li>{{ trans('messages.fields.type') }}: {{ $payment->getTypeName() }}</li>
                             <li>
-                                {{ trans('shop::admin.payments.fields.status') }}:
+                                {{ trans('messages.fields.status') }}:
                                 <span class="badge badge-{{ $payment->statusColor() }}">
                                     {{ trans('shop::admin.payments.payment-status.'.$payment->status) }}
                                 </span>
                             </li>
-                            <li>{{ trans('shop::admin.payments.fields.payment-id') }}: {{ $payment->transaction_id ?? trans('messages.unknown') }}</li>
+                            <li>{{ trans('shop::messages.fields.payment-id') }}: {{ $payment->transaction_id ?? trans('messages.unknown') }}</li>
                         @else
                             <li>{{ trans('shop::messages.fields.price') }}: {{ format_money($payment->price) }}</li>
                         @endif
