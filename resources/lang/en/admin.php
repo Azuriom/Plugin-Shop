@@ -9,6 +9,7 @@ return [
         'gateways' => 'Gateways',
         'offers' => 'Offers',
         'coupons' => 'Coupons',
+        'giftcards' => 'Gift cards',
         'discounts' => 'Discounts',
         'payments' => 'Payments',
         'purchases' => 'Purchases',
@@ -68,6 +69,22 @@ return [
 
         'active' => 'Active',
         'enable' => 'Enable the coupon',
+    ],
+
+    'giftcards' => [
+        'title' => 'Giftcards',
+        'title-edit' => 'Edit the giftcard :giftcard',
+        'title-create' => 'Create a gift card',
+
+        'status' => [
+            'created' => 'The gift card has been created.',
+            'updated' => 'This gift card has been modified.',
+            'deleted' => 'This gift card has been deleted.',
+        ],
+        'global_limit' => 'Global limit',
+
+        'active' => 'Active',
+        'enable' => 'Enable the gift card',
     ],
 
     'discounts' => [

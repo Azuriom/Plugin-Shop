@@ -24,6 +24,7 @@ Route::middleware('can:shop.admin')->group(function () {
     Route::resource('purchases', 'PurchaseController')->only('index');
     Route::resource('offers', 'OfferController')->except('show');
     Route::resource('coupons', 'CouponController')->except('show');
+    Route::resource('giftcards', 'GiftcardController')->except('show');
     Route::resource('discounts', 'DiscountController')->except('show');
     Route::resource('gateways', 'GatewayController')->except(['show', 'create']);
 

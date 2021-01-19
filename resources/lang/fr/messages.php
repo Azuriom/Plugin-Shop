@@ -95,4 +95,10 @@ return [
     'profile' => [
         'payments' => 'Vos achats',
     ],
+
+    'giftcards' => [
+        'success' => ':money ont été crédité sur votre compte',
+        'error' => 'Cette carte cadeau n\'existe pas, est expiré ou ne peut plus être utilisé.',
+        'add' => 'Echanger une carte cadeau',
+    ],
 ];

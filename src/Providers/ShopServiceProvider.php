@@ -2,16 +2,17 @@
 
 namespace Azuriom\Plugin\Shop\Providers;
 
-use Azuriom\Extensions\Plugin\BasePluginServiceProvider;
 use Azuriom\Models\ActionLog;
 use Azuriom\Models\Permission;
-use Azuriom\Plugin\Shop\Models\Gateway;
+use Illuminate\Support\Facades\View;
 use Azuriom\Plugin\Shop\Models\Offer;
+use Azuriom\Plugin\Shop\Models\Gateway;
 use Azuriom\Plugin\Shop\Models\Package;
 use Azuriom\Plugin\Shop\Payment\PaymentManager;
-use Azuriom\Plugin\Shop\View\Composers\ShopAdminDashboardComposer;
 use Illuminate\Database\Eloquent\Relations\Relation;
-use Illuminate\Support\Facades\View;
+use Azuriom\Extensions\Plugin\BasePluginServiceProvider;
+use Azuriom\Plugin\Shop\View\Composers\UserProfileCardComposer;
+use Azuriom\Plugin\Shop\View\Composers\ShopAdminDashboardComposer;
 
 class ShopServiceProvider extends BasePluginServiceProvider
 {
@@ -55,6 +56,8 @@ class ShopServiceProvider extends BasePluginServiceProvider
 
         View::composer('admin.dashboard', ShopAdminDashboardComposer::class);
 
+        View::composer('profile.index', UserProfileCardComposer::class);
+
         Permission::registerPermissions(['shop.admin' => 'shop::admin.permissions.admin']);
 
         ActionLog::registerLogModels([
@@ -97,6 +100,7 @@ class ShopServiceProvider extends BasePluginServiceProvider
                     'shop.admin.offers.index' => 'shop::admin.nav.offers',
                     'shop.admin.discounts.index' => 'shop::admin.nav.discounts',
                     'shop.admin.coupons.index' => 'shop::admin.nav.coupons',
+                    'shop.admin.giftcards.index' => 'shop::admin.nav.giftcards',
                     'shop.admin.payments.index' => 'shop::admin.nav.payments',
                     'shop.admin.purchases.index' => 'shop::admin.nav.purchases',
                     'shop.admin.statistics' => 'shop::admin.nav.statistics',
