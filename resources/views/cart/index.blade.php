@@ -78,7 +78,7 @@
                         @foreach($cart->coupons() as $coupon)
                             <tr>
                                 <th scope="row">{{ $coupon->code }}</th>
-                                <td>{{ $coupon->discount }}%</td>
+                                <td>{{ $coupon->discount }} @if($coupon->is_fixed) @if(use_site_money()){{money_name()}} @else {{ currency_display() }} @endif  @else % @endif</td>
                                 <td>
                                     <form action="{{ route('shop.cart.coupons.remove', $coupon) }}" method="POST" class="d-inline-block">
                                         @csrf

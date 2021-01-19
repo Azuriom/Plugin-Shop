@@ -133,10 +133,18 @@ class CartItem implements Arrayable
             ->filter(function (Coupon $coupon) use ($package) {
                 return $coupon->isActiveOn($package);
             });
-
-        return round($coupons->reduce(function ($price, Coupon $coupon) {
-            return $price - ($coupon->discount / 100) * $price;
+        
+        // Apply % first
+        $priceAfterNonFixed = round($coupons->reduce(function ($price, Coupon $coupon) {
+            return ($coupon->is_fixed || $coupon->is_global) ? $price : $price - ($coupon->discount / 100) * $price;
         }, $this->originalPrice()), 2);
+
+        // Then apply fixed amounts
+        $priceAfterFixed = round($coupons->reduce(function ($price, Coupon $coupon) {
+            return $coupon->is_fixed && !$coupon->is_global ? max($price - $coupon->discount, 0) : $price;
+        }, $priceAfterNonFixed), 2);
+
+        return $priceAfterFixed;
     }
 
     public function originalTotal()

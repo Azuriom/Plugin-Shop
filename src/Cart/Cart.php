@@ -211,9 +211,19 @@ class Cart implements Arrayable
      */
     public function total()
     {
-        return $this->content()->sum(function (CartItem $cartItem) {
+        $total = $this->content()->sum(function (CartItem $cartItem) {
             return $cartItem->total();
         });
+
+        $totalAfterNonFixed =  round($this->coupons->reduce(function ($price, Coupon $coupon) {
+            return !$coupon->is_fixed && $coupon->is_global ? $price - ($coupon->discount / 100) * $price : $price;
+        }, $total), 2);
+
+        $totalAfterFixed =  round($this->coupons->reduce(function ($price, Coupon $coupon) {
+            return $coupon->is_fixed && $coupon->is_global ? $price - $coupon->discount : $price;
+        }, $totalAfterNonFixed), 2);
+
+        return max($totalAfterFixed, 0);
     }
 
     protected function getItemId(Buyable $buyable)

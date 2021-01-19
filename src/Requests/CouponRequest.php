@@ -29,7 +29,13 @@ class CouponRequest extends FormRequest
     {
         return [
             'code' => ['required', 'string', 'max:50', Rule::unique(Coupon::class)->ignore($this->coupon, 'code')],
-            'discount' => ['required', 'integer', 'between:0,100'],
+            'discount' => [ 'required', 'integer', 'min:0', 
+                function ($attribute, $value, $fail) {
+                    if (request()->input('is_fixed') == false && $value >= 100 ) {
+                        $fail(trans('validation.max.numeric', ['max'=>100]));
+                    }
+                },
+            ],
             'packages' => ['required_without:is_global', 'array'],
             'user_limit' => ['nullable', 'integer', 'min:0'],
             'global_limit' => ['nullable', 'integer', 'min:0'],
@@ -37,6 +43,7 @@ class CouponRequest extends FormRequest
             'expire_at' => ['required', 'date', 'after:start_at'],
             'is_enabled' => ['filled', 'boolean'],
             'is_global' => ['filled', 'boolean'],
+            'is_fixed' => ['filled' , 'boolean'],
         ];
     }
 }

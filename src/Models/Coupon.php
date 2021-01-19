@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $global_limit
  * @property bool $is_enabled
  * @property bool $is_global
+ * @property bool $is_fixed
  * @property \Carbon\Carbon|null $start_at
  * @property \Carbon\Carbon|null $expire_at
  * @property \Carbon\Carbon $created_at
@@ -43,7 +44,7 @@ class Coupon extends Model
      * @var array
      */
     protected $fillable = [
-        'code', 'discount', 'start_at', 'expire_at', 'user_limit', 'global_limit', 'is_enabled', 'is_global',
+        'code', 'discount', 'start_at', 'expire_at', 'user_limit', 'global_limit', 'is_enabled', 'is_global', 'is_fixed',
     ];
 
     /**
@@ -56,6 +57,7 @@ class Coupon extends Model
         'expire_at' => 'datetime',
         'is_enabled' => 'boolean',
         'is_global' => 'boolean',
+        'is_fixed' => 'boolean',
     ];
 
     /**
