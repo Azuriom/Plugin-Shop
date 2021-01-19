@@ -3,6 +3,7 @@
 @section('title', trans('shop::admin.giftcards.title'))
 
 @section('content')
+    @if (use_site_money())
     <div class="card shadow mb-4">
         <div class="card-body">
             <div class="table-responsive">
@@ -50,4 +51,10 @@
             </a>
         </div>
     </div>
+    @else
+        <div class="alert alert-warning" role="alert">
+            <a href="{{route('shop.admin.settings')}}">{{ trans('shop::admin.settings.use-site-money')}}</a>  
+        </div>
+    @endif
+    
 @endsection

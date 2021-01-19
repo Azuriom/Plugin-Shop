@@ -56,7 +56,9 @@ class ShopServiceProvider extends BasePluginServiceProvider
 
         View::composer('admin.dashboard', ShopAdminDashboardComposer::class);
 
-        View::composer('profile.index', UserProfileCardComposer::class);
+        if(use_site_money()) {
+            View::composer('profile.index', UserProfileCardComposer::class);
+        }
 
         Permission::registerPermissions(['shop.admin' => 'shop::admin.permissions.admin']);
 
