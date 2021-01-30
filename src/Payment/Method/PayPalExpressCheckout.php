@@ -81,7 +81,7 @@ class PayPalExpressCheckout extends PaymentMethod
                                 'currency_code' => $currency,
                                 'value' => $total,
                             ],
-                        ]
+                        ],
                     ],
                     'items' => $items,
                 ],
@@ -131,7 +131,7 @@ class PayPalExpressCheckout extends PaymentMethod
             $request = new OrdersCaptureRequest($token);
 
             $response = $this->getClient()->execute($request);
-            
+
             if ($response->statusCode != 201) {
                 logger()->warning('Invalid response while capturing order '.$token);
 
