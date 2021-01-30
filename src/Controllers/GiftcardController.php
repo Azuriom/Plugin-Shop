@@ -5,8 +5,8 @@ namespace Azuriom\Plugin\Shop\Controllers;
 use Azuriom\Http\Controllers\Controller;
 use Azuriom\Plugin\Shop\Models\Giftcard;
 use Illuminate\Http\Request;
-use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 
 class GiftcardController extends Controller
 {

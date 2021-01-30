@@ -2,17 +2,17 @@
 
 namespace Azuriom\Plugin\Shop\Providers;
 
+use Azuriom\Extensions\Plugin\BasePluginServiceProvider;
 use Azuriom\Models\ActionLog;
 use Azuriom\Models\Permission;
-use Illuminate\Support\Facades\View;
-use Azuriom\Plugin\Shop\Models\Offer;
 use Azuriom\Plugin\Shop\Models\Gateway;
+use Azuriom\Plugin\Shop\Models\Offer;
 use Azuriom\Plugin\Shop\Models\Package;
 use Azuriom\Plugin\Shop\Payment\PaymentManager;
-use Illuminate\Database\Eloquent\Relations\Relation;
-use Azuriom\Extensions\Plugin\BasePluginServiceProvider;
-use Azuriom\Plugin\Shop\View\Composers\UserProfileCardComposer;
 use Azuriom\Plugin\Shop\View\Composers\ShopAdminDashboardComposer;
+use Azuriom\Plugin\Shop\View\Composers\UserProfileCardComposer;
+use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Support\Facades\View;
 
 class ShopServiceProvider extends BasePluginServiceProvider
 {
@@ -56,7 +56,7 @@ class ShopServiceProvider extends BasePluginServiceProvider
 
         View::composer('admin.dashboard', ShopAdminDashboardComposer::class);
 
-        if(use_site_money()) {
+        if (use_site_money()) {
             View::composer('profile.index', UserProfileCardComposer::class);
         }
 

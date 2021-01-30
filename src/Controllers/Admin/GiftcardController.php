@@ -2,7 +2,6 @@
 
 namespace Azuriom\Plugin\Shop\Controllers\Admin;
 
-use Azuriom\Plugin\Shop\Models\Package;
 use Azuriom\Http\Controllers\Controller;
 use Azuriom\Plugin\Shop\Models\Giftcard;
 use Azuriom\Plugin\Shop\Requests\GiftcardRequest;

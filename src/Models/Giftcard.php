@@ -64,7 +64,7 @@ class Giftcard extends Model
     }
 
     protected function hasReachUserLimit(User $user)
-    {      
+    {
         return DB::table('shop_giftcards_user')->where('user_id', $user->id)->exists();
     }
 
@@ -75,7 +75,7 @@ class Giftcard extends Model
         }
 
         $count = DB::table('shop_giftcards_user')
-                    ->select('user_id')->where('giftcard_id', $this->id)->count();
+            ->select('user_id')->where('giftcard_id', $this->id)->count();
 
         return $count >= $this->global_limit;
     }

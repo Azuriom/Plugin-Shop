@@ -3,7 +3,6 @@
 namespace Azuriom\Plugin\Shop\View\Composers;
 
 use Azuriom\Extensions\Plugin\UserProfileCardComposer as CardComposer;
-use Azuriom\Plugin\Shop\Models\Payment;
 
 class UserProfileCardComposer extends CardComposer
 {

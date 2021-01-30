@@ -2,10 +2,10 @@
 
 namespace Azuriom\Plugin\Shop\Requests;
 
-use Illuminate\Validation\Rule;
+use Azuriom\Http\Requests\Traits\ConvertCheckbox;
 use Azuriom\Plugin\Shop\Models\Giftcard;
 use Illuminate\Foundation\Http\FormRequest;
-use Azuriom\Http\Requests\Traits\ConvertCheckbox;
+use Illuminate\Validation\Rule;
 
 class GiftcardRequest extends FormRequest
 {
