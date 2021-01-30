@@ -90,6 +90,12 @@ class PayPalExpressCheckout extends PaymentMethod
 
         $response = $this->getClient()->execute($request);
 
+        if ($response->statusCode != 201) {
+        	logger()->warning('Error occured while creating order with PayPal.');
+
+        	abort(500);
+        }
+
         $payment->update(['transaction_id' => $response->result->id]);
 
         $approveLink = null;
@@ -116,7 +122,7 @@ class PayPalExpressCheckout extends PaymentMethod
         $payment = Payment::firstWhere('transaction_id', $token);
 
         if ($payment === null) {
-            logger()->warning('Invalid payment id: '.$token);
+            logger()->warning('Invalid order id: '.$token);
 
             return $this->errorResponse();
         }
@@ -127,7 +133,7 @@ class PayPalExpressCheckout extends PaymentMethod
 	        $response = $this->getClient()->execute($request);
             
             if ($response->statusCode != 201) {
-            	logger()->warning('Invalid response for '.$token);
+            	logger()->warning('Invalid response while capturing order '.$token);
 
             	return $this->errorResponse();
             }
