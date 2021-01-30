@@ -8,8 +8,8 @@ use Azuriom\Plugin\Shop\Payment\PaymentMethod;
 use Illuminate\Http\Request;
 use PayPalCheckoutSdk\Core\PayPalHttpClient;
 use PayPalCheckoutSdk\Core\ProductionEnvironment;
-use PayPalCheckoutSdk\Orders\OrdersCreateRequest;
 use PayPalCheckoutSdk\Orders\OrdersCaptureRequest;
+use PayPalCheckoutSdk\Orders\OrdersCreateRequest;
 
 class PayPalExpressCheckout extends PaymentMethod
 {
@@ -42,15 +42,15 @@ class PayPalExpressCheckout extends PaymentMethod
 
         foreach ($cart->content() as $cartItem) {
             $item = [
-            	'name' => $cartItem->name(),
-            	'description' => $cartItem->buyable()->getDescription(),
-            	'sku' => $cartItem->id,
-            	'unit_amount' => [
-            		'currency_code' => $currency,
-            		'value' => $cartItem->buyable()->getPrice(),
-            	],
-            	'quantity' => $cartItem->quantity,
-            	'category' => 'DIGITAL_GOODS',
+                'name' => $cartItem->name(),
+                'description' => $cartItem->buyable()->getDescription(),
+                'sku' => $cartItem->id,
+                'unit_amount' => [
+                    'currency_code' => $currency,
+                    'value' => $cartItem->buyable()->getPrice(),
+                ],
+                'quantity' => $cartItem->quantity,
+                'category' => 'DIGITAL_GOODS',
             ];
 
             $items[] = $item;
@@ -59,51 +59,51 @@ class PayPalExpressCheckout extends PaymentMethod
         $request = new OrdersCreateRequest();
         $request->headers['prefer'] = 'return=representation';
         $request->body = [
-        	'intent' => 'CAPTURE',
-        	'application_context' => [
-        		'return_url' => route('shop.payments.success', $this->id),
-        		'cancel_url' => route('shop.cart.index'),
-        		'brand_name' => 'Azuriom',
-        		'locale' => str_replace('_', '-', app()->getLocale()),
-        		'landing_page' => 'BILLING',
-        		'user_action' => 'PAY_NOW',
-        	],
-        	'purchase_units' => [
-        		[
-        			'description' => $this->getPurchaseDescription($payment->id),
-        			'custom_id' => $payment->id,
-        			'soft_descriptor' => $payment->id,
-        			'amount' => [
-        				'currency_code' => $currency,
-        				'value' => $total,
-        				'breakdown' => [
-        					'item_total' => [
-        						'currency_code' => $currency,
-        						'value' => $total,
-        					],
-        				]
-        			],
-        			'items' => $items,
-        		],
-        	],
+            'intent' => 'CAPTURE',
+            'application_context' => [
+                'return_url' => route('shop.payments.success', $this->id),
+                'cancel_url' => route('shop.cart.index'),
+                'brand_name' => 'Azuriom',
+                'locale' => str_replace('_', '-', app()->getLocale()),
+                'landing_page' => 'BILLING',
+                'user_action' => 'PAY_NOW',
+            ],
+            'purchase_units' => [
+                [
+                    'description' => $this->getPurchaseDescription($payment->id),
+                    'custom_id' => $payment->id,
+                    'soft_descriptor' => $payment->id,
+                    'amount' => [
+                        'currency_code' => $currency,
+                        'value' => $total,
+                        'breakdown' => [
+                            'item_total' => [
+                                'currency_code' => $currency,
+                                'value' => $total,
+                            ],
+                        ]
+                    ],
+                    'items' => $items,
+                ],
+            ],
         ];
 
         $response = $this->getClient()->execute($request);
 
         if ($response->statusCode != 201) {
-        	logger()->warning('Error occured while creating order with PayPal.');
+            logger()->warning('Error occured while creating order with PayPal.');
 
-        	abort(500);
+            abort(500);
         }
 
         $payment->update(['transaction_id' => $response->result->id]);
 
         $approveLink = null;
         foreach ($response->result->links as $link) {
-        	if ($link->rel === 'approve') {
-        		$approveLink = $link->href;
-        		break;
-        	}
+            if ($link->rel === 'approve') {
+                $approveLink = $link->href;
+                break;
+            }
         }
 
         return redirect()->away($approveLink);
@@ -128,14 +128,14 @@ class PayPalExpressCheckout extends PaymentMethod
         }
 
         if ($payment->isPending()) {
-	        $request = new OrdersCaptureRequest($token);
+            $request = new OrdersCaptureRequest($token);
 
-	        $response = $this->getClient()->execute($request);
+            $response = $this->getClient()->execute($request);
             
             if ($response->statusCode != 201) {
-            	logger()->warning('Invalid response while capturing order '.$token);
+                logger()->warning('Invalid response while capturing order '.$token);
 
-            	return $this->errorResponse();
+                return $this->errorResponse();
             }
 
             $payment->update(['transaction_id' => $response->result->purchase_units[0]->payments->captures[0]->id]);
