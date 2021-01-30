@@ -90,7 +90,7 @@ class PayPalExpressCheckout extends PaymentMethod
 
         $payment->update(['transaction_id' => $response->result->id]);
 
-        $approveLink = Arr::first($response->result->links, function ($link)  {
+        $approveLink = Arr::first($response->result->links, function ($link) {
             return $link->rel === 'approve';
         });
 
