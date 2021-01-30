@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Payment')
+@section('title', trans('shop::messages.payment.title'))
 
 @section('content')
     <div class="container content">
