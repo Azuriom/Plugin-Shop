@@ -3,9 +3,11 @@
 namespace Azuriom\Plugin\Shop\Payment\Method;
 
 use Azuriom\Plugin\Shop\Cart\Cart;
+use Azuriom\Plugin\Shop\Cart\CartItem;
 use Azuriom\Plugin\Shop\Models\Payment;
 use Azuriom\Plugin\Shop\Payment\PaymentMethod;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use PayPalCheckoutSdk\Core\PayPalHttpClient;
 use PayPalCheckoutSdk\Core\ProductionEnvironment;
 use PayPalCheckoutSdk\Orders\OrdersCaptureRequest;
@@ -34,14 +36,12 @@ class PayPalExpressCheckout extends PaymentMethod
      */
     protected $image = 'paypal-express-checkout.png';
 
-    public function startPayment(Cart $cart, float $total, string $currency)
+    public function startPayment(Cart $cart, float $amount, string $currency)
     {
-        $payment = $this->createPayment($cart, $total, $currency);
+        $payment = $this->createPayment($cart, $amount, $currency);
 
-        $items = [];
-
-        foreach ($cart->content() as $cartItem) {
-            $item = [
+        $items = $cart->content()->map(function (CartItem $cartItem) use ($currency) {
+            return [
                 'name' => $cartItem->name(),
                 'description' => $cartItem->buyable()->getDescription(),
                 'sku' => $cartItem->id,
@@ -52,9 +52,7 @@ class PayPalExpressCheckout extends PaymentMethod
                 'quantity' => $cartItem->quantity,
                 'category' => 'DIGITAL_GOODS',
             ];
-
-            $items[] = $item;
-        }
+        });
 
         $request = new OrdersCreateRequest();
         $request->headers['prefer'] = 'return=representation';
@@ -75,11 +73,11 @@ class PayPalExpressCheckout extends PaymentMethod
                     'soft_descriptor' => $payment->id,
                     'amount' => [
                         'currency_code' => $currency,
-                        'value' => $total,
+                        'value' => $amount,
                         'breakdown' => [
                             'item_total' => [
                                 'currency_code' => $currency,
-                                'value' => $total,
+                                'value' => $amount,
                             ],
                         ],
                     ],
@@ -90,23 +88,13 @@ class PayPalExpressCheckout extends PaymentMethod
 
         $response = $this->getClient()->execute($request);
 
-        if ($response->statusCode != 201) {
-            logger()->warning('Error occured while creating order with PayPal.');
-
-            abort(500);
-        }
-
         $payment->update(['transaction_id' => $response->result->id]);
 
-        $approveLink = null;
-        foreach ($response->result->links as $link) {
-            if ($link->rel === 'approve') {
-                $approveLink = $link->href;
-                break;
-            }
-        }
+        $approveLink = Arr::first($response->result->links, function ($link)  {
+            return $link->rel === 'approve';
+        });
 
-        return redirect()->away($approveLink);
+        return redirect()->away($approveLink->href);
     }
 
     public function notification(Request $request, ?string $paymentId)
@@ -116,13 +104,12 @@ class PayPalExpressCheckout extends PaymentMethod
 
     public function success(Request $request)
     {
-        $environment = $this->getEnvironment();
         $token = $request->input('token');
 
         $payment = Payment::firstWhere('transaction_id', $token);
 
         if ($payment === null) {
-            logger()->warning('Invalid order id: '.$token);
+            logger()->warning('Invalid PayPal token: '.$token);
 
             return $this->errorResponse();
         }
@@ -132,13 +119,9 @@ class PayPalExpressCheckout extends PaymentMethod
 
             $response = $this->getClient()->execute($request);
 
-            if ($response->statusCode != 201) {
-                logger()->warning('Invalid response while capturing order '.$token);
+            $captures = $response->result->purchase_units[0]->payments->captures;
 
-                return $this->errorResponse();
-            }
-
-            $payment->update(['transaction_id' => $response->result->purchase_units[0]->payments->captures[0]->id]);
+            $payment->update(['transaction_id' => $captures[0]->id]);
 
             $payment->deliver();
 
@@ -169,14 +152,9 @@ class PayPalExpressCheckout extends PaymentMethod
 
     private function getClient()
     {
-        return new PayPalHttpClient($this->getEnvironment());
-    }
-
-    private function getEnvironment()
-    {
         $id = $this->gateway->data['client-id'];
         $secret = $this->gateway->data['secret'];
 
-        return new ProductionEnvironment($id, $secret);
+        return new PayPalHttpClient(new ProductionEnvironment($id, $secret));
     }
 }
