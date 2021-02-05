@@ -98,7 +98,7 @@ return [
 
     'giftcards' => [
         'success' => ':money have been credited to your account',
-        'error' => 'This coupon does not exist, has expired or can no longer be used.',
+        'error' => 'This gift card does not exist, has expired or can no longer be used.',
         'add' => 'Redeem a gift card',
     ],
 ];

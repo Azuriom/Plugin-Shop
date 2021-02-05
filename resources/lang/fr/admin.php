@@ -72,14 +72,14 @@ return [
     ],
 
     'giftcards' => [
-        'title' => 'Carte cadeau',
+        'title' => 'Cartes Cadeaux',
         'title-edit' => 'Modifier la carte cadeau :giftcard',
         'title-create' => 'Ajouter une carte cadeau',
 
         'status' => [
-            'created' => 'La carte cadeau a été ajouté.',
-            'updated' => 'La carte cadeau a été mis à jour.',
-            'deleted' => 'La carte cadeau a été supprimé.',
+            'created' => 'La carte cadeau a été ajoutée.',
+            'updated' => 'La carte cadeau a été mise à jour.',
+            'deleted' => 'La carte cadeau a été supprimée.',
         ],
         'global_limit' => 'Limite d\'utilisations globale',
 

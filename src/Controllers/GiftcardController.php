@@ -33,15 +33,12 @@ class GiftcardController extends Controller
             ]);
         }
 
-        $user->money += $giftcard->amount;
+        $user->addMoney($giftcard->amount);
 
-        DB::table('shop_giftcards_user')->insert([
-            'user_id' => $user->id,
-            'giftcard_id' => $giftcard->id,
-        ]);
+        $giftcard->users()->attach($user);
 
-        $user->save();
-
-        return redirect()->back()->with('success', trans('shop::messages.giftcards.success', ['money'=>format_money($giftcard->amount)]));
+        return redirect()->back()->with('success', trans('shop::messages.giftcards.success', [
+            'money' => format_money($giftcard->amount),
+        ]));
     }
 }

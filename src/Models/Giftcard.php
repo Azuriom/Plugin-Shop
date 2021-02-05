@@ -11,18 +11,16 @@ use Illuminate\Support\Facades\DB;
 /**
  * @property int $id
  * @property string $code
- * @property int $amount
+ * @property float $amount
  * @property int $used
- * @property int $max_usage
+ * @property int $global_limit
  * @property bool $is_enabled
- * @property bool $is_global
  * @property \Carbon\Carbon|null $start_at
  * @property \Carbon\Carbon|null $expire_at
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
  *
- * @property \Illuminate\Support\Collection|\Azuriom\Plugin\Shop\Models\Package[] $packages
- * @property \Illuminate\Support\Collection|\Azuriom\Plugin\Shop\Models\Payment[] $payments
+ * @property \Illuminate\Support\Collection|\Azuriom\Models\User[] $users
  *
  * @method static \Illuminate\Database\Eloquent\Builder active()
  * @method static \Illuminate\Database\Eloquent\Builder enabled()
@@ -58,6 +56,11 @@ class Giftcard extends Model
         'is_enabled' => 'boolean',
     ];
 
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'shop_giftcard_user');
+    }
+
     public function hasReachLimit(User $user)
     {
         return $this->hasReachGlobalLimit() || $this->hasReachUserLimit($user);
@@ -65,19 +68,16 @@ class Giftcard extends Model
 
     protected function hasReachUserLimit(User $user)
     {
-        return DB::table('shop_giftcards_user')->where('user_id', $user->id)->exists();
+        return $this->users()->where('users.id', $user->id)->exists();
     }
 
     protected function hasReachGlobalLimit()
     {
-        if (! $this->max_usage) {
+        if (! $this->global_limit) {
             return false;
         }
 
-        $count = DB::table('shop_giftcards_user')
-            ->select('user_id')->where('giftcard_id', $this->id)->count();
-
-        return $count >= $this->global_limit;
+        return $this->users()->count() >= $this->global_limit;
     }
 
     /**
@@ -91,7 +91,7 @@ class Giftcard extends Model
     }
 
     /**
-     * Scope a query to only include active giftcards.
+     * Scope a query to only include active gift cards.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @return \Illuminate\Database\Eloquent\Builder
@@ -104,7 +104,7 @@ class Giftcard extends Model
     }
 
     /**
-     * Scope a query to only include enabled giftcards.
+     * Scope a query to only include enabled gift cards.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @return \Illuminate\Database\Eloquent\Builder

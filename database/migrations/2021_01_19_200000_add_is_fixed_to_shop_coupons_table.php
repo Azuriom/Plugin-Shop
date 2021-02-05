@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddFixedColumnToShopCouponsTable extends Migration
+class AddIsFixedToShopCouponsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class AddFixedColumnToShopCouponsTable extends Migration
     public function up()
     {
         Schema::table('shop_coupons', function (Blueprint $table) {
-            $table->boolean('is_fixed')->default(false)->after('is_global');
+            $table->boolean('is_fixed')->default(false)->after('discount');
         });
     }
 

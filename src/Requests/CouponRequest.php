@@ -21,6 +21,18 @@ class CouponRequest extends FormRequest
     ];
 
     /**
+     * Get the validator instance for the request.
+     *
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    protected function getValidatorInstance()
+    {
+        return parent::getValidatorInstance()->sometimes('discount', 'max:100', function ($input) {
+            return ! $input->is_fixed;
+        });
+    }
+
+    /**
      * Get the validation rules that apply to the request.
      *
      * @return array
@@ -29,13 +41,7 @@ class CouponRequest extends FormRequest
     {
         return [
             'code' => ['required', 'string', 'max:50', Rule::unique(Coupon::class)->ignore($this->coupon, 'code')],
-            'discount' => ['required', 'integer', 'min:0',
-                function ($attribute, $value, $fail) {
-                    if (request()->input('is_fixed') === false && $value >= 100) {
-                        $fail(trans('validation.max.numeric', ['max' => 100]));
-                    }
-                },
-            ],
+            'discount' => ['required', 'integer', 'min:0'],
             'packages' => ['required_without:is_global', 'array'],
             'user_limit' => ['nullable', 'integer', 'min:0'],
             'global_limit' => ['nullable', 'integer', 'min:0'],

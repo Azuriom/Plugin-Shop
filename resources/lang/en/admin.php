@@ -9,7 +9,7 @@ return [
         'gateways' => 'Gateways',
         'offers' => 'Offers',
         'coupons' => 'Coupons',
-        'giftcards' => 'Gift cards',
+        'giftcards' => 'Gift Cards',
         'discounts' => 'Discounts',
         'payments' => 'Payments',
         'purchases' => 'Purchases',
@@ -72,8 +72,8 @@ return [
     ],
 
     'giftcards' => [
-        'title' => 'Giftcards',
-        'title-edit' => 'Edit the giftcard :giftcard',
+        'title' => 'Gift Cards',
+        'title-edit' => 'Edit the gift card :giftcard',
         'title-create' => 'Create a gift card',
 
         'status' => [

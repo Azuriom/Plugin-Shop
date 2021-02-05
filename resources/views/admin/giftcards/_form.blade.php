@@ -3,22 +3,22 @@
 
 @csrf
 
+<div class="form-group">
+    <label for="codeInput">{{ trans('shop::messages.fields.code') }}</label>
+    <input type="text" class="form-control @error('code') is-invalid @enderror" id="codeInput" name="code" value="{{ old('code', $giftcard->code ?? '') }}" required>
+
+    @error('code')
+    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+    @enderror
+</div>
+
 <div class="form-row">
-    <div class="form-group col-md-6">
-        <label for="codeInput">{{ trans('shop::messages.fields.code') }}</label>
-        <input type="text" class="form-control @error('code') is-invalid @enderror" id="codeInput" name="code" value="{{ old('code', $giftcard->code ?? '') }}" required>
-
-        @error('code')
-        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
-        @enderror
-    </div>
-
     <div class="form-group col-md-6">
         <label for="amountInput">{{ trans('messages.fields.money') }}</label>
         <div class="input-group">
             <input type="number" min="0" class="form-control @error('amount') is-invalid @enderror" id="amountInput" name="amount" value="{{ old('amount', $giftcard->amount ?? '') }}" required>
             <div class="input-group-append">
-                <span class="input-group-text">€</span>
+                <span class="input-group-text">{{ shop_active_currency() }}</span>
             </div>
 
             @error('amount')
@@ -26,9 +26,7 @@
             @enderror
         </div>
     </div>
-</div>
 
-<div class="form-row">
     <div class="form-group col-md-6">
         <label for="globalLimitInput">{{ trans('shop::admin.giftcards.global_limit') }}</label>
         <input type="number" min="1" class="form-control @error('global_limit') is-invalid @enderror" id="globalLimitInput" name="global_limit" value="{{ old('global_limit', $giftcard->global_limit ?? '1') }}">

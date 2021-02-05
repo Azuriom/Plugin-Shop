@@ -24,7 +24,7 @@
                         <tr>
                             <th scope="row">{{ $giftcard->id }}</th>
                             <td>{{ $giftcard->code }}</td>
-                            <td>{{ $giftcard->amount }}</td>
+                            <td>{{ shop_format_amount($giftcard->amount) }}</td>
                             <td>
                                 <span class="badge badge-{{ $giftcard->is_enabled ? 'success' : 'danger' }}">
                                     {{ trans_bool($giftcard->is_enabled) }}
@@ -53,8 +53,8 @@
     </div>
     @else
         <div class="alert alert-warning" role="alert">
-            <a href="{{route('shop.admin.settings')}}">{{ trans('shop::admin.settings.use-site-money')}}</a>  
+            <a href="{{route('shop.admin.settings')}}">{{ trans('shop::admin.settings.use-site-money')}}</a>
         </div>
     @endif
-    
+
 @endsection

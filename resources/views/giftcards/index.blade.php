@@ -2,7 +2,7 @@
     @csrf
 
     <div class="form-group">
-        <input type="text" class="form-control @error('code') is-invalid @enderror mx-2" placeholder="Code" id="code" name="code" value="{{ old('code') }}">
+        <input type="text" class="form-control @error('code') is-invalid @enderror mx-2" placeholder="{{ trans('shop::messages.fields.code') }}" id="code" name="code" value="{{ old('code') }}">
 
         @error('code')
         <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>

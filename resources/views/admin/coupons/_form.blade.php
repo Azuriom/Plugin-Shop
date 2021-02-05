@@ -1,6 +1,15 @@
 @include('admin.elements.date-picker')
 @include('shop::admin.elements.select')
 
+@push('styles')
+    <style>
+        .input-group-append .custom-select {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+    </style>
+@endpush
+
 @csrf
 
 <div class="form-row">
@@ -20,7 +29,7 @@
             <div class="input-group-append">
                 <select class="custom-select" name="is_fixed">
                     <option value="0" @if(!old('is_fixed', $coupon->is_fixed ?? false)) selected @endif>%</option>
-                    <option value="1" @if(old('is_fixed', $coupon->is_fixed ?? false)) selected @endif >@if(use_site_money()){{money_name()}} @else {{ currency_display() }} @endif</option>
+                    <option value="1" @if(old('is_fixed', $coupon->is_fixed ?? false)) selected @endif >{{ shop_active_currency() }}</option>
                 </select>
             </div>
 

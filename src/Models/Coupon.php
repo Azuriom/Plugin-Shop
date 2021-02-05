@@ -129,6 +129,13 @@ class Coupon extends Model
         return $this->packages->contains($package);
     }
 
+    public function applyOn(float $price)
+    {
+        $discount = $this->is_fixed ? $this->discount : (($this->discount / 100) * $price);
+
+        return max($price - $discount, 0);
+    }
+
     /**
      * Scope a query to only include active coupons.
      *

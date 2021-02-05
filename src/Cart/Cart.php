@@ -215,15 +215,17 @@ class Cart implements Arrayable
             return $cartItem->total();
         });
 
-        $totalAfterNonFixed = round($this->coupons->reduce(function ($price, Coupon $coupon) {
-            return ! $coupon->is_fixed && $coupon->is_global ? $price - ($coupon->discount / 100) * $price : $price;
-        }, $total), 2);
+        $coupons = $this->coupons->where('is_global', true);
 
-        $totalAfterFixed = round($this->coupons->reduce(function ($price, Coupon $coupon) {
-            return $coupon->is_fixed && $coupon->is_global ? $price - $coupon->discount : $price;
-        }, $totalAfterNonFixed), 2);
+        $total = $coupons->where('is_fixed', false)->reduce(function ($price, Coupon $coupon) {
+            return $coupon->applyOn($price);
+        }, $total);
 
-        return max($totalAfterFixed, 0);
+        $total = $coupons->where('is_fixed', true)->reduce(function ($price, Coupon $coupon) {
+            return $coupon->applyOn($price);
+        }, $total);
+
+        return round($total, 2);
     }
 
     protected function getItemId(Buyable $buyable)

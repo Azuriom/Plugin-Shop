@@ -98,7 +98,7 @@ return [
 
     'giftcards' => [
         'success' => ':money ont été crédité sur votre compte',
-        'error' => 'Cette carte cadeau n\'existe pas, est expiré ou ne peut plus être utilisé.',
-        'add' => 'Echanger une carte cadeau',
+        'error' => 'Cette carte cadeau n\'existe pas, est expirée ou ne peut plus être utilisée.',
+        'add' => 'Échanger une carte cadeau',
     ],
 ];
