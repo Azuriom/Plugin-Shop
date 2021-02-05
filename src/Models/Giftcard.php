@@ -6,7 +6,6 @@ use Azuriom\Models\Traits\HasTablePrefix;
 use Azuriom\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
 
 /**
  * @property int $id
