@@ -30,7 +30,7 @@ class StatisticsController extends Controller
 
     protected function getDeliveredItems()
     {
-        return PaymentItem::whereHas('payment', function ($query) {
+        return PaymentItem::where('buyable_type', 'shop.packages')->whereHas('payment', function ($query) {
             $query->where('status', 'completed');
         });
     }
