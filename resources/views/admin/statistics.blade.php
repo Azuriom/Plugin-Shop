@@ -127,6 +127,20 @@
                 </div>
             </div>
         </div>
+
+        <!-- Pie Chart -->
+        <div class="col-xl-4 col-lg-5">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">{{ trans('shop::admin.packages.title') }}</h6>
+                </div>
+                <div class="card-body">
+                    <div class="chart-pie pt-4 pb-2">
+                        <canvas id="itemsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 @endsection
 
@@ -137,5 +151,6 @@
         createLineChart('paymentsPerMonthsChart', @json($paymentsPerMonths), '{{ trans('shop::admin.statistics.total') }}');
         createLineChart('paymentsPerDaysChart', @json($paymentsPerDays), '{{ trans('shop::admin.statistics.total') }}');
         createPieChart('gatewaysChart', @json($gatewaysChart));
+        createPieChart('itemsChart', @json($itemsChart));
     </script>
 @endpush
