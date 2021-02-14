@@ -29,7 +29,7 @@ return [
         'user_limit' => 'Limite d\'achats par utilisateur',
         'status' => 'Status',
         'payment-id' => 'ID du Paiement',
-        'role' => 'Grade à définir lors de l\'achat'
+        'role' => 'Grade à définir lors de l\'achat',
     ],
 
     'actions' => [
