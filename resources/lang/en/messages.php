@@ -5,6 +5,8 @@ return [
 
     'buy' => 'Buy',
 
+    'free' => 'Free',
+
     'month-goal' => 'Goal of the month',
     'month-goal-current' => ':count% completed',
 
@@ -27,6 +29,7 @@ return [
         'user_limit' => 'User purchase limit',
         'status' => 'Status',
         'payment-id' => 'Payment ID',
+        'role' => 'Role to set after purchase',
     ],
 
     'actions' => [

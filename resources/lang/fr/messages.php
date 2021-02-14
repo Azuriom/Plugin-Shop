@@ -5,6 +5,8 @@ return [
 
     'buy' => 'Acheter',
 
+    'free' => 'Gratuit',
+
     'month-goal' => 'Objectif du mois',
     'month-goal-current' => ':count% complété|:count% complétés',
 
@@ -27,6 +29,7 @@ return [
         'user_limit' => 'Limite d\'achats par utilisateur',
         'status' => 'Status',
         'payment-id' => 'ID du Paiement',
+        'role' => 'Grade à définir lors de l\'achat'
     ],
 
     'actions' => [

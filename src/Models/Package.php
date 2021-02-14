@@ -6,6 +6,7 @@ use Azuriom\Models\Server;
 use Azuriom\Models\Traits\HasImage;
 use Azuriom\Models\Traits\HasTablePrefix;
 use Azuriom\Models\Traits\Loggable;
+use Azuriom\Models\Role;
 use Azuriom\Models\User;
 use Azuriom\Plugin\Shop\Events\PackageDelivered;
 use Azuriom\Plugin\Shop\Models\Concerns\Buyable;
@@ -26,6 +27,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Illuminate\Support\Collection|null $required_packages
  * @property bool $has_quantity
  * @property array $commands
+ * @property int|null $role_id
  * @property bool $need_online
  * @property int $user_limit
  * @property bool $is_enabled
@@ -33,6 +35,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Carbon\Carbon $updated_at
  *
  * @property \Azuriom\Plugin\Shop\Models\Category $category
+ * @property \Azuriom\Models\Role|null $role
  * @property \Illuminate\Support\Collection|\Azuriom\Models\Server[] $servers
  * @property \Illuminate\Support\Collection|\Azuriom\Plugin\Shop\Models\Discount[] $discounts
  *
@@ -59,7 +62,7 @@ class Package extends Model implements Buyable
      */
     protected $fillable = [
         'category_id', 'name', 'short_description', 'description', 'image', 'position', 'price', 'required_packages',
-        'has_quantity', 'commands', 'need_online', 'user_limit', 'is_enabled',
+        'has_quantity', 'commands', 'role_id', 'need_online', 'user_limit', 'is_enabled',
     ];
 
     /**
@@ -81,6 +84,11 @@ class Package extends Model implements Buyable
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
     }
 
     public function servers()
@@ -209,6 +217,10 @@ class Package extends Model implements Buyable
             $commands = $this->getCommandsToDispatch($quantity);
 
             $server->bridge()->executeCommands($commands, $user->name, $this->need_online);
+        }
+
+        if ($this->role !== null && ! $this->role->is_admin && $user->role->power < $this->role->power) {
+            $user->role()->associate($this->role)->save();
         }
 
         event(new PackageDelivered($user, $this, $quantity));

@@ -3,6 +3,7 @@
 namespace Azuriom\Plugin\Shop\Controllers\Admin;
 
 use Azuriom\Http\Controllers\Controller;
+use Azuriom\Models\Role;
 use Azuriom\Models\Server;
 use Azuriom\Plugin\Shop\Models\Category;
 use Azuriom\Plugin\Shop\Models\Package;
@@ -105,6 +106,7 @@ class PackageController extends Controller
     {
         return view('shop::admin.packages.create', [
             'categories' => Category::all(),
+            'roles' => Role::where('is_admin', false)->get(),
             'servers' => Server::executable()->get(),
         ]);
     }
@@ -140,6 +142,7 @@ class PackageController extends Controller
         return view('shop::admin.packages.edit', [
             'package' => $package,
             'categories' => Category::all(),
+            'roles' => Role::where('is_admin', false)->get(),
             'servers' => Server::executable()->get(),
         ]);
     }
