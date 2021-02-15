@@ -1,6 +1,14 @@
 <div class="list-group mb-3">
     @foreach($categories as $subCategory)
-        <a href="{{ route('shop.categories.show', $subCategory) }}" class="list-group-item @if($category->is($subCategory)) active @endif">{{ $subCategory->name }}</a>
+        <a href="{{ route('shop.categories.show', $subCategory) }}" class="list-group-item @if($category->is($subCategory)) active @endif">
+            {{ $subCategory->name }}
+        </a>
+
+        @foreach($subCategory->categories as $cat)
+            <a href="{{ route('shop.categories.show', $cat) }}" class="list-group-item pl-5 @if($category->is($cat)) active @endif">
+                {{ $cat->name }}
+            </a>
+        @endforeach
     @endforeach
 </div>
 

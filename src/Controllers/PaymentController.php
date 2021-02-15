@@ -5,6 +5,7 @@ namespace Azuriom\Plugin\Shop\Controllers;
 use Azuriom\Http\Controllers\Controller;
 use Azuriom\Plugin\Shop\Cart\Cart;
 use Azuriom\Plugin\Shop\Models\Gateway;
+use Azuriom\Plugin\Shop\Payment\PaymentManager;
 use Illuminate\Http\Request;
 
 class PaymentController extends Controller
@@ -15,8 +16,8 @@ class PaymentController extends Controller
 
         // If the cart isn't empty and the total is 0, just complete
         // the payment now as gateways won't accept null payment
-        if (! $cart->isEmpty() && $cart->total() === 0.0) {
-            payment_manager()->buyPackages($cart);
+        if (! $cart->isEmpty() && $cart->total() < 0.1) {
+            PaymentManager::createPayment($cart, $cart->total(), currency(), 'free')->deliver();
 
             $cart->destroy();
 

@@ -5,6 +5,8 @@ return [
 
     'buy' => 'Buy',
 
+    'free' => 'Free',
+
     'month-goal' => 'Goal of the month',
     'month-goal-current' => ':count% completed',
 
@@ -25,6 +27,9 @@ return [
         'expire_date' => 'Expire date',
         'required_packages' => 'Required Packages',
         'user_limit' => 'User purchase limit',
+        'status' => 'Status',
+        'payment-id' => 'Payment ID',
+        'role' => 'Role to set after purchase',
     ],
 
     'actions' => [
@@ -88,5 +93,9 @@ return [
         'title-select' => 'Amount',
 
         'empty' => 'No offers are currently available.',
+    ],
+
+    'profile' => [
+        'payments' => 'Your payments',
     ],
 ];

@@ -108,28 +108,7 @@ abstract class PaymentMethod
 
     protected function createPayment(Cart $cart, float $price, string $currency, string $paymentId = null)
     {
-        $payment = Payment::create([
-            'price' => $price,
-            'currency' => $currency,
-            'gateway_type' => $this->id,
-            'status' => 'pending',
-            'transaction_id' => $paymentId,
-        ]);
-
-        foreach ($cart->content() as $item) {
-            $payment->items()
-                ->make([
-                    'name' => $item->name(),
-                    'price' => $item->price(),
-                    'quantity' => $item->quantity,
-                ])
-                ->buyable()->associate($item->buyable())
-                ->save();
-        }
-
-        $payment->coupons()->sync($cart->coupons());
-
-        return $payment;
+        return PaymentManager::createPayment($cart, $price, $currency, $this->id, $paymentId);
     }
 
     protected function processPayment(?Payment $payment, string $paymentId = null)

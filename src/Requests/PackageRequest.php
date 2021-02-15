@@ -35,6 +35,7 @@ class PackageRequest extends FormRequest
             'user_limit' => ['nullable', 'integer', 'min:0'],
             'required_packages' => ['sometimes', 'nullable', 'array'],
             'commands' => ['sometimes', 'nullable', 'array'],
+            'role_id' => ['nullable', 'integer', 'exists:roles,id'],
             'need_online' => ['filled', 'boolean'],
             'is_enabled' => ['filled', 'boolean'],
             'has_quantity' => ['filled', 'boolean'],
@@ -49,8 +50,9 @@ class PackageRequest extends FormRequest
      */
     public function validated()
     {
-        $commands = array_filter($this->input('commands', []));
-
-        return ['commands' => $commands] + $this->validator->validated();
+        return array_merge(parent::validated(), [
+            'commands' => array_filter($this->input('commands', [])),
+            'required_packages' => $this->input('required_packages', []),
+        ]);
     }
 }

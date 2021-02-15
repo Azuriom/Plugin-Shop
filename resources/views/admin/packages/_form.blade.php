@@ -133,7 +133,15 @@
         <label for="categorySelect">{{ trans('shop::messages.fields.category') }}</label>
         <select class="custom-select @error('category_id') is-invalid @enderror" id="categorySelect" name="category_id" required>
             @foreach($categories as $category)
-                <option value="{{ $category->id }}" @if(($package->category_id ?? 0) === $category->id) selected @endif>{{ $category->name }}</option>
+                <option value="{{ $category->id }}" @if(isset($package) && $category->is($package->category)) selected @endif>
+                    {{ $category->name }}
+                </option>
+
+                @foreach($category->categories as $subCategory)
+                    <option value="{{ $subCategory->id }}" @if(isset($package) && $subCategory->is($package->category)) selected @endif>
+                        {{ $subCategory->name }}
+                    </option>
+                @endforeach
             @endforeach
         </select>
 
@@ -160,15 +168,15 @@
 
 <div class="form-row">
     <div class="form-group col-md-6">
-        <label for="serversSelect">{{ trans('shop::messages.fields.servers') }}</label>
-
-        <select class="custom-select @error('servers') is-invalid @enderror" id="serversSelect" name="servers[]" multiple>
-            @foreach($servers as $server)
-                <option value="{{ $server->id }}" @if(isset($package) && $package->servers->contains($server) ?? false) selected @endif>{{ $server->name }}</option>
+        <label for="roleSelect">{{ trans('shop::messages.fields.role') }}</label>
+        <select class="custom-select @error('role_id') is-invalid @enderror" id="roleSelect" name="role_id">
+            <option value="">{{ trans('messages.none') }}</option>
+            @foreach($roles as $role)
+                <option value="{{ $role->id }}" @if($role->is($package->role)) selected @endif>{{ $role->name }}</option>
             @endforeach
         </select>
 
-        @error('servers')
+        @error('role_id')
         <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
         @enderror
     </div>
@@ -224,6 +232,20 @@
     <label>{{ trans('shop::messages.fields.commands') }}</label>
 
     @include('shop::admin.elements.commands', ['commands' => $package->commands ?? []])
+</div>
+
+<div class="form-group">
+    <label for="serversSelect">{{ trans('shop::messages.fields.servers') }}</label>
+
+    <select class="custom-select @error('servers') is-invalid @enderror" id="serversSelect" name="servers[]" multiple>
+        @foreach($servers as $server)
+            <option value="{{ $server->id }}" @if(isset($package) && $package->servers->contains($server) ?? false) selected @endif>{{ $server->name }}</option>
+        @endforeach
+    </select>
+
+    @error('servers')
+    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+    @enderror
 </div>
 
 <div class="form-group custom-control custom-switch">

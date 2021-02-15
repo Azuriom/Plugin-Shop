@@ -15,7 +15,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $category = Category::enabled()->first();
+        $category = Category::scopes(['parents', 'enabled'])->first();
 
         if ($category === null) {
             return view('shop::categories.index', [
@@ -34,11 +34,12 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        $categories = Category::enabled()
+        $categories = Category::scopes(['parents', 'enabled'])
+            ->with('categories')
             ->withCount('packages')
             ->get()
             ->filter(function (Category $cat) use ($category) {
-                return $cat->is($category) || $cat->packages_count > 0;
+                return $cat->is($category) || ! $cat->categories->isEmpty() || $cat->packages_count > 0;
             });
 
         $category->load('packages.discounts');

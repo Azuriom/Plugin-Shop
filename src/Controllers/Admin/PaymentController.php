@@ -3,7 +3,6 @@
 namespace Azuriom\Plugin\Shop\Controllers\Admin;
 
 use Azuriom\Http\Controllers\Controller;
-use Azuriom\Models\User;
 use Azuriom\Plugin\Shop\Models\Payment;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -24,14 +23,10 @@ class PaymentController extends Controller
             ->with('user')
             ->latest()
             ->when($search, function (Builder $query, string $search) {
-                $users = User::search($search)->get();
-
-                $query->where(function (Builder $query) use ($users, $search) {
-                    $query->where('transaction_id', 'LIKE', "%{$search}%");
-
-                    if (! $users->isEmpty()) {
-                        $query->orWhereIn('user_id', $users->modelKeys());
-                    }
+                $query->where(function (Builder $query) use ($search) {
+                    $query->whereHas('user', function (Builder $query) use ($search) {
+                        $query->scopes(['search' => $search]);
+                    })->orWhere('transaction_id', 'like', "%{$search}%");
 
                     if (is_numeric($search)) {
                         $query->orWhere('id', $search);

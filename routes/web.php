@@ -50,3 +50,5 @@ Route::prefix('payments')->name('payments.')->group(function () {
     Route::get('/{gateway:type}/success', 'PaymentController@success')->name('success');
     Route::get('/{gateway:type}/failure', 'PaymentController@failure')->name('failure');
 });
+
+Route::get('/profile', 'ProfileController@index')->middleware('auth')->name('profile');

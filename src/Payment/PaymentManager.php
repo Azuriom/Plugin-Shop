@@ -103,4 +103,30 @@ class PaymentManager
 
         $payment->deliver();
     }
+
+    public static function createPayment(Cart $cart, float $price, string $currency, string $gatewayId, string $paymentId = null)
+    {
+        $payment = Payment::create([
+            'price' => $price,
+            'currency' => $currency,
+            'gateway_type' => $gatewayId,
+            'status' => 'pending',
+            'transaction_id' => $paymentId,
+        ]);
+
+        foreach ($cart->content() as $item) {
+            $payment->items()
+                ->make([
+                    'name' => $item->name(),
+                    'price' => $item->price(),
+                    'quantity' => $item->quantity,
+                ])
+                ->buyable()->associate($item->buyable())
+                ->save();
+        }
+
+        $payment->coupons()->sync($cart->coupons());
+
+        return $payment;
+    }
 }

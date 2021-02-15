@@ -16,7 +16,7 @@ return [
     ],
 
     'permissions' => [
-        'admin' => 'View and manage shop plugin',
+        'admin' => 'Manage shop plugin',
     ],
 
     'categories' => [
@@ -152,11 +152,6 @@ return [
 
         'info' => 'Payment information',
         'items' => 'Purchased items',
-
-        'fields' => [
-            'status' => 'Status',
-            'payment-id' => 'Payment ID',
-        ],
 
         'card' => 'Shop payments',
 

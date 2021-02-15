@@ -90,6 +90,10 @@ class Payment extends Model
 
     public function getTypeName()
     {
+        if ($this->gateway_type === 'free') {
+            return trans('shop::messages.free');
+        }
+
         $paymentManager = payment_manager();
 
         if (! $paymentManager->hasPaymentMethod($this->gateway_type)) {
@@ -116,7 +120,7 @@ class Payment extends Model
                     ->author($this->user->name, null, $this->user->getAvatar())
                     ->addField(trans('shop::messages.fields.price'), $this->price.' '.currency_display($this->currency))
                     ->addField(trans('messages.fields.type'), $this->getTypeName())
-                    ->addField(trans('shop::admin.payments.fields.payment-id'), $this->transaction_id)
+                    ->addField(trans('shop::messages.fields.payment-id'), $this->transaction_id)
                     ->url(route('shop.admin.payments.show', $this))
                     ->color('#004de6')
                     ->footer('Azuriom v'.Azuriom::version())

@@ -12,13 +12,17 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $name
  * @property string $description
  * @property int $position
+ * @property int $parent_id
  * @property bool $cumulate_purchases
  * @property bool $is_enabled
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
  *
+ * @property \Azuriom\Plugin\Shop\Models\Category $parent
+ * @property \Illuminate\Support\Collection|\Azuriom\Plugin\Shop\Models\Category[] $categories
  * @property \Illuminate\Support\Collection|\Azuriom\Plugin\Shop\Models\Package[] $packages
  *
+ * @method static \Illuminate\Database\Eloquent\Builder parents()
  * @method static \Illuminate\Database\Eloquent\Builder enabled()
  */
 class Category extends Model
@@ -39,7 +43,7 @@ class Category extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'position', 'cumulate_purchases', 'is_enabled',
+        'name', 'position', 'parent_id', 'cumulate_purchases', 'is_enabled',
     ];
 
     /**
@@ -59,6 +63,22 @@ class Category extends Model
     ];
 
     /**
+     * Get the parent category of this category.
+     */
+    public function category()
+    {
+        return $this->belongsTo(self::class, 'parent_id')->orderBy('position');
+    }
+
+    /**
+     * Get the subcategories in this category.
+     */
+    public function categories()
+    {
+        return $this->hasMany(self::class, 'parent_id')->orderBy('position');
+    }
+
+    /**
      * Get the packages in this category.
      */
     public function packages()
@@ -75,5 +95,16 @@ class Category extends Model
     public function scopeEnabled(Builder $query)
     {
         return $query->where('is_enabled', true)->orderBy('position');
+    }
+
+    /**
+     * Scope a query to only include parent forums.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeParents(Builder $query)
+    {
+        return $query->whereNull('parent_id')->orderBy('position');
     }
 }
