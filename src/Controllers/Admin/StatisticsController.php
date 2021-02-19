@@ -6,6 +6,7 @@ use Azuriom\Http\Controllers\Controller;
 use Azuriom\Plugin\Shop\Models\Payment;
 use Azuriom\Plugin\Shop\Models\PaymentItem;
 use Azuriom\Support\Charts;
+use Illuminate\Database\Eloquent\Builder;
 
 class StatisticsController extends Controller
 {
@@ -19,7 +20,7 @@ class StatisticsController extends Controller
             'paymentsPerMonths' => Charts::sumByMonths($this->getCompletedPayments(), 'price'),
             'paymentsPerDays' => Charts::sumByDays($this->getCompletedPayments(), 'price'),
             'gatewaysChart' => Charts::count($this->getCompletedPayments(), 'gateway_type'),
-            'itemsChart' => Charts::count($this->getDeliveredItems(), 'name'),
+            'itemsChart' => Charts::count($this->getDeliveredPackages(), 'name'),
         ]);
     }
 
@@ -28,10 +29,11 @@ class StatisticsController extends Controller
         return Payment::scopes(['completed', 'withRealMoney']);
     }
 
-    protected function getDeliveredItems()
+    protected function getDeliveredPackages()
     {
-        return PaymentItem::where('buyable_type', 'shop.packages')->whereHas('payment', function ($query) {
-            $query->where('status', 'completed');
-        });
+        return PaymentItem::where('buyable_type', 'shop.packages')
+            ->whereHas('payment', function (Builder $query) {
+                $query->where('status', 'completed');
+            });
     }
 }

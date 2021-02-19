@@ -59,6 +59,7 @@ return [
         'coupons' => 'Coupons',
         'add-coupon' => 'Add a coupon',
         'invalid-coupon' => 'This coupon does not exist, has expired or can no longer be used.',
+        'cannot-cumulate' => 'You cannot use this coupon with an other coupon.',
 
         'back' => 'Back to shop',
 

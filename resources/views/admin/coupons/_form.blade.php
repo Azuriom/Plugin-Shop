@@ -96,6 +96,11 @@
 </div>
 
 <div class="form-group custom-control custom-switch">
+    <input type="checkbox" class="custom-control-input" id="cumulateSwitch" name="can_cumulate" @if($coupon->can_cumulate ?? true) checked @endif>
+    <label class="custom-control-label" for="cumulateSwitch">{{ trans('shop::admin.coupons.cumulate') }}</label>
+</div>
+
+<div class="form-group custom-control custom-switch">
     <input type="checkbox" class="custom-control-input" id="enableSwitch" name="is_enabled" @if($coupon->is_enabled ?? true) checked @endif>
     <label class="custom-control-label" for="enableSwitch">{{ trans('shop::admin.coupons.enable') }}</label>
 </div>

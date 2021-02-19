@@ -65,6 +65,18 @@ class PayPalMethod extends PaymentMethod
         $status = $request->input('payment_status');
         $receiverEmail = Str::lower($request->input('receiver_email'));
 
+        if ($status === 'Canceled_Reversal') {
+            return response()->noContent();
+        }
+
+        if ($status === 'Reversed') {
+            $parentTransactionId = $request->input('parent_txn_id');
+
+            Payment::firstWhere('transaction_id', $parentTransactionId)->update(['status' => 'refund']);
+
+            return response()->noContent();
+        }
+
         $payment = Payment::findOrFail($request->input('custom'));
 
         if ($status === 'Pending') {

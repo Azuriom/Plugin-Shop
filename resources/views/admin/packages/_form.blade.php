@@ -73,7 +73,7 @@
         <select class="custom-select @error('role_id') is-invalid @enderror" id="roleSelect" name="role_id">
             <option value="">{{ trans('messages.none') }}</option>
             @foreach($roles as $role)
-                <option value="{{ $role->id }}" @if($role->is($package->role)) selected @endif>{{ $role->name }}</option>
+                <option value="{{ $role->id }}" @if(isset($package) && $role->is($package->role)) selected @endif>{{ $role->name }}</option>
             @endforeach
         </select>
 
