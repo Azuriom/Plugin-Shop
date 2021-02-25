@@ -97,6 +97,7 @@ class ShopServiceProvider extends BasePluginServiceProvider
                     'shop.admin.offers.index' => 'shop::admin.nav.offers',
                     'shop.admin.discounts.index' => 'shop::admin.nav.discounts',
                     'shop.admin.coupons.index' => 'shop::admin.nav.coupons',
+                    'shop.admin.giftcards.index' => 'shop::admin.nav.giftcards',
                     'shop.admin.payments.index' => 'shop::admin.nav.payments',
                     'shop.admin.purchases.index' => 'shop::admin.nav.purchases',
                     'shop.admin.statistics' => 'shop::admin.nav.statistics',

@@ -134,9 +134,17 @@ class CartItem implements Arrayable
                 return $coupon->isActiveOn($package);
             });
 
-        return round($coupons->reduce(function ($price, Coupon $coupon) {
-            return $price - ($coupon->discount / 100) * $price;
-        }, $this->originalPrice()), 2);
+        // Apply % first
+        $price = $coupons->where('is_fixed', false)->reduce(function ($price, Coupon $coupon) {
+            return $coupon->applyOn($price);
+        }, $this->originalPrice());
+
+        // Then apply fixed amounts
+        $price = $coupons->where('is_fixed', true)->reduce(function ($price, Coupon $coupon) {
+            return $coupon->applyOn($price);
+        }, $price);
+
+        return round($price, 2);
     }
 
     public function originalTotal()

@@ -23,7 +23,7 @@
                         <tr>
                             <th scope="row">{{ $coupon->id }}</th>
                             <td>{{ $coupon->code }}</td>
-                            <td>{{ $coupon->discount }} %</td>
+                            <td>{{ $coupon->is_fixed ? shop_format_amount($coupon->discount) : $coupon->discount.' %' }}</td>
                             <td>
                                 <span class="badge badge-{{ $coupon->is_enabled ? 'success' : 'danger' }}">
                                     {{ trans_bool($coupon->is_enabled) }}
