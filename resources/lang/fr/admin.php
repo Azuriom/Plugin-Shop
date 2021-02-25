@@ -64,6 +64,7 @@ return [
 
         'global' => 'Est ce que ce code promotionnel doit être actif sur toute la boutique ?',
 
+        'cumulate' => 'Pouvoir utiliser ce code promo avec d\'autres codes promo',
         'user_limit' => 'Limite d\'utilisations par utilisateur',
         'global_limit' => 'Limite d\'utilisations globale',
 

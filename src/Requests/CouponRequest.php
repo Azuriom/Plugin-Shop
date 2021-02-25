@@ -17,7 +17,7 @@ class CouponRequest extends FormRequest
      * @var array
      */
     protected $checkboxes = [
-        'is_enabled', 'is_global',
+        'can_cumulate', 'is_enabled', 'is_global',
     ];
 
     /**
@@ -47,6 +47,7 @@ class CouponRequest extends FormRequest
             'global_limit' => ['nullable', 'integer', 'min:0'],
             'start_at' => ['required', 'date'],
             'expire_at' => ['required', 'date', 'after:start_at'],
+            'can_cumulate' => ['filled', 'boolean'],
             'is_enabled' => ['filled', 'boolean'],
             'is_global' => ['filled', 'boolean'],
             'is_fixed' => ['filled', 'boolean'],

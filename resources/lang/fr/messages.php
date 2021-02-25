@@ -5,6 +5,8 @@ return [
 
     'buy' => 'Acheter',
 
+    'free' => 'Gratuit',
+
     'month-goal' => 'Objectif du mois',
     'month-goal-current' => ':count% complété|:count% complétés',
 
@@ -27,6 +29,7 @@ return [
         'user_limit' => 'Limite d\'achats par utilisateur',
         'status' => 'Status',
         'payment-id' => 'ID du Paiement',
+        'role' => 'Grade à définir lors de l\'achat',
     ],
 
     'actions' => [
@@ -56,6 +59,7 @@ return [
         'coupons' => 'Codes promo',
         'add-coupon' => 'Ajouter un code promo',
         'invalid-coupon' => 'Ce code promo n\'existe pas, est expiré ou ne peut plus être utilisé.',
+        'cannot-cumulate' => 'Ce code promo ne peut pas être utilisé avec un autre code promo.',
 
         'back' => 'Retour à la boutique',
 

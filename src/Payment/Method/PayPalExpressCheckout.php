@@ -3,19 +3,15 @@
 namespace Azuriom\Plugin\Shop\Payment\Method;
 
 use Azuriom\Plugin\Shop\Cart\Cart;
+use Azuriom\Plugin\Shop\Cart\CartItem;
 use Azuriom\Plugin\Shop\Models\Payment;
 use Azuriom\Plugin\Shop\Payment\PaymentMethod;
 use Illuminate\Http\Request;
-use PayPal\Api\Amount;
-use PayPal\Api\Item;
-use PayPal\Api\ItemList;
-use PayPal\Api\Payer;
-use PayPal\Api\Payment as PayPalPayment;
-use PayPal\Api\PaymentExecution;
-use PayPal\Api\RedirectUrls;
-use PayPal\Api\Transaction;
-use PayPal\Auth\OAuthTokenCredential;
-use PayPal\Rest\ApiContext;
+use Illuminate\Support\Arr;
+use PayPalCheckoutSdk\Core\PayPalHttpClient;
+use PayPalCheckoutSdk\Core\ProductionEnvironment;
+use PayPalCheckoutSdk\Orders\OrdersCaptureRequest;
+use PayPalCheckoutSdk\Orders\OrdersCreateRequest;
 
 class PayPalExpressCheckout extends PaymentMethod
 {
@@ -40,47 +36,64 @@ class PayPalExpressCheckout extends PaymentMethod
      */
     protected $image = 'paypal-express-checkout.png';
 
-    public function startPayment(Cart $cart, float $total, string $currency)
+    public function startPayment(Cart $cart, float $amount, string $currency)
     {
-        $payment = $this->createPayment($cart, $total, $currency);
+        $payment = $this->createPayment($cart, $amount, $currency);
 
-        $items = new ItemList();
+        $items = $cart->content()->map(function (CartItem $cartItem) use ($currency) {
+            return [
+                'name' => $cartItem->name(),
+                'sku' => $cartItem->id,
+                'unit_amount' => [
+                    'currency_code' => $currency,
+                    'value' => $cartItem->price(),
+                ],
+                'quantity' => $cartItem->quantity,
+                'category' => 'DIGITAL_GOODS',
+            ];
+        });
 
-        foreach ($cart->content() as $cartItem) {
-            $item = new Item();
-            $item->setName($cartItem->name())
-                ->setDescription($cartItem->buyable()->getDescription())
-                ->setQuantity($cartItem->quantity)
-                ->setPrice($cartItem->buyable()->getPrice());
+        $request = new OrdersCreateRequest();
+        $request->headers['prefer'] = 'return=representation';
+        $request->body = [
+            'intent' => 'CAPTURE',
+            'application_context' => [
+                'return_url' => route('shop.payments.success', $this->id),
+                'cancel_url' => route('shop.cart.index'),
+                'brand_name' => 'Azuriom',
+                'locale' => str_replace('_', '-', app()->getLocale()),
+                'landing_page' => 'BILLING',
+                'user_action' => 'PAY_NOW',
+            ],
+            'purchase_units' => [
+                [
+                    'description' => $this->getPurchaseDescription($payment->id),
+                    'custom_id' => $payment->id,
+                    'soft_descriptor' => $payment->id,
+                    'amount' => [
+                        'currency_code' => $currency,
+                        'value' => $amount,
+                        'breakdown' => [
+                            'item_total' => [
+                                'currency_code' => $currency,
+                                'value' => $amount,
+                            ],
+                        ],
+                    ],
+                    'items' => $items,
+                ],
+            ],
+        ];
 
-            $items->addItem($item);
-        }
+        $response = $this->getClient()->execute($request);
 
-        $payer = new Payer();
-        $payer->setPaymentMethod('paypal');
+        $payment->update(['transaction_id' => $response->result->id]);
 
-        $redirectUrls = new RedirectUrls();
-        $redirectUrls->setReturnUrl(route('shop.payments.success', $this->id))
-            ->setCancelUrl(route('shop.cart.index'));
+        $approveLink = Arr::first($response->result->links, function ($link) {
+            return $link->rel === 'approve';
+        });
 
-        $amount = new Amount();
-        $amount->setTotal($total)->setCurrency($currency);
-
-        $transaction = new Transaction();
-        $transaction->setAmount($amount)
-            ->setDescription($this->getPurchaseDescription($payment->id))
-            ->setCustom($payment->id);
-
-        $paypalPayment = new PayPalPayment();
-        $paypalPayment->setIntent('sale')
-            ->setPayer($payer)
-            ->setTransactions([$transaction])
-            ->setRedirectUrls($redirectUrls)
-            ->create($this->getApiContext());
-
-        $payment->update(['transaction_id' => $paypalPayment->getId()]);
-
-        return redirect()->away($paypalPayment->getApprovalLink());
+        return redirect()->away($approveLink->href);
     }
 
     public function notification(Request $request, ?string $paymentId)
@@ -90,24 +103,24 @@ class PayPalExpressCheckout extends PaymentMethod
 
     public function success(Request $request)
     {
-        $apiContext = $this->getApiContext();
-        $paymentId = $request->input('paymentId');
+        $token = $request->input('token');
 
-        $paypalPayment = PayPalPayment::get($paymentId, $apiContext);
-
-        $payment = Payment::firstWhere('transaction_id', $paypalPayment->getId());
+        $payment = Payment::firstWhere('transaction_id', $token);
 
         if ($payment === null) {
-            logger()->warning('Invalid payment id: '.$paymentId);
+            logger()->warning('Invalid PayPal token: '.$token);
 
             return $this->errorResponse();
         }
 
         if ($payment->isPending()) {
-            $execution = new PaymentExecution();
-            $execution->setPayerId($request->input('PayerID'));
+            $request = new OrdersCaptureRequest($token);
 
-            $paypalPayment->execute($execution, $apiContext);
+            $response = $this->getClient()->execute($request);
+
+            $captures = $response->result->purchase_units[0]->payments->captures;
+
+            $payment->update(['transaction_id' => $captures[0]->id]);
 
             $payment->deliver();
 
@@ -115,7 +128,7 @@ class PayPalExpressCheckout extends PaymentMethod
         }
 
         if (! $payment->isCompleted()) {
-            logger()->warning('Invalid payment status for '.$paymentId);
+            logger()->warning('Invalid payment status for '.$token);
 
             return $this->errorResponse();
         }
@@ -136,13 +149,11 @@ class PayPalExpressCheckout extends PaymentMethod
         ];
     }
 
-    private function getApiContext()
+    private function getClient()
     {
         $id = $this->gateway->data['client-id'];
         $secret = $this->gateway->data['secret'];
 
-        $apiContext = new ApiContext(new OAuthTokenCredential($id, $secret));
-
-        return tap($apiContext)->setConfig(['mode' => 'live']);
+        return new PayPalHttpClient(new ProductionEnvironment($id, $secret));
     }
 }

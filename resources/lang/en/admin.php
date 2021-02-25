@@ -64,6 +64,7 @@ return [
 
         'global' => 'Should the coupon be active on all the shop ?',
 
+        'cumulate' => 'Allow to use this coupon with other coupons',
         'user_limit' => 'User limit',
         'global_limit' => 'Global limit',
 

@@ -60,10 +60,22 @@ class PayPalMethod extends PaymentMethod
         }
 
         $paymentId = $request->input('txn_id');
-        $amount = (float) $request->input('mc_gross');
+        $amount = $request->input('mc_gross');
         $currency = $request->input('mc_currency');
         $status = $request->input('payment_status');
         $receiverEmail = Str::lower($request->input('receiver_email'));
+
+        if ($status === 'Canceled_Reversal') {
+            return response()->noContent();
+        }
+
+        if ($status === 'Reversed') {
+            $parentTransactionId = $request->input('parent_txn_id');
+
+            Payment::firstWhere('transaction_id', $parentTransactionId)->update(['status' => 'refund']);
+
+            return response()->noContent();
+        }
 
         $payment = Payment::findOrFail($request->input('custom'));
 
@@ -79,15 +91,15 @@ class PayPalMethod extends PaymentMethod
             return $this->invalidPayment($payment, $paymentId, 'Invalid status');
         }
 
-        if ($payment->currency !== $currency || $payment->price !== $amount) {
-            logger()->warning("[Shop] Invalid payment amount/currency for #{$paymentId}: {$amount} {$currency}");
+        if ($currency !== $payment->currency || $amount < $payment->price) {
+            logger()->warning("[Shop] Invalid payment amount or currency for #{$paymentId}: {$amount} {$currency}.");
 
             return $this->invalidPayment($payment, $paymentId, 'Invalid amount/currency');
         }
 
         $email = Str::lower($this->gateway->data['email']);
 
-        if ($email !== $receiverEmail) {
+        if ($receiverEmail !== $email) {
             logger()->warning("[Shop] Invalid email for #{$paymentId}: expected {$email} but got {$receiverEmail}.");
 
             return $this->invalidPayment($payment, $paymentId, 'Invalid email');

@@ -5,6 +5,8 @@ return [
 
     'buy' => 'Buy',
 
+    'free' => 'Free',
+
     'month-goal' => 'Goal of the month',
     'month-goal-current' => ':count% completed',
 
@@ -27,6 +29,7 @@ return [
         'user_limit' => 'User purchase limit',
         'status' => 'Status',
         'payment-id' => 'Payment ID',
+        'role' => 'Role to set after purchase',
     ],
 
     'actions' => [
@@ -56,6 +59,7 @@ return [
         'coupons' => 'Coupons',
         'add-coupon' => 'Add a coupon',
         'invalid-coupon' => 'This coupon does not exist, has expired or can no longer be used.',
+        'cannot-cumulate' => 'You cannot use this coupon with an other coupon.',
 
         'back' => 'Back to shop',
 
