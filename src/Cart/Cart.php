@@ -211,21 +211,9 @@ class Cart implements Arrayable
      */
     public function total()
     {
-        $total = $this->content()->sum(function (CartItem $cartItem) {
+        return $this->content()->sum(function (CartItem $cartItem) {
             return $cartItem->total();
         });
-
-        $coupons = $this->coupons->where('is_global', true);
-
-        $total = $coupons->where('is_fixed', false)->reduce(function ($price, Coupon $coupon) {
-            return $coupon->applyOn($price);
-        }, $total);
-
-        $total = $coupons->where('is_fixed', true)->reduce(function ($price, Coupon $coupon) {
-            return $coupon->applyOn($price);
-        }, $total);
-
-        return round($total, 2);
     }
 
     protected function getItemId(Buyable $buyable)

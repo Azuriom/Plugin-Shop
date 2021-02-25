@@ -131,7 +131,7 @@ class CartItem implements Arrayable
 
         $coupons = $this->cart->coupons()
             ->filter(function (Coupon $coupon) use ($package) {
-                return ! $coupon->is_global && $coupon->isActiveOn($package);
+                return $coupon->isActiveOn($package);
             });
 
         // Apply % first
