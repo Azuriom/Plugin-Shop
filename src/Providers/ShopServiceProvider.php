@@ -10,7 +10,6 @@ use Azuriom\Plugin\Shop\Models\Offer;
 use Azuriom\Plugin\Shop\Models\Package;
 use Azuriom\Plugin\Shop\Payment\PaymentManager;
 use Azuriom\Plugin\Shop\View\Composers\ShopAdminDashboardComposer;
-use Azuriom\Plugin\Shop\View\Composers\UserProfileCardComposer;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\View;
 
@@ -55,10 +54,6 @@ class ShopServiceProvider extends BasePluginServiceProvider
         $this->registerAdminNavigation();
 
         View::composer('admin.dashboard', ShopAdminDashboardComposer::class);
-
-        if (use_site_money()) {
-            View::composer('profile.index', UserProfileCardComposer::class);
-        }
 
         Permission::registerPermissions(['shop.admin' => 'shop::admin.permissions.admin']);
 
