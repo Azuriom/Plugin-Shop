@@ -32,7 +32,16 @@ class CouponController extends Controller
             ]);
         }
 
-        Cart::fromSession($request->session())->addCoupon($coupon);
+        $cart = Cart::fromSession($request->session());
+
+        if ((! $coupon->can_cumulate && ! $cart->coupons()->isEmpty())
+            || $cart->coupons()->contains('can_cumulate', false)) {
+            throw ValidationException::withMessages([
+                'code' => trans('shop::messages.cart.cannot-cumulate'),
+            ]);
+        }
+
+        $cart->addCoupon($coupon);
 
         return redirect()->route('shop.cart.index');
     }

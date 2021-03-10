@@ -1,6 +1,15 @@
 @include('admin.elements.date-picker')
 @include('shop::admin.elements.select')
 
+@push('styles')
+    <style>
+        .input-group-append .custom-select {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+    </style>
+@endpush
+
 @csrf
 
 <div class="form-row">
@@ -16,9 +25,12 @@
     <div class="form-group col-md-6">
         <label for="discountInput">{{ trans('shop::messages.fields.discount') }}</label>
         <div class="input-group">
-            <input type="number" min="0" max="100" class="form-control @error('discount') is-invalid @enderror" id="discountInput" name="discount" value="{{ old('discount', $coupon->discount ?? '') }}" required>
+            <input type="number" min="0" class="form-control @error('discount') is-invalid @enderror" id="discountInput" name="discount" value="{{ old('discount', $coupon->discount ?? '') }}" required>
             <div class="input-group-append">
-                <span class="input-group-text">%</span>
+                <select class="custom-select" name="is_fixed">
+                    <option value="0" @if(!old('is_fixed', $coupon->is_fixed ?? false)) selected @endif>%</option>
+                    <option value="1" @if(old('is_fixed', $coupon->is_fixed ?? false)) selected @endif >{{ shop_active_currency() }}</option>
+                </select>
             </div>
 
             @error('discount')
@@ -93,6 +105,11 @@
             @enderror
         </div>
     </div>
+</div>
+
+<div class="form-group custom-control custom-switch">
+    <input type="checkbox" class="custom-control-input" id="cumulateSwitch" name="can_cumulate" @if($coupon->can_cumulate ?? true) checked @endif>
+    <label class="custom-control-label" for="cumulateSwitch">{{ trans('shop::admin.coupons.cumulate') }}</label>
 </div>
 
 <div class="form-group custom-control custom-switch">

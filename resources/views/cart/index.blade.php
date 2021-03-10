@@ -78,7 +78,7 @@
                         @foreach($cart->coupons() as $coupon)
                             <tr>
                                 <th scope="row">{{ $coupon->code }}</th>
-                                <td>{{ $coupon->discount }}%</td>
+                                <td>{{ $coupon->is_fixed ? shop_format_amount($coupon->discount) : $coupon->discount.' %' }}</td>
                                 <td>
                                     <form action="{{ route('shop.cart.coupons.remove', $coupon) }}" method="POST" class="d-inline-block">
                                         @csrf
@@ -102,7 +102,7 @@
                         @csrf
 
                         <div class="form-group">
-                            <input type="text" class="form-control @error('code') is-invalid @enderror mx-2" placeholder="Code" id="code" name="code" value="{{ old('code') }}">
+                            <input type="text" class="form-control @error('code') is-invalid @enderror mx-2" placeholder="{{ trans('shop::messages.fields.code') }}" id="code" name="code" value="{{ old('code') }}">
 
                             @error('code')
                             <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>

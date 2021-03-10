@@ -34,8 +34,7 @@ class StripeMethod extends PaymentMethod
         $items = $cart->content()->map(function (CartItem $item) use ($currency) {
             return [
                 'name' => $item->name(),
-                'amount' => (int) $item->buyable()->getPrice() * 100,
-                'description' => $item->buyable()->getDescription(),
+                'amount' => (int) ($item->price() * 100),
                 'currency' => $currency,
                 'quantity' => $item->quantity,
             ];
@@ -46,9 +45,8 @@ class StripeMethod extends PaymentMethod
         $successUrl = route('shop.payments.success', [$this->id, '%id%']);
 
         $session = Session::create([
-            'customer_email' => auth()->user()->email,
             'payment_method_types' => ['card'],
-            'line_items' => $items->toArray(),
+            'line_items' => $items->all(),
             'success_url' => str_replace('%id%', '{CHECKOUT_SESSION_ID}', $successUrl),
             'cancel_url' => route('shop.cart.index'),
             'client_reference_id' => $payment->id,

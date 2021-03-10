@@ -43,11 +43,10 @@ class PayPalExpressCheckout extends PaymentMethod
         $items = $cart->content()->map(function (CartItem $cartItem) use ($currency) {
             return [
                 'name' => $cartItem->name(),
-                'description' => $cartItem->buyable()->getDescription(),
                 'sku' => $cartItem->id,
                 'unit_amount' => [
                     'currency_code' => $currency,
-                    'value' => $cartItem->buyable()->getPrice(),
+                    'value' => $cartItem->price(),
                 ],
                 'quantity' => $cartItem->quantity,
                 'category' => 'DIGITAL_GOODS',

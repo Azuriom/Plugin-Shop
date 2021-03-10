@@ -9,6 +9,7 @@ return [
         'gateways' => 'Gateways',
         'offers' => 'Offers',
         'coupons' => 'Coupons',
+        'giftcards' => 'Gift Cards',
         'discounts' => 'Discounts',
         'payments' => 'Payments',
         'purchases' => 'Purchases',
@@ -63,11 +64,28 @@ return [
 
         'global' => 'Should the coupon be active on all the shop ?',
 
+        'cumulate' => 'Allow to use this coupon with other coupons',
         'user_limit' => 'User limit',
         'global_limit' => 'Global limit',
 
         'active' => 'Active',
         'enable' => 'Enable the coupon',
+    ],
+
+    'giftcards' => [
+        'title' => 'Gift Cards',
+        'title-edit' => 'Edit the gift card :giftcard',
+        'title-create' => 'Create a gift card',
+
+        'status' => [
+            'created' => 'The gift card has been created.',
+            'updated' => 'This gift card has been modified.',
+            'deleted' => 'This gift card has been deleted.',
+        ],
+        'global_limit' => 'Global limit',
+
+        'active' => 'Active',
+        'enable' => 'Enable the gift card',
     ],
 
     'discounts' => [

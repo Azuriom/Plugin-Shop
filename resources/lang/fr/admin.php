@@ -9,6 +9,7 @@ return [
         'gateways' => 'Moyens de paiements',
         'offers' => 'Offres',
         'coupons' => 'Codes promo',
+        'giftcards' => 'Carte cadeau',
         'discounts' => 'Réductions',
         'payments' => 'Paiements',
         'purchases' => 'Achats',
@@ -63,11 +64,28 @@ return [
 
         'global' => 'Est ce que ce code promotionnel doit être actif sur toute la boutique ?',
 
+        'cumulate' => 'Pouvoir utiliser ce code promo avec d\'autres codes promo',
         'user_limit' => 'Limite d\'utilisations par utilisateur',
         'global_limit' => 'Limite d\'utilisations globale',
 
         'active' => 'Actif',
         'enable' => 'Activer ce code promotionnel',
+    ],
+
+    'giftcards' => [
+        'title' => 'Cartes Cadeaux',
+        'title-edit' => 'Modifier la carte cadeau :giftcard',
+        'title-create' => 'Ajouter une carte cadeau',
+
+        'status' => [
+            'created' => 'La carte cadeau a été ajoutée.',
+            'updated' => 'La carte cadeau a été mise à jour.',
+            'deleted' => 'La carte cadeau a été supprimée.',
+        ],
+        'global_limit' => 'Limite d\'utilisations globale',
+
+        'active' => 'Actif',
+        'enable' => 'Activer cette carte cadeau',
     ],
 
     'discounts' => [
