@@ -1,7 +1,7 @@
 @csrf
 
 @php
-    $translations = $category->translations ?? [];
+    $translations = $offer->translations ?? [];
     $locales = array_keys($translations['name'] ?? []);
 @endphp
 
