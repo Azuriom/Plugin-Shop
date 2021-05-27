@@ -16,7 +16,7 @@ class AddParentIdToShopCategoriesTable extends Migration
         Schema::table('shop_categories', function (Blueprint $table) {
             $table->unsignedInteger('parent_id')->nullable()->after('position');
 
-            $table->foreign('parent_id')->references('id')->on('shop_categories')->cascadeOnDelete();
+            $table->foreign('parent_id')->references('id')->on('shop_categories');
         });
     }
 
