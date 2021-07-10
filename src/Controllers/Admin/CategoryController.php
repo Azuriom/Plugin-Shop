@@ -2,6 +2,7 @@
 
 namespace Azuriom\Plugin\Shop\Controllers\Admin;
 
+use Illuminate\Support\Arr;
 use Azuriom\Http\Controllers\Controller;
 use Azuriom\Plugin\Shop\Models\Category;
 use Azuriom\Plugin\Shop\Requests\CategoryRequest;
@@ -36,7 +37,12 @@ class CategoryController extends Controller
      */
     public function store(CategoryRequest $request)
     {
-        Category::create($request->validated());
+        $data = $request->validated();
+        $category = new Category(Arr::except($data, 'translations'));
+
+        set_spatie_translations($question, $data['translations']);
+
+        $category->save();
 
         return redirect()->route('shop.admin.packages.index')
             ->with('success', trans('shop::admin.categories.status.created'));
@@ -62,7 +68,10 @@ class CategoryController extends Controller
      */
     public function update(CategoryRequest $request, Category $category)
     {
-        $category->update($request->validated());
+        $data = $request->validated();
+        set_spatie_translations($category, $data['translations']);
+
+        $category->update(Arr::except($data, 'translations'));
 
         return redirect()->route('shop.admin.packages.index')
             ->with('success', trans('shop::admin.categories.status.updated'));

@@ -26,10 +26,11 @@ class PackageRequest extends FormRequest
     public function rules()
     {
         return [
+            'translations.*.locale' => ['required', 'string', 'max:50'],
+            'translations.*.name' => ['required', 'string', 'max:50'],
+            'translations.*.short_description' => ['required', 'string', 'max:255'],
+            'translations.*.description' => ['required', 'string'],
             'category_id' => ['required', 'exists:shop_categories,id'],
-            'name' => ['required', 'string', 'max:50'],
-            'short_description' => ['required', 'string', 'max:255'],
-            'description' => ['required', 'string'],
             'price' => ['required', 'numeric', 'min:0'],
             'user_limit' => ['nullable', 'integer', 'min:0'],
             'required_packages' => ['sometimes', 'nullable', 'array'],

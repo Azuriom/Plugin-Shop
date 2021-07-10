@@ -6,6 +6,7 @@ use Azuriom\Models\Role;
 use Azuriom\Models\Server;
 use Azuriom\Models\Traits\HasImage;
 use Azuriom\Models\Traits\HasTablePrefix;
+use Azuriom\Models\Traits\HasTranslations;
 use Azuriom\Models\Traits\Loggable;
 use Azuriom\Models\User;
 use Azuriom\Plugin\Shop\Events\PackageDelivered;
@@ -43,9 +44,10 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Package extends Model implements Buyable
 {
-    use IsBuyable;
     use HasImage;
     use HasTablePrefix;
+    use HasTranslations;
+    use IsBuyable;
     use Loggable;
 
     /**
@@ -64,6 +66,13 @@ class Package extends Model implements Buyable
         'category_id', 'name', 'short_description', 'description', 'image', 'position', 'price', 'required_packages',
         'has_quantity', 'commands', 'role_id', 'need_online', 'user_limit', 'is_enabled',
     ];
+
+    /**
+     * The attributes that are translatable.
+     *
+     * @var array
+     */
+    public $translatable = ['name', 'short_description', 'description'];
 
     /**
      * The attributes that should be cast to native types.
@@ -133,11 +142,11 @@ class Package extends Model implements Buyable
         }
 
         $purchasedPackage = $this->category->packages
-            ->filter(function (Package $package) {
+            ->filter(function (self $package) {
                 return $package->price < $this->price;
             })
             ->sortByDesc('price')
-            ->first(function (Package $package) {
+            ->first(function (self $package) {
                 return $package->getUserTotalPurchases() > 0;
             });
 
@@ -152,7 +161,7 @@ class Package extends Model implements Buyable
 
         $packages = self::findMany($this->required_packages);
 
-        return ! $packages->contains(function (Package $package) {
+        return ! $packages->contains(function (self $package) {
             return $package->getUserTotalPurchases() < 1;
         });
     }
