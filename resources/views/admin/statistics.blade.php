@@ -12,7 +12,7 @@
                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                 {{ trans('shop::admin.statistics.count') }}
                             </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $monthPaymentsCount }}</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $paymentsCount }}</div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-money-bill-wave fa-2x text-gray-300"></i>
@@ -30,7 +30,7 @@
                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                 {{ trans('shop::admin.statistics.estimated') }}
                             </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $monthPaymentsTotal }} {{ currency_display() }}</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $paymentsTotal }} {{ currency_display() }}</div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -48,7 +48,7 @@
                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                 {{ trans('shop::admin.statistics.month') }}
                             </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $paymentsCount }}</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $monthPaymentsCount }}</div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-money-bill-wave fa-2x text-gray-300"></i>
@@ -66,7 +66,7 @@
                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                 {{ trans('shop::admin.statistics.month-estimated') }}
                             </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $paymentsTotal }} {{ currency_display() }}</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $monthPaymentsTotal }} {{ currency_display() }}</div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
