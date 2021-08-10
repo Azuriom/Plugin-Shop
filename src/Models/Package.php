@@ -133,11 +133,11 @@ class Package extends Model implements Buyable
         }
 
         $purchasedPackage = $this->category->packages
-            ->filter(function (Package $package) {
+            ->filter(function (self $package) {
                 return $package->price < $this->price;
             })
             ->sortByDesc('price')
-            ->first(function (Package $package) {
+            ->first(function (self $package) {
                 return $package->getUserTotalPurchases() > 0;
             });
 
@@ -152,7 +152,7 @@ class Package extends Model implements Buyable
 
         $packages = self::findMany($this->required_packages);
 
-        return ! $packages->contains(function (Package $package) {
+        return ! $packages->contains(function (self $package) {
             return $package->getUserTotalPurchases() < 1;
         });
     }

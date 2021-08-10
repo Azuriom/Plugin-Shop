@@ -131,7 +131,9 @@ class Payment extends Model
                 });
             }
 
-            $this->user->notify(new PaymentPaidNotification($this));
+            rescue(function () {
+                $this->user->notify(new PaymentPaidNotification($this));
+            });
         }
     }
 
