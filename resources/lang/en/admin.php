@@ -118,7 +118,7 @@ return [
             'order-updated' => 'The packages have been updated.',
         ],
 
-        'commands-info' => 'You can use <code>{player}</code> to use the player name. The command must not start with <code>/</code>.',
+        'commands-info' => 'The command must not start with <code>/</code>. You can use <code>{player}</code> to use the player name. For Steam games, you can also use <code>{steam_id}</code> and <code>{steam_id_32}</code>.',
 
         'need-online' => 'The user must be online to receive the package (only available with AzLink)',
         'enable-quantity' => 'Enable the quantity',

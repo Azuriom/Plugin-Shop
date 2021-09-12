@@ -5,6 +5,7 @@ namespace Azuriom\Plugin\Shop\Payment\Method;
 use Azuriom\Plugin\Shop\Cart\Cart;
 use Azuriom\Plugin\Shop\Models\Payment;
 use Azuriom\Plugin\Shop\Payment\PaymentMethod;
+use Illuminate\Http\Client\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
@@ -57,7 +58,7 @@ class PaysafecardMethod extends PaymentMethod
         ]);
 
         if (! $response->successful()) {
-            Log::warning("[Shop] Paysafecard - Invalid init response from {$response->effectiveUri()} : {$response->json()['message']}");
+            $this->logInvalid($response, 'Invalid init response');
 
             return $this->errorResponse();
         }
@@ -100,13 +101,15 @@ class PaysafecardMethod extends PaymentMethod
         $response = $this->retrievePayment($paymentId);
 
         if (! $response->successful()) {
+            $this->logInvalid($response, 'Invalid payment response');
+
             return [
                 'status' => false,
-                'message' => "Invalid payment response from {$response->effectiveUri()}: {$response->json()['message']}",
+                'message' => "Invalid payment response ({$response->status()}: {$response->json('message')}",
             ];
         }
 
-        $status = $response->json()['status'];
+        $status = $response->json('status');
 
         if ($status === 'SUCCESS') {
             // Payment already successfully completed
@@ -130,7 +133,7 @@ class PaysafecardMethod extends PaymentMethod
             ];
         }
 
-        $status = $response->json()['status'];
+        $status = $response->json('status');
 
         if ($status !== 'SUCCESS') {
             return [
@@ -169,6 +172,11 @@ class PaysafecardMethod extends PaymentMethod
     private function retrievePayment(string $paymentId)
     {
         return $this->prepareRequest()->get($paymentId);
+    }
+
+    private function logInvalid(Response $response, string $message)
+    {
+        Log::warning("[Shop] Paysafecard - {$message} {$response->effectiveUri()} ({$response->status()}): {$response->json('message ')}");
     }
 
     public static function environments()

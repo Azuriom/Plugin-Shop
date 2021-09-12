@@ -9,7 +9,7 @@ return [
         'gateways' => 'Moyens de paiements',
         'offers' => 'Offres',
         'coupons' => 'Codes promo',
-        'giftcards' => 'Carte cadeau',
+        'giftcards' => 'Cartes cadeaux',
         'discounts' => 'Réductions',
         'payments' => 'Paiements',
         'purchases' => 'Achats',
@@ -118,7 +118,7 @@ return [
             'order-updated' => 'Les produits ont été mis à jour.',
         ],
 
-        'commands-info' => 'Vous pouvez utiliser la variable <code>{player}</code> pour utiliser le pseudo du joueur. La commande ne doit pas contenir de <code>/</code> au début.',
+        'commands-info' => 'La commande ne doit pas commencer par <code>/</code>. Vous pouvez utiliser la variable <code>{player}</code> pour le pseudo du joueur. Pour les jeux Steam, les variables sont <code>{steam_id}</code> et <code>{steam_id_32}</code> sont disponibles.',
 
         'need-online' => 'L\'utilisateur doit être en ligne pour recevoir le paquet (uniquement disponible avec AzLink)',
         'enable-quantity' => 'Activer la quantité',
