@@ -43,7 +43,7 @@ class OfferController extends Controller
 
         set_spatie_translations($offer, $data['translations']);
 
-        $question->save();
+        $offer->save();
 
         $gateways = array_keys($request->input('gateways', []));
 

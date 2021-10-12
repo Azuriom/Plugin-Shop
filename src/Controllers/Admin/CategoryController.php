@@ -40,7 +40,7 @@ class CategoryController extends Controller
         $data = $request->validated();
         $category = new Category(Arr::except($data, 'translations'));
 
-        set_spatie_translations($question, $data['translations']);
+        set_spatie_translations($category, $data['translations']);
 
         $category->save();
 

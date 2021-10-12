@@ -124,7 +124,7 @@ class PackageController extends Controller
 
         set_spatie_translations($package, $data['translations']);
 
-        $question->save();
+        $package->save();
 
         if ($request->hasFile('image')) {
             $package->storeImage($request->file('image'), true);
