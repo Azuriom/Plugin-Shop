@@ -96,30 +96,25 @@
     </div>
 @empty
     <div class="form-group">
-        <label for="nameInput">{{ trans('messages.fields.name') }}</label>
-        <input type="text" class="form-control @error('name') is-invalid @enderror" id="nameInput" name="name" value="{{ old('name', $package->name ?? '') }}" required>
-    
-        @error('name')
-        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
-        @enderror
+        <label for="translationInput-0">Translation</label>
+        <div class="input-group">
+            <input type="text" class="form-control" id="translationInput-0" name="translations[0][locale]" value="{{ app()->getLocale() }}" required>
+        </div>
     </div>
-    
+
     <div class="form-group">
-        <label for="shortDescriptionInput">{{ trans('messages.fields.short-description') }}</label>
-        <input type="text" class="form-control @error('short_description') is-invalid @enderror" id="shortDescriptionInput" name="short_description" value="{{ old('short_description', $package->short_description ?? '') }}" required>
-    
-        @error('short_description')
-        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
-        @enderror
+        <label for="nameInput-0">{{ trans('messages.fields.name') }}</label>
+        <input type="text" class="form-control" id="nameInput-0" name="translations[0][name]" value="" required>
     </div>
-    
+
     <div class="form-group">
-        <label for="descriptionArea">{{ trans('messages.fields.description') }}</label>
-        <textarea class="form-control html-editor @error('description') is-invalid @enderror" id="descriptionArea" name="description" rows="5">{{ old('description', $package->description ?? '') }}</textarea>
-    
-        @error('description')
-        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
-        @enderror
+        <label for="short_descriptionInput-0">{{ trans('messages.fields.short-description') }}</label>
+        <input type="text" class="form-control" id="short_descriptionInput-0" name="translations[0][short_description]" value="" required>
+    </div>
+
+    <div class="form-group">
+        <label for="textArea-0">{{ trans('messages.fields.description') }}</label>
+        <textarea class="form-control html-editor" id="textArea-0" name="translations[0][description]" rows="5"></textarea>
     </div>
     @endforelse
 </div>
