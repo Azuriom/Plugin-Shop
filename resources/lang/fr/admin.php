@@ -154,6 +154,8 @@ return [
         'merchant-id' => 'ID du vendeur',
         'project-id' => 'ID du projet',
         'env' => 'Environnement',
+        'methods' => 'Méthodes de paiement',
+        'methods-info' => 'Les cartes bancaires sont supportées par défaut. Vous pouvez avoir plus d\'informations dans la <a href=":docs">documentation Stripe</a>.',
 
         'paypal-email' => 'Adresse Email PayPal',
         'paysafecard-info' => 'Pour pouvoir accepter les paiements par paysafecard, vous devez être un <a href="https://www.paysafecard.com/fr/business/" target="_blank" rel="noopener noreferrer">partenaire paysafecard</a>. D\'autres méthodes existent, mais celle-ci est la seule autorisée par paysafecard.',

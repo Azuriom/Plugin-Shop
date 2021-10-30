@@ -16,7 +16,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property bool $is_enabled
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
- *
  * @property \Illuminate\Support\Collection|\Azuriom\Plugin\Shop\Models\Gateway[] $gateways
  */
 class Offer extends Model implements Buyable

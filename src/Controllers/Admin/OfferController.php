@@ -39,9 +39,7 @@ class OfferController extends Controller
     {
         $offer = Offer::create($request->validated());
 
-        $gateways = array_keys($request->input('gateways', []));
-
-        $offer->gateways()->sync($gateways);
+        $offer->gateways()->sync($request->input('gateways', []));
 
         return redirect()->route('shop.admin.offers.index')
             ->with('success', trans('shop::admin.offers.status.created'));
@@ -72,9 +70,7 @@ class OfferController extends Controller
     {
         $offer->update($request->validated());
 
-        $gateways = array_keys($request->input('gateways', []));
-
-        $offer->gateways()->sync($gateways);
+        $offer->gateways()->sync($request->input('gateways', []));
 
         return redirect()->route('shop.admin.offers.index')
             ->with('success', trans('shop::admin.offers.status.updated'));

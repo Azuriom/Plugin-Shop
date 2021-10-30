@@ -16,7 +16,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Carbon\Carbon $end_at
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
- *
  * @property \Illuminate\Support\Collection|\Azuriom\Plugin\Shop\Models\Package[] $packages
  *
  * @method static \Illuminate\Database\Eloquent\Builder enabled()

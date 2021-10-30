@@ -44,12 +44,16 @@
     <label>{{ trans('shop::messages.fields.gateways') }}</label>
 
     <div class="card card-body pb-0">
-        @foreach($gateways as $gateway)
-            <div class="form-group custom-control custom-switch">
-                <input type="checkbox" class="custom-control-input" id="gateways{{ $gateway->id }}" name="gateways[{{ $gateway->id }}]" @if(isset($offer) && $offer->gateways->contains($gateway)) checked @endif>
-                <label class="custom-control-label" for="gateways{{ $gateway->id }}">{{ $gateway->name }}</label>
-            </div>
-        @endforeach
+        <div class="row">
+            @foreach($gateways as $gateway)
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="form-group custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input" id="gateways{{ $gateway->id }}" name="gateways[]" value="{{ $gateway->id }}" @if(isset($offer) && $offer->gateways->contains($gateway)) checked @endif>
+                        <label class="custom-control-label" for="gateways{{ $gateway->id }}">{{ $gateway->name }}</label>
+                    </div>
+                </div>
+            @endforeach
+        </div>
     </div>
 
     @error('gateways')

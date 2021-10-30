@@ -49,7 +49,7 @@
 
                 <div class="form-group">
                     <label for="webhookInput">{{ trans('shop::admin.settings.webhook') }}</label>
-                    <input type="text" class="form-control @error('webhook') is-invalid @enderror" id="webhookInput" name="webhook" placeholder="https://discordapp.com/api/webhooks/.../..." value="{{ old('webhook', setting('shop.webhook')) }}" aria-describedby="webhookInfo">
+                    <input type="text" class="form-control @error('webhook') is-invalid @enderror" id="webhookInput" name="webhook" placeholder="https://discord.com/api/webhooks/.../..." value="{{ old('webhook', setting('shop.webhook')) }}" aria-describedby="webhookInfo">
 
                     @error('webhook')
                     <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>

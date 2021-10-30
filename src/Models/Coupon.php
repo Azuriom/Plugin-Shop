@@ -21,7 +21,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Carbon\Carbon|null $expire_at
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
- *
  * @property \Illuminate\Support\Collection|\Azuriom\Plugin\Shop\Models\Package[] $packages
  * @property \Illuminate\Support\Collection|\Azuriom\Plugin\Shop\Models\Payment[] $payments
  *

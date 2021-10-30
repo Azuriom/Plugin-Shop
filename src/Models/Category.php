@@ -16,7 +16,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property bool $is_enabled
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
- *
  * @property \Azuriom\Plugin\Shop\Models\Category $parent
  * @property \Illuminate\Support\Collection|\Azuriom\Plugin\Shop\Models\Category[] $categories
  * @property \Illuminate\Support\Collection|\Azuriom\Plugin\Shop\Models\Package[] $packages

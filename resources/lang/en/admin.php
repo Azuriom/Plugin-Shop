@@ -154,6 +154,8 @@ return [
         'merchant-id' => 'Merchant ID',
         'project-id' => 'Project ID',
         'env' => 'Environment',
+        'methods' => 'Payment methods',
+        'methods-info' => 'Credit cards are enabled by default. You can find more information in the <a href=":docs">Stripe documentation</a>.',
 
         'paypal-email' => 'PayPal Email Address',
         'paysafecard-info' => 'In order to be able to accept payments by paysafecard, you must be a <a href="https://www.paysafecard.com/en/business/" target="_blank" rel="noopener noreferrer">paysafecard partner</a>. Other methods exist but only this one is allowed by paysafecard.',

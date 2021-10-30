@@ -15,7 +15,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $buyable_id
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
- *
  * @property \Azuriom\Plugin\Shop\Models\Payment $payment
  * @property \Azuriom\Plugin\Shop\Models\Package|\Azuriom\Plugin\Shop\Models\Offer|null $buyable
  */

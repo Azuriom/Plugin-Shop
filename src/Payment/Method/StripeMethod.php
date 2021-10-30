@@ -7,12 +7,35 @@ use Azuriom\Plugin\Shop\Cart\CartItem;
 use Azuriom\Plugin\Shop\Models\Payment;
 use Azuriom\Plugin\Shop\Payment\PaymentMethod;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Stripe\Checkout\Session;
+use Stripe\Exception\SignatureVerificationException;
+use Stripe\Exception\UnexpectedValueException;
 use Stripe\Stripe;
 use Stripe\Webhook;
 
 class StripeMethod extends PaymentMethod
 {
+    public const PAYMENT_METHODS = [
+        'acss_debit' => 'ACSS Debit',
+        'afterpay_clearpay' => 'Afterpay / Clearpay',
+        'alipay' => 'Alipay',
+        'bacs_debit' => 'Bacs Direct Debit',
+        'bancontact' => 'Bancontact',
+        'boleto' => 'Boleto',
+        'eps' => 'EPS',
+        'fpx' => 'FPX',
+        'giropay' => 'giropay',
+        'grabpay' => 'GrabPay',
+        'ideal' => 'iDEAL',
+        'klarna' => 'Klarna',
+        'oxxo' => 'OXXO',
+        'p24' => 'Przelewy24',
+        'sepa_debit' => 'SEPA Direct Debit',
+        'sofort' => 'Sofort',
+        'wechat_pay' => 'WeChat Pay',
+    ];
+
     /**
      * The payment method id name.
      *
@@ -29,13 +52,18 @@ class StripeMethod extends PaymentMethod
 
     public function startPayment(Cart $cart, float $amount, string $currency)
     {
+        $user = auth()->user();
         $this->setup();
 
         $items = $cart->content()->map(function (CartItem $item) use ($currency) {
             return [
-                'name' => $item->name(),
-                'amount' => (int) ($item->price() * 100),
-                'currency' => $currency,
+                'price_data' => [
+                    'currency' => $currency,
+                    'unit_amount' => (int) ($item->price() * 100),
+                    'product_data' => [
+                        'name' => $item->name(),
+                    ],
+                ],
                 'quantity' => $item->quantity,
             ];
         });
@@ -45,19 +73,18 @@ class StripeMethod extends PaymentMethod
         $successUrl = route('shop.payments.success', [$this->id, '%id%']);
 
         $session = Session::create([
-            'payment_method_types' => ['card'],
+            'payment_method_types' => array_merge($this->gateway->data['methods'] ?? [], ['card']),
+            'mode' => 'payment',
+            'customer_email' => $user->email,
             'line_items' => $items->all(),
             'success_url' => str_replace('%id%', '{CHECKOUT_SESSION_ID}', $successUrl),
             'cancel_url' => route('shop.cart.index'),
             'client_reference_id' => $payment->id,
         ]);
 
-        $payment->update(['transaction_id' => $payment->id]);
+        $payment->update(['transaction_id' => $session->id]);
 
-        return view('shop::payments.stripe', [
-            'checkoutSessionId' => $session->id,
-            'stripeApiKey' => $this->gateway->data['public-key'],
-        ]);
+        return redirect()->away($session->url);
     }
 
     public function notification(Request $request, ?string $paymentId)
@@ -65,7 +92,11 @@ class StripeMethod extends PaymentMethod
         $endpointSecret = $this->gateway->data['endpoint-secret'];
         $stripeSignature = $request->header('Stripe-Signature');
 
-        $event = Webhook::constructEvent($request->getContent(), $stripeSignature, $endpointSecret);
+        try {
+            $event = Webhook::constructEvent($request->getContent(), $stripeSignature, $endpointSecret);
+        } catch (UnexpectedValueException | SignatureVerificationException $e) {
+            return response()->json(['error' => 'Invalid signature'], 400);
+        }
 
         if ($event->type !== 'checkout.session.completed') {
             return response()->json(['status' => 'unknown']);
@@ -92,6 +123,7 @@ class StripeMethod extends PaymentMethod
             'secret-key' => ['required', 'string'],
             'public-key' => ['required', 'string'],
             'endpoint-secret' => ['nullable', 'string'],
+            'methods.*' => [Rule::in(array_keys(static::PAYMENT_METHODS))],
         ];
     }
 

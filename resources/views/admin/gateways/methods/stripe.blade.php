@@ -1,3 +1,5 @@
+@include('shop::admin.elements.select')
+
 <div class="form-row">
     <div class="form-group col-md-6">
         <label for="keyInput">{{ trans('shop::admin.gateways.public-key') }}</label>
@@ -16,15 +18,33 @@
         <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
         @enderror
     </div>
-</div>
 
-<div class="form-group">
-    <label for="endpointInput">Endpoint secret</label>
-    <input type="text" class="form-control @error('endpoint-secret') is-invalid @enderror" id="endpointInput" name="endpoint-secret" value="{{ old('endpoint-secret', $gateway->data['endpoint-secret'] ?? '') }}" placeholder="whsec_...">
+    <div class="form-group col-md-6">
+        <label for="endpointInput">Endpoint secret</label>
+        <input type="text" class="form-control @error('endpoint-secret') is-invalid @enderror" id="endpointInput" name="endpoint-secret" value="{{ old('endpoint-secret', $gateway->data['endpoint-secret'] ?? '') }}" placeholder="whsec_...">
 
-    @error('endpoint-secret')
-    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
-    @enderror
+        @error('endpoint-secret')
+        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+        @enderror
+    </div>
+
+    <div class="form-group col-md-6">
+        <label for="methodsSelect">{{ trans('shop::admin.gateways.methods') }}</label>
+
+        <select class="custom-select @error('methods') is-invalid @enderror" id="methodsSelect" name="methods[]" multiple aria-describedby="methodsInfo">
+            @foreach(\Azuriom\Plugin\Shop\Payment\Method\StripeMethod::PAYMENT_METHODS as $id => $name)
+                <option value="{{ $id }}" @if(in_array($id, $gateway->data['methods'] ?? [], true)) selected @endif>{{ $name }}</option>
+            @endforeach
+        </select>
+
+        @error('methods')
+        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+        @enderror
+
+        <small id="methodsInfo" class="form-text">
+            @lang('shop::admin.gateways.methods-info', ['docs' => 'https://stripe.com/payments/payment-methods-guide'])
+        </small>
+    </div>
 </div>
 
 <div class="alert alert-info" role="alert">

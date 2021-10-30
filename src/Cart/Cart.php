@@ -41,6 +41,7 @@ class Cart implements Arrayable
      * Create a new cart instance.
      *
      * @param  \Illuminate\Contracts\Session\Session  $session
+     *
      * @deprecated Use Cart::fromSession() or Cart::empty()
      */
     public function __construct(Session $session = null)
