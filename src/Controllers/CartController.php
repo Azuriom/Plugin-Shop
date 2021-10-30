@@ -105,11 +105,12 @@ class CartController extends Controller
         try {
             payment_manager()->buyPackages($cart);
         } catch(\Throwable $e){
-            $user->addMoney($cart->total());
+            $total = $cart->total();
+            $user->addMoney($total);
             $user->save();
             Log::error($e->getMessage());
 
-            return redirect()->route('shop.cart.index')->with('error', trans('shop::messages.cart.error-bridge'));
+            return redirect()->route('shop.cart.index')->with('error', trans('shop::messages.cart.error-bridge', ['money' => shop_format_amount($total)]));
         }
 
         $cart->destroy();
