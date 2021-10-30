@@ -104,7 +104,7 @@ class CartController extends Controller
 
         try {
             payment_manager()->buyPackages($cart);
-        } catch(\Throwable $e){
+        } catch (\Throwable $e) {
             $total = $cart->total();
             $user->addMoney($total);
             $user->save();
