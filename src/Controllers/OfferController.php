@@ -34,6 +34,8 @@ class OfferController extends Controller
 
     public function buy(Gateway $gateway)
     {
+        abort_if(! $gateway->is_enabled, 403);
+
         $gateway->load('offers');
 
         if ($gateway->paymentMethod()->hasFixedAmount()) {
@@ -48,6 +50,8 @@ class OfferController extends Controller
 
     public function pay(Offer $offer, Gateway $gateway)
     {
+        abort_if((! $gateway->is_enabled || ! $offer->is_enabled), 403);
+
         $cart = Cart::createEmpty();
 
         $cart->add($offer);

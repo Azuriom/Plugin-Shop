@@ -46,6 +46,8 @@ class PaymentController extends Controller
      */
     public function pay(Request $request, Gateway $gateway)
     {
+        abort_if(! $gateway->is_enabled, 403);
+
         $cart = Cart::fromSession($request->session());
 
         if ($cart->isEmpty()) {
