@@ -6,6 +6,7 @@ use Azuriom\Http\Controllers\Controller;
 use Azuriom\Plugin\Shop\Cart\Cart;
 use Azuriom\Plugin\Shop\Models\Package;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class CartController extends Controller
 {
@@ -101,7 +102,15 @@ class CartController extends Controller
         $user->removeMoney($cart->total());
         $user->save();
 
-        payment_manager()->buyPackages($cart);
+        try {
+            payment_manager()->buyPackages($cart);
+        } catch(\Throwable $e){
+            $user->addMoney($cart->total());
+            $user->save();
+            Log::error($e->getMessage());
+
+            return redirect()->route('shop.cart.index')->with('error', trans('shop::messages.cart.error-bridge'));
+        }
 
         $cart->destroy();
 
