@@ -43,7 +43,7 @@ return [
     'cart' => [
         'title' => 'Panier',
         'error-money' => 'Vous n\'avez pas assez d\'argent pour faire cet achat.',
-        'error-bridge' => 'Une erreur inattendue s\'est produite lors du paiement, vos :money :money_name ont été remboursé',
+        'error-bridge' => 'Une erreur inattendue s\'est produite lors du paiement, vos :money ont été remboursé',
         'purchase' => 'Votre achat a été effectué avec succès.',
 
         'pay-confirm-title' => 'Payer ?',
