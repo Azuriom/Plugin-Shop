@@ -6,6 +6,7 @@ use Azuriom\Http\Controllers\Controller;
 use Azuriom\Plugin\Shop\Cart\Cart;
 use Azuriom\Plugin\Shop\Models\Package;
 use Illuminate\Http\Request;
+use Throwable;
 
 class CartController extends Controller
 {
@@ -93,18 +94,17 @@ class CartController extends Controller
         }
 
         $user = $request->user();
-        $total = $cart->total();
 
-        if (! $user->hasMoney($total)) {
+        if (! $user->hasMoney($cart->total())) {
             return redirect()->route('shop.cart.index')->with('error', trans('shop::messages.cart.error-money'));
         }
 
         try {
             payment_manager()->buyPackages($cart);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             report($e);
 
-            return redirect()->route('shop.cart.index')->with('error', trans('shop::messages.cart.error-bridge', ['money' => shop_format_amount($total)]));
+            return redirect()->route('shop.cart.index')->with('error', trans('shop::messages.cart.error-execute'));
         }
 
         $user->removeMoney($total);
