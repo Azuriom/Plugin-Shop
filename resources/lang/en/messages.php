@@ -43,6 +43,7 @@ return [
     'cart' => [
         'title' => 'Cart',
         'error-money' => 'You don\'t have enough money to make this purchase.',
+        'error-execute' => 'An unexpected error occurred during payment, your purchase got refund.',
         'purchase' => 'Your purchase has been successfully completed.',
 
         'pay-confirm-title' => 'Pay?',
