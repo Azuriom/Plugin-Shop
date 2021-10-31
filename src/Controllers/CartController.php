@@ -5,8 +5,8 @@ namespace Azuriom\Plugin\Shop\Controllers;
 use Azuriom\Http\Controllers\Controller;
 use Azuriom\Plugin\Shop\Cart\Cart;
 use Azuriom\Plugin\Shop\Models\Package;
+use Exception;
 use Illuminate\Http\Request;
-use Throwable;
 
 class CartController extends Controller
 {
@@ -102,7 +102,7 @@ class CartController extends Controller
 
         try {
             payment_manager()->buyPackages($cart);
-        } catch (Throwable $e) {
+        } catch (Exception $e) {
             report($e);
 
             return redirect()->route('shop.cart.index')->with('error', trans('shop::messages.cart.error-execute'));
@@ -110,6 +110,7 @@ class CartController extends Controller
 
         $user->removeMoney($total);
         $user->save();
+
         $cart->destroy();
 
         return redirect()->route('shop.home')->with('success', trans('shop::messages.cart.purchase'));
