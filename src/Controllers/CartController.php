@@ -94,8 +94,9 @@ class CartController extends Controller
         }
 
         $user = $request->user();
+        $total = $cart->total();
 
-        if (! $user->hasMoney($cart->total())) {
+        if (! $user->hasMoney($total)) {
             return redirect()->route('shop.cart.index')->with('error', trans('shop::messages.cart.error-money'));
         }
 
