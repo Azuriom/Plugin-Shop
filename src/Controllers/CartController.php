@@ -103,7 +103,7 @@ class CartController extends Controller
         try {
             payment_manager()->buyPackages($cart);
         } catch (\Throwable $e) {
-            report($e)
+            report($e);
 
             return redirect()->route('shop.cart.index')->with('error', trans('shop::messages.cart.error-bridge', ['money' => shop_format_amount($total)]));
         }
