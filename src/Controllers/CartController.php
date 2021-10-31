@@ -94,25 +94,22 @@ class CartController extends Controller
         }
 
         $user = $request->user();
+        $total = $cart->total();
 
-        if (! $user->hasMoney($cart->total())) {
+        if (! $user->hasMoney($total)) {
             return redirect()->route('shop.cart.index')->with('error', trans('shop::messages.cart.error-money'));
         }
-
-        $user->removeMoney($cart->total());
-        $user->save();
 
         try {
             payment_manager()->buyPackages($cart);
         } catch (\Throwable $e) {
-            $total = $cart->total();
-            $user->addMoney($total);
-            $user->save();
-            Log::error($e->getMessage());
+            report($e)
 
             return redirect()->route('shop.cart.index')->with('error', trans('shop::messages.cart.error-bridge', ['money' => shop_format_amount($total)]));
         }
-
+        
+        $user->removeMoney($total);
+        $user->save();
         $cart->destroy();
 
         return redirect()->route('shop.home')->with('success', trans('shop::messages.cart.purchase'));
