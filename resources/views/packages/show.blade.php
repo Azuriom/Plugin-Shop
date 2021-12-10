@@ -40,7 +40,7 @@
                             </div>
 
                             <div class="form-group mx-3">
-                                <input type="number" min="0" max="{{ $package->getMaxQuantity() }}" size="5" class="form-control" name="quantity" id="quantity" value="1">
+                                <input type="number" min="0" max="{{ $package->getMaxQuantity() }}" size="5" class="form-control" name="quantity" id="quantity" value="1" required>
                             </div>
                         @endif
 
