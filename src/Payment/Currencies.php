@@ -31,6 +31,7 @@ class Currencies
         'SEK' => 'Swedish krona',
         'CHF' => 'Swiss franc',
         'THB' => 'Thai baht',
+        'ZAR' => 'South African rand',
     ];
 
     private const SYMBOLS = [
