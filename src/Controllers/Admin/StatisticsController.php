@@ -21,7 +21,7 @@ class StatisticsController extends Controller
             $perGateway[] = [
                 'paymentsCountPerMonths' => Charts::countByMonths($query),
                 'paymentsPerMonths' => Charts::sumByMonths($query, 'price'),
-                'name' => $gateway->type
+                'name' => $gateway->type,
             ];
         }
 
