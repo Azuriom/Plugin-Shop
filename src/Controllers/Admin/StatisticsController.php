@@ -13,7 +13,6 @@ class StatisticsController extends Controller
 {
     public function index()
     {
-
         $perGateway = [];
 
         foreach (Gateway::all() as $gateway) {
