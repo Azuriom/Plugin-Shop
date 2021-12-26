@@ -148,9 +148,141 @@
     <script src="{{ asset('vendor/chart.js/Chart.min.js') }}"></script>
     <script src="{{ asset('admin/js/charts.js') }}"></script>
     <script>
-        createLineChart('paymentsPerMonthsChart', @json($paymentsPerMonths), '{{ trans('shop::admin.statistics.total') }}');
+        createMultiLineChart(
+            'paymentsPerMonthsChart',
+            [
+                {
+                    labelName: '{{ trans('shop::admin.statistics.total') }}',
+                    data: @json($paymentsPerMonths)
+                },
+                {
+                    labelName: '{{ trans('shop::admin.statistics.count') }}',
+                    data: @json($paymentsCountPerMonths)
+                },
+                @foreach ($perGateway as $gate_payments)
+                    {
+                        labelName: '{{ trans('shop::admin.statistics.estimated') }} {{ $gate_payments['name'] }}',
+                        data: @json($gate_payments['paymentsPerMonths']),
+                        color: stringToColour('{{ $gate_payments['name'] }}')
+                    },
+                    {
+                        labelName: '{{ trans('shop::admin.statistics.count') }} {{ $gate_payments['name'] }}',
+                        data: @json($gate_payments['paymentsCountPerMonths']),
+                        color: stringToColour('{{ $gate_payments['name'] }}')
+                    },
+                @endforeach
+            ]
+        )
         createLineChart('paymentsPerDaysChart', @json($paymentsPerDays), '{{ trans('shop::admin.statistics.total') }}');
         createPieChart('gatewaysChart', @json($gatewaysChart));
         createPieChart('itemsChart', @json($itemsChart));
+
+        function stringToColour(str) {
+            let i;
+            let hash = 0;
+            for (i = 0; i < str.length; i++) {
+                hash = str.charCodeAt(i) + ((hash << 5) - hash);
+            }
+            let colour = '#';
+            for (i = 0; i < 3; i++) {
+                const value = (hash >> (i * 8)) & 0xFF;
+                colour += ('00' + value.toString(16)).substr(-2);
+            }
+            return colour;
+        }
+
+        function createMultiLineChart(elementId, options, labels) {
+
+            if (! Array.isArray(labels) && options.length > 0) {
+                labels = Object.keys(options[0].data)
+            }
+
+            console.log(labels)
+
+            let dataset = [];
+            for (let option of options) {
+                dataset.push(
+                    {
+                        label: option.labelName,
+                        lineTension: 0.3,
+                        backgroundColor: "rgba(78, 115, 223, 0.05)",
+                        borderColor: option.hasOwnProperty('color') ? option.color : "rgba(78, 115, 223, 1)",
+                        pointRadius: 3,
+                        pointBackgroundColor: option.hasOwnProperty('color') ? option.color : "rgba(78, 115, 223, 1)",
+                        pointBorderColor: option.hasOwnProperty('color') ? option.color : "rgba(78, 115, 223, 1)",
+                        pointHoverRadius: 3,
+                        pointHoverBackgroundColor: option.hasOwnProperty('color') ? option.color : "rgba(78, 115, 223, 1)",
+                        pointHoverBorderColor: option.hasOwnProperty('color') ? option.color : "rgba(78, 115, 223, 1)",
+                        pointHitRadius: 10,
+                        pointBorderWidth: 2,
+                        data: Object.values(option.data),
+                    }
+                )
+            }
+
+            createLineChartFromDataset(elementId, dataset, labels)
+        }
+
+        function createLineChartFromDataset(elementId, dataset, labels) {
+            Chart.defaults.global.defaultFontFamily = 'Nunito';
+            Chart.defaults.global.defaultFontColor = '#858796';
+
+            new Chart(document.getElementById(elementId), {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: dataset,
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    scales: {
+                        xAxes: [{
+                            time: {
+                                unit: 'date'
+                            },
+                            gridLines: {
+                                display: false,
+                                drawBorder: false
+                            },
+                            ticks: {
+                                maxTicksLimit: 7
+                            },
+                        }],
+                        yAxes: [{
+                            ticks: {
+                                maxTicksLimit: 5,
+                                padding: 10,
+                            },
+                            gridLines: {
+                                color: "rgb(234, 236, 244)",
+                                zeroLineColor: "rgb(234, 236, 244)",
+                                drawBorder: false,
+                                borderDash: [2],
+                                zeroLineBorderDash: [2],
+                            },
+                        }],
+                    },
+                    legend: {
+                        display: true
+                    },
+                    tooltips: {
+                        backgroundColor: "rgb(255,255,255)",
+                        bodyFontColor: "#858796",
+                        titleMarginBottom: 10,
+                        titleFontColor: '#6e707e',
+                        titleFontSize: 14,
+                        borderColor: '#dddfeb',
+                        borderWidth: 1,
+                        xPadding: 15,
+                        yPadding: 15,
+                        displayColors: false,
+                        intersect: false,
+                        mode: 'index',
+                        caretPadding: 10,
+                    }
+                }
+            });
+        }
+
     </script>
 @endpush
