@@ -16,7 +16,16 @@ class StatisticsController extends Controller
         $perGateway = [];
 
         foreach (Gateway::all() as $gateway) {
-            $query = $this->getCompletedPayments()->where('gateway_type', '=', $gateway->type);
+            $query = $this->getCompletedPayments();
+
+            // Tricky fix because it looks like payments with paysafecardmanual
+            // are not stored with $gateway->type but 'paysafecard_manual'
+            if ($gateway->type === 'paysafecardmanual') {
+                $query->where('gateway_type', '=', 'paysafecard_manual');
+            } else {
+                $query->where('gateway_type', '=', $gateway->type);
+            }
+
             $perGateway[] = [
                 'paymentsCountPerMonths' => Charts::countByMonths($query),
                 'paymentsPerMonths' => Charts::sumByMonths($query, 'price'),
