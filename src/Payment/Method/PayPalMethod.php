@@ -40,7 +40,7 @@ class PayPalMethod extends PaymentMethod
             'quantity' => 1,
             'no_shipping' => 1,
             'no_note' => 1,
-            'return' => route('shop.cart.index'),
+            'return' => route('shop.payments.success', $this->id),
             'notify_url' => route('shop.payments.notification', $this->id),
             'custom' => $payment->id,
             'bn' => 'Azuriom',
