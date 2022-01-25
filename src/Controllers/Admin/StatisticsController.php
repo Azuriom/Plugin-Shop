@@ -3,6 +3,7 @@
 namespace Azuriom\Plugin\Shop\Controllers\Admin;
 
 use Azuriom\Http\Controllers\Controller;
+use Azuriom\Plugin\Shop\Models\Gateway;
 use Azuriom\Plugin\Shop\Models\Payment;
 use Azuriom\Plugin\Shop\Models\PaymentItem;
 use Azuriom\Support\Charts;
@@ -12,7 +13,20 @@ class StatisticsController extends Controller
 {
     public function index()
     {
+        $gatewaysPayments = Gateway::all()->map(function (Gateway $gateway) {
+            $query = $this->getCompletedPayments()
+                ->where('gateway_type', $gateway->type);
+            $method = payment_manager()->getPaymentMethod($gateway->type);
+
+            return [
+                'name' => $method ? $method->name() : $gateway->type,
+                'totalByMonths' => Charts::sumByMonths($query, 'price'),
+                'totalByDays' => Charts::sumByDays($query, 'price'),
+            ];
+        });
+
         return view('shop::admin.statistics', [
+            'gatewaysPayments' => $gatewaysPayments,
             'monthPaymentsCount' => $this->getCompletedPayments()->where('created_at', '>', now()->startOfMonth())->count(),
             'monthPaymentsTotal' => $this->getCompletedPayments()->where('created_at', '>', now()->startOfMonth())->sum('price'),
             'paymentsCount' => $this->getCompletedPayments()->count(),
