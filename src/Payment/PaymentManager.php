@@ -59,7 +59,9 @@ class PaymentManager
      */
     public function getPaymentMethod(string $type, Gateway $gateway = null)
     {
-        return app($this->paymentMethods->get($type), $gateway ? ['gateway' => $gateway] : []);
+        $class = $this->paymentMethods->get($type);
+
+        return $class ? app($class, $gateway ? ['gateway' => $gateway] : []) : null;
     }
 
     public function getPaymentMethodOrFail(string $type, Gateway $gateway = null)
