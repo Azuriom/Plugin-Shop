@@ -148,90 +148,67 @@
     <script src="{{ asset('vendor/chart.js/Chart.min.js') }}"></script>
     <script src="{{ asset('admin/js/charts.js') }}"></script>
     <script>
-        createMultiLineChart(
-            'paymentsPerMonthsChart',
-            [
-                {
-                    labelName: '{{ trans('shop::admin.statistics.total') }}',
-                    data: @json($paymentsPerMonths)
-                },
-                {
-                    labelName: '{{ trans('shop::admin.statistics.count') }}',
-                    data: @json($paymentsCountPerMonths)
-                },
-                @foreach ($perGateway as $gate_payments)
-                    {
-                        labelName: '{{ trans('shop::admin.statistics.estimated') }} {{ $gate_payments['name'] }}',
-                        data: @json($gate_payments['paymentsPerMonths']),
-                        color: stringToColour('{{ $gate_payments['name'] }}')
-                    },
-                    {
-                        labelName: '{{ trans('shop::admin.statistics.count') }} {{ $gate_payments['name'] }}',
-                        data: @json($gate_payments['paymentsCountPerMonths']),
-                        color: stringToColour('{{ $gate_payments['name'] }}')
-                    },
-                @endforeach
-            ]
-        )
-        createLineChart('paymentsPerDaysChart', @json($paymentsPerDays), '{{ trans('shop::admin.statistics.total') }}');
         createPieChart('gatewaysChart', @json($gatewaysChart));
         createPieChart('itemsChart', @json($itemsChart));
 
-        function stringToColour(str) {
-            let i;
-            let hash = 0;
-            for (i = 0; i < str.length; i++) {
-                hash = str.charCodeAt(i) + ((hash << 5) - hash);
-            }
-            let colour = '#';
-            for (i = 0; i < 3; i++) {
-                const value = (hash >> (i * 8)) & 0xFF;
-                colour += ('00' + value.toString(16)).substr(-2);
-            }
-            return colour;
-        }
+        createShopMultiLineChart('paymentsPerMonthsChart', [
+            {
+                label: '{{ trans('shop::admin.statistics.total') }}',
+                data: @json($paymentsPerMonths)
+            },
+                @foreach ($gatewaysPayments as $gatewayPayments)
+            {
+                label: '{{ $gatewayPayments['name'] }}',
+                data: @json($gatewayPayments['totalByMonths']),
+            },
+            @endforeach
+        ]);
+        createShopMultiLineChart('paymentsPerDaysChart', [
+            {
+                label: '{{ trans('shop::admin.statistics.total') }}',
+                data: @json($paymentsPerDays)
+            },
+                @foreach ($gatewaysPayments as $gatewayPayments)
+            {
+                label: '{{ $gatewayPayments['name'] }}',
+                data: @json($gatewayPayments['totalByDays']),
+            },
+            @endforeach
+        ]);
 
-        function createMultiLineChart(elementId, options, labels) {
+        function createShopMultiLineChart(elementId, values, labels) {
+            const colors = ['#4e73df', '#1cc88a', '#36b9cc', '#e9aa0b'];
+            let count = 0;
 
-            if (! Array.isArray(labels) && options.length > 0) {
-                labels = Object.keys(options[0].data)
-            }
-
-            console.log(labels)
-
-            let dataset = [];
-            for (let option of options) {
-                dataset.push(
-                    {
-                        label: option.labelName,
-                        lineTension: 0.3,
-                        backgroundColor: "rgba(78, 115, 223, 0.05)",
-                        borderColor: option.hasOwnProperty('color') ? option.color : "rgba(78, 115, 223, 1)",
-                        pointRadius: 3,
-                        pointBackgroundColor: option.hasOwnProperty('color') ? option.color : "rgba(78, 115, 223, 1)",
-                        pointBorderColor: option.hasOwnProperty('color') ? option.color : "rgba(78, 115, 223, 1)",
-                        pointHoverRadius: 3,
-                        pointHoverBackgroundColor: option.hasOwnProperty('color') ? option.color : "rgba(78, 115, 223, 1)",
-                        pointHoverBorderColor: option.hasOwnProperty('color') ? option.color : "rgba(78, 115, 223, 1)",
-                        pointHitRadius: 10,
-                        pointBorderWidth: 2,
-                        data: Object.values(option.data),
-                    }
-                )
+            if (!Array.isArray(labels) && values.length > 0) {
+                labels = Object.keys(values[0].data)
             }
 
-            createLineChartFromDataset(elementId, dataset, labels)
-        }
+            const datasets = values.map(function (value) {
+                const color = colors[count++ % colors.length];
 
-        function createLineChartFromDataset(elementId, dataset, labels) {
-            Chart.defaults.global.defaultFontFamily = 'Nunito';
-            Chart.defaults.global.defaultFontColor = '#858796';
+                return {
+                    label: value.label,
+                    lineTension: 0.3,
+                    backgroundColor: "rgba(78, 115, 223, 0.05)",
+                    borderColor: color,
+                    pointRadius: 3,
+                    pointBackgroundColor: color,
+                    pointBorderColor: color,
+                    pointHoverRadius: 3,
+                    pointHoverBackgroundColor: color,
+                    pointHoverBorderColor: color,
+                    pointHitRadius: 10,
+                    pointBorderWidth: 2,
+                    data: Object.values(value.data),
+                }
+            });
 
             new Chart(document.getElementById(elementId), {
                 type: 'line',
                 data: {
                     labels: labels,
-                    datasets: dataset,
+                    datasets: datasets,
                 },
                 options: {
                     maintainAspectRatio: false,
@@ -279,10 +256,9 @@
                         intersect: false,
                         mode: 'index',
                         caretPadding: 10,
-                    }
+                    },
                 }
             });
         }
-
     </script>
 @endpush
