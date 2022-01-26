@@ -31,6 +31,7 @@ return [
         'payment-id' => 'ID du Paiement',
         'role' => 'Grade à définir lors de l\'achat',
         'user_id' => 'ID de l\'utilisateur',
+        'required_roles' => 'Role pré-requis',
     ],
 
     'actions' => [
@@ -90,7 +91,7 @@ return [
 
     'packages' => [
         'limit' => 'Vous avez acheté le maximum possible pour cet article.',
-        'requirements' => 'Vous n\'avez pas acheté les articles nécessaires pour l\'achat de cet article.',
+        'requirements' => 'Vous n\'avez pas les pré-requis pour acheter cet article.',
     ],
 
     'offers' => [

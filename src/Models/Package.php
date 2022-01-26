@@ -25,6 +25,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $position
  * @property float $price
  * @property \Illuminate\Support\Collection|null $required_packages
+ * @property \Illuminate\Support\Collection|null $required_roles
  * @property bool $has_quantity
  * @property array $commands
  * @property int|null $role_id
@@ -61,7 +62,7 @@ class Package extends Model implements Buyable
      */
     protected $fillable = [
         'category_id', 'name', 'short_description', 'description', 'image', 'position', 'price', 'required_packages',
-        'has_quantity', 'commands', 'role_id', 'need_online', 'user_limit', 'is_enabled',
+        'required_roles', 'has_quantity', 'commands', 'role_id', 'need_online', 'user_limit', 'is_enabled',
     ];
 
     /**
@@ -73,6 +74,7 @@ class Package extends Model implements Buyable
         'price' => 'float',
         'commands' => 'array',
         'required_packages' => 'collection',
+        'required_roles' => 'collection',
         'has_quantity' => 'boolean',
         'is_enabled' => 'boolean',
     ];
@@ -141,6 +143,15 @@ class Package extends Model implements Buyable
             });
 
         return $purchasedPackage->price ?? 0;
+    }
+
+    public function hasRequiredRole(Role $role)
+    {
+        if ($this->required_roles === null || $this->required_roles->isEmpty()) {
+            return true;
+        }
+
+        return $role->is_admin || $this->required_roles->contains($role->id);
     }
 
     public function hasBoughtRequirements()

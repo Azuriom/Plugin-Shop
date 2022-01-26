@@ -33,6 +33,7 @@ class PackageRequest extends FormRequest
             'price' => ['required', 'numeric', 'min:0'],
             'user_limit' => ['nullable', 'integer', 'min:0'],
             'required_packages' => ['sometimes', 'nullable', 'array'],
+            'required_roles' => ['sometimes', 'nullable', 'array'],
             'commands' => ['sometimes', 'nullable', 'array'],
             'role_id' => ['nullable', 'integer', 'exists:roles,id'],
             'need_online' => ['filled', 'boolean'],

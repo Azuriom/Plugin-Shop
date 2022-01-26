@@ -35,13 +35,14 @@ class PackageController extends Controller
     {
         $this->validate($request, ['quantity' => 'nullable|integer']);
 
+        $user = $request->user();
         $cart = Cart::fromSession($request->session());
 
         if ($package->getMaxQuantity() < 1) {
             return redirect()->back()->with('error', trans('shop::messages.packages.limit'));
         }
 
-        if (! $package->hasBoughtRequirements()) {
+        if (! $package->hasBoughtRequirements() || ! $package->hasRequiredRole($user->role)) {
             return redirect()->back()->with('error', trans('shop::messages.packages.requirements'));
         }
 

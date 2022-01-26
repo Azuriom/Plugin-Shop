@@ -31,6 +31,7 @@ return [
         'payment-id' => 'Payment ID',
         'role' => 'Role to set after purchase',
         'user_id' => 'User ID',
+        'required_roles' => 'Required role',
     ],
 
     'actions' => [
@@ -90,7 +91,7 @@ return [
 
     'packages' => [
         'limit' => 'You have purchased the maximum possible for this packages.',
-        'requirements' => 'You have not purchased the necessary packages to purchase this package.',
+        'requirements' => 'You don\'t have the requirements to purchase this package.',
     ],
 
     'offers' => [

@@ -83,6 +83,23 @@
     </div>
 
     <div class="form-group col-md-6">
+        <label for="requiredRoleSelect">{{ trans('shop::messages.fields.required_roles') }}</label>
+        <select class="custom-select @error('required_roles') is-invalid @enderror" id="requiredRoleSelect" name="required_roles[]" multiple>
+            @foreach($roles as $role)
+                <option value="{{ $role->id }}" @if(isset($package) && optional($package->required_roles)->contains($role->id)) selected @endif>
+                    {{ $role->name }}
+                </option>
+            @endforeach
+        </select>
+
+        @error('required_roles')
+        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+        @enderror
+    </div>
+</div>
+
+<div class="form-row">
+    <div class="form-group col-md-6">
         <label for="requiredPackagesSelect">{{ trans('shop::messages.fields.required_packages') }}</label>
 
         <select class="custom-select @error('required_packages') is-invalid @enderror" id="requiredPackagesSelect" name="required_packages[]" multiple>
@@ -90,7 +107,9 @@
                 <optgroup label="{{ $category->name }}">
                     @foreach($category->packages as $categoryPackage)
                         @if(! isset($package) || ! $categoryPackage->is($package))
-                            <option value="{{ $categoryPackage->id }}" @if(isset($package) && optional($package->required_packages)->contains($categoryPackage->id)) selected @endif>{{ $categoryPackage->name }}</option>
+                            <option value="{{ $categoryPackage->id }}" @if(isset($package) && optional($package->required_packages)->contains($categoryPackage->id)) selected @endif>
+                                {{ $categoryPackage->name }}
+                            </option>
                         @endif
                     @endforeach
                 </optgroup>
@@ -101,9 +120,7 @@
         <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
         @enderror
     </div>
-</div>
 
-<div class="form-row">
     <div class="form-group col-md-6">
         <label for="imageInput">{{ trans('messages.fields.image') }}</label>
         <div class="custom-file">
