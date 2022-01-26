@@ -3,9 +3,13 @@
 namespace Azuriom\Plugin\Shop\Controllers\Admin;
 
 use Azuriom\Http\Controllers\Controller;
+use Azuriom\Plugin\Shop\Models\Category;
+use Azuriom\Plugin\Shop\Models\Package;
 use Azuriom\Plugin\Shop\Models\Payment;
+use Azuriom\Plugin\Shop\Requests\PaymentRequest;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
 class PaymentController extends Controller
 {
@@ -51,5 +55,51 @@ class PaymentController extends Controller
         $payment->load(['user', 'items', 'coupons']);
 
         return view('shop::admin.payments.show', ['payment' => $payment]);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        return view('shop::admin.payments.create', [
+            'categories' => Category::with('packages')->get(),
+        ]);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Azuriom\Plugin\Shop\Requests\PaymentRequest  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(PaymentRequest $request)
+    {
+        $attributes = array_merge($request->validated(), [
+            'price' => 0,
+            'currency' => currency(),
+            'status' => 'completed',
+            'gateway_type' => 'manual',
+        ]);
+
+        $payment = Payment::create(Arr::except($attributes, 'packages'));
+        $packages = Package::findMany($request->input('packages'));
+
+        foreach ($packages as $package) {
+            $payment->items()
+                ->make([
+                    'name' => $package->name,
+                    'price' => 0,
+                    'quantity' => 1,
+                ])
+                ->buyable()->associate($package)
+                ->save();
+        }
+
+        $payment->deliver();
+
+        return redirect()->route('shop.admin.payments.show', $payment);
     }
 }

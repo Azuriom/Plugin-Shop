@@ -30,6 +30,14 @@
             </div>
 
             <div class="col-lg-9">
+                @if($category->description)
+                    <div class="card mb-4">
+                        <div class="card-body pb-1">
+                            {!! $category->description !!}
+                        </div>
+                    </div>
+                @endif
+
                 <div class="row">
                     @forelse($category->packages as $package)
                         <div class="col-md-4 mb-4">

@@ -33,7 +33,7 @@ return [
             'delete-items' => 'Une catégorie contenant des produits ne peut pas être supprimée',
         ],
 
-        'cumulate_purchases' => 'Cumuler les achats de cette catégorie',
+        'cumulate_purchases' => 'Cumuler les achats dans cette catégorie (les utilisateurs ne paieront que la différence lors de l\'achat d\'un produit plus cher)',
         'enable' => 'Activer cette catégorie',
     ],
 
@@ -120,7 +120,7 @@ return [
 
         'commands-info' => 'La commande ne doit pas commencer par <code>/</code>. Vous pouvez utiliser la variable <code>{player}</code> pour le pseudo du joueur. Pour les jeux Steam, les variables sont <code>{steam_id}</code> et <code>{steam_id_32}</code> sont disponibles.',
 
-        'need-online' => 'L\'utilisateur doit être en ligne pour recevoir le paquet (uniquement disponible avec AzLink)',
+        'need-online' => 'Exécuter les commandes lorsque l\'utilisateur est en ligne sur le serveur (uniquement disponible avec AzLink)',
         'enable-quantity' => 'Activer la quantité',
 
         'create-category' => 'Créer une catégorie',

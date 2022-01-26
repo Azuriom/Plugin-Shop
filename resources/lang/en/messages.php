@@ -30,10 +30,12 @@ return [
         'status' => 'Status',
         'payment-id' => 'Payment ID',
         'role' => 'Role to set after purchase',
+        'user_id' => 'User ID',
     ],
 
     'actions' => [
         'remove' => 'Remove',
+        'duplicate' => 'Duplicate',
     ],
 
     'categories' => [
@@ -71,6 +73,7 @@ return [
 
     'payment' => [
         'title' => 'Payment',
+        'manual' => 'Manual payment',
 
         'empty' => 'No payment methods currently available.',
 

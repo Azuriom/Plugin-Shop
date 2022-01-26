@@ -9,7 +9,8 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @property int $id
  * @property string $name
- * @property string $description
+ * @property string $slug
+ * @property string|null $description
  * @property int $position
  * @property int $parent_id
  * @property bool $cumulate_purchases
@@ -40,7 +41,7 @@ class Category extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'position', 'parent_id', 'cumulate_purchases', 'is_enabled',
+        'name', 'slug', 'description', 'position', 'parent_id', 'cumulate_purchases', 'is_enabled',
     ];
 
     /**

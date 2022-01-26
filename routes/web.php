@@ -15,7 +15,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', 'CategoryController@index')->name('home');
-Route::resource('categories', 'CategoryController')->only('show');
+Route::resource('categories', 'CategoryController')->only('show')->scoped([
+    'category' => 'slug',
+]);
 
 Route::resource('packages', 'PackageController')->only('show');
 Route::post('/packages/{package}/buy', 'PackageController@buy')->name('packages.buy')->middleware('auth');

@@ -89,17 +89,7 @@ class Payment extends Model
 
     public function getTypeName()
     {
-        if ($this->gateway_type === 'free') {
-            return trans('shop::messages.free');
-        }
-
-        $paymentManager = payment_manager();
-
-        if (! $paymentManager->hasPaymentMethod($this->gateway_type)) {
-            return $this->gateway_type;
-        }
-
-        return $paymentManager->getPaymentMethod($this->gateway_type)->name();
+        return Gateway::getNameByType($this->gateway_type);
     }
 
     public function deliver()

@@ -83,18 +83,18 @@ class PackageController extends Controller
     }
 
     /**
-     * Clone the specified package.
+     * Duplicate the specified package.
      *
      * @param  \Azuriom\Plugin\Shop\Models\Package  $package
      * @return \Illuminate\Http\Response
      */
-    public function clone(Package $package)
+    public function duplicate(Package $package)
     {
-        $clone = $package->replicate();
+        $replicate = $package->replicate();
 
-        $clone->update(['image' => null]);
+        $replicate->fill(['image' => null])->save();
 
-        return redirect()->route('shop.admin.packages.edit', $clone);
+        return redirect()->route('shop.admin.packages.edit', ['package' => $replicate]);
     }
 
     /**

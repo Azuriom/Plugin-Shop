@@ -20,7 +20,7 @@ Route::middleware('can:shop.admin')->group(function () {
 
     Route::resource('categories', 'CategoryController')->except(['index', 'show']);
     Route::resource('packages', 'PackageController')->except('show');
-    Route::resource('payments', 'PaymentController')->only(['index', 'show']);
+    Route::resource('payments', 'PaymentController')->only(['index', 'show', 'create', 'store']);
     Route::resource('purchases', 'PurchaseController')->only('index');
     Route::resource('offers', 'OfferController')->except('show');
     Route::resource('coupons', 'CouponController')->except('show');
@@ -29,6 +29,6 @@ Route::middleware('can:shop.admin')->group(function () {
     Route::resource('gateways', 'GatewayController')->except(['show', 'create']);
 
     Route::post('/packages/update-order', 'PackageController@updateOrder')->name('packages.update-order');
-    Route::post('/packages/{package}/clone', 'PackageController@clone')->name('packages.clone');
+    Route::post('/packages/{package}/duplicate', 'PackageController@duplicate')->name('packages.duplicate');
     Route::get('/gateways/create/{type}', 'GatewayController@create')->name('gateways.create');
 });

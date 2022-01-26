@@ -30,10 +30,12 @@ return [
         'status' => 'Status',
         'payment-id' => 'ID du Paiement',
         'role' => 'Grade à définir lors de l\'achat',
+        'user_id' => 'ID de l\'utilisateur',
     ],
 
     'actions' => [
         'remove' => 'Retirer',
+        'duplicate' => 'Dupliquer',
     ],
 
     'categories' => [
@@ -71,6 +73,7 @@ return [
 
     'payment' => [
         'title' => 'Paiement',
+        'manual' => 'Paiement manuel',
 
         'empty' => 'Aucun moyen de paiement n\'est disponible actuellement.',
 

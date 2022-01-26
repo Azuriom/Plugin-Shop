@@ -22,7 +22,7 @@
 
 <div class="form-group">
     <label for="descriptionArea">{{ trans('messages.fields.description') }}</label>
-    <textarea class="form-control html-editor @error('description') is-invalid @enderror" id="descriptionArea" name="description" rows="5">{{ old('content', $package->description ?? '') }}</textarea>
+    <textarea class="form-control html-editor @error('description') is-invalid @enderror" id="descriptionArea" name="description" rows="5">{{ old('description', $package->description ?? '') }}</textarea>
 
     @error('description')
     <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>

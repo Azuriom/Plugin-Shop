@@ -64,6 +64,10 @@
             </div>
 
             {{ $payments->withQueryString()->links() }}
+
+            <a href="{{ route('shop.admin.payments.create') }}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> {{ trans('messages.actions.add') }}
+            </a>
         </div>
     </div>
 @endsection

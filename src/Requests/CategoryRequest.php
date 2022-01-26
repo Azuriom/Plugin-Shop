@@ -3,7 +3,9 @@
 namespace Azuriom\Plugin\Shop\Requests;
 
 use Azuriom\Http\Requests\Traits\ConvertCheckbox;
+use Azuriom\Rules\Slug;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class CategoryRequest extends FormRequest
 {
@@ -25,8 +27,14 @@ class CategoryRequest extends FormRequest
      */
     public function rules()
     {
+        $current = $this->route('category');
+
         return [
             'name' => ['required', 'string', 'max:50'],
+            'slug' => [
+                'required', 'max:100', new Slug(), Rule::unique('shop_categories')->ignore($current, 'slug'),
+            ],
+            'description' => ['nullable', 'string'],
             'cumulate_purchases' => ['filled', 'boolean'],
             'is_enabled' => ['filled', 'boolean'],
         ];

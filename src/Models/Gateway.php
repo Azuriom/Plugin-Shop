@@ -69,6 +69,26 @@ class Gateway extends Model
         return payment_manager()->getPaymentMethodOrFail($this->type, $this);
     }
 
+    public function getTypeName()
+    {
+        return self::getNameByType($this->type);
+    }
+
+    public static function getNameByType(string $gatewayType)
+    {
+        if ($gatewayType === 'free') {
+            return trans('shop::messages.free');
+        }
+
+        if ($gatewayType === 'manual') {
+            return trans('shop::messages.payment.manual');
+        }
+
+        $method = payment_manager()->getPaymentMethod($gatewayType);
+
+        return $method !== null ? $method->name() : $gatewayType;
+    }
+
     /**
      * Scope a query to only include enabled payment gateways.
      *

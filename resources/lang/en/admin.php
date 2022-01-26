@@ -33,7 +33,7 @@ return [
             'delete-items' => 'A category with packages can\'t be deleted.',
         ],
 
-        'cumulate_purchases' => 'Cumulate purchases from this category',
+        'cumulate_purchases' => 'Cumulate purchases in this category (users will only pay the difference when purchasing a more expensive package)',
         'enable' => 'Enable the category',
     ],
 
@@ -120,7 +120,7 @@ return [
 
         'commands-info' => 'The command must not start with <code>/</code>. You can use <code>{player}</code> to use the player name. For Steam games, you can also use <code>{steam_id}</code> and <code>{steam_id_32}</code>.',
 
-        'need-online' => 'The user must be online to receive the package (only available with AzLink)',
+        'need-online' => 'Execute commands when the user is online on the server (only available with AzLink)',
         'enable-quantity' => 'Enable the quantity',
 
         'create-category' => 'Create category',

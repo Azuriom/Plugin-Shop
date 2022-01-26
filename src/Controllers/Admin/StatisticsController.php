@@ -16,10 +16,9 @@ class StatisticsController extends Controller
         $gatewaysPayments = Gateway::all()->map(function (Gateway $gateway) {
             $query = $this->getCompletedPayments()
                 ->where('gateway_type', $gateway->type);
-            $method = payment_manager()->getPaymentMethod($gateway->type);
 
             return [
-                'name' => $method ? $method->name() : $gateway->type,
+                'name' => $gateway->getTypeName(),
                 'totalByMonths' => Charts::sumByMonths($query, 'price'),
                 'totalByDays' => Charts::sumByDays($query, 'price'),
             ];

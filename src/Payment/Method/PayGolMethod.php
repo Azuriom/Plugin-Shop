@@ -27,14 +27,7 @@ class PayGolMethod extends PaymentMethod
      *
      * @var string
      */
-    protected $name = 'PayGol';
-
-    /**
-     * The payment method image.
-     *
-     * @var string
-     */
-    protected $image = 'paygol.png';
+    protected $name = 'Paygol';
 
     public function startPayment(Cart $cart, float $amount, string $currency)
     {
