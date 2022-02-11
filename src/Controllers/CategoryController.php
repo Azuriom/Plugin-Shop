@@ -5,6 +5,7 @@ namespace Azuriom\Plugin\Shop\Controllers;
 use Azuriom\Http\Controllers\Controller;
 use Azuriom\Plugin\Shop\Models\Category;
 use Azuriom\Plugin\Shop\Models\Payment;
+use Illuminate\Support\HtmlString;
 
 class CategoryController extends Controller
 {
@@ -15,15 +16,11 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $category = Category::scopes(['parents', 'enabled'])->first();
-
-        if ($category === null) {
-            return view('shop::categories.index', [
-                'goal' => $this->getMonthGoal(),
-            ]);
-        }
-
-        return $this->show($category);
+        return view('shop::categories.index', [
+            'categories' => $this->getCategories(),
+            'goal' => $this->getMonthGoal(),
+            'welcome' => new HtmlString(setting('shop.home', '')),
+        ]);
     }
 
     /**
@@ -34,13 +31,7 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        $categories = Category::scopes(['parents', 'enabled'])
-            ->with('categories')
-            ->withCount('packages')
-            ->get()
-            ->filter(function (Category $cat) use ($category) {
-                return $cat->is($category) || ! $cat->categories->isEmpty() || $cat->packages_count > 0;
-            });
+        $categories = $this->getCategories($category);
 
         $category->load('packages.discounts');
 
@@ -66,5 +57,16 @@ class CategoryController extends Controller
             ->sum('price');
 
         return round(($total / setting('shop.month-goal')) * 100, 2);
+    }
+
+    protected function getCategories(Category $current = null)
+    {
+        return Category::scopes(['parents', 'enabled'])
+            ->with('categories')
+            ->withCount('packages')
+            ->get()
+            ->filter(function (Category $cat) use ($current) {
+                return $cat->is($current) || ! $cat->categories->isEmpty() || $cat->packages_count > 0;
+            });
     }
 }

@@ -39,10 +39,6 @@ return [
         'duplicate' => 'Duplicate',
     ],
 
-    'categories' => [
-        'empty' => 'This category is empty.',
-    ],
-
     'cart' => [
         'title' => 'Cart',
         'error-money' => 'You don\'t have enough money to make this purchase.',

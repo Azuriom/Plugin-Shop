@@ -85,22 +85,22 @@ class ShopServiceProvider extends BasePluginServiceProvider
     {
         return [
             'shop' => [
-                'name' => 'shop::admin.nav.title',
+                'name' => trans('shop::admin.nav.title'),
                 'type' => 'dropdown',
                 'icon' => 'fas fa-shopping-cart',
                 'route' => 'shop.admin.*',
                 'permission' => 'shop.admin',
                 'items' => [
-                    'shop.admin.settings' => 'shop::admin.nav.settings',
-                    'shop.admin.packages.index' => 'shop::admin.nav.packages',
-                    'shop.admin.gateways.index' => 'shop::admin.nav.gateways',
-                    'shop.admin.offers.index' => 'shop::admin.nav.offers',
-                    'shop.admin.discounts.index' => 'shop::admin.nav.discounts',
-                    'shop.admin.coupons.index' => 'shop::admin.nav.coupons',
-                    'shop.admin.giftcards.index' => 'shop::admin.nav.giftcards',
-                    'shop.admin.payments.index' => 'shop::admin.nav.payments',
-                    'shop.admin.purchases.index' => 'shop::admin.nav.purchases',
-                    'shop.admin.statistics' => 'shop::admin.nav.statistics',
+                    'shop.admin.settings' => trans('shop::admin.nav.settings'),
+                    'shop.admin.packages.index' => trans('shop::admin.nav.packages'),
+                    'shop.admin.gateways.index' => trans('shop::admin.nav.gateways'),
+                    'shop.admin.offers.index' => trans('shop::admin.nav.offers'),
+                    'shop.admin.discounts.index' => trans('shop::admin.nav.discounts'),
+                    'shop.admin.coupons.index' => trans('shop::admin.nav.coupons'),
+                    'shop.admin.giftcards.index' => trans('shop::admin.nav.giftcards'),
+                    'shop.admin.payments.index' => trans('shop::admin.nav.payments'),
+                    'shop.admin.purchases.index' => trans('shop::admin.nav.purchases'),
+                    'shop.admin.statistics' => trans('shop::admin.nav.statistics'),
                 ],
             ],
         ];

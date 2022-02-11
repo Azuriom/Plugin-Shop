@@ -39,10 +39,6 @@ return [
         'duplicate' => 'Dupliquer',
     ],
 
-    'categories' => [
-        'empty' => 'Cette catégorie est vide.',
-    ],
-
     'cart' => [
         'title' => 'Panier',
         'error-money' => 'Vous n\'avez pas assez d\'argent pour faire cet achat.',

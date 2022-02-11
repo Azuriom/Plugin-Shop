@@ -1,5 +1,7 @@
 @extends('admin.layouts.admin')
 
+@include('admin.elements.editor')
+
 @section('title', trans('shop::admin.settings.title'))
 
 @section('content')
@@ -24,6 +26,15 @@
                         <input type="checkbox" class="custom-control-input" id="useSiteMoneyCheckbox" name="use-site-money" @if(use_site_money()) checked @endif>
                         <label class="custom-control-label" for="useSiteMoneyCheckbox">{{ trans('shop::admin.settings.use-site-money') }}</label>
                     </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="homeMessage">{{ trans('shop::admin.settings.home-messages') }}</label>
+                    <textarea class="form-control html-editor @error('home-message') is-invalid @enderror" id="homeMessage" name="home-message" rows="5">{{ old('home-message', $homeMessage) }}</textarea>
+
+                    @error('home-message')
+                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                    @enderror
                 </div>
 
                 <div class="form-group">

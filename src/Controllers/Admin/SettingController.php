@@ -25,6 +25,7 @@ class SettingController extends Controller
             'currentCurrency' => setting('currency', 'USD'),
             'goal' => (int) setting('shop.month-goal', 0),
             'commands' => $commands ? json_decode($commands) : [],
+            'homeMessage' => setting('shop.home', ''),
         ]);
     }
 
@@ -53,6 +54,7 @@ class SettingController extends Controller
             'shop.use-site-money' => $request->has('use-site-money'),
             'shop.month-goal' => $request->input('goal'),
             'shop.webhook' => $request->input('webhook'),
+            'shop.home' => $request->input('home-message'),
             'shop.commands' => is_array($commands) ? json_encode(array_filter($commands)) : null,
         ]);
 
