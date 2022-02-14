@@ -10,11 +10,11 @@ class PackageDelivered
 {
     use SerializesModels;
 
-    public $user;
+    public User $user;
 
-    public $package;
+    public Package $package;
 
-    public $quantity;
+    public int $quantity;
 
     /**
      * Create a new event instance.

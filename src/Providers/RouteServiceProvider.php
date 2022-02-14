@@ -8,13 +8,6 @@ use Illuminate\Support\Facades\Route;
 class RouteServiceProvider extends BaseRouteServiceProvider
 {
     /**
-     * This namespace is applied to your controller routes.
-     *
-     * @var string
-     */
-    protected $namespace = 'Azuriom\Plugin\Shop\Controllers';
-
-    /**
      * Define the routes for the application.
      *
      * @return void
@@ -32,7 +25,6 @@ class RouteServiceProvider extends BaseRouteServiceProvider
     {
         Route::prefix($this->plugin->id)
             ->middleware('web')
-            ->namespace($this->namespace)
             ->name($this->plugin->id.'.')
             ->group(plugin_path($this->plugin->id.'/routes/web.php'));
     }
@@ -41,7 +33,6 @@ class RouteServiceProvider extends BaseRouteServiceProvider
     {
         Route::prefix('api/'.$this->plugin->id)
             ->middleware('api')
-            ->namespace($this->namespace.'\Api')
             ->name($this->plugin->id.'.')
             ->group(plugin_path($this->plugin->id.'/routes/api.php'));
     }
@@ -50,7 +41,6 @@ class RouteServiceProvider extends BaseRouteServiceProvider
     {
         Route::prefix('admin/'.$this->plugin->id)
             ->middleware('admin-access')
-            ->namespace($this->namespace.'\Admin')
             ->name($this->plugin->id.'.admin.')
             ->group(plugin_path($this->plugin->id.'/routes/admin.php'));
     }

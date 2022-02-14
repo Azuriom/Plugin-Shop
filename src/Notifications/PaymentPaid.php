@@ -8,10 +8,7 @@ use Illuminate\Notifications\Notification;
 
 class PaymentPaid extends Notification
 {
-    /**
-     * @var \Azuriom\Plugin\Shop\Models\Payment
-     */
-    protected $payment;
+    protected Payment $payment;
 
     /**
      * Create a new notification instance.

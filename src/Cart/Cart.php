@@ -18,24 +18,18 @@ class Cart implements Arrayable
 {
     /**
      * The session where this cart is stored.
-     *
-     * @var \Illuminate\Contracts\Session\Session
      */
-    private $session;
+    private Session $session;
 
     /**
      * The items in the cart.
-     *
-     * @var \Illuminate\Support\Collection
      */
-    private $items;
+    private Collection $items;
 
     /**
      * The coupons applied to the cart.
-     *
-     * @var \Illuminate\Support\Collection
      */
-    private $coupons;
+    private Collection $coupons;
 
     /**
      * Create a new cart instance.
