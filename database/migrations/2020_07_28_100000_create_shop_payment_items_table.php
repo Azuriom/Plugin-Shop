@@ -6,7 +6,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-class CreateShopPaymentItemsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -67,4 +67,4 @@ class CreateShopPaymentItemsTable extends Migration
             }
         }
     }
-}
+};
