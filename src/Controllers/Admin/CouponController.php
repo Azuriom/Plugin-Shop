@@ -46,7 +46,7 @@ class CouponController extends Controller
         $coupon->packages()->sync($request->input('packages'));
 
         return redirect()->route('shop.admin.coupons.index')
-            ->with('success', trans('shop::admin.coupons.status.created'));
+            ->with('success', trans('messages.status.success'));
     }
 
     /**
@@ -81,7 +81,7 @@ class CouponController extends Controller
         $coupon->packages()->sync($request->input('packages'));
 
         return redirect()->route('shop.admin.coupons.index')
-            ->with('success', trans('shop::admin.coupons.status.updated'));
+            ->with('success', trans('messages.status.success'));
     }
 
     /**
@@ -97,6 +97,6 @@ class CouponController extends Controller
         $coupon->delete();
 
         return redirect()->route('shop.admin.coupons.index')
-            ->with('success', trans('shop::admin.coupons.status.deleted'));
+            ->with('success', trans('messages.status.success'));
     }
 }

@@ -1,6 +1,6 @@
 @extends('admin.layouts.admin')
 
-@section('title', trans('shop::admin.packages.title-create'))
+@section('title', trans('shop::admin.packages.create'))
 
 @include('admin.elements.editor')
 

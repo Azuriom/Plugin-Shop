@@ -1,6 +1,6 @@
 @extends('admin.layouts.admin')
 
-@section('title', trans('shop::admin.gateways.title-edit', ['gateway' => $gateway->name]))
+@section('title', trans('shop::admin.gateways.edit', ['gateway' => $gateway->name]))
 
 @section('content')
     <div class="card shadow mb-4">

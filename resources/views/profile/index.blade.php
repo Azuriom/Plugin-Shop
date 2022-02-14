@@ -26,7 +26,7 @@
                         <td>{{ $payment->price }} {{ currency_display($payment->currency) }}</td>
                         <td>{{ $payment->getTypeName() }}</td>
                         <td>
-                            <span class="badge badge-{{ $payment->statusColor() }}">
+                            <span class="badge bg-{{ $payment->statusColor() }}">
                                 {{ trans('shop::admin.payments.payment-status.'.$payment->status) }}
                             </span>
                         </td>
@@ -44,7 +44,7 @@
         <form action="{{ route('shop.giftcards.add') }}" method="POST">
             @csrf
 
-            <div class="form-group">
+            <div class="mb-3">
                 <input type="text" class="form-control @error('code') is-invalid @enderror mx-2" placeholder="{{ trans('shop::messages.fields.code') }}" id="code" name="code" value="{{ old('code') }}">
 
                 @error('code')

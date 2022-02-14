@@ -78,7 +78,7 @@ class PackageController extends Controller
         }
 
         return response()->json([
-            'message' => trans('shop::admin.packages.status.order-updated'),
+            'message' => trans('shop::admin.packages.updated'),
         ]);
     }
 
@@ -128,7 +128,7 @@ class PackageController extends Controller
         $package->servers()->sync($request->input('servers', []));
 
         return redirect()->route('shop.admin.packages.index')
-            ->with('success', trans('shop::admin.packages.status.created'));
+            ->with('success', trans('messages.status.success'));
     }
 
     /**
@@ -165,7 +165,7 @@ class PackageController extends Controller
         $package->servers()->sync($request->input('servers', []));
 
         return redirect()->route('shop.admin.packages.index')
-            ->with('success', trans('shop::admin.packages.status.updated'));
+            ->with('success', trans('messages.status.success'));
     }
 
     /**
@@ -181,6 +181,6 @@ class PackageController extends Controller
         $package->delete();
 
         return redirect()->route('shop.admin.packages.index')
-            ->with('success', trans('shop::admin.packages.status.deleted'));
+            ->with('success', trans('messages.status.success'));
     }
 }

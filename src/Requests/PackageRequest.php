@@ -48,7 +48,7 @@ class PackageRequest extends FormRequest
      *
      * @return array
      */
-    public function validated()
+    public function validated($key = null, $default = null)
     {
         return array_merge(parent::validated(), [
             'commands' => array_filter($this->input('commands', [])),

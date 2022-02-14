@@ -25,18 +25,18 @@
                             <td>{{ $coupon->code }}</td>
                             <td>{{ $coupon->is_fixed ? shop_format_amount($coupon->discount) : $coupon->discount.' %' }}</td>
                             <td>
-                                <span class="badge badge-{{ $coupon->is_enabled ? 'success' : 'danger' }}">
+                                <span class="badge bg-{{ $coupon->is_enabled ? 'success' : 'danger' }}">
                                     {{ trans_bool($coupon->is_enabled) }}
                                 </span>
                             </td>
                             <td>
-                                <span class="badge badge-{{ $coupon->isActive() ? 'success' : 'danger' }}">
+                                <span class="badge bg-{{ $coupon->isActive() ? 'success' : 'danger' }}">
                                     {{ trans_bool($coupon->isActive()) }}
                                 </span>
                             </td>
                             <td>
-                                <a href="{{ route('shop.admin.coupons.edit', $coupon) }}" class="mx-1" title="{{ trans('messages.actions.edit') }}" data-toggle="tooltip"><i class="fas fa-edit"></i></a>
-                                <a href="{{ route('shop.admin.coupons.destroy', $coupon) }}" class="mx-1" title="{{ trans('messages.actions.delete') }}" data-toggle="tooltip" data-confirm="delete"><i class="fas fa-trash"></i></a>
+                                <a href="{{ route('shop.admin.coupons.edit', $coupon) }}" class="mx-1" title="{{ trans('messages.actions.edit') }}" data-bs-toggle="tooltip"><i class="fas fa-edit"></i></a>
+                                <a href="{{ route('shop.admin.coupons.destroy', $coupon) }}" class="mx-1" title="{{ trans('messages.actions.delete') }}" data-bs-toggle="tooltip" data-confirm="delete"><i class="fas fa-trash"></i></a>
                             </td>
                         </tr>
                     @endforeach

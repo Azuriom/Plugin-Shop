@@ -1,6 +1,8 @@
+<h4>Categories</h4>
+
 <div class="list-group mb-3">
     @foreach($categories as $subCategory)
-        <a href="{{ route('shop.categories.show', $subCategory) }}" class="list-group-item @if($category->is($subCategory)) active @endif">
+        <a href="{{ route('shop.categories.show', $subCategory) }}" class="list-group-item @if($subCategory->is($category ?? null)) active @endif">
             {{ $subCategory->name }}
         </a>
 

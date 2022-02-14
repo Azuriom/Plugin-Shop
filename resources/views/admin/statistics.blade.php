@@ -4,95 +4,112 @@
 
 @section('content')
     <div class="row">
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-primary shadow h-100 py-2">
+        <div class="col-sm-6 col-xl-3">
+            <div class="card">
                 <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                    <div class="row">
+                        <div class="col mt-0">
+                            <h5 class="card-title mb-0">
                                 {{ trans('shop::admin.statistics.month') }}
-                            </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $monthPaymentsCount }}</div>
+                            </h5>
                         </div>
+
                         <div class="col-auto">
-                            <i class="fas fa-money-bill-wave fa-2x text-gray-300"></i>
+                            <div class="stat text-primary">
+                                <i class="fas fa-money-bill"></i>
+                            </div>
                         </div>
                     </div>
+                    <h1 class="mt-1 mb-3">{{ $monthPaymentsCount }}</h1>
                 </div>
             </div>
         </div>
 
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-success shadow h-100 py-2">
+        <div class="col-sm-6 col-xl-3">
+            <div class="card">
                 <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                    <div class="row">
+                        <div class="col mt-0">
+                            <h5 class="card-title mb-0">
                                 {{ trans('shop::admin.statistics.month-estimated') }}
-                            </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $monthPaymentsTotal }} {{ currency_display() }}</div>
+                            </h5>
                         </div>
+
                         <div class="col-auto">
-                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                            <div class="stat text-primary">
+                                <i class="fas fa-dollar-sign"></i>
+                            </div>
                         </div>
                     </div>
+                    <h1 class="mt-1 mb-3">
+                        {{ $monthPaymentsTotal }} {{ currency_display() }}
+                    </h1>
                 </div>
             </div>
         </div>
 
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-info shadow h-100 py-2">
+        <div class="col-sm-6 col-xl-3">
+            <div class="card">
                 <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                    <div class="row">
+                        <div class="col mt-0">
+                            <h5 class="card-title mb-0">
                                 {{ trans('shop::admin.statistics.count') }}
-                            </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $paymentsCount }}</div>
+                            </h5>
                         </div>
+
                         <div class="col-auto">
-                            <i class="fas fa-money-bill-wave fa-2x text-gray-300"></i>
+                            <div class="stat text-primary">
+                                <i class="fas fa-money-bill-wave"></i>
+                            </div>
                         </div>
                     </div>
+                    <h1 class="mt-1 mb-3">{{ $paymentsCount }}</h1>
                 </div>
             </div>
         </div>
 
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-warning shadow h-100 py-2">
+        <div class="col-sm-6 col-xl-3">
+            <div class="card">
                 <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                    <div class="row">
+                        <div class="col mt-0">
+                            <h5 class="card-title mb-0">
                                 {{ trans('shop::admin.statistics.estimated') }}
-                            </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $paymentsTotal }} {{ currency_display() }}</div>
+                            </h5>
                         </div>
+
                         <div class="col-auto">
-                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                            <div class="stat text-primary">
+                                <i class="fas fa-dollar-sign"></i>
+                            </div>
                         </div>
                     </div>
+                    <h1 class="mt-1 mb-3">
+                        {{ $paymentsTotal }} {{ currency_display() }}
+                    </h1>
                 </div>
             </div>
         </div>
     </div>
 
     <div class="row">
-        <!-- Area Chart -->
         <div class="col-xl-8 col-lg-7">
-            <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">{{ trans('shop::admin.statistics.recent-payments') }}</h6>
+            <div class="card flex-fill w-100">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        {{ trans('shop::admin.statistics.recent-payments') }}
+                    </h5>
                 </div>
-                <div class="card-body">
+                <div class="card-body pt-2 pb-3">
                     <div class="tab-content mb-3">
                         <div class="tab-pane fade show active" id="monthlyChart" role="tabpanel" aria-labelledby="monthlyChartTab">
-                            <div class="chart-area">
+                            <div class="chart">
                                 <canvas id="paymentsPerMonthsChart"></canvas>
                             </div>
                         </div>
                         <div class="tab-pane fade" id="dailyChart" role="tabpanel" aria-labelledby="dailyChartTab">
-                            <div class="chart-area">
+                            <div class="chart">
                                 <canvas id="paymentsPerDaysChart"></canvas>
                             </div>
                         </div>
@@ -100,12 +117,12 @@
 
                     <ul class="nav nav-pills" id="pills-tab" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link active" id="monthlyChartTab" data-toggle="pill" href="#monthlyChart" role="tab" aria-controls="monthlyChart" aria-selected="true">
+                            <a class="nav-link active" id="monthlyChartTab" data-bs-toggle="pill" href="#monthlyChart" role="tab" aria-controls="monthlyChart" aria-selected="true">
                                 {{ trans('messages.range.months') }}
                             </a>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link" id="dailyChartTab" data-toggle="pill" href="#dailyChart" role="tab" aria-controls="dailyChart" aria-selected="false">
+                            <a class="nav-link" id="dailyChartTab" data-bs-toggle="pill" href="#dailyChart" role="tab" aria-controls="dailyChart" aria-selected="false">
                                 {{ trans('messages.range.days') }}
                             </a>
                         </li>
@@ -114,33 +131,36 @@
             </div>
         </div>
 
-        <!-- Pie Chart -->
         <div class="col-xl-4 col-lg-5">
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">{{ trans('shop::admin.gateways.title') }}</h6>
+                    <h5 class="card-title mb-0">
+                        {{ trans('shop::admin.gateways.title') }}
+                    </h5>
                 </div>
                 <div class="card-body">
-                    <div class="chart-pie pt-4 pb-2">
+                    <div class="chart-pie py-4">
                         <canvas id="gatewaysChart"></canvas>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Pie Chart -->
         <div class="col-xl-4 col-lg-5">
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">{{ trans('shop::admin.packages.title') }}</h6>
+                    <h5 class="card-title mb-0">
+                        {{ trans('shop::admin.packages.title') }}
+                    </h5>
                 </div>
                 <div class="card-body">
-                    <div class="chart-pie pt-4 pb-2">
+                    <div class="chart-pie py-4">
                         <canvas id="itemsChart"></canvas>
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
 @endsection
 

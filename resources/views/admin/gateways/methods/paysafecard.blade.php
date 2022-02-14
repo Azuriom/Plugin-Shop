@@ -1,6 +1,6 @@
-<div class="form-row">
-    <div class="form-group col-md-7">
-        <label for="keyInput">{{ trans('shop::admin.gateways.api-key') }}</label>
+<div class="row g-3">
+    <div class="mb-3 col-md-7">
+        <label class="form-label" for="keyInput">{{ trans('shop::admin.gateways.api-key') }}</label>
         <input type="text" class="form-control @error('key') is-invalid @enderror" id="keyInput" name="key" value="{{ old('key', $gateway->data['key'] ?? '') }}" required placeholder="psc_..">
 
         @error('key')
@@ -8,10 +8,10 @@
         @enderror
     </div>
 
-    <div class="form-group col-md-5">
-        <label for="environmentInput">{{ trans('shop::admin.gateways.env') }}</label>
+    <div class="mb-3 col-md-5">
+        <label class="form-label" for="environmentInput">{{ trans('shop::admin.gateways.env') }}</label>
 
-        <select class="custom-select @error('environment') is-invalid @enderror" id="environmentInput" name="environment">
+        <select class="form-select @error('environment') is-invalid @enderror" id="environmentInput" name="environment">
             @foreach($type->environments() as $env)
                 <option value="{{ $env }}" @if(($gateway->data['environment'] ?? '') === $env) selected @endif>{{ $env }}</option>
             @endforeach

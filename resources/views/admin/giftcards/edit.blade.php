@@ -1,6 +1,6 @@
 @extends('admin.layouts.admin')
 
-@section('title', trans('shop::admin.giftcards.title-edit', ['giftcard' => $giftcard->name]))
+@section('title', trans('shop::admin.giftcards.edit', ['giftcard' => $giftcard->name]))
 
 @section('content')
     <div class="card shadow mb-4">

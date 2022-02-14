@@ -13,7 +13,9 @@
                         'X-PJAX': 'true'
                     }
                 }).then(function (response) {
-                    $('#itemModal').html(response.data).modal('show');
+                    const itemModal = document.getElementById('itemModal');
+                    itemModal.innerHTML = response.data;
+                    new bootstrap.Modal(itemModal).show();
                 }).catch(function (error) {
                     createAlert('danger', error, true);
                 });

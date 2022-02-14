@@ -2,9 +2,7 @@
     <div class="modal-content">
         <div class="modal-header">
             <h3 class="modal-title" id="itemModalLabel">{{ $package->name }}</h3>
-            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">×</span>
-            </button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
             {!! $package->description !!}
@@ -31,15 +29,13 @@
                 @elseif(! $package->hasBoughtRequirements())
                     {{ trans('shop::messages.packages.requirements') }}
                 @else
-                    <form action="{{ route('shop.packages.buy', $package) }}" method="POST" class="form-inline">
+                    <form action="{{ route('shop.packages.buy', $package) }}" method="POST" class="row row-cols-lg-auto g-0 align-items-center">
                         @csrf
 
                         @if($package->has_quantity)
-                            <div class="form-group">
-                                <label for="quantity">{{ trans('shop::messages.fields.quantity') }}</label>
-                            </div>
+                            <label for="quantity">{{ trans('shop::messages.fields.quantity') }}</label>
 
-                            <div class="form-group mx-3">
+                            <div class="mx-3">
                                 <input type="number" min="0" max="{{ $package->getMaxQuantity() }}" size="5" class="form-control" name="quantity" id="quantity" value="1" required>
                             </div>
                         @endif

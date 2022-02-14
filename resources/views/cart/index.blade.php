@@ -19,7 +19,6 @@
         <h1>{{ trans('shop::messages.cart.title') }}</h1>
 
         @if(! $cart->isEmpty())
-
             <form action="{{ route('shop.cart.update') }}" method="POST">
                 @csrf
 
@@ -54,7 +53,7 @@
                     </tbody>
                 </table>
 
-                <p class="text-right mb-4">
+                <p class="text-end mb-4">
                     <button type="submit" class="btn btn-primary btn-sm">
                         {{ trans('messages.actions.update') }}
                     </button>
@@ -98,18 +97,20 @@
                 <div class="col-md-4">
                     <h5>{{ trans('shop::messages.cart.add-coupon') }}</h5>
 
-                    <form action="{{ route('shop.cart.coupons.add') }}" method="POST" class="form-inline mb-3">
+                    <form action="{{ route('shop.cart.coupons.add') }}" method="POST" >
                         @csrf
 
-                        <div class="form-group">
-                            <input type="text" class="form-control @error('code') is-invalid @enderror mx-2" placeholder="{{ trans('shop::messages.fields.code') }}" id="code" name="code" value="{{ old('code') }}">
+                        <div class="input-group mb-3 @error('code') has-validation @enderror">
+                            <input type="text" class="form-control @error('code') is-invalid @enderror" placeholder="{{ trans('shop::messages.fields.code') }}" id="code" name="code" value="{{ old('code') }}">
+
+                            <button type="submit" class="btn btn-primary">
+                                {{ trans('messages.actions.add') }}
+                            </button>
 
                             @error('code')
                             <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
                         </div>
-
-                        <button type="submit" class="btn btn-primary">{{ trans('messages.actions.add') }}</button>
                     </form>
                 </div>
             </div>
@@ -127,7 +128,7 @@
                     </a>
                 </div>
 
-                <div class="col-md-6 text-right">
+                <div class="col-md-6 text-end">
                     <form method="POST" action="{{ route('shop.cart.clear') }}" class="d-inline-block">
                         @csrf
 
@@ -137,7 +138,7 @@
                     </form>
 
                     @if(use_site_money())
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#confirmBuyModal">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#confirmBuyModal">
                             {{ trans('shop::messages.buy') }}
                         </button>
                     @else
@@ -164,9 +165,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h2 class="modal-title" id="confirmBuyLabel">{{ trans('shop::messages.cart.pay-confirm-title') }}</h2>
-                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">×</span>
-                        </button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 
                     <div class="modal-body">

@@ -72,7 +72,7 @@ class ShopServiceProvider extends BasePluginServiceProvider
     protected function routeDescriptions()
     {
         return [
-            'shop.home' => 'shop::messages.title',
+            'shop.home' => trans('shop::messages.title'),
         ];
     }
 
@@ -116,7 +116,7 @@ class ShopServiceProvider extends BasePluginServiceProvider
         return [
             'shop' => [
                 'route' => 'shop.profile',
-                'name' => 'shop::messages.profile.payments',
+                'name' => trans('shop::messages.profile.payments'),
             ],
         ];
     }

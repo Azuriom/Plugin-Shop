@@ -39,7 +39,7 @@ class GiftcardController extends Controller
         $giftcard = Giftcard::create($request->validated());
 
         return redirect()->route('shop.admin.giftcards.index')
-            ->with('success', trans('shop::admin.giftcards.status.created'));
+            ->with('success', trans('messages.status.success'));
     }
 
     /**
@@ -67,7 +67,7 @@ class GiftcardController extends Controller
         $giftcard->update($request->validated());
 
         return redirect()->route('shop.admin.giftcards.index')
-            ->with('success', trans('shop::admin.giftcards.status.updated'));
+            ->with('success', trans('messages.status.success'));
     }
 
     /**
@@ -83,6 +83,6 @@ class GiftcardController extends Controller
         $giftcard->delete();
 
         return redirect()->route('shop.admin.giftcards.index')
-            ->with('success', trans('shop::admin.giftcards.status.deleted'));
+            ->with('success', trans('messages.status.success'));
     }
 }

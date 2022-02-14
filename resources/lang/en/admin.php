@@ -22,16 +22,10 @@ return [
 
     'categories' => [
         'title' => 'Categories',
-        'title-edit' => 'Edit category :category',
-        'title-create' => 'Create category',
+        'edit' => 'Edit category :category',
+        'create' => 'Create category',
 
-        'status' => [
-            'created' => 'The category has been created.',
-            'updated' => 'This category has been modified.',
-            'deleted' => 'This category has been deleted.',
-
-            'delete-items' => 'A category with packages can\'t be deleted.',
-        ],
+        'delete_error' => 'A category with packages can\'t be deleted.',
 
         'cumulate_purchases' => 'Cumulate purchases in this category (users will only pay the difference when purchasing a more expensive package)',
         'enable' => 'Enable the category',
@@ -39,86 +33,53 @@ return [
 
     'offers' => [
         'title' => 'Offers',
-        'title-edit' => 'Edit offer :offer',
-        'title-create' => 'Create offer',
+        'edit' => 'Edit offer :offer',
+        'create' => 'Create offer',
 
-        'status' => [
-            'created' => 'The offer has been created.',
-            'updated' => 'This offer has been modified.',
-            'deleted' => 'This offer has been deleted.',
-        ],
-
-        'enable' => 'Enable the offer',
+        'enable' => 'Enable this offer',
     ],
 
     'coupons' => [
         'title' => 'Coupons',
-        'title-edit' => 'Edit coupon :coupon',
-        'title-create' => 'Create coupon',
-
-        'status' => [
-            'created' => 'The coupon has been created.',
-            'updated' => 'This coupon has been modified.',
-            'deleted' => 'This coupon has been deleted.',
-        ],
+        'edit' => 'Edit coupon :coupon',
+        'create' => 'Create coupon',
 
         'global' => 'Should the coupon be active on all the shop ?',
-
         'cumulate' => 'Allow to use this coupon with other coupons',
         'user_limit' => 'User limit',
         'global_limit' => 'Global limit',
-
         'active' => 'Active',
         'enable' => 'Enable the coupon',
     ],
 
     'giftcards' => [
         'title' => 'Gift Cards',
-        'title-edit' => 'Edit the gift card :giftcard',
-        'title-create' => 'Create a gift card',
+        'edit' => 'Edit the gift card :giftcard',
+        'create' => 'Create a gift card',
 
-        'status' => [
-            'created' => 'The gift card has been created.',
-            'updated' => 'This gift card has been modified.',
-            'deleted' => 'This gift card has been deleted.',
-        ],
         'global_limit' => 'Global limit',
-
         'active' => 'Active',
         'enable' => 'Enable the gift card',
     ],
 
     'discounts' => [
         'title' => 'Discounts',
-        'title-edit' => 'Edit discount :discount',
-        'title-create' => 'Create discount',
-
-        'status' => [
-            'created' => 'The discount has been created.',
-            'updated' => 'This discount has been modified.',
-            'deleted' => 'This discount has been deleted.',
-        ],
+        'edit' => 'Edit discount :discount',
+        'create' => 'Create discount',
 
         'global' => 'Should the discount be active on all the shop ?',
-
         'active' => 'Active',
         'enable' => 'Enable the discount',
     ],
 
     'packages' => [
         'title' => 'Packages',
-        'title-edit' => 'Edit package :package',
-        'title-create' => 'Create package',
+        'edit' => 'Edit package :package',
+        'create' => 'Create package',
 
-        'status' => [
-            'created' => 'The package has been created.',
-            'updated' => 'This package has been modified.',
-            'deleted' => 'This package has been deleted.',
+        'updated' => 'The packages have been updated.',
 
-            'order-updated' => 'The packages have been updated.',
-        ],
-
-        'commands-info' => 'The command must not start with <code>/</code>. You can use <code>{player}</code> to use the player name. For Steam games, you can also use <code>{steam_id}</code> and <code>{steam_id_32}</code>.',
+        'command' => 'The command must not start with <code>/</code>. You can use <code>{player}</code> to use the player name. For Steam games, you can also use <code>{steam_id}</code> and <code>{steam_id_32}</code>.',
 
         'need-online' => 'Execute commands when the user is online on the server (only available with AzLink)',
         'enable-quantity' => 'Enable the quantity',
@@ -131,17 +92,11 @@ return [
 
     'gateways' => [
         'title' => 'Gateways',
-        'title-edit' => 'Edit gateway :gateway',
-        'title-create' => 'Add gateway',
+        'edit' => 'Edit gateway :gateway',
+        'create' => 'Add gateway',
 
         'subtitle-current' => 'Current gateways',
         'subtitle-add' => 'Add a new gateway',
-
-        'status' => [
-            'created' => 'The gateway has been created.',
-            'updated' => 'This gateway has been modified.',
-            'deleted' => 'This gateway has been deleted.',
-        ],
 
         'country' => 'Country',
         'sandbox' => 'Sandbox',
@@ -191,7 +146,7 @@ return [
 
     'settings' => [
         'title' => 'Shop settings',
-        'home-message' => 'Home message',
+        'home_message' => 'Home message',
         'use-site-money' => 'Enable purchases with the site currency.',
         'webhook' => 'Discord Webhook URL',
         'webhook-info' => 'When an user make a payment it will create a notification on this webhook. Leave empty to disable',

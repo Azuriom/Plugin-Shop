@@ -11,25 +11,25 @@
             <form action="{{ route('shop.admin.settings') }}" method="POST">
                 @csrf
 
-                <div class="form-group">
-                    <label for="currencySelect">{{ trans('shop::messages.fields.currency') }}</label>
+                <div class="mb-3">
+                    <label class="form-label" for="currencySelect">{{ trans('shop::messages.fields.currency') }}</label>
 
-                    <select class="custom-select @error('currency') is-invalid @enderror" id="currencySelect" name="currency">
+                    <select class="form-select @error('currency') is-invalid @enderror" id="currencySelect" name="currency">
                         @foreach($currencies as $code => $name)
                             <option value="{{ $code }}" @if($currentCurrency === $code) selected @endif>{{ $name }}</option>
                         @endforeach
                     </select>
                 </div>
 
-                <div class="form-group">
-                    <div class="custom-control custom-switch">
-                        <input type="checkbox" class="custom-control-input" id="useSiteMoneyCheckbox" name="use-site-money" @if(use_site_money()) checked @endif>
-                        <label class="custom-control-label" for="useSiteMoneyCheckbox">{{ trans('shop::admin.settings.use-site-money') }}</label>
+                <div class="mb-3">
+                    <div class="form-check form-switch">
+                        <input type="checkbox" class="form-check-input" id="useSiteMoneyCheckbox" name="use-site-money" @if(use_site_money()) checked @endif>
+                        <label class="form-check-label" for="useSiteMoneyCheckbox">{{ trans('shop::admin.settings.use-site-money') }}</label>
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="homeMessage">{{ trans('shop::admin.settings.home-messages') }}</label>
+                <div class="mb-3">
+                    <label class="form-label" for="homeMessage">{{ trans('shop::admin.settings.home_message') }}</label>
                     <textarea class="form-control html-editor @error('home-message') is-invalid @enderror" id="homeMessage" name="home-message" rows="5">{{ old('home-message', $homeMessage) }}</textarea>
 
                     @error('home-message')
@@ -37,14 +37,12 @@
                     @enderror
                 </div>
 
-                <div class="form-group">
-                    <label for="goalInput">{{ trans('shop::messages.month-goal') }}</label>
+                <div class="mb-3">
+                    <label class="form-label" for="goalInput">{{ trans('shop::messages.month-goal') }}</label>
 
-                    <div class="input-group">
+                    <div class="input-group @error('goal') has-validation @enderror">
                         <input type="number" min="0" class="form-control @error('goal') is-invalid @enderror" id="goalInput" name="goal" value="{{ old('goal', $goal) }}">
-                        <div class="input-group-append">
-                            <span class="input-group-text">{{ currency_display() }}</span>
-                        </div>
+                        <span class="input-group-text">{{ currency_display() }}</span>
 
                         @error('goal')
                         <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
@@ -52,14 +50,14 @@
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label>{{ trans('shop::admin.settings.commands') }}</label>
+                <div class="mb-3">
+                    <label class="form-label">{{ trans('shop::admin.settings.commands') }}</label>
 
                     @include('shop::admin.elements.commands', ['commands' => $commands])
                 </div>
 
-                <div class="form-group">
-                    <label for="webhookInput">{{ trans('shop::admin.settings.webhook') }}</label>
+                <div class="mb-3">
+                    <label class="form-label" for="webhookInput">{{ trans('shop::admin.settings.webhook') }}</label>
                     <input type="text" class="form-control @error('webhook') is-invalid @enderror" id="webhookInput" name="webhook" placeholder="https://discord.com/api/webhooks/.../..." value="{{ old('webhook', setting('shop.webhook')) }}" aria-describedby="webhookInfo">
 
                     @error('webhook')

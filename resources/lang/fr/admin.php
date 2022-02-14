@@ -22,16 +22,10 @@ return [
 
     'categories' => [
         'title' => 'Catégories',
-        'title-edit' => 'Édition de la catégorie :category',
-        'title-create' => 'Création d\'une catégorie',
+        'edit' => 'Édition de la catégorie :category',
+        'create' => 'Création d\'une catégorie',
 
-        'status' => [
-            'created' => 'La catégorie a été ajoutée.',
-            'updated' => 'La catégorie a été mise à jour.',
-            'deleted' => 'La catégorie a été supprimée.',
-
-            'delete-items' => 'Une catégorie contenant des produits ne peut pas être supprimée',
-        ],
+        'delete_error' => 'Une catégorie contenant des produits ne peut pas être supprimée',
 
         'cumulate_purchases' => 'Cumuler les achats dans cette catégorie (les utilisateurs ne paieront que la différence lors de l\'achat d\'un produit plus cher)',
         'enable' => 'Activer cette catégorie',
@@ -39,28 +33,16 @@ return [
 
     'offers' => [
         'title' => 'Offres',
-        'title-edit' => 'Édition de l\'offre :offer',
-        'title-create' => 'Création d\'une offre.',
-
-        'status' => [
-            'created' => 'L\'offre a été ajoutée.',
-            'updated' => 'L\'offre a été mise à jour.',
-            'deleted' => 'L\'offre a été supprimée.',
-        ],
+        'edit' => 'Édition de l\'offre :offer',
+        'create' => 'Création d\'une offre.',
 
         'enable' => 'Activer cette offre.',
     ],
 
     'coupons' => [
         'title' => 'Codes promotionnels',
-        'title-edit' => 'Modifier le code promotionnel :coupon',
-        'title-create' => 'Ajouter un code promotionnel',
-
-        'status' => [
-            'created' => 'Le code promotionnel a été ajouté.',
-            'updated' => 'Le code promotionnel a été mis à jour.',
-            'deleted' => 'Le code promotionnel a été supprimé.',
-        ],
+        'edit' => 'Modifier le code promotionnel :coupon',
+        'create' => 'Ajouter un code promotionnel',
 
         'global' => 'Est ce que ce code promotionnel doit être actif sur toute la boutique ?',
 
@@ -74,14 +56,9 @@ return [
 
     'giftcards' => [
         'title' => 'Cartes Cadeaux',
-        'title-edit' => 'Modifier la carte cadeau :giftcard',
-        'title-create' => 'Ajouter une carte cadeau',
+        'edit' => 'Modifier la carte cadeau :giftcard',
+        'create' => 'Ajouter une carte cadeau',
 
-        'status' => [
-            'created' => 'La carte cadeau a été ajoutée.',
-            'updated' => 'La carte cadeau a été mise à jour.',
-            'deleted' => 'La carte cadeau a été supprimée.',
-        ],
         'global_limit' => 'Limite d\'utilisations globale',
 
         'active' => 'Actif',
@@ -90,14 +67,8 @@ return [
 
     'discounts' => [
         'title' => 'Réductions',
-        'title-edit' => 'Édition de la réduction :discount',
-        'title-create' => 'Création d\'une réduction.',
-
-        'status' => [
-            'created' => 'La réduction a été ajoutée.',
-            'updated' => 'La réduction a été mise à jour.',
-            'deleted' => 'La réduction a été supprimée.',
-        ],
+        'edit' => 'Édition de la réduction :discount',
+        'create' => 'Création d\'une réduction.',
 
         'global' => 'La réduction doit-elle être active sur toute la boutique ?',
 
@@ -107,18 +78,12 @@ return [
 
     'packages' => [
         'title' => 'Produits',
-        'title-edit' => 'Édition du produit :package',
-        'title-create' => 'Création d\'un produit',
+        'edit' => 'Édition du produit :package',
+        'create' => 'Création d\'un produit',
 
-        'status' => [
-            'created' => 'Le produit a été ajouté.',
-            'updated' => 'Le produit a été mis à jour.',
-            'deleted' => 'Le produit a été supprimé.',
+        'updated' => 'Les produits ont été mis à jour.',
 
-            'order-updated' => 'Les produits ont été mis à jour.',
-        ],
-
-        'commands-info' => 'La commande ne doit pas commencer par <code>/</code>. Vous pouvez utiliser la variable <code>{player}</code> pour le pseudo du joueur. Pour les jeux Steam, les variables sont <code>{steam_id}</code> et <code>{steam_id_32}</code> sont disponibles.',
+        'command' => 'La commande ne doit pas commencer par <code>/</code>. Vous pouvez utiliser la variable <code>{player}</code> pour le pseudo du joueur. Pour les jeux Steam, les variables sont <code>{steam_id}</code> et <code>{steam_id_32}</code> sont disponibles.',
 
         'need-online' => 'Exécuter les commandes lorsque l\'utilisateur est en ligne sur le serveur (uniquement disponible avec AzLink)',
         'enable-quantity' => 'Activer la quantité',
@@ -131,17 +96,11 @@ return [
 
     'gateways' => [
         'title' => 'Moyens de paiements',
-        'title-edit' => 'Édition du moyen de paiement :gateway',
-        'title-create' => 'Ajout d\'un moyen de paiement',
+        'edit' => 'Édition du moyen de paiement :gateway',
+        'create' => 'Ajout d\'un moyen de paiement',
 
         'subtitle-current' => 'Moyen de paiement actuel',
         'subtitle-add' => 'Ajout d\'un nouveau moyen de paiement',
-
-        'status' => [
-            'created' => 'Le moyen de paiement a été ajouté.',
-            'updated' => 'Le moyen de paiement a été mis à jour.',
-            'deleted' => 'Le moyen de paiement a été supprimé.',
-        ],
 
         'country' => 'Pays',
         'sandbox' => 'Sandbox',
@@ -191,7 +150,7 @@ return [
 
     'settings' => [
         'title' => 'Paramètres de la boutique',
-        'home-message' => 'Message de la page d\'accueil',
+        'home_message' => 'Message de la page d\'accueil',
         'use-site-money' => 'Activer les achats avec l\'argent du site.',
         'webhook' => 'URL de webhook Discord',
         'webhook-info' => 'Lorsqu\'un utilisateur fait un paiement sur la boutique, cela va créer une notification sur ce webhook. Laissez vide pour ne pas utiliser de webhook.',
