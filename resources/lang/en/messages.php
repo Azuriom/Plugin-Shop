@@ -7,9 +7,6 @@ return [
 
     'free' => 'Free',
 
-    'month-goal' => 'Goal of the month',
-    'month-goal-current' => ':count% completed',
-
     'fields' => [
         'price' => 'Price',
         'total' => 'Total',
@@ -28,7 +25,7 @@ return [
         'required_packages' => 'Required Packages',
         'user_limit' => 'User purchase limit',
         'status' => 'Status',
-        'payment-id' => 'Payment ID',
+        'payment_id' => 'Payment ID',
         'role' => 'Role to set after purchase',
         'user_id' => 'User ID',
         'required_roles' => 'Required role',
@@ -39,33 +36,40 @@ return [
         'duplicate' => 'Duplicate',
     ],
 
+    'goal' => [
+        'title' => 'Goal of the month',
+        'progress' => ':count% completed',
+    ],
+
     'cart' => [
         'title' => 'Cart',
-        'error-money' => 'You don\'t have enough money to make this purchase.',
-        'error-execute' => 'An unexpected error occurred during payment, your purchase got refund.',
         'purchase' => 'Your purchase has been successfully completed.',
-
-        'pay-confirm-title' => 'Pay?',
-        'pay-confirm' => 'Are you sure you want to buy this cart for :price.',
-
         'guest' => 'You must be logged in to make a purchase.',
         'empty' => 'Your cart is empty.',
-
         'checkout' => 'Checkout',
         'remove' => 'Remove',
         'clear' => 'Clear the cart',
         'pay' => 'Pay',
-
-        'coupons' => 'Coupons',
-        'add-coupon' => 'Add a coupon',
-        'invalid-coupon' => 'This coupon does not exist, has expired or can no longer be used.',
-        'cannot-cumulate' => 'You cannot use this coupon with an other coupon.',
-
         'back' => 'Back to shop',
-
         'total' => 'Total: :total',
-
         'credit' => 'Credit',
+
+        'confirm' => [
+            'title' => 'Pay?',
+            'price' => 'Are you sure you want to buy this cart for :price.',
+        ],
+
+        'errors' => [
+            'money' => 'You don\'t have enough money to make this purchase.',
+            'execute' => 'An unexpected error occurred during payment, your purchase got refund.',
+        ],
+    ],
+
+    'coupons' => [
+        'title' => 'Coupons',
+        'add' => 'Add a coupon',
+        'error' => 'This coupon does not exist, has expired or can no longer be used.',
+        'cumulate' => 'You cannot use this coupon with an other coupon.',
     ],
 
     'payment' => [
@@ -78,9 +82,7 @@ return [
         'error' => 'The payment could not be completed.',
 
         'success' => 'Payment completed',
-        'success-info' => 'You\'ll receive your purchase in-game in less than a minute.',
-
-        'redirect-info' => 'If you are not redirected automatically check that javascript is enabled on your browser.',
+        'success_info' => 'You\'ll receive your purchase in-game in less than a minute.',
 
         'webhook' => 'New payment on the shop',
     ],
@@ -91,8 +93,8 @@ return [
     ],
 
     'offers' => [
-        'title-payment' => 'Payment type',
-        'title-select' => 'Amount',
+        'gateway' => 'Payment type',
+        'amount' => 'Amount',
 
         'empty' => 'No offers are currently available.',
     ],

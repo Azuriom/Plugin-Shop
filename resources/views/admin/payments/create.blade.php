@@ -21,7 +21,7 @@
                     </div>
 
                     <div class="mb-3 col-md-4">
-                        <label class="form-label" for="transactionInput">{{ trans('shop::messages.fields.payment-id') }}</label>
+                        <label class="form-label" for="transactionInput">{{ trans('shop::messages.fields.payment_id') }}</label>
                         <input type="text" class="form-control @error('transaction_id') is-invalid @enderror" id="transactionInput" name="transaction_id" value="{{ old('transaction_id') }}" required>
 
                         @error('transaction_id')

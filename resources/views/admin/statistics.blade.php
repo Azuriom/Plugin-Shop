@@ -31,7 +31,7 @@
                     <div class="row">
                         <div class="col mt-0">
                             <h5 class="card-title mb-0">
-                                {{ trans('shop::admin.statistics.month-estimated') }}
+                                {{ trans('shop::admin.statistics.month_estimated') }}
                             </h5>
                         </div>
 
@@ -98,7 +98,7 @@
             <div class="card flex-fill w-100">
                 <div class="card-header">
                     <h5 class="card-title mb-0">
-                        {{ trans('shop::admin.statistics.recent-payments') }}
+                        {{ trans('shop::admin.statistics.recent') }}
                     </h5>
                 </div>
                 <div class="card-body pt-2 pb-3">

@@ -2,7 +2,7 @@
     <script>
       function addCommandListener(el) {
         el.addEventListener('click', function () {
-          const element = el.parentNode.parentNode;
+          const element = el.parentNode;
 
           element.parentNode.removeChild(element);
         });

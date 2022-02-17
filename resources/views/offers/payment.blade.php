@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', trans('shop::messages.offers.title-payment'))
+@section('title', trans('shop::messages.offers.gateway'))
 
 @section('content')
     <div class="container content">
-        <h1>{{ trans('shop::messages.offers.title-payment') }}</h1>
+        <h1>{{ trans('shop::messages.offers.gateway') }}</h1>
 
         <div class="row">
             @forelse($gateways as $gateway)

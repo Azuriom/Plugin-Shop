@@ -19,5 +19,5 @@
 </div>
 
 <div class="alert alert-info" role="alert">
-    <i class="fas fa-info-circle"></i> @lang('shop::admin.gateways.paymentwall-info', ['url' => route('shop.payments.notification', 'paymentwall')])
+    <i class="fas fa-info-circle"></i> @lang('shop::admin.gateways.paymentwall_info', ['url' => route('shop.payments.notification', 'paymentwall')])
 </div>

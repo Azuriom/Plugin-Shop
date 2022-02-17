@@ -53,7 +53,7 @@
     </div>
     @else
         <div class="alert alert-warning" role="alert">
-            <a href="{{route('shop.admin.settings')}}">{{ trans('shop::admin.settings.use-site-money')}}</a>
+            <a href="{{route('shop.admin.settings')}}">{{ trans('shop::admin.settings.use_site_money')}}</a>
         </div>
     @endif
 

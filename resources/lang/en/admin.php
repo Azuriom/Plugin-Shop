@@ -3,7 +3,6 @@
 return [
     'nav' => [
         'title' => 'Shop',
-
         'settings' => 'Settings',
         'packages' => 'Packages',
         'gateways' => 'Gateways',
@@ -81,11 +80,11 @@ return [
 
         'command' => 'The command must not start with <code>/</code>. You can use <code>{player}</code> to use the player name. For Steam games, you can also use <code>{steam_id}</code> and <code>{steam_id_32}</code>.',
 
-        'need-online' => 'Execute commands when the user is online on the server (only available with AzLink)',
-        'enable-quantity' => 'Enable the quantity',
+        'require_online' => 'Execute commands when the user is online on the server (only available with AzLink)',
+        'enable_quantity' => 'Enable the quantity',
 
-        'create-category' => 'Create category',
-        'create-package' => 'Create package',
+        'create_category' => 'Create category',
+        'create_package' => 'Create package',
 
         'enable' => 'Enable this package',
     ],
@@ -95,8 +94,8 @@ return [
         'edit' => 'Edit gateway :gateway',
         'create' => 'Add gateway',
 
-        'subtitle-current' => 'Current gateways',
-        'subtitle-add' => 'Add a new gateway',
+        'current' => 'Current gateways',
+        'add' => 'Add a new gateway',
 
         'country' => 'Country',
         'sandbox' => 'Sandbox',
@@ -112,10 +111,10 @@ return [
         'methods' => 'Payment methods',
         'methods-info' => 'Credit cards are enabled by default. You can find more information in the <a href=":docs">Stripe documentation</a>.',
 
-        'paypal-email' => 'PayPal Email Address',
-        'paysafecard-info' => 'In order to be able to accept payments by paysafecard, you must be a <a href="https://www.paysafecard.com/en/business/" target="_blank" rel="noopener noreferrer">paysafecard partner</a>. Other methods exist but only this one is allowed by paysafecard.',
-        'stripe-info' => 'On the Stripe dashboard you need to set the webhook URL to <code>:url</code> and select the event <code>checkout.session.completed</code>.',
-        'paymentwall-info' => 'On the PaymentWall dashboard you need to set the pingback URL to <code>:url</code>.',
+        'paypal_email' => 'PayPal Email Address',
+        'paysafecard_info' => 'In order to be able to accept payments by paysafecard, you must be a <a href="https://www.paysafecard.com/en/business/" target="_blank" rel="noopener noreferrer">paysafecard partner</a>. Other methods exist but only this one is allowed by paysafecard.',
+        'stripe_info' => 'On the Stripe dashboard you need to set the webhook URL to <code>:url</code> and select the event <code>checkout.session.completed</code>.',
+        'paymentwall_info' => 'On the PaymentWall dashboard you need to set the pingback URL to <code>:url</code>.',
         'xsolla' => 'On the Xsolla dashboard you need to set the webhook URL to <code>:url</code>, enable \'Transaction external ID\' in the \'Pay station\' settings, test the webhooks and then enable \'Checkout\' in the \'Pay Station\' settings.',
 
         'enable' => 'Enable the gateway',
@@ -123,14 +122,14 @@ return [
 
     'payments' => [
         'title' => 'Payments',
-        'title-show' => 'Payment #:payment',
+        'show' => 'Payment #:payment',
 
         'info' => 'Payment information',
         'items' => 'Purchased items',
 
         'card' => 'Shop payments',
 
-        'payment-status' => [
+        'status' => [
             'pending' => 'Pending',
             'expired' => 'Expired',
             'chargeback' => 'Chargeback',
@@ -147,9 +146,9 @@ return [
     'settings' => [
         'title' => 'Shop settings',
         'home_message' => 'Home message',
-        'use-site-money' => 'Enable purchases with the site currency.',
+        'use_site_money' => 'Enable purchases with the site currency.',
         'webhook' => 'Discord Webhook URL',
-        'webhook-info' => 'When an user make a payment it will create a notification on this webhook. Leave empty to disable',
+        'webhook_info' => 'When an user make a payment it will create a notification on this webhook. Leave empty to disable',
         'commands' => 'Global commands',
     ],
 
@@ -176,11 +175,11 @@ return [
     'statistics' => [
         'title' => 'Statistics',
         'total' => 'Total',
-        'recent-payments' => 'Recent payments',
+        'recent' => 'Recent payments',
         'count' => 'Payments count',
         'estimated' => 'Estimated earnings',
         'month' => 'Payments during this month',
-        'month-estimated' => 'Estimated earnings this month',
+        'month_estimated' => 'Estimated earnings this month',
     ],
 
 ];

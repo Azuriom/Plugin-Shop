@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', trans('shop::messages.offers.title-select'))
+@section('title', trans('shop::messages.offers.amount'))
 
 @push('footer-scripts')
     <script>
@@ -18,7 +18,7 @@
 
 @section('content')
     <div class="container content">
-        <h1>{{ trans('shop::messages.offers.title-select') }}</h1>
+        <h1>{{ trans('shop::messages.offers.amount') }}</h1>
 
         <div class="row">
             @forelse($offers as $offer)

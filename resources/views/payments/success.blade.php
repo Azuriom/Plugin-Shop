@@ -6,6 +6,6 @@
     <div class="container content">
         <h1>{{ trans('shop::messages.payment.success') }}</h1>
 
-        <p>{{ trans('shop::messages.payment.success-info') }}</p>
+        <p>{{ trans('shop::messages.payment.success_info') }}</p>
     </div>
 @endsection

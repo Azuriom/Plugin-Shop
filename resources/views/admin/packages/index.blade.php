@@ -103,11 +103,11 @@
                 @each('shop::admin.packages._category', $categories, 'category')
             </ol>
 
-            <a href="{{ route('shop.admin.categories.create') }}" class="btn btn-primary"><i class="fas fa-plus"></i> {{ trans('shop::admin.packages.create-category') }}
+            <a href="{{ route('shop.admin.categories.create') }}" class="btn btn-primary"><i class="fas fa-plus"></i> {{ trans('shop::admin.packages.create_category') }}
             </a>
 
             @if(! $categories->isEmpty())
-                <a href="{{ route('shop.admin.packages.create') }}" class="btn btn-primary"><i class="fas fa-plus"></i> {{ trans('shop::admin.packages.create-package') }}
+                <a href="{{ route('shop.admin.packages.create') }}" class="btn btn-primary"><i class="fas fa-plus"></i> {{ trans('shop::admin.packages.create_package') }}
                 </a>
 
                 <button type="button" class="btn btn-success" id="save">

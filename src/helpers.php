@@ -32,7 +32,7 @@ if (! function_exists('payment_manager')) {
 if (! function_exists('use_site_money')) {
     function use_site_money()
     {
-        return setting('shop.use-site-money', false);
+        return setting('shop.use_site_money', false);
     }
 }
 

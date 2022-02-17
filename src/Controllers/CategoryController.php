@@ -48,7 +48,7 @@ class CategoryController extends Controller
 
     protected function getMonthGoal()
     {
-        if (! setting('shop.month-goal')) {
+        if (! setting('shop.month_goal')) {
             return false;
         }
 
@@ -56,7 +56,7 @@ class CategoryController extends Controller
             ->where('created_at', '>', now()->startOfMonth())
             ->sum('price');
 
-        return round(($total / setting('shop.month-goal')) * 100, 2);
+        return round(($total / setting('shop.month_goal')) * 100, 2);
     }
 
     protected function getCategories(Category $current = null)

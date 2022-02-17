@@ -63,19 +63,29 @@
             @enderror
         </div>
     </div>
-</div>
 
-<div class="row g-3">
     <div class="mb-3 col-md-6">
         <label class="form-label" for="roleSelect">{{ trans('shop::messages.fields.role') }}</label>
         <select class="form-select @error('role_id') is-invalid @enderror" id="roleSelect" name="role_id">
             <option value="">{{ trans('messages.none') }}</option>
             @foreach($roles as $role)
-                <option value="{{ $role->id }}" @if(isset($package) && $role->is($package->role)) selected @endif>{{ $role->name }}</option>
+                <option value="{{ $role->id }}" @if(isset($package) && $role->is($package->role)) selected @endif>
+                    {{ $role->name }}
+                </option>
             @endforeach
         </select>
 
         @error('role_id')
+        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+        @enderror
+    </div>
+
+    <div class="mb-3 col-md-6">
+        <label class="form-label" for="userLimitInput">{{ trans('shop::messages.fields.user_limit') }}</label>
+
+        <input type="number" min="0" step="1" class="form-control @error('user_limit') is-invalid @enderror" id="userLimitInput" name="user_limit" value="{{ old('user_limit', $package->user_limit ?? '') }}">
+
+        @error('user_limit')
         <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
         @enderror
     </div>
@@ -94,9 +104,7 @@
         <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
         @enderror
     </div>
-</div>
 
-<div class="row g-3">
     <div class="mb-3 col-md-6">
         <label class="form-label" for="requiredPackagesSelect">{{ trans('shop::messages.fields.required_packages') }}</label>
 
@@ -121,23 +129,13 @@
 
     <div class="mb-3 col-md-6">
         <label class="form-label" for="imageInput">{{ trans('messages.fields.image') }}</label>
-        <input type="file" class="form-control @error('image') is-invalid @enderror" id="imageInput" name="image" accept=".jpg,.jpeg,.jpe,.png,.gif,.bmp,.svg,.webp" data-image-preview="filePreview" required>
+        <input type="file" class="form-control @error('image') is-invalid @enderror" id="imageInput" name="image" accept=".jpg,.jpeg,.jpe,.png,.gif,.bmp,.svg,.webp" data-image-preview="filePreview">
 
         @error('image')
         <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
         @enderror
 
         <img src="{{ ($package->image ?? false) ? $package->imageUrl() : '#' }}" class="mt-2 img-fluid rounded img-preview {{ ($package->image ?? false) ? '' : 'd-none' }}" alt="Image" id="imagePreview">
-    </div>
-
-    <div class="mb-3 col-md-6">
-        <label class="form-label" for="userLimitInput">{{ trans('shop::messages.fields.user_limit') }}</label>
-
-        <input type="number" min="0" step="1" class="form-control @error('user_limit') is-invalid @enderror" id="userLimitInput" name="user_limit" value="{{ old('user_limit', $package->user_limit ?? '') }}">
-
-        @error('user_limit')
-        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
-        @enderror
     </div>
 </div>
 
@@ -163,12 +161,12 @@
 
 <div class="mb-3 form-check form-switch">
     <input type="checkbox" class="form-check-input" id="needOnlineSwitch" name="need_online" @if($package->need_online ?? true) checked @endif>
-    <label class="form-check-label" for="needOnlineSwitch">{{ trans('shop::admin.packages.need-online') }}</label>
+    <label class="form-check-label" for="needOnlineSwitch">{{ trans('shop::admin.packages.require_online') }}</label>
 </div>
 
 <div class="mb-3 form-check form-switch">
     <input type="checkbox" class="form-check-input" id="quantitySwitch" name="has_quantity" @if($package->has_quantity ?? true) checked @endif>
-    <label class="form-check-label" for="quantitySwitch">{{ trans('shop::admin.packages.enable-quantity') }}</label>
+    <label class="form-check-label" for="quantitySwitch">{{ trans('shop::admin.packages.enable_quantity') }}</label>
 </div>
 
 <div class="mb-3 form-check form-switch">

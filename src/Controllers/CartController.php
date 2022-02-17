@@ -97,7 +97,7 @@ class CartController extends Controller
         $total = $cart->total();
 
         if (! $user->hasMoney($total)) {
-            return redirect()->route('shop.cart.index')->with('error', trans('shop::messages.cart.error-money'));
+            return redirect()->route('shop.cart.index')->with('error', trans('shop::messages.cart.errors.money'));
         }
 
         try {
@@ -105,7 +105,7 @@ class CartController extends Controller
         } catch (Exception $e) {
             report($e);
 
-            return redirect()->route('shop.cart.index')->with('error', trans('shop::messages.cart.error-execute'));
+            return redirect()->route('shop.cart.index')->with('error', trans('shop::messages.cart.errors.execute'));
         }
 
         $user->removeMoney($total);

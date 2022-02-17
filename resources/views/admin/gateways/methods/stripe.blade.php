@@ -48,5 +48,5 @@
 </div>
 
 <div class="alert alert-info" role="alert">
-    <i class="fas fa-info-circle"></i> @lang('shop::admin.gateways.stripe-info', ['url' => route('shop.payments.notification', 'stripe')])
+    <i class="fas fa-info-circle"></i> @lang('shop::admin.gateways.stripe_info', ['url' => route('shop.payments.notification', 'stripe')])
 </div>

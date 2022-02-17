@@ -1,5 +1,5 @@
 <div class="mb-3">
-    <label class="form-label" for="emailInput">{{ trans('shop::admin.gateways.paypal-email') }}</label>
+    <label class="form-label" for="emailInput">{{ trans('shop::admin.gateways.paypal_email') }}</label>
     <input type="email" class="form-control @error('email') is-invalid @enderror" id="emailInput" name="email" value="{{ old('email', $gateway->data['email'] ?? '') }}" required placeholder="hello@world.com">
 
     @error('email')

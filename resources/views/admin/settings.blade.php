@@ -23,8 +23,8 @@
 
                 <div class="mb-3">
                     <div class="form-check form-switch">
-                        <input type="checkbox" class="form-check-input" id="useSiteMoneyCheckbox" name="use-site-money" @if(use_site_money()) checked @endif>
-                        <label class="form-check-label" for="useSiteMoneyCheckbox">{{ trans('shop::admin.settings.use-site-money') }}</label>
+                        <input type="checkbox" class="form-check-input" id="useSiteMoneyCheckbox" name="use_site_money" @if(use_site_money()) checked @endif>
+                        <label class="form-check-label" for="useSiteMoneyCheckbox">{{ trans('shop::admin.settings.use_site_money') }}</label>
                     </div>
                 </div>
 
@@ -38,7 +38,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label" for="goalInput">{{ trans('shop::messages.month-goal') }}</label>
+                    <label class="form-label" for="goalInput">{{ trans('shop::messages.goal.title') }}</label>
 
                     <div class="input-group @error('goal') has-validation @enderror">
                         <input type="number" min="0" class="form-control @error('goal') is-invalid @enderror" id="goalInput" name="goal" value="{{ old('goal', $goal) }}">
@@ -64,7 +64,7 @@
                     <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                     @enderror
 
-                    <small id="webhookInfo" class="form-text">{{ trans('shop::admin.settings.webhook-info') }}</small>
+                    <small id="webhookInfo" class="form-text">{{ trans('shop::admin.settings.webhook_info') }}</small>
                 </div>
 
                 <button type="submit" class="btn btn-primary">

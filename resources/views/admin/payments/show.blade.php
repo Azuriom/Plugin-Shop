@@ -1,6 +1,6 @@
 @extends('admin.layouts.admin')
 
-@section('title', trans('shop::admin.payments.title-show', ['payment' => $payment->id]))
+@section('title', trans('shop::admin.payments.show', ['payment' => $payment->id]))
 
 @section('content')
     <div class="row">
@@ -19,10 +19,10 @@
                             <li>
                                 {{ trans('messages.fields.status') }}:
                                 <span class="badge bg-{{ $payment->statusColor() }}">
-                                    {{ trans('shop::admin.payments.payment-status.'.$payment->status) }}
+                                    {{ trans('shop::admin.payments.status.'.$payment->status) }}
                                 </span>
                             </li>
-                            <li>{{ trans('shop::messages.fields.payment-id') }}: {{ $payment->transaction_id ?? trans('messages.unknown') }}</li>
+                            <li>{{ trans('shop::messages.fields.payment_id') }}: {{ $payment->transaction_id ?? trans('messages.unknown') }}</li>
                         @else
                             <li>{{ trans('shop::messages.fields.price') }}: {{ format_money($payment->price) }}</li>
                         @endif
@@ -35,7 +35,7 @@
 
                         @if(!$payment->coupons->isEmpty())
                             <li>
-                                {{ trans('shop::messages.cart.coupons') }}:
+                                {{ trans('shop::messages.coupons.title') }}:
 
                                 <ul>
                                     @foreach($payment->coupons as $coupon)

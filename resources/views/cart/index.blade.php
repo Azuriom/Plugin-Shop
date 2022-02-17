@@ -62,7 +62,7 @@
 
             <div class="row">
                 <div class="col-md-8">
-                    <h5>{{ trans('shop::messages.cart.coupons') }}</h5>
+                    <h5>{{ trans('shop::messages.coupons.title') }}</h5>
 
                     <table class="table coupons">
                         <thead>
@@ -95,7 +95,7 @@
                 </div>
 
                 <div class="col-md-4">
-                    <h5>{{ trans('shop::messages.cart.add-coupon') }}</h5>
+                    <h5>{{ trans('shop::messages.coupons.add') }}</h5>
 
                     <form action="{{ route('shop.cart.coupons.add') }}" method="POST" >
                         @csrf
@@ -164,12 +164,14 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h2 class="modal-title" id="confirmBuyLabel">{{ trans('shop::messages.cart.pay-confirm-title') }}</h2>
+                        <h2 class="modal-title" id="confirmBuyLabel">
+                            {{ trans('shop::messages.cart.confirm.title') }}
+                        </h2>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 
                     <div class="modal-body">
-                        {{ trans('shop::messages.cart.pay-confirm', ['price' => shop_format_amount($cart->total())]) }}
+                        {{ trans('shop::messages.cart.confirm.price', ['price' => shop_format_amount($cart->total())]) }}
                     </div>
 
                     <div class="modal-footer">

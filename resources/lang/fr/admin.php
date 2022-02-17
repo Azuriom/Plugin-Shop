@@ -3,7 +3,6 @@
 return [
     'nav' => [
         'title' => 'Boutique',
-
         'settings' => 'Paramètres',
         'packages' => 'Produits',
         'gateways' => 'Moyens de paiements',
@@ -45,11 +44,9 @@ return [
         'create' => 'Ajouter un code promotionnel',
 
         'global' => 'Est ce que ce code promotionnel doit être actif sur toute la boutique ?',
-
         'cumulate' => 'Pouvoir utiliser ce code promo avec d\'autres codes promo',
         'user_limit' => 'Limite d\'utilisations par utilisateur',
         'global_limit' => 'Limite d\'utilisations globale',
-
         'active' => 'Actif',
         'enable' => 'Activer ce code promotionnel',
     ],
@@ -60,7 +57,6 @@ return [
         'create' => 'Ajouter une carte cadeau',
 
         'global_limit' => 'Limite d\'utilisations globale',
-
         'active' => 'Actif',
         'enable' => 'Activer cette carte cadeau',
     ],
@@ -71,7 +67,6 @@ return [
         'create' => 'Création d\'une réduction.',
 
         'global' => 'La réduction doit-elle être active sur toute la boutique ?',
-
         'active' => 'Active',
         'enable' => 'Activer cette réduction',
     ],
@@ -85,11 +80,11 @@ return [
 
         'command' => 'La commande ne doit pas commencer par <code>/</code>. Vous pouvez utiliser la variable <code>{player}</code> pour le pseudo du joueur. Pour les jeux Steam, les variables sont <code>{steam_id}</code> et <code>{steam_id_32}</code> sont disponibles.',
 
-        'need-online' => 'Exécuter les commandes lorsque l\'utilisateur est en ligne sur le serveur (uniquement disponible avec AzLink)',
-        'enable-quantity' => 'Activer la quantité',
+        'require_online' => 'Exécuter les commandes lorsque l\'utilisateur est en ligne sur le serveur (uniquement disponible avec AzLink)',
+        'enable_quantity' => 'Activer la quantité',
 
-        'create-category' => 'Créer une catégorie',
-        'create-package' => 'Créer un produit',
+        'create_category' => 'Créer une catégorie',
+        'create_package' => 'Créer un produit',
 
         'enable' => 'Activer ce produit',
     ],
@@ -99,8 +94,8 @@ return [
         'edit' => 'Édition du moyen de paiement :gateway',
         'create' => 'Ajout d\'un moyen de paiement',
 
-        'subtitle-current' => 'Moyen de paiement actuel',
-        'subtitle-add' => 'Ajout d\'un nouveau moyen de paiement',
+        'current' => 'Moyen de paiement actuel',
+        'add' => 'Ajout d\'un nouveau moyen de paiement',
 
         'country' => 'Pays',
         'sandbox' => 'Sandbox',
@@ -116,10 +111,10 @@ return [
         'methods' => 'Méthodes de paiement',
         'methods-info' => 'Les cartes bancaires sont supportées par défaut. Vous pouvez avoir plus d\'informations dans la <a href=":docs">documentation Stripe</a>.',
 
-        'paypal-email' => 'Adresse Email PayPal',
-        'paysafecard-info' => 'Pour pouvoir accepter les paiements par paysafecard, vous devez être un <a href="https://www.paysafecard.com/fr/business/" target="_blank" rel="noopener noreferrer">partenaire paysafecard</a>. D\'autres méthodes existent, mais celle-ci est la seule autorisée par paysafecard.',
-        'stripe-info' => 'Sur le tableau de bord Stripe, vous devez définir l\'URL du webhook sur <code>:url</code> et séléctionner l\'événement <code>checkout.session.completed</code>.',
-        'paymentwall-info' => 'Dans le tableau de bord PaymentWall, vous devez définir l\'URL de pingback sur <code>:url</code>.',
+        'paypal_email' => 'Adresse Email PayPal',
+        'paysafecard_info' => 'Pour pouvoir accepter les paiements par paysafecard, vous devez être un <a href="https://www.paysafecard.com/fr/business/" target="_blank" rel="noopener noreferrer">partenaire paysafecard</a>. D\'autres méthodes existent, mais celle-ci est la seule autorisée par paysafecard.',
+        'stripe_info' => 'Sur le tableau de bord Stripe, vous devez définir l\'URL du webhook sur <code>:url</code> et séléctionner l\'événement <code>checkout.session.completed</code>.',
+        'paymentwall_info' => 'Dans le tableau de bord PaymentWall, vous devez définir l\'URL de pingback sur <code>:url</code>.',
         'xsolla' => 'Dans le tableau de bord Xsolla dashboard vous devez définir l\'URL de webhook URL sur <code>:url</code>, activer \'Transaction external ID\' dans les paramètres de la \'Pay station\', tester les webhooks et ensuite activer \'Checkout\' dans les paramètres de la \'Pay Station\'.',
 
         'enable' => 'Activer ce moyen de paiement',
@@ -127,14 +122,14 @@ return [
 
     'payments' => [
         'title' => 'Paiements',
-        'title-show' => 'Paiement #:payment',
+        'show' => 'Paiement #:payment',
 
         'info' => 'Informations du paiement',
         'items' => 'Objets achetés',
 
         'card' => 'Paiements sur la boutique',
 
-        'payment-status' => [
+        'status' => [
             'pending' => 'En attente',
             'expired' => 'Expiré',
             'chargeback' => 'Litige',
@@ -151,9 +146,9 @@ return [
     'settings' => [
         'title' => 'Paramètres de la boutique',
         'home_message' => 'Message de la page d\'accueil',
-        'use-site-money' => 'Activer les achats avec l\'argent du site.',
+        'use_site_money' => 'Activer les achats avec l\'argent du site.',
         'webhook' => 'URL de webhook Discord',
-        'webhook-info' => 'Lorsqu\'un utilisateur fait un paiement sur la boutique, cela va créer une notification sur ce webhook. Laissez vide pour ne pas utiliser de webhook.',
+        'webhook_info' => 'Lorsqu\'un utilisateur fait un paiement sur la boutique, cela va créer une notification sur ce webhook. Laissez vide pour ne pas utiliser de webhook.',
         'commands' => 'Commandes globales',
     ],
 
@@ -180,11 +175,11 @@ return [
     'statistics' => [
         'title' => 'Statistiques',
         'total' => 'Total',
-        'recent-payments' => 'Paiements récents',
+        'recent' => 'Paiements récents',
         'count' => 'Nombre de paiements',
         'estimated' => 'Estimation des revenus',
         'month' => 'Paiements sur la boutique ce mois-ci',
-        'month-estimated' => 'Estimation des gains ce mois-ci',
+        'month_estimated' => 'Estimation des gains ce mois-ci',
     ],
 
 ];

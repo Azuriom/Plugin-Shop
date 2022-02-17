@@ -7,7 +7,7 @@
         <div class="card shadow mb-4">
             <div class="card-header py-3">
                 <h5 class="card-title mb-0">
-                    {{ trans('shop::admin.gateways.subtitle-current') }}
+                    {{ trans('shop::admin.gateways.current') }}
                 </h5>
             </div>
             <div class="card-body">
@@ -42,7 +42,7 @@
         <div class="card shadow mb-4">
             <div class="card-header py-3">
                 <h5 class="card-title mb-0">
-                    {{ trans('shop::admin.gateways.subtitle-add') }}
+                    {{ trans('shop::admin.gateways.add') }}
                 </h5>
             </div>
             <div class="card-body">
