@@ -43,7 +43,7 @@ return [
 
     'cart' => [
         'title' => 'Panier',
-        'purchase' => 'Votre achat a été effectué avec succès.',
+        'success' => 'Votre achat a été effectué avec succès.',
         'guest' => 'Vous devez être connecté pour effectuer un achat.',
         'empty' => 'Votre panier est vide.',
         'checkout' => 'Procéder au paiement',

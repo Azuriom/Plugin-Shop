@@ -33,11 +33,11 @@
 </div>
 
 <div class="mb-3 form-check form-switch">
-    <input type="checkbox" class="form-check-input" id="cumulatePurchasesSwitch" name="cumulate_purchases" @if(old('cumulate_purchases', $category->cumulate_purchases ?? false)) checked @endif>
+    <input type="checkbox" class="form-check-input" id="cumulatePurchasesSwitch" name="cumulate_purchases" @checked(old('cumulate_purchases', $category->cumulate_purchases ?? false))>
     <label class="form-check-label" for="cumulatePurchasesSwitch">{{ trans('shop::admin.categories.cumulate_purchases') }}</label>
 </div>
 
 <div class="mb-3 form-check form-switch">
-    <input type="checkbox" class="form-check-input" id="enableSwitch" name="is_enabled" @if(old('is_enabled', $category->is_enabled ?? true)) checked @endif>
+    <input type="checkbox" class="form-check-input" id="enableSwitch" name="is_enabled" @checked(old('is_enabled', $category->is_enabled ?? true))>
     <label class="form-check-label" for="enableSwitch">{{ trans('shop::admin.categories.enable') }}</label>
 </div>

@@ -56,6 +56,6 @@
 </div>
 
 <div class="mb-3 form-check form-switch">
-    <input type="checkbox" class="form-check-input" id="enableSwitch" name="is_enabled" @if($giftcard->is_enabled ?? true) checked @endif>
+    <input type="checkbox" class="form-check-input" id="enableSwitch" name="is_enabled" @checked($giftcard->is_enabled ?? true)>
     <label class="form-check-label" for="enableSwitch">{{ trans('shop::admin.giftcards.enable') }}</label>
 </div>

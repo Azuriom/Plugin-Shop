@@ -113,6 +113,6 @@ class CartController extends Controller
 
         $cart->destroy();
 
-        return redirect()->route('shop.home')->with('success', trans('shop::messages.cart.purchase'));
+        return redirect()->route('shop.home')->with('success', trans('shop::messages.cart.success'));
     }
 }

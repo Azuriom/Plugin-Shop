@@ -41,7 +41,7 @@
         <label class="form-label" for="sandboxSelect">{{ trans('shop::admin.gateways.sandbox') }}</label>
         <select class="form-select @error('sandbox') is-invalid @enderror" id="sandboxSelect" name="sandbox" required>
             @foreach(['true', 'false'] as $sandboxOption)
-                <option value="{{ $sandboxOption }}" @if(old('sandbox', $gateway->data['sandbox'] ?? 'false') === $sandboxOption) selected @endif>
+                <option value="{{ $sandboxOption }}" @selected(old('sandbox', $gateway->data['sandbox'] ?? 'false') === $sandboxOption)>
                     {{ trans_bool($sandboxOption === 'true') }}
                 </option>
             @endforeach

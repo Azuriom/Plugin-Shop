@@ -13,7 +13,7 @@
 
         <select class="form-select @error('environment') is-invalid @enderror" id="environmentInput" name="environment">
             @foreach($type->environments() as $env)
-                <option value="{{ $env }}" @if(($gateway->data['environment'] ?? '') === $env) selected @endif>{{ $env }}</option>
+                <option value="{{ $env }}" @selected(($gateway->data['environment'] ?? '') === $env)>{{ $env }}</option>
             @endforeach
         </select>
 

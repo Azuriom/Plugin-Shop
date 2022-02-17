@@ -43,7 +43,7 @@ return [
 
     'cart' => [
         'title' => 'Cart',
-        'purchase' => 'Your purchase has been successfully completed.',
+        'success' => 'Your purchase has been successfully completed.',
         'guest' => 'You must be logged in to make a purchase.',
         'empty' => 'Your cart is empty.',
         'checkout' => 'Checkout',

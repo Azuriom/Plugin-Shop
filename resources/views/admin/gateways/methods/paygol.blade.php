@@ -21,7 +21,7 @@
         <label class="form-label" for="countrySelect">{{ trans('shop::admin.gateways.country') }}</label>
         <select class="form-select @error('country') is-invalid @enderror" id="countrySelect" name="country" required>
             @foreach($type->countries() as $code => $country)
-                <option value="{{ $code }}" @if(old('country', $gateway->data['country'] ?? 'US') === $code) selected @endif>{{ $country }}</option>
+                <option value="{{ $code }}" @selected(old('country', $gateway->data['country'] ?? 'US') === $code)>{{ $country }}</option>
             @endforeach
         </select>
 

@@ -33,7 +33,7 @@
 
         <select class="form-select @error('methods') is-invalid @enderror" id="methodsSelect" name="methods[]" multiple aria-describedby="methodsInfo">
             @foreach(\Azuriom\Plugin\Shop\Payment\Method\StripeMethod::PAYMENT_METHODS as $id => $name)
-                <option value="{{ $id }}" @if(in_array($id, $gateway->data['methods'] ?? [], true)) selected @endif>{{ $name }}</option>
+                <option value="{{ $id }}" @selected(in_array($id, $gateway->data['methods'] ?? [], true))>{{ $name }}</option>
             @endforeach
         </select>
 

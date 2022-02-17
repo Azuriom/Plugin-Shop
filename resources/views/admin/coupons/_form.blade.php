@@ -28,8 +28,8 @@
             <input type="number" min="0" class="form-control @error('discount') is-invalid @enderror" id="discountInput" name="discount" value="{{ old('discount', $coupon->discount ?? '') }}" required>
             <div class="input-group-append">
                 <select class="form-select" name="is_fixed">
-                    <option value="0" @if(!old('is_fixed', $coupon->is_fixed ?? false)) selected @endif>%</option>
-                    <option value="1" @if(old('is_fixed', $coupon->is_fixed ?? false)) selected @endif >{{ shop_active_currency() }}</option>
+                    <option value="0" @selected(!old('is_fixed', $coupon->is_fixed ?? false))>%</option>
+                    <option value="1" @selected(old('is_fixed', $coupon->is_fixed ?? false)) >{{ shop_active_currency() }}</option>
                 </select>
             </div>
 
@@ -81,7 +81,7 @@
 </div>
 
 <div class="mb-3 form-check form-switch">
-    <input type="checkbox" class="form-check-input" id="globalSwitch" name="is_global" data-bs-toggle="collapse" data-bs-target="#targetGroup" @if(old('is_global', $coupon->is_global ?? false)) checked @endif>
+    <input type="checkbox" class="form-check-input" id="globalSwitch" name="is_global" data-bs-toggle="collapse" data-bs-target="#targetGroup" @checked(old('is_global', $coupon->is_global ?? false))>
     <label class="form-check-label" for="globalSwitch">{{ trans('shop::admin.coupons.global') }}</label>
 </div>
 
@@ -94,7 +94,7 @@
                 @foreach($packages as $category => $localPackages)
                     <optgroup label="{{ $category }}">
                         @foreach($localPackages as $package)
-                            <option value="{{ $package->id }}" @if(isset($coupon) && $coupon->packages->contains($package)) selected @endif>{{ $package->name }}</option>
+                            <option value="{{ $package->id }}" @selected(isset($coupon) && $coupon->packages->contains($package))>{{ $package->name }}</option>
                         @endforeach
                     </optgroup>
                 @endforeach
@@ -108,11 +108,11 @@
 </div>
 
 <div class="mb-3 form-check form-switch">
-    <input type="checkbox" class="form-check-input" id="cumulateSwitch" name="can_cumulate" @if($coupon->can_cumulate ?? true) checked @endif>
+    <input type="checkbox" class="form-check-input" id="cumulateSwitch" name="can_cumulate" @checked($coupon->can_cumulate ?? true)>
     <label class="form-check-label" for="cumulateSwitch">{{ trans('shop::admin.coupons.cumulate') }}</label>
 </div>
 
 <div class="mb-3 form-check form-switch">
-    <input type="checkbox" class="form-check-input" id="enableSwitch" name="is_enabled" @if($coupon->is_enabled ?? true) checked @endif>
+    <input type="checkbox" class="form-check-input" id="enableSwitch" name="is_enabled" @checked($coupon->is_enabled ?? true)>
     <label class="form-check-label" for="enableSwitch">{{ trans('shop::admin.coupons.enable') }}</label>
 </div>

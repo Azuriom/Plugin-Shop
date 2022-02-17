@@ -47,7 +47,7 @@
 </div>
 
 <div class="mb-3 form-check form-switch">
-    <input type="checkbox" class="form-check-input" id="globalSwitch" name="is_global" data-bs-toggle="collapse" data-bs-target="#targetGroup" @if($discount->is_global ?? false) checked @endif>
+    <input type="checkbox" class="form-check-input" id="globalSwitch" name="is_global" data-bs-toggle="collapse" data-bs-target="#targetGroup" @checked($discount->is_global ?? false)>
     <label class="form-check-label" for="globalSwitch">{{ trans('shop::admin.discounts.global') }}</label>
 </div>
 
@@ -60,7 +60,7 @@
                 @foreach($categories as $category)
                     <optgroup label="{{ $category->name }}">
                         @foreach($category->packages as $package)
-                            <option value="{{ $package->id }}" @if(isset($discount) && $discount->packages->contains($package)) selected @endif>{{ $package->name }}</option>
+                            <option value="{{ $package->id }}" @selected(isset($discount) && $discount->packages->contains($package))>{{ $package->name }}</option>
                         @endforeach
                     </optgroup>
                 @endforeach
@@ -74,6 +74,6 @@
 </div>
 
 <div class="mb-3 form-check form-switch">
-    <input type="checkbox" class="form-check-input" id="enableSwitch" name="is_enabled" @if($discount->is_enabled ?? true) checked @endif>
+    <input type="checkbox" class="form-check-input" id="enableSwitch" name="is_enabled" @checked($discount->is_enabled ?? true)>
     <label class="form-check-label" for="enableSwitch">{{ trans('shop::admin.discounts.enable') }}</label>
 </div>

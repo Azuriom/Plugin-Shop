@@ -14,6 +14,6 @@
 @include($type->view())
 
 <div class="mb-3 form-check form-switch">
-    <input type="checkbox" class="form-check-input" id="enableSwitch" name="is_enabled" @if($gateway->is_enabled ?? true) checked @endif>
+    <input type="checkbox" class="form-check-input" id="enableSwitch" name="is_enabled" @checked($gateway->is_enabled ?? true)>
     <label class="form-check-label" for="enableSwitch">{{ trans('shop::admin.gateways.enable') }}</label>
 </div>

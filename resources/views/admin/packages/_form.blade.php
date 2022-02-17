@@ -34,12 +34,12 @@
         <label class="form-label" for="categorySelect">{{ trans('shop::messages.fields.category') }}</label>
         <select class="form-select @error('category_id') is-invalid @enderror" id="categorySelect" name="category_id" required>
             @foreach($categories as $category)
-                <option value="{{ $category->id }}" @if(isset($package) && $category->is($package->category)) selected @endif>
+                <option value="{{ $category->id }}" @selected(isset($package) && $category->is($package->category))>
                     {{ $category->name }}
                 </option>
 
                 @foreach($category->categories as $subCategory)
-                    <option value="{{ $subCategory->id }}" @if(isset($package) && $subCategory->is($package->category)) selected @endif>
+                    <option value="{{ $subCategory->id }}" @selected(isset($package) && $subCategory->is($package->category))>
                         {{ $subCategory->name }}
                     </option>
                 @endforeach
@@ -69,7 +69,7 @@
         <select class="form-select @error('role_id') is-invalid @enderror" id="roleSelect" name="role_id">
             <option value="">{{ trans('messages.none') }}</option>
             @foreach($roles as $role)
-                <option value="{{ $role->id }}" @if(isset($package) && $role->is($package->role)) selected @endif>
+                <option value="{{ $role->id }}" @selected(isset($package) && $role->is($package->role))>
                     {{ $role->name }}
                 </option>
             @endforeach
@@ -94,7 +94,7 @@
         <label class="form-label" for="requiredRoleSelect">{{ trans('shop::messages.fields.required_roles') }}</label>
         <select class="form-select @error('required_roles') is-invalid @enderror" id="requiredRoleSelect" name="required_roles[]" multiple>
             @foreach($roles as $role)
-                <option value="{{ $role->id }}" @if(isset($package) && optional($package->required_roles)->contains($role->id)) selected @endif>
+                <option value="{{ $role->id }}" @selected(isset($package) && optional($package->required_roles)->contains($role->id))>
                     {{ $role->name }}
                 </option>
             @endforeach
@@ -113,7 +113,7 @@
                 <optgroup label="{{ $category->name }}">
                     @foreach($category->packages as $categoryPackage)
                         @if(! isset($package) || ! $categoryPackage->is($package))
-                            <option value="{{ $categoryPackage->id }}" @if(isset($package) && optional($package->required_packages)->contains($categoryPackage->id)) selected @endif>
+                            <option value="{{ $categoryPackage->id }}" @selected(isset($package) && optional($package->required_packages)->contains($categoryPackage->id))>
                                 {{ $categoryPackage->name }}
                             </option>
                         @endif
@@ -150,7 +150,7 @@
 
     <select class="form-select @error('servers') is-invalid @enderror" id="serversSelect" name="servers[]" multiple>
         @foreach($servers as $server)
-            <option value="{{ $server->id }}" @if(isset($package) && $package->servers->contains($server) ?? false) selected @endif>{{ $server->name }}</option>
+            <option value="{{ $server->id }}" @selected(isset($package) && $package->servers->contains($server) ?? false)>{{ $server->name }}</option>
         @endforeach
     </select>
 
@@ -160,16 +160,16 @@
 </div>
 
 <div class="mb-3 form-check form-switch">
-    <input type="checkbox" class="form-check-input" id="needOnlineSwitch" name="need_online" @if($package->need_online ?? true) checked @endif>
+    <input type="checkbox" class="form-check-input" id="needOnlineSwitch" name="need_online" @checked($package->need_online ?? true)>
     <label class="form-check-label" for="needOnlineSwitch">{{ trans('shop::admin.packages.require_online') }}</label>
 </div>
 
 <div class="mb-3 form-check form-switch">
-    <input type="checkbox" class="form-check-input" id="quantitySwitch" name="has_quantity" @if($package->has_quantity ?? true) checked @endif>
+    <input type="checkbox" class="form-check-input" id="quantitySwitch" name="has_quantity" @checked($package->has_quantity ?? true)>
     <label class="form-check-label" for="quantitySwitch">{{ trans('shop::admin.packages.enable_quantity') }}</label>
 </div>
 
 <div class="mb-3 form-check form-switch">
-    <input type="checkbox" class="form-check-input" id="enableSwitch" name="is_enabled" @if($package->is_enabled ?? true) checked @endif>
+    <input type="checkbox" class="form-check-input" id="enableSwitch" name="is_enabled" @checked($package->is_enabled ?? true)>
     <label class="form-check-label" for="enableSwitch">{{ trans('shop::admin.packages.enable') }}</label>
 </div>

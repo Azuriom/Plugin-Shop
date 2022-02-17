@@ -44,7 +44,7 @@
             @foreach($gateways as $gateway)
                 <div class="col-lg-3 col-md-4 col-sm-6">
                     <div class="mb-3 form-check form-switch">
-                        <input type="checkbox" class="form-check-input" id="gateways{{ $gateway->id }}" name="gateways[]" value="{{ $gateway->id }}" @if(isset($offer) && $offer->gateways->contains($gateway)) checked @endif>
+                        <input type="checkbox" class="form-check-input" id="gateways{{ $gateway->id }}" name="gateways[]" value="{{ $gateway->id }}" @checked(isset($offer) && $offer->gateways->contains($gateway))>
                         <label class="form-check-label" for="gateways{{ $gateway->id }}">{{ $gateway->name }}</label>
                     </div>
                 </div>
@@ -58,6 +58,6 @@
 </div>
 
 <div class="mb-3 form-check form-switch">
-    <input type="checkbox" class="form-check-input" id="enableSwitch" name="is_enabled" @if($offer->is_enabled ?? true) checked @endif>
+    <input type="checkbox" class="form-check-input" id="enableSwitch" name="is_enabled" @checked($offer->is_enabled ?? true)>
     <label class="form-check-label" for="enableSwitch">{{ trans('shop::admin.offers.enable') }}</label>
 </div>

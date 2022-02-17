@@ -16,14 +16,14 @@
 
                     <select class="form-select @error('currency') is-invalid @enderror" id="currencySelect" name="currency">
                         @foreach($currencies as $code => $name)
-                            <option value="{{ $code }}" @if($currentCurrency === $code) selected @endif>{{ $name }}</option>
+                            <option value="{{ $code }}" @selected($currentCurrency === $code)>{{ $name }}</option>
                         @endforeach
                     </select>
                 </div>
 
                 <div class="mb-3">
                     <div class="form-check form-switch">
-                        <input type="checkbox" class="form-check-input" id="useSiteMoneyCheckbox" name="use_site_money" @if(use_site_money()) checked @endif>
+                        <input type="checkbox" class="form-check-input" id="useSiteMoneyCheckbox" name="use_site_money" @checked(use_site_money())>
                         <label class="form-check-label" for="useSiteMoneyCheckbox">{{ trans('shop::admin.settings.use_site_money') }}</label>
                     </div>
                 </div>
