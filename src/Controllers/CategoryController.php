@@ -17,6 +17,7 @@ class CategoryController extends Controller
     public function index()
     {
         return view('shop::categories.index', [
+            'category' => null,
             'categories' => $this->getCategories(),
             'goal' => $this->getMonthGoal(),
             'welcome' => new HtmlString(setting('shop.home', '')),
@@ -64,9 +65,6 @@ class CategoryController extends Controller
         return Category::scopes(['parents', 'enabled'])
             ->with('categories')
             ->withCount('packages')
-            ->get()
-            ->filter(function (Category $cat) use ($current) {
-                return $cat->is($current) || ! $cat->categories->isEmpty() || $cat->packages_count > 0;
-            });
+            ->get();
     }
 }

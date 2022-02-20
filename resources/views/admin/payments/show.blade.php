@@ -31,7 +31,7 @@
                             {{ trans('messages.fields.user') }}:
                             <a href="{{ route('admin.users.edit', $payment->user) }}">{{ $payment->user->name }}</a>
                         </li>
-                        <li>{{ trans('messages.fields.date') }}: {{ format_date_compact($payment->created_at, true) }}</li>
+                        <li>{{ trans('messages.fields.date') }}: {{ format_date_compact($payment->created_at) }}</li>
 
                         @if(!$payment->coupons->isEmpty())
                             <li>

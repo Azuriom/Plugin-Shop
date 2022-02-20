@@ -17,28 +17,30 @@
 @endpush
 
 @section('content')
-    <div class="container content">
-        <h1>{{ trans('shop::messages.offers.amount') }}</h1>
+    <h1>{{ trans('shop::messages.offers.amount') }}</h1>
 
-        <div class="row">
-            @forelse($offers as $offer)
-                <div class="col-md-3">
-                    <div class="card shadow-sm mb-3">
-                        <a href="{{ route('shop.offers.pay', [$offer->id, $gateway->type]) }}" class="payment-method">
-                            <div class="card-body text-center">
-                                <h3>{{ $offer->name }}</h3>
-                                <h4>{{ $offer->price }} {{ currency_display() }}</h4>
-                            </div>
-                        </a>
+    <div class="card">
+        <div class="card-body">
+            <div class="row gy-3">
+                @forelse($offers as $offer)
+                    <div class="col-md-3">
+                        <div class="card">
+                            <a href="{{ route('shop.offers.pay', [$offer->id, $gateway->type]) }}" class="payment-method">
+                                <div class="card-body text-center">
+                                    <h3>{{ $offer->name }}</h3>
+                                    <h4>{{ $offer->price }} {{ currency_display() }}</h4>
+                                </div>
+                            </a>
+                        </div>
                     </div>
-                </div>
-            @empty
-                <div class="col">
-                    <div class="alert alert-warning" role="alert">
-                        {{ trans('shop::messages.offers.empty') }}
+                @empty
+                    <div class="col">
+                        <div class="alert alert-warning" role="alert">
+                            {{ trans('shop::messages.offers.empty') }}
+                        </div>
                     </div>
-                </div>
-            @endforelse
+                @endforelse
+            </div>
         </div>
     </div>
 

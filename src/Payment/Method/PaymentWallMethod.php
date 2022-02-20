@@ -77,11 +77,6 @@ class PaymentWallMethod extends PaymentMethod
         return $this->processPayment($payment, $pingback->getReferenceId());
     }
 
-    public function success(Request $request)
-    {
-        return view('shop::payments.success');
-    }
-
     public function view()
     {
         return 'shop::admin.gateways.methods.paymentwall';

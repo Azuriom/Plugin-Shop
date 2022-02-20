@@ -81,8 +81,7 @@ return [
         'info' => 'Purchase #:id on :website',
         'error' => 'The payment could not be completed.',
 
-        'success' => 'Payment completed',
-        'success_info' => 'You\'ll receive your purchase in-game in less than a minute.',
+        'success' => 'Payment completed, you\'ll receive your purchase in-game in less than a minute.',
 
         'webhook' => 'New payment on the shop',
     ],
@@ -101,6 +100,7 @@ return [
 
     'profile' => [
         'payments' => 'Your payments',
+        'money' => 'Money: :balance'
     ],
 
     'giftcards' => [

@@ -99,11 +99,6 @@ class XsollaMethod extends PaymentMethod
         return $webhookServer->getSymfonyResponse($webhookRequest);
     }
 
-    public function success(Request $request)
-    {
-        return view('shop::payments.success');
-    }
-
     public function view()
     {
         return 'shop::admin.gateways.methods.xsolla';

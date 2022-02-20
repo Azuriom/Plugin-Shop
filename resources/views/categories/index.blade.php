@@ -4,20 +4,17 @@
 
 
 @section('content')
-    <div class="container content">
-        <div class="row">
-            <div class="col-lg-3">
-                @include('shop::categories.sidebar')
-            </div>
+    <h1>{{ trans('shop::messages.title') }}</h1>
 
-            <div class="col-lg-9">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <h4 class="card-title">{{ trans('shop::messages.title') }}</h4>
-                        <div class="card-text">
-                            {{ $welcome }}
-                        </div>
-                    </div>
+    <div class="row">
+        <div class="col-lg-3">
+            @include('shop::categories._sidebar')
+        </div>
+
+        <div class="col-lg-9">
+            <div class="card">
+                <div class="card-body">
+                    {{ $welcome }}
                 </div>
             </div>
         </div>

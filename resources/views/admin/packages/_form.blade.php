@@ -94,7 +94,7 @@
         <label class="form-label" for="requiredRoleSelect">{{ trans('shop::messages.fields.required_roles') }}</label>
         <select class="form-select @error('required_roles') is-invalid @enderror" id="requiredRoleSelect" name="required_roles[]" multiple>
             @foreach($roles as $role)
-                <option value="{{ $role->id }}" @selected(isset($package) && optional($package->required_roles)->contains($role->id))>
+                <option value="{{ $role->id }}" @selected(isset($package) && $package->required_roles?->contains($role->id))>
                     {{ $role->name }}
                 </option>
             @endforeach
@@ -113,7 +113,7 @@
                 <optgroup label="{{ $category->name }}">
                     @foreach($category->packages as $categoryPackage)
                         @if(! isset($package) || ! $categoryPackage->is($package))
-                            <option value="{{ $categoryPackage->id }}" @selected(isset($package) && optional($package->required_packages)->contains($categoryPackage->id))>
+                            <option value="{{ $categoryPackage->id }}" @selected(isset($package) && $package->required_packages?->contains($categoryPackage->id))>
                                 {{ $categoryPackage->name }}
                             </option>
                         @endif

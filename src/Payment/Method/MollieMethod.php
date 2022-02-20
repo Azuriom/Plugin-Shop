@@ -63,11 +63,6 @@ class MollieMethod extends PaymentMethod
         return $this->processPayment($payment, $orderId);
     }
 
-    public function success(Request $request)
-    {
-        return view('shop::payments.success');
-    }
-
     public function view()
     {
         return 'shop::admin.gateways.methods.mollie';

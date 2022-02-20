@@ -128,18 +128,12 @@ class Payment extends Model
 
     public function statusColor()
     {
-        switch ($this->status) {
-            case 'pending':
-            case 'expired':
-                return 'warning';
-            case 'chargeback':
-            case 'error':
-                return 'danger';
-            case 'completed':
-                return 'success';
-            default:
-                return 'secondary';
-        }
+        return match ($this->status) {
+            'pending', 'expired' => 'warning',
+            'chargeback', 'error' => 'danger',
+            'completed' => 'success',
+            default => 'secondary',
+        };
     }
 
     public function isPending()

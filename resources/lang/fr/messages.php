@@ -81,8 +81,7 @@ return [
         'info' => 'Achat #:id sur :website',
         'error' => 'Le paiement n\'a pas pu être effectué.',
 
-        'success' => 'Paiement effectué',
-        'success_info' => 'Vous recevrez votre achat dans le jeu en moins d\'une minute.',
+        'success' => 'Paiement effectué, vous recevrez votre achat dans le jeu en moins d\'une minute',
 
         'webhook' => 'Nouveau paiement effectué sur la boutique',
     ],
@@ -101,6 +100,7 @@ return [
 
     'profile' => [
         'payments' => 'Vos achats',
+        'money' => 'Argent : :balance'
     ],
 
     'giftcards' => [

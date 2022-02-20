@@ -1,13 +1,11 @@
-<h4>Categories</h4>
-
 <div class="list-group mb-3">
     @foreach($categories as $subCategory)
-        <a href="{{ route('shop.categories.show', $subCategory) }}" class="list-group-item @if($subCategory->is($category ?? null)) active @endif">
+        <a href="{{ route('shop.categories.show', $subCategory) }}" class="list-group-item @if($subCategory->is($category)) active @endif">
             {{ $subCategory->name }}
         </a>
 
         @foreach($subCategory->categories as $cat)
-            <a href="{{ route('shop.categories.show', $cat) }}" class="list-group-item pl-5 @if($category->is($cat)) active @endif">
+            <a href="{{ route('shop.categories.show', $cat) }}" class="list-group-item ps-5 @if($category->is($cat)) active @endif">
                 {{ $cat->name }}
             </a>
         @endforeach
@@ -15,14 +13,20 @@
 </div>
 
 @auth
-    <div class="mb-4">
+    <div class="d-grid gap-2 mb-4">
         @if(use_site_money())
-            <p class="text-center">{{ trans('messages.fields.money') }}: {{ format_money(auth()->user()->money) }}</p>
+            <p class="text-center mb-0">
+                {{ trans('shop::messages.profile.money', ['balance' => format_money(auth()->user()->money)]) }}
+            </p>
 
-            <a href="{{ route('shop.offers.select') }}" class="btn btn-primary btn-block">{{ trans('shop::messages.cart.credit') }}</a>
+            <a href="{{ route('shop.offers.select') }}" class="btn btn-primary btn-block">
+                {{ trans('shop::messages.cart.credit') }}
+            </a>
         @endif
 
-        <a href="{{ route('shop.cart.index') }}" class="btn btn-primary btn-block">{{ trans('shop::messages.cart.title') }}</a>
+        <a href="{{ route('shop.cart.index') }}" class="btn btn-primary btn-block">
+            {{ trans('shop::messages.cart.title') }}
+        </a>
     </div>
 @endauth
 

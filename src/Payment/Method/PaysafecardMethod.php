@@ -91,7 +91,7 @@ class PaysafecardMethod extends PaymentMethod
             return $this->errorResponse();
         }
 
-        return view('shop::payments.success');
+        return parent::success($request);
     }
 
     private function processPscPayment(string $paymentId)

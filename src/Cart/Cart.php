@@ -19,7 +19,7 @@ class Cart implements Arrayable
     /**
      * The session where this cart is stored.
      */
-    private Session $session;
+    private ?Session $session;
 
     /**
      * The items in the cart.
@@ -34,11 +34,9 @@ class Cart implements Arrayable
     /**
      * Create a new cart instance.
      *
-     * @param  \Illuminate\Contracts\Session\Session  $session
-     *
-     * @deprecated Use Cart::fromSession() or Cart::empty()
+     * @param  \Illuminate\Contracts\Session\Session|null  $session
      */
-    public function __construct(Session $session = null)
+    private function __construct(Session $session = null)
     {
         $this->session = $session;
 
@@ -270,9 +268,7 @@ class Cart implements Arrayable
      */
     public function save()
     {
-        if ($this->session) {
-            $this->session->put('shop.cart', $this->toArray());
-        }
+        $this->session?->put('shop.cart', $this->toArray());
     }
 
     /**
@@ -284,9 +280,7 @@ class Cart implements Arrayable
         $this->items = collect();
         $this->coupons = collect();
 
-        if ($this->session) {
-            $this->session->remove('shop.cart');
-        }
+        $this->session?->remove('shop.cart');
     }
 
     /**

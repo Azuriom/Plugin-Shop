@@ -42,10 +42,8 @@ class CartItem implements Arrayable
 
     /**
      * The associated model.
-     *
-     * @var \Azuriom\Plugin\Shop\Models\Concerns\Buyable
      */
-    private $buyable;
+    private Buyable $buyable;
 
     /**
      * Create a new item instance.

@@ -36,7 +36,7 @@ class GiftcardController extends Controller
      */
     public function store(GiftcardRequest $request)
     {
-        $giftcard = Giftcard::create($request->validated());
+        Giftcard::create($request->validated());
 
         return redirect()->route('shop.admin.giftcards.index')
             ->with('success', trans('messages.status.success'));
