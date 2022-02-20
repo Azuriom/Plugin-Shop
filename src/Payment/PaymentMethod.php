@@ -54,7 +54,8 @@ abstract class PaymentMethod
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function success(Request $request) {
+    public function success(Request $request)
+    {
         return redirect()->route('shop.index')
             ->with('success', trans('shop::messages.payment.success'));
     }

@@ -39,7 +39,7 @@
         <h4>{{ trans('shop::messages.goal.title') }}</h4>
 
         <div class="progress mb-1">
-            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="{{ $goal }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ $goal }}%"></div>
+            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="{{ $goal }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ min($goal, 100) }}%"></div>
         </div>
 
         <p class="text-center">{{ trans_choice('shop::messages.goal.progress', $goal) }}</p>

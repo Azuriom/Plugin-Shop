@@ -16,7 +16,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $message= setting('shop.home', trans('shop::messages.welcome'));
+        $message = setting('shop.home', trans('shop::messages.welcome'));
 
         return view('shop::categories.index', [
             'category' => null,

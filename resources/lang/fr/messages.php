@@ -101,7 +101,7 @@ return [
 
     'profile' => [
         'payments' => 'Vos achats',
-        'money' => 'Argent : :balance'
+        'money' => 'Argent : :balance',
     ],
 
     'giftcards' => [
