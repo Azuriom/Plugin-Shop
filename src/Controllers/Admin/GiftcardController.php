@@ -45,7 +45,7 @@ class GiftcardController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \Azuriom\Plugin\Shop\Models\Coupon  $coupon
+     * @param  \Azuriom\Plugin\Shop\Models\Giftcard  $giftcard
      * @return \Illuminate\Http\Response
      */
     public function edit(Giftcard $giftcard)
@@ -73,7 +73,7 @@ class GiftcardController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \Azuriom\Plugin\Shop\Models\Giftcard  $coupon
+     * @param  \Azuriom\Plugin\Shop\Models\Giftcard  $giftcard
      * @return \Illuminate\Http\Response
      *
      * @throws \Exception

@@ -2,6 +2,7 @@
 
 return [
     'title' => 'Boutique',
+    'welcome' => 'Welcome on the shop',
 
     'buy' => 'Acheter',
 

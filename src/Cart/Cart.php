@@ -119,7 +119,7 @@ class Cart implements Arrayable
     }
 
     /**
-     * Get from the cart the cart items associated to this model.
+     * Get from the cartt items associated to this model.
      * Return null if this model is not in this cart.
      *
      * @param  \Azuriom\Plugin\Shop\Models\Concerns\Buyable  $buyable

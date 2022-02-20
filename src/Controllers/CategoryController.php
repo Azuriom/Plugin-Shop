@@ -16,11 +16,13 @@ class CategoryController extends Controller
      */
     public function index()
     {
+        $message= setting('shop.home', trans('shop::messages.welcome'));
+
         return view('shop::categories.index', [
             'category' => null,
             'categories' => $this->getCategories(),
             'goal' => $this->getMonthGoal(),
-            'welcome' => new HtmlString(setting('shop.home', '')),
+            'welcome' => new HtmlString($message),
         ]);
     }
 
