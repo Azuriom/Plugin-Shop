@@ -35,14 +35,6 @@ return new class extends Migration
             $table->foreign('coupon_id')->references('id')->on('shop_coupons')->onDelete('cascade');
             $table->foreign('package_id')->references('id')->on('shop_packages')->onDelete('cascade');
         });
-
-        Schema::create('shop_coupon_payment', function (Blueprint $table) {
-            $table->unsignedInteger('payment_id');
-            $table->unsignedInteger('coupon_id');
-
-            $table->foreign('payment_id')->references('id')->on('shop_payments')->cascadeOnDelete();
-            $table->foreign('coupon_id')->references('id')->on('shop_coupons')->cascadeOnDelete();
-        });
     }
 
     /**

@@ -87,6 +87,10 @@ return [
         'webhook' => 'New payment on the shop',
     ],
 
+    'categories' => [
+        'empty' => 'This category is empty.',
+    ],
+
     'packages' => [
         'limit' => 'You have purchased the maximum possible for this packages.',
         'requirements' => 'You don\'t have the requirements to purchase this package.',

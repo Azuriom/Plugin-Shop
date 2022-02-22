@@ -25,6 +25,14 @@ return new class extends Migration
 
             $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
         });
+
+        Schema::create('shop_coupon_payment', function (Blueprint $table) {
+            $table->unsignedInteger('payment_id');
+            $table->unsignedInteger('coupon_id');
+
+            $table->foreign('payment_id')->references('id')->on('shop_payments')->cascadeOnDelete();
+            $table->foreign('coupon_id')->references('id')->on('shop_coupons')->cascadeOnDelete();
+        });
     }
 
     /**

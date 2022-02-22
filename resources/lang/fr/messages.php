@@ -87,6 +87,10 @@ return [
         'webhook' => 'Nouveau paiement effectué sur la boutique',
     ],
 
+    'categories' => [
+        'empty' => 'Cette catégorie est vide.',
+    ],
+
     'packages' => [
         'limit' => 'Vous avez acheté le maximum possible pour cet article.',
         'requirements' => 'Vous n\'avez pas les pré-requis pour acheter cet article.',
