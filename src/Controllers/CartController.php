@@ -109,7 +109,6 @@ class CartController extends Controller
         }
 
         $user->removeMoney($total);
-        $user->save();
 
         $cart->destroy();
 
