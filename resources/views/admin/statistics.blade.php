@@ -16,7 +16,7 @@
 
                         <div class="col-auto">
                             <div class="stat text-primary">
-                                <i class="fas fa-money-bill"></i>
+                                <i class="bi bi-cash"></i>
                             </div>
                         </div>
                     </div>
@@ -37,7 +37,7 @@
 
                         <div class="col-auto">
                             <div class="stat text-primary">
-                                <i class="fas fa-dollar-sign"></i>
+                                <i class="bi bi-coin"></i>
                             </div>
                         </div>
                     </div>
@@ -60,7 +60,7 @@
 
                         <div class="col-auto">
                             <div class="stat text-primary">
-                                <i class="fas fa-money-bill-wave"></i>
+                                <i class="bi bi-cash-coin"></i>
                             </div>
                         </div>
                     </div>
@@ -81,7 +81,7 @@
 
                         <div class="col-auto">
                             <div class="stat text-primary">
-                                <i class="fas fa-dollar-sign"></i>
+                                <i class="bi bi-cash-stack"></i>
                             </div>
                         </div>
                     </div>

@@ -45,7 +45,7 @@
                                 </td>
                                 <td>
                                     <a href="{{ route('shop.cart.remove', $cartItem->id) }}" class="btn btn-sm btn-danger" title="{{ trans('messages.actions.delete') }}">
-                                        <i class="fas fa-times fa-fw"></i>
+                                        <i class="bi bi-x-lg"></i>
                                     </a>
                                 </td>
                             </tr>
@@ -113,7 +113,7 @@
                                                 @csrf
 
                                                 <button type="submit" class="btn btn-sm btn-danger" title="{{ trans('messages.actions.delete') }}">
-                                                    <i class="fas fa-times fa-fw"></i>
+                                                    <i class="bi bi-x-lg"></i>
                                                 </button>
                                             </form>
                                         </td>

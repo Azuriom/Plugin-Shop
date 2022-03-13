@@ -55,5 +55,5 @@
 
 
 <div class="alert alert-info" role="alert">
-    <i class="fas fa-info-circle"></i> @lang('shop::admin.gateways.xsolla', ['url' => route('shop.payments.notification', 'xsolla')])
+    <i class="bi bi-info-circle"></i> @lang('shop::admin.gateways.xsolla', ['url' => route('shop.payments.notification', 'xsolla')])
 </div>

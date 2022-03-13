@@ -2,13 +2,13 @@
     <div class="card">
         <div class="card-body d-flex justify-content-between">
             <span>
-                <i class="fas fa-arrows-alt sortable-handle"></i>
+                <i class="bi bi-arrows-move sortable-handle"></i>
                 <a href="{{ route('shop.categories.show', $category) }}">{{ $category->name }}</a>
-                <i class="fas fa-th"></i>
+                <i class="bi bi-collection"></i>
             </span>
             <span>
-                <a href="{{ route('shop.admin.categories.edit', $category) }}" class="mx-1" title="{{ trans('messages.actions.edit') }}" data-bs-toggle="tooltip"><i class="fas fa-edit"></i></a>
-                <a href="{{ route('shop.admin.categories.destroy', $category) }}" class="mx-1" title="{{ trans('messages.actions.delete') }}" data-bs-toggle="tooltip" data-confirm="delete"><i class="fas fa-trash"></i></a>
+                <a href="{{ route('shop.admin.categories.edit', $category) }}" class="mx-1" title="{{ trans('messages.actions.edit') }}" data-bs-toggle="tooltip"><i class="bi bi-pencil-square"></i></a>
+                <a href="{{ route('shop.admin.categories.destroy', $category) }}" class="mx-1" title="{{ trans('messages.actions.delete') }}" data-bs-toggle="tooltip" data-confirm="delete"><i class="bi bi-trash"></i></a>
             </span>
         </div>
     </div>
@@ -20,16 +20,16 @@
                 <div class="card">
                     <div class="card-body d-flex justify-content-between">
                         <span>
-                            <i class="fas fa-arrows-alt sortable-handle"></i>
+                            <i class="bi bi-arrows-move sortable-handle"></i>
                             {{ $package->name }}
                         </span>
                         <div class="d-inline-block">
-                            <a href="{{ route('shop.admin.packages.edit', $package) }}" class="mx-1" title="{{ trans('messages.actions.edit') }}" data-bs-toggle="tooltip"><i class="fas fa-edit"></i></a>
+                            <a href="{{ route('shop.admin.packages.edit', $package) }}" class="mx-1" title="{{ trans('messages.actions.edit') }}" data-bs-toggle="tooltip"><i class="bi bi-pencil-square"></i></a>
                             <form class="d-inline-block" action="{{ route('shop.admin.packages.duplicate', $package) }}" method="POST">
                                 @csrf
-                                <button class="btn btn-link mx-1 p-0" title="{{ trans('shop::messages.actions.duplicate') }}" data-bs-toggle="tooltip"><i class="fas fa-clone"></i></button>
+                                <button class="btn btn-link mx-1 p-0" title="{{ trans('shop::messages.actions.duplicate') }}" data-bs-toggle="tooltip"><i class="bi bi-layers"></i></button>
                             </form>
-                            <a href="{{ route('shop.admin.packages.destroy', $package) }}" class="mx-1" title="{{ trans('messages.actions.delete') }}" data-bs-toggle="tooltip" data-confirm="delete"><i class="fas fa-trash"></i></a>
+                            <a href="{{ route('shop.admin.packages.destroy', $package) }}" class="mx-1" title="{{ trans('messages.actions.delete') }}" data-bs-toggle="tooltip" data-confirm="delete"><i class="bi bi-trash"></i></a>
                         </div>
                     </div>
                 </div>

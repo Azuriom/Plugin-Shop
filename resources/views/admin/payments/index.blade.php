@@ -13,7 +13,7 @@
                 <input type="text" class="form-control" id="searchInput" name="search" value="{{ $search ?? '' }}" placeholder="{{ trans('messages.actions.search') }}">
 
                 <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-search fa-sm"></i>
+                    <i class="bi bi-search"></i>
                 </button>
             </div>
         </div>
@@ -54,7 +54,7 @@
                             <td>{{ $payment->transaction_id ?? trans('messages.unknown') }}</td>
                             <td>{{ format_date_compact($payment->created_at) }}</td>
                             <td>
-                                <a href="{{ route('shop.admin.payments.show', $payment) }}" class="mx-1" title="{{ trans('messages.actions.show') }}" data-bs-toggle="tooltip"><i class="fas fa-eye"></i></a>
+                                <a href="{{ route('shop.admin.payments.show', $payment) }}" class="mx-1" title="{{ trans('messages.actions.show') }}" data-bs-toggle="tooltip"><i class="bi bi-eye"></i></a>
                             </td>
                         </tr>
                     @endforeach
@@ -66,7 +66,7 @@
             {{ $payments->withQueryString()->links() }}
 
             <a href="{{ route('shop.admin.payments.create') }}" class="btn btn-primary">
-                <i class="fas fa-plus"></i> {{ trans('messages.actions.add') }}
+                <i class="bi bi-plus-lg"></i> {{ trans('messages.actions.add') }}
             </a>
         </div>
     </div>

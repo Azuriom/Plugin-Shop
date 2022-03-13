@@ -87,7 +87,7 @@ class ShopServiceProvider extends BasePluginServiceProvider
             'shop' => [
                 'name' => trans('shop::admin.nav.title'),
                 'type' => 'dropdown',
-                'icon' => 'fas fa-shopping-cart',
+                'icon' => 'bi bi-cart',
                 'route' => 'shop.admin.*',
                 'permission' => 'shop.admin',
                 'items' => [

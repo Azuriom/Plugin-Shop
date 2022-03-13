@@ -23,10 +23,10 @@
                                     </div>
 
                                     <a href="{{ route('shop.admin.gateways.edit', $gateway) }}" class="btn btn-primary">
-                                        <i class="fas fa-edit"></i> {{ trans('messages.actions.edit') }}
+                                        <i class="bi bi-pencil-square"></i> {{ trans('messages.actions.edit') }}
                                     </a>
                                     <a href="{{ route('shop.admin.gateways.destroy', $gateway) }}" class="btn btn-danger" data-confirm="delete">
-                                        <i class="fas fa-trash"></i> {{ trans('messages.actions.delete') }}
+                                        <i class="bi bi-trash"></i> {{ trans('messages.actions.delete') }}
                                     </a>
                                 </div>
                             </div>
@@ -56,7 +56,7 @@
                 </div>
 
                 <a href="#" onclick="this.href = document.getElementById('typeSelect').value" class="btn btn-primary">
-                    <i class="fas fa-plus"></i> {{ trans('messages.actions.add') }}
+                    <i class="bi bi-plus-lg"></i> {{ trans('messages.actions.add') }}
                 </a>
             </div>
         </div>
