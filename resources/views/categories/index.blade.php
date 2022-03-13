@@ -2,10 +2,21 @@
 
 @section('title', trans('shop::messages.title'))
 
+
 @section('content')
-    <div class="container content">
-        <div class="alert alert-warning" role="alert">
-            {{ trans('shop::messages.categories.empty') }}
+    <h1>{{ trans('shop::messages.title') }}</h1>
+
+    <div class="row">
+        <div class="col-lg-3">
+            @include('shop::categories._sidebar')
+        </div>
+
+        <div class="col-lg-9">
+            <div class="card">
+                <div class="card-body">
+                    {{ $welcome }}
+                </div>
+            </div>
         </div>
     </div>
 @endsection

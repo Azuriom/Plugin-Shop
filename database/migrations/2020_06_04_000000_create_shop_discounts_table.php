@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateShopDiscountsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,6 @@ class CreateShopDiscountsTable extends Migration
      */
     public function up()
     {
-        // Fix for a wrong shop updates
-        // TODO Azuriom 1.0 remove
-        Schema::dropIfExists('shop_discounts');
-        Schema::dropIfExists('shop_discount_package');
-
         Schema::create('shop_discounts', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
@@ -48,4 +43,4 @@ class CreateShopDiscountsTable extends Migration
         Schema::dropIfExists('shop_discounts');
         Schema::dropIfExists('shop_discount_package');
     }
-}
+};

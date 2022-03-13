@@ -26,18 +26,18 @@
                             <td>{{ $giftcard->code }}</td>
                             <td>{{ shop_format_amount($giftcard->amount) }}</td>
                             <td>
-                                <span class="badge badge-{{ $giftcard->is_enabled ? 'success' : 'danger' }}">
+                                <span class="badge bg-{{ $giftcard->is_enabled ? 'success' : 'danger' }}">
                                     {{ trans_bool($giftcard->is_enabled) }}
                                 </span>
                             </td>
                             <td>
-                                <span class="badge badge-{{ $giftcard->isActive() ? 'success' : 'danger' }}">
+                                <span class="badge bg-{{ $giftcard->isActive() ? 'success' : 'danger' }}">
                                     {{ trans_bool($giftcard->isActive()) }}
                                 </span>
                             </td>
                             <td>
-                                <a href="{{ route('shop.admin.giftcards.edit', $giftcard) }}" class="mx-1" title="{{ trans('messages.actions.edit') }}" data-toggle="tooltip"><i class="fas fa-edit"></i></a>
-                                <a href="{{ route('shop.admin.giftcards.destroy', $giftcard) }}" class="mx-1" title="{{ trans('messages.actions.delete') }}" data-toggle="tooltip" data-confirm="delete"><i class="fas fa-trash"></i></a>
+                                <a href="{{ route('shop.admin.giftcards.edit', $giftcard) }}" class="mx-1" title="{{ trans('messages.actions.edit') }}" data-bs-toggle="tooltip"><i class="bi bi-pencil-square"></i></a>
+                                <a href="{{ route('shop.admin.giftcards.destroy', $giftcard) }}" class="mx-1" title="{{ trans('messages.actions.delete') }}" data-bs-toggle="tooltip" data-confirm="delete"><i class="bi bi-trash"></i></a>
                             </td>
                         </tr>
                     @endforeach
@@ -47,13 +47,13 @@
             </div>
 
             <a class="btn btn-primary" href="{{ route('shop.admin.giftcards.create') }}">
-                <i class="fas fa-plus"></i> {{ trans('messages.actions.add') }}
+                <i class="bi bi-plus-lg"></i> {{ trans('messages.actions.add') }}
             </a>
         </div>
     </div>
     @else
         <div class="alert alert-warning" role="alert">
-            <a href="{{route('shop.admin.settings')}}">{{ trans('shop::admin.settings.use-site-money')}}</a>
+            <a href="{{route('shop.admin.settings')}}">{{ trans('shop::admin.settings.use_site_money')}}</a>
         </div>
     @endif
 

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateShopPackagesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -23,6 +23,8 @@ class CreateShopPackagesTable extends Migration
             $table->string('image')->nullable();
             $table->unsignedDecimal('price');
             $table->text('commands');
+            $table->unsignedInteger('role_id')->nullable();
+            $table->text('required_roles')->nullable();
             $table->boolean('need_online')->default(false);
             $table->unsignedInteger('user_limit')->nullable();
             $table->text('required_packages')->nullable();
@@ -31,6 +33,7 @@ class CreateShopPackagesTable extends Migration
             $table->timestamps();
 
             $table->foreign('category_id')->references('id')->on('shop_categories');
+            $table->foreign('role_id')->references('id')->on('roles')->nullOnDelete();
         });
 
         Schema::create('shop_package_server', function (Blueprint $table) {
@@ -52,4 +55,4 @@ class CreateShopPackagesTable extends Migration
         Schema::dropIfExists('shop_packages');
         Schema::dropIfExists('shop_package_server');
     }
-}
+};

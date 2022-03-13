@@ -5,6 +5,7 @@ namespace Azuriom\Plugin\Shop\Controllers;
 use Azuriom\Http\Controllers\Controller;
 use Azuriom\Plugin\Shop\Models\Category;
 use Azuriom\Plugin\Shop\Models\Payment;
+use Illuminate\Support\HtmlString;
 
 class CategoryController extends Controller
 {
@@ -15,15 +16,14 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $category = Category::scopes(['parents', 'enabled'])->first();
+        $message = setting('shop.home', trans('shop::messages.welcome'));
 
-        if ($category === null) {
-            return view('shop::categories.index', [
-                'goal' => $this->getMonthGoal(),
-            ]);
-        }
-
-        return $this->show($category);
+        return view('shop::categories.index', [
+            'category' => null,
+            'categories' => $this->getCategories(),
+            'goal' => $this->getMonthGoal(),
+            'welcome' => new HtmlString($message),
+        ]);
     }
 
     /**
@@ -34,13 +34,7 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        $categories = Category::scopes(['parents', 'enabled'])
-            ->with('categories')
-            ->withCount('packages')
-            ->get()
-            ->filter(function (Category $cat) use ($category) {
-                return $cat->is($category) || ! $cat->categories->isEmpty() || $cat->packages_count > 0;
-            });
+        $categories = $this->getCategories($category);
 
         $category->load('packages.discounts');
 
@@ -57,7 +51,7 @@ class CategoryController extends Controller
 
     protected function getMonthGoal()
     {
-        if (! setting('shop.month-goal')) {
+        if (! setting('shop.month_goal')) {
             return false;
         }
 
@@ -65,6 +59,14 @@ class CategoryController extends Controller
             ->where('created_at', '>', now()->startOfMonth())
             ->sum('price');
 
-        return round(($total / setting('shop.month-goal')) * 100, 2);
+        return round(($total / setting('shop.month_goal')) * 100, 2);
+    }
+
+    protected function getCategories(Category $current = null)
+    {
+        return Category::scopes(['parents', 'enabled'])
+            ->with('categories')
+            ->withCount('packages')
+            ->get();
     }
 }

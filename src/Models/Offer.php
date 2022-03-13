@@ -61,6 +61,5 @@ class Offer extends Model implements Buyable
     public function deliver(User $user, int $quantity = 1)
     {
         $user->addMoney($this->money * $quantity);
-        $user->save();
     }
 }

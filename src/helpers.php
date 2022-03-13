@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Request;
 |
 | Here is where you can register helpers for your plugin. These
 | functions are loaded by Composer and are globally available on the app !
-| Just make sure you verify that a function don't exists before registering it
+| Just make sure you verify that a function doesn't exist before registering it
 | to prevent any side effect.
 |
 */
@@ -32,7 +32,7 @@ if (! function_exists('payment_manager')) {
 if (! function_exists('use_site_money')) {
     function use_site_money()
     {
-        return setting('shop.use-site-money', false);
+        return setting('shop.use_site_money', false);
     }
 }
 

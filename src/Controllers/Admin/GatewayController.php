@@ -86,7 +86,7 @@ class GatewayController extends Controller
         ] + $request->validated());
 
         return redirect()->route('shop.admin.gateways.index')
-            ->with('success', trans('shop::admin.gateways.status.created'));
+            ->with('success', trans('messages.status.success'));
     }
 
     /**
@@ -119,7 +119,7 @@ class GatewayController extends Controller
         $gateway->update(['data' => $data] + $request->validated());
 
         return redirect()->route('shop.admin.gateways.index')
-            ->with('success', trans('shop::admin.gateways.status.updated'));
+            ->with('success', trans('messages.status.success'));
     }
 
     /**
@@ -135,6 +135,6 @@ class GatewayController extends Controller
         $gateway->delete();
 
         return redirect()->route('shop.admin.gateways.index')
-            ->with('success', trans('shop::admin.gateways.status.deleted'));
+            ->with('success', trans('messages.status.success'));
     }
 }

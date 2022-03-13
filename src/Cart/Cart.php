@@ -18,33 +18,25 @@ class Cart implements Arrayable
 {
     /**
      * The session where this cart is stored.
-     *
-     * @var \Illuminate\Contracts\Session\Session
      */
-    private $session;
+    private ?Session $session;
 
     /**
      * The items in the cart.
-     *
-     * @var \Illuminate\Support\Collection
      */
-    private $items;
+    private Collection $items;
 
     /**
      * The coupons applied to the cart.
-     *
-     * @var \Illuminate\Support\Collection
      */
-    private $coupons;
+    private Collection $coupons;
 
     /**
      * Create a new cart instance.
      *
-     * @param  \Illuminate\Contracts\Session\Session  $session
-     *
-     * @deprecated Use Cart::fromSession() or Cart::empty()
+     * @param  \Illuminate\Contracts\Session\Session|null  $session
      */
-    public function __construct(Session $session = null)
+    private function __construct(Session $session = null)
     {
         $this->session = $session;
 
@@ -127,7 +119,7 @@ class Cart implements Arrayable
     }
 
     /**
-     * Get from the cart the cart items associated to this model.
+     * Get from the cartt items associated to this model.
      * Return null if this model is not in this cart.
      *
      * @param  \Azuriom\Plugin\Shop\Models\Concerns\Buyable  $buyable
@@ -276,9 +268,7 @@ class Cart implements Arrayable
      */
     public function save()
     {
-        if ($this->session) {
-            $this->session->put('shop.cart', $this->toArray());
-        }
+        $this->session?->put('shop.cart', $this->toArray());
     }
 
     /**
@@ -290,9 +280,7 @@ class Cart implements Arrayable
         $this->items = collect();
         $this->coupons = collect();
 
-        if ($this->session) {
-            $this->session->remove('shop.cart');
-        }
+        $this->session?->remove('shop.cart');
     }
 
     /**

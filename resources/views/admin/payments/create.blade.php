@@ -10,9 +10,9 @@
 
                 @csrf
 
-                <div class="form-row">
-                    <div class="form-group col-md-4">
-                        <label for="userInput">{{ trans('shop::messages.fields.user_id') }}</label>
+                <div class="row g-3">
+                    <div class="mb-3 col-md-4">
+                        <label class="form-label" for="userInput">{{ trans('shop::messages.fields.user_id') }}</label>
                         <input type="number" class="form-control @error('user_id') is-invalid @enderror" id="userInput" name="user_id" value="{{ old('user_id') }}" required>
 
                         @error('user_id')
@@ -20,8 +20,8 @@
                         @enderror
                     </div>
 
-                    <div class="form-group col-md-4">
-                        <label for="transactionInput">{{ trans('shop::messages.fields.payment-id') }}</label>
+                    <div class="mb-3 col-md-4">
+                        <label class="form-label" for="transactionInput">{{ trans('shop::messages.fields.payment_id') }}</label>
                         <input type="text" class="form-control @error('transaction_id') is-invalid @enderror" id="transactionInput" name="transaction_id" value="{{ old('transaction_id') }}" required>
 
                         @error('transaction_id')
@@ -29,10 +29,10 @@
                         @enderror
                     </div>
 
-                    <div class="form-group col-md-4">
-                        <label for="packagesSelect">{{ trans('shop::messages.fields.packages') }}</label>
+                    <div class="mb-3 col-md-4">
+                        <label class="form-label" for="packagesSelect">{{ trans('shop::messages.fields.packages') }}</label>
 
-                        <select class="custom-select @error('packages') is-invalid @enderror" id="packagesSelect" name="packages[]" multiple>
+                        <select class="form-select @error('packages') is-invalid @enderror" id="packagesSelect" name="packages[]" multiple>
                             @foreach($categories as $category)
                                 <optgroup label="{{ $category->name }}">
                                     @foreach($category->packages as $package)
@@ -49,7 +49,7 @@
                 </div>
 
                 <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-save"></i> {{ trans('messages.actions.save') }}
+                    <i class="bi bi-save"></i> {{ trans('messages.actions.save') }}
                 </button>
             </form>
         </div>

@@ -17,7 +17,7 @@ class PaymentRequest extends FormRequest
             'user_id' => ['required', 'exists:users,id'],
             'transaction_id' => ['required', 'string', 'max:100'],
             'packages' => ['required', 'array'],
-            'packages.*.id' => ['required', 'exists:shop_packages,id'],
+            'packages.*' => ['required', 'exists:shop_packages,id'],
         ];
     }
 }

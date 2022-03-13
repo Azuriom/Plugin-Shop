@@ -42,7 +42,7 @@ class OfferController extends Controller
         $offer->gateways()->sync($request->input('gateways', []));
 
         return redirect()->route('shop.admin.offers.index')
-            ->with('success', trans('shop::admin.offers.status.created'));
+            ->with('success', trans('messages.status.success'));
     }
 
     /**
@@ -73,7 +73,7 @@ class OfferController extends Controller
         $offer->gateways()->sync($request->input('gateways', []));
 
         return redirect()->route('shop.admin.offers.index')
-            ->with('success', trans('shop::admin.offers.status.updated'));
+            ->with('success', trans('messages.status.success'));
     }
 
     /**
@@ -89,7 +89,7 @@ class OfferController extends Controller
         $offer->delete();
 
         return redirect()->route('shop.admin.offers.index')
-            ->with('success', trans('shop::admin.offers.status.deleted'));
+            ->with('success', trans('messages.status.success'));
     }
 
     private function getGateways()

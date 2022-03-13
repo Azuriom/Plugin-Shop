@@ -28,7 +28,7 @@ class CouponController extends Controller
 
         if ($coupon === null || $coupon->hasReachLimit($request->user())) {
             throw ValidationException::withMessages([
-                'code' => trans('shop::messages.cart.invalid-coupon'),
+                'code' => trans('shop::messages.cart.coupons.error'),
             ]);
         }
 
@@ -37,7 +37,7 @@ class CouponController extends Controller
         if ((! $coupon->can_cumulate && ! $cart->coupons()->isEmpty())
             || $cart->coupons()->contains('can_cumulate', false)) {
             throw ValidationException::withMessages([
-                'code' => trans('shop::messages.cart.cannot-cumulate'),
+                'code' => trans('shop::messages.coupons.cumulate'),
             ]);
         }
 

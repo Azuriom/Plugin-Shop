@@ -1,6 +1,6 @@
-<div class="form-row">
-    <div class="form-group col-md-5">
-        <label for="keyInput">{{ trans('shop::admin.gateways.api-key') }}</label>
+<div class="row g-3">
+    <div class="mb-3 col-md-5">
+        <label class="form-label" for="keyInput">{{ trans('shop::admin.gateways.api-key') }}</label>
         <input type="text" class="form-control @error('key') is-invalid @enderror" id="keyInput" name="key" value="{{ old('key', $gateway->data['key'] ?? '') }}" required>
 
         @error('key')
@@ -8,8 +8,8 @@
         @enderror
     </div>
 
-    <div class="form-group col-md-5">
-        <label for="serviceIdInput">{{ trans('shop::admin.gateways.service-id') }}</label>
+    <div class="mb-3 col-md-5">
+        <label class="form-label" for="serviceIdInput">{{ trans('shop::admin.gateways.service-id') }}</label>
         <input type="text" class="form-control @error('service-id') is-invalid @enderror" id="serviceIdInput" name="service-id" value="{{ old('service-id', $gateway->data['service-id'] ?? '') }}" required>
 
         @error('service-id')
@@ -17,11 +17,11 @@
         @enderror
     </div>
 
-    <div class="form-group col-md-2">
-        <label for="countrySelect">{{ trans('shop::admin.gateways.country') }}</label>
-        <select class="custom-select @error('country') is-invalid @enderror" id="countrySelect" name="country" required>
+    <div class="mb-3 col-md-2">
+        <label class="form-label" for="countrySelect">{{ trans('shop::admin.gateways.country') }}</label>
+        <select class="form-select @error('country') is-invalid @enderror" id="countrySelect" name="country" required>
             @foreach($type->countries() as $code => $country)
-                <option value="{{ $code }}" @if(old('country', $gateway->data['country'] ?? 'US') === $code) selected @endif>{{ $country }}</option>
+                <option value="{{ $code }}" @selected(old('country', $gateway->data['country'] ?? 'US') === $code)>{{ $country }}</option>
             @endforeach
         </select>
 

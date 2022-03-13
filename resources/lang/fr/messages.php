@@ -2,13 +2,11 @@
 
 return [
     'title' => 'Boutique',
+    'welcome' => 'Welcome on the shop',
 
     'buy' => 'Acheter',
 
     'free' => 'Gratuit',
-
-    'month-goal' => 'Objectif du mois',
-    'month-goal-current' => ':count% complété|:count% complétés',
 
     'fields' => [
         'price' => 'Prix',
@@ -28,7 +26,7 @@ return [
         'required_packages' => 'Articles pré-requis',
         'user_limit' => 'Limite d\'achats par utilisateur',
         'status' => 'Status',
-        'payment-id' => 'ID du Paiement',
+        'payment_id' => 'ID du Paiement',
         'role' => 'Grade à définir lors de l\'achat',
         'user_id' => 'ID de l\'utilisateur',
         'required_roles' => 'Role pré-requis',
@@ -39,37 +37,40 @@ return [
         'duplicate' => 'Dupliquer',
     ],
 
-    'categories' => [
-        'empty' => 'Cette catégorie est vide.',
+    'goal' => [
+        'title' => 'Objectif du mois',
+        'progress' => ':count% complété|:count% complétés',
     ],
 
     'cart' => [
         'title' => 'Panier',
-        'error-money' => 'Vous n\'avez pas assez d\'argent pour faire cet achat.',
-        'error-execute' => 'Une erreur est survenue lors du paiement, votre achat a été remboursé.',
-        'purchase' => 'Votre achat a été effectué avec succès.',
-
-        'pay-confirm-title' => 'Payer ?',
-        'pay-confirm' => 'Êtes vous sûr de vouloir acheter le contenu du panier pour :price ?',
-
+        'success' => 'Votre achat a été effectué avec succès.',
         'guest' => 'Vous devez être connecté pour effectuer un achat.',
         'empty' => 'Votre panier est vide.',
-
         'checkout' => 'Procéder au paiement',
         'remove' => 'Supprimer',
         'clear' => 'Vider le panier',
         'pay' => 'Payer',
-
-        'coupons' => 'Codes promo',
-        'add-coupon' => 'Ajouter un code promo',
-        'invalid-coupon' => 'Ce code promo n\'existe pas, est expiré ou ne peut plus être utilisé.',
-        'cannot-cumulate' => 'Ce code promo ne peut pas être utilisé avec un autre code promo.',
-
         'back' => 'Retour à la boutique',
-
         'total' => 'Total : :total',
-
         'credit' => 'Créditer',
+
+        'confirm' => [
+            'title' => 'Payer ?',
+            'info' => 'Êtes vous sûr de vouloir acheter le contenu du panier pour :price ?',
+        ],
+
+        'errors' => [
+            'money' => 'Vous n\'avez pas assez d\'argent pour faire cet achat.',
+            'execute' => 'Une erreur est survenue lors du paiement, votre achat a été remboursé.',
+        ],
+    ],
+
+    'coupons' => [
+        'title' => 'Codes promo',
+        'add' => 'Ajouter un code promo',
+        'error' => 'Ce code promo n\'existe pas, est expiré ou ne peut plus être utilisé.',
+        'cumulate' => 'Ce code promo ne peut pas être utilisé avec un autre code promo.',
     ],
 
     'payment' => [
@@ -81,12 +82,13 @@ return [
         'info' => 'Achat #:id sur :website',
         'error' => 'Le paiement n\'a pas pu être effectué.',
 
-        'success' => 'Paiement effectué',
-        'success-info' => 'Vous recevrez votre achat dans le jeu en moins d\'une minute.',
-
-        'redirect-info' => 'Si vous n\'êtes pas redirigé automatiquement, vérifiez que le javascript est activé sur votre navigateur.',
+        'success' => 'Paiement effectué, vous recevrez votre achat dans le jeu en moins d\'une minute',
 
         'webhook' => 'Nouveau paiement effectué sur la boutique',
+    ],
+
+    'categories' => [
+        'empty' => 'Cette catégorie est vide.',
     ],
 
     'packages' => [
@@ -95,14 +97,15 @@ return [
     ],
 
     'offers' => [
-        'title-payment' => 'Moyen de paiement',
-        'title-select' => 'Montant',
+        'gateway' => 'Moyen de paiement',
+        'amount' => 'Montant',
 
         'empty' => 'Aucune offre n\'est disponible actuellement.',
     ],
 
     'profile' => [
         'payments' => 'Vos achats',
+        'money' => 'Argent : :balance',
     ],
 
     'giftcards' => [

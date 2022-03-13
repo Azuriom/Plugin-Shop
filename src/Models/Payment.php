@@ -109,7 +109,7 @@ class Payment extends Model
                     ->author($this->user->name, null, $this->user->getAvatar())
                     ->addField(trans('shop::messages.fields.price'), $this->price.' '.currency_display($this->currency))
                     ->addField(trans('messages.fields.type'), $this->getTypeName())
-                    ->addField(trans('shop::messages.fields.payment-id'), $this->transaction_id ?? trans('messages.none'))
+                    ->addField(trans('shop::messages.fields.payment_id'), $this->transaction_id ?? trans('messages.none'))
                     ->url(route('shop.admin.payments.show', $this))
                     ->color('#004de6')
                     ->footer('Azuriom v'.Azuriom::version())
@@ -128,18 +128,12 @@ class Payment extends Model
 
     public function statusColor()
     {
-        switch ($this->status) {
-            case 'pending':
-            case 'expired':
-                return 'warning';
-            case 'chargeback':
-            case 'error':
-                return 'danger';
-            case 'completed':
-                return 'success';
-            default:
-                return 'secondary';
-        }
+        return match ($this->status) {
+            'pending', 'expired' => 'warning',
+            'chargeback', 'error' => 'danger',
+            'completed' => 'success',
+            default => 'secondary',
+        };
     }
 
     public function isPending()

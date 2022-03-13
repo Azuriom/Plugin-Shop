@@ -39,7 +39,7 @@ class CategoryController extends Controller
         Category::create($request->validated());
 
         return redirect()->route('shop.admin.packages.index')
-            ->with('success', trans('shop::admin.categories.status.created'));
+            ->with('success', trans('messages.status.success'));
     }
 
     /**
@@ -65,7 +65,7 @@ class CategoryController extends Controller
         $category->update($request->validated());
 
         return redirect()->route('shop.admin.packages.index')
-            ->with('success', trans('shop::admin.categories.status.updated'));
+            ->with('success', trans('messages.status.success'));
     }
 
     /**
@@ -79,12 +79,12 @@ class CategoryController extends Controller
     public function destroy(Category $category)
     {
         if ($category->packages()->exists() || $category->categories()->exists()) {
-            return redirect()->back()->with('error', trans('shop::admin.categories.status.delete-items'));
+            return redirect()->back()->with('error', trans('shop::admin.categories.delete_error'));
         }
 
         $category->delete();
 
         return redirect()->route('shop.admin.packages.index')
-            ->with('success', trans('shop::admin.categories.status.deleted'));
+            ->with('success', trans('messages.status.success'));
     }
 }

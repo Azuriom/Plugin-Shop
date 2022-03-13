@@ -114,9 +114,9 @@ class PayPalExpressCheckout extends PaymentMethod
         }
 
         if ($payment->isPending()) {
-            $request = new OrdersCaptureRequest($token);
+            $captureRequest = new OrdersCaptureRequest($token);
 
-            $response = $this->getClient()->execute($request);
+            $response = $this->getClient()->execute($captureRequest);
 
             $captures = $response->result->purchase_units[0]->payments->captures;
 
@@ -124,7 +124,7 @@ class PayPalExpressCheckout extends PaymentMethod
 
             $payment->deliver();
 
-            return view('shop::payments.success');
+            return parent::success($request);
         }
 
         if (! $payment->isCompleted()) {
@@ -133,7 +133,7 @@ class PayPalExpressCheckout extends PaymentMethod
             return $this->errorResponse();
         }
 
-        return view('shop::payments.success');
+        return parent::success($request);
     }
 
     public function view()

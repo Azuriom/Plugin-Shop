@@ -28,7 +28,7 @@
                             <td>{{ format_money($purchase->price) }}</td>
                             <td>{{ format_date_compact($purchase->created_at) }}</td>
                             <td>
-                                <a href="{{ route('shop.admin.payments.show', $purchase) }}" class="mx-1" title="{{ trans('messages.actions.show') }}" data-toggle="tooltip"><i class="fas fa-eye"></i></a>
+                                <a href="{{ route('shop.admin.payments.show', $purchase) }}" class="mx-1" title="{{ trans('messages.actions.show') }}" data-bs-toggle="tooltip"><i class="bi bi-eye"></i></a>
                             </td>
                         </tr>
                     @endforeach

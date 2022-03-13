@@ -36,16 +36,16 @@ class GiftcardController extends Controller
      */
     public function store(GiftcardRequest $request)
     {
-        $giftcard = Giftcard::create($request->validated());
+        Giftcard::create($request->validated());
 
         return redirect()->route('shop.admin.giftcards.index')
-            ->with('success', trans('shop::admin.giftcards.status.created'));
+            ->with('success', trans('messages.status.success'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \Azuriom\Plugin\Shop\Models\Coupon  $coupon
+     * @param  \Azuriom\Plugin\Shop\Models\Giftcard  $giftcard
      * @return \Illuminate\Http\Response
      */
     public function edit(Giftcard $giftcard)
@@ -67,13 +67,13 @@ class GiftcardController extends Controller
         $giftcard->update($request->validated());
 
         return redirect()->route('shop.admin.giftcards.index')
-            ->with('success', trans('shop::admin.giftcards.status.updated'));
+            ->with('success', trans('messages.status.success'));
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \Azuriom\Plugin\Shop\Models\Giftcard  $coupon
+     * @param  \Azuriom\Plugin\Shop\Models\Giftcard  $giftcard
      * @return \Illuminate\Http\Response
      *
      * @throws \Exception
@@ -83,6 +83,6 @@ class GiftcardController extends Controller
         $giftcard->delete();
 
         return redirect()->route('shop.admin.giftcards.index')
-            ->with('success', trans('shop::admin.giftcards.status.deleted'));
+            ->with('success', trans('messages.status.success'));
     }
 }

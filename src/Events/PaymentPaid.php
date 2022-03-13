@@ -9,7 +9,7 @@ class PaymentPaid
 {
     use SerializesModels;
 
-    public $payment;
+    public Payment $payment;
 
     /**
      * Create a new event instance.

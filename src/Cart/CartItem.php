@@ -17,45 +17,33 @@ class CartItem implements Arrayable
     /**
      * The cart where this item is stored.
      * The cart *may* not contain this item if it was removed.
-     *
-     * @var \Azuriom\Plugin\Shop\Cart\Cart
      */
-    private $cart;
+    private Cart $cart;
 
     /**
      * The ID of the cart item with the format '{model class}-{model id}'.
-     *
-     * @var string
      */
-    public $itemId;
+    public string $itemId;
 
     /**
      * The ID of the item.
-     *
-     * @var int
      */
-    public $id;
+    public int $id;
 
     /**
      * The quantity for this cart item.
-     *
-     * @var int
      */
-    public $quantity;
+    public int $quantity;
 
     /**
      * The model class.
-     *
-     * @var string
      */
-    public $type;
+    public string $type;
 
     /**
      * The associated model.
-     *
-     * @var \Azuriom\Plugin\Shop\Models\Concerns\Buyable
      */
-    private $buyable;
+    private Buyable $buyable;
 
     /**
      * Create a new item instance.
