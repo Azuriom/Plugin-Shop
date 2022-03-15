@@ -56,7 +56,7 @@ abstract class PaymentMethod
      */
     public function success(Request $request)
     {
-        return redirect()->route('shop.index')
+        return redirect()->route('shop.home')
             ->with('success', trans('shop::messages.payment.success'));
     }
 
