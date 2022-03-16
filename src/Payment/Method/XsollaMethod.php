@@ -63,6 +63,12 @@ class XsollaMethod extends PaymentMethod
     {
         $webhookServer = WebhookServer::create(function (Message $message) {
             if ($message->isUserValidation()) {
+
+                // Xsolla unit tests include random strings as UserIds
+                if (! is_numeric($message->getUserId())) {
+                    throw new InvalidUserException('Unknown user id: '.$message->getUserId());
+                }
+
                 if (! User::whereKey($message->getUserId())->exists()) {
                     throw new InvalidUserException('Unknown user id: '.$message->getUserId());
                 }
