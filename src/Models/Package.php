@@ -226,7 +226,7 @@ class Package extends Model implements Buyable
         foreach ($this->servers as $server) {
             $commands = $this->getCommandsToDispatch($quantity);
 
-            $server->bridge()->executeCommands($commands, $user->name, $this->need_online);
+            $server->bridge()->sendCommands($commands, $user, $this->need_online);
         }
 
         if ($this->role !== null && ! $this->role->is_admin && $user->role->power < $this->role->power) {
