@@ -28,7 +28,7 @@ class CouponController extends Controller
 
         if ($coupon === null || $coupon->hasReachLimit($request->user())) {
             throw ValidationException::withMessages([
-                'code' => trans('shop::messages.cart.coupons.error'),
+                'code' => trans('shop::messages.coupons.error'),
             ]);
         }
 
