@@ -107,7 +107,10 @@ abstract class PaymentMethod
     {
         $payment->update(['status' => 'error', 'transaction_id' => $paymentId]);
 
-        return response()->json(['status' => false, 'message' => $message]);
+        return response()->json([
+            'status' => false,
+            'message' => $message,
+        ]);
     }
 
     protected function createPayment(Cart $cart, float $price, string $currency, string $paymentId = null)
@@ -118,15 +121,28 @@ abstract class PaymentMethod
     protected function processPayment(?Payment $payment, string $paymentId = null)
     {
         if ($payment === null) {
-            return response()->json(['status' => false, 'message' => 'Unable to retrieve the payment']);
+            logger()->warning('[Shop] Invalid payment for #'.$paymentId);
+
+            return response()->json([
+                'status' => false,
+                'message' => 'Unable to retrieve the payment',
+            ], 400);
         }
 
         if ($payment->isCompleted()) {
-            return response()->json(['status' => true, 'message' => 'Payment already completed']);
+            return response()->json([
+                'status' => true,
+                'message' => 'Payment already completed',
+            ]);
         }
 
         if (! $payment->isPending()) {
-            return response()->json(['status' => false, 'message' => 'Invalid payment status: '.$payment->status]);
+            logger()->warning("[Shop] Invalid payment status for #{$payment->id}: ".$payment->status);
+
+            return response()->json([
+                'status' => false,
+                'message' => 'Invalid payment status: '.$payment->status,
+            ]);
         }
 
         if ($paymentId !== null) {

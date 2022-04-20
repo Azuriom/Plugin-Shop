@@ -43,9 +43,9 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Package extends Model implements Buyable
 {
-    use IsBuyable;
     use HasImage;
     use HasTablePrefix;
+    use IsBuyable;
     use Loggable;
 
     /**

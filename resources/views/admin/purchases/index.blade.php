@@ -3,6 +3,22 @@
 @section('title', trans('shop::admin.purchases.title'))
 
 @section('content')
+    <form class="row row-cols-lg-auto g-3 align-items-center" action="{{ route('shop.admin.purchases.index') }}" method="GET">
+        <div class="mb-3">
+            <label for="searchInput" class="visually-hidden">
+                {{ trans('messages.actions.search') }}
+            </label>
+
+            <div class="input-group">
+                <input type="text" class="form-control" id="searchInput" name="search" value="{{ $search ?? '' }}" placeholder="{{ trans('messages.actions.search') }}">
+
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-search"></i>
+                </button>
+            </div>
+        </div>
+    </form>
+
     <div class="card shadow mb-4">
         <div class="card-body">
 

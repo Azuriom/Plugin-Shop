@@ -25,7 +25,6 @@ class PaymentController extends Controller
 
         $payments = Payment::scopes(['notPending', 'withRealMoney'])
             ->with('user')
-            ->latest()
             ->when($search, function (Builder $query, string $search) {
                 $query->where(function (Builder $query) use ($search) {
                     $query->whereHas('user', function (Builder $query) use ($search) {
@@ -36,7 +35,9 @@ class PaymentController extends Controller
                         $query->orWhere('id', $search);
                     }
                 });
-            })->paginate();
+            })
+            ->latest()
+            ->paginate();
 
         return view('shop::admin.payments.index', [
             'payments' => $payments,
