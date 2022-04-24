@@ -91,9 +91,9 @@
             <label class="form-label" for="packagesSelect">{{ trans('shop::messages.fields.packages') }}</label>
 
             <select class="form-select @error('packages') is-invalid @enderror" id="packagesSelect" name="packages[]" multiple>
-                @foreach($packages as $category => $localPackages)
-                    <optgroup label="{{ $category }}">
-                        @foreach($localPackages as $package)
+                @foreach($categories as $category)
+                    <optgroup label="{{ $category->name }}">
+                        @foreach($category->packages as $package)
                             <option value="{{ $package->id }}" @selected(isset($coupon) && $coupon->packages->contains($package))>{{ $package->name }}</option>
                         @endforeach
                     </optgroup>

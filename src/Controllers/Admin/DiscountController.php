@@ -27,9 +27,9 @@ class DiscountController extends Controller
      */
     public function create()
     {
-        return view('shop::admin.discounts.create', [
-            'categories' => Category::with('packages')->get(),
-        ]);
+        $categories = Category::with('packages')->whereHas('packages')->get();
+
+        return view('shop::admin.discounts.create', ['categories' => $categories]);
     }
 
     /**
@@ -55,9 +55,11 @@ class DiscountController extends Controller
      */
     public function edit(Discount $discount)
     {
+        $categories = Category::with('packages')->whereHas('packages')->get();
+
         return view('shop::admin.discounts.edit', [
             'discount' => $discount->load('packages'),
-            'categories' => Category::with('packages')->get(),
+            'categories' => $categories,
         ]);
     }
 

@@ -20,9 +20,9 @@ return [
         'servers' => 'Serveurs',
         'code' => 'Code',
         'discount' => 'Promotion',
+        'commands' => 'Commandes',
         'start_date' => 'Date de début',
         'expire_date' => 'Date de fin',
-        'commands' => 'Commandes',
         'required_packages' => 'Articles pré-requis',
         'user_limit' => 'Limite d\'achats par utilisateur',
         'status' => 'Status',
@@ -57,7 +57,7 @@ return [
 
         'confirm' => [
             'title' => 'Payer ?',
-            'info' => 'Êtes vous sûr de vouloir acheter le contenu du panier pour :price ?',
+            'price' => 'Êtes vous sûr de vouloir acheter le contenu du panier pour :price ?',
         ],
 
         'errors' => [

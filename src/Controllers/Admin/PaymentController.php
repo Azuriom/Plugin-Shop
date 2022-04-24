@@ -65,9 +65,9 @@ class PaymentController extends Controller
      */
     public function create()
     {
-        return view('shop::admin.payments.create', [
-            'categories' => Category::with('packages')->get(),
-        ]);
+        $categories = Category::with('packages')->whereHas('packages')->get();
+
+        return view('shop::admin.payments.create', ['categories' => $categories]);
     }
 
     /**

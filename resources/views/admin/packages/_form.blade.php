@@ -37,12 +37,6 @@
                 <option value="{{ $category->id }}" @selected(isset($package) && $category->is($package->category))>
                     {{ $category->name }}
                 </option>
-
-                @foreach($category->categories as $subCategory)
-                    <option value="{{ $subCategory->id }}" @selected(isset($package) && $subCategory->is($package->category))>
-                        {{ $subCategory->name }}
-                    </option>
-                @endforeach
             @endforeach
         </select>
 
