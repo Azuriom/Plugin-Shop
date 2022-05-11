@@ -20,8 +20,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Offer extends Model implements Buyable
 {
-    use IsBuyable;
     use HasTablePrefix;
+    use IsBuyable;
     use Loggable;
 
     /**

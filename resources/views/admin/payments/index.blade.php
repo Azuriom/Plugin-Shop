@@ -3,8 +3,8 @@
 @section('title', trans('shop::admin.payments.title'))
 
 @section('content')
-    <form class="form-inline mb-3" action="{{ route('shop.admin.payments.index') }}" method="GET">
-        <div class="mb-3 mb-2">
+    <form class="row row-cols-lg-auto g-3 align-items-center" action="{{ route('shop.admin.payments.index') }}" method="GET">
+        <div class="mb-3">
             <label for="searchInput" class="visually-hidden">
                 {{ trans('messages.actions.search') }}
             </label>

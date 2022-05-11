@@ -29,8 +29,6 @@ return new class extends Migration
         Schema::create('shop_coupon_package', function (Blueprint $table) {
             $table->unsignedInteger('coupon_id');
             $table->unsignedInteger('package_id');
-            $table->unsignedInteger('user_limit')->nullable();
-            $table->unsignedInteger('global_limit')->nullable();
 
             $table->foreign('coupon_id')->references('id')->on('shop_coupons')->onDelete('cascade');
             $table->foreign('package_id')->references('id')->on('shop_packages')->onDelete('cascade');

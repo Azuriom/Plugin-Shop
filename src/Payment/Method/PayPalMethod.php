@@ -57,7 +57,7 @@ class PayPalMethod extends PaymentMethod
         $response = Http::asForm()->post('https://ipnpb.paypal.com/cgi-bin/webscr', $data);
 
         if ($response->body() !== 'VERIFIED') {
-            return response()->json('Invalid response');
+            return response()->json('Invalid response from PayPal', 401);
         }
 
         $paymentId = $request->input('txn_id');
@@ -82,6 +82,7 @@ class PayPalMethod extends PaymentMethod
 
         if ($status === 'Pending') {
             $payment->update(['status' => 'pending', 'transaction_id' => $paymentId]);
+            logger()->info('[Shop] Pending payment for #'.$paymentId);
 
             return response()->noContent();
         }

@@ -178,7 +178,9 @@
                     </div>
 
                     <div class="modal-footer">
-                        <button class="btn btn-secondary" type="button" data-dismiss="modal">{{ trans('messages.actions.cancel') }}</button>
+                        <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">
+                            {{ trans('messages.actions.cancel') }}
+                        </button>
 
                         <form method="POST" action="{{ route('shop.cart.payment') }}">
                             @csrf

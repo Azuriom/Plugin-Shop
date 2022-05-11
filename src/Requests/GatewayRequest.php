@@ -29,7 +29,6 @@ class GatewayRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:50', Rule::unique(Gateway::class)->ignore($this->gateway, 'name')],
-            //'fees' => ['required', 'integer', 'between:0,100'],
             'is_enabled' => ['filled', 'boolean'],
         ];
     }

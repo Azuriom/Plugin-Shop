@@ -3,8 +3,8 @@
 namespace Azuriom\Plugin\Shop\Controllers\Admin;
 
 use Azuriom\Http\Controllers\Controller;
+use Azuriom\Plugin\Shop\Models\Category;
 use Azuriom\Plugin\Shop\Models\Coupon;
-use Azuriom\Plugin\Shop\Models\Package;
 use Azuriom\Plugin\Shop\Requests\CouponRequest;
 
 class CouponController extends Controller
@@ -26,11 +26,9 @@ class CouponController extends Controller
      */
     public function create()
     {
-        $packages = Package::with('category')
-            ->get()
-            ->groupBy('category.name');
+        $categories = Category::with('packages')->whereHas('packages')->get();
 
-        return view('shop::admin.coupons.create', ['packages' => $packages]);
+        return view('shop::admin.coupons.create', ['categories' => $categories]);
     }
 
     /**
@@ -57,13 +55,13 @@ class CouponController extends Controller
      */
     public function edit(Coupon $coupon)
     {
-        $packages = Package::with('category')
-            ->get()
-            ->groupBy('category.name');
+        $categories = Category::with('packages')
+            ->whereHas('packages')
+            ->get();
 
         return view('shop::admin.coupons.edit', [
             'coupon' => $coupon,
-            'packages' => $packages,
+            'categories' => $categories,
         ]);
     }
 
