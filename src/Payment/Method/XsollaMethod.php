@@ -90,7 +90,17 @@ class XsollaMethod extends PaymentMethod
             }
 
             if ($message->isRefund()) {
-                return; // TODO handle refunds
+                /** @var \Xsolla\SDK\Webhook\Message\PaymentMessage $message */
+                $payment = Payment::find($message->getExternalPaymentId());
+
+                if ($payment === null) {
+                    throw new InvalidInvoiceException('Unknown payment id: '.$message->getExternalPaymentId());
+                }
+
+                // Mark the payment as refunded
+                $payment->update(['status' => 'refunded']);
+
+                return;
             }
 
             throw new XsollaWebhookException('Notification type not implemented');
