@@ -131,6 +131,19 @@
 
         <img src="{{ ($package->image ?? false) ? $package->imageUrl() : '#' }}" class="mt-2 img-fluid rounded img-preview {{ ($package->image ?? false) ? '' : 'd-none' }}" alt="Image" id="imagePreview">
     </div>
+
+    <div class="mb-3 col-md-6">
+        <label class="form-label" for="moneyInput">{{ trans('shop::admin.packages.money') }}</label>
+
+        <div class="input-group @error('money') has-validation @enderror">
+            <input type="number" min="0" step="0.01" max="999999" class="form-control @error('money') is-invalid @enderror" id="moneyInput" name="money" value="{{ old('money', $package->money ?? '') }}">
+            <span class="input-group-text">{{ money_name() }}</span>
+
+            @error('money')
+            <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+            @enderror
+        </div>
+    </div>
 </div>
 
 <div class="mb-3">

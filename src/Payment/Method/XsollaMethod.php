@@ -63,47 +63,12 @@ class XsollaMethod extends PaymentMethod
     {
         $webhookServer = WebhookServer::create(function (Message $message) {
             if ($message->isUserValidation()) {
-
-                // Xsolla unit tests include random strings as UserIds
-                if (! is_numeric($message->getUserId())) {
-                    throw new InvalidUserException('Unknown user id: '.$message->getUserId());
-                }
-
-                if (! User::whereKey($message->getUserId())->exists()) {
-                    throw new InvalidUserException('Unknown user id: '.$message->getUserId());
-                }
+                $this->handleUserValidation($message);
 
                 return;
             }
 
-            if ($message->isPayment()) {
-                /** @var \Xsolla\SDK\Webhook\Message\PaymentMessage $message */
-                $payment = Payment::find($message->getExternalPaymentId());
-
-                if ($payment === null) {
-                    throw new InvalidInvoiceException('Unknown payment id: '.$message->getExternalPaymentId());
-                }
-
-                $this->processPayment($payment, $message->getPaymentId());
-
-                return;
-            }
-
-            if ($message->isRefund()) {
-                /** @var \Xsolla\SDK\Webhook\Message\PaymentMessage $message */
-                $payment = Payment::find($message->getExternalPaymentId());
-
-                if ($payment === null) {
-                    throw new InvalidInvoiceException('Unknown payment id: '.$message->getExternalPaymentId());
-                }
-
-                // Mark the payment as refunded
-                $payment->update(['status' => 'refunded']);
-
-                return;
-            }
-
-            throw new XsollaWebhookException('Notification type not implemented');
+            $this->handleMessage($message);
         }, $this->gateway->data['secret-key']);
 
         $headers = array_map(function ($headers) {
@@ -129,5 +94,36 @@ class XsollaMethod extends PaymentMethod
             'secret-key' => ['required', 'string'],
             'sandbox' => ['required', 'in:true,false'],
         ];
+    }
+
+    protected function handleMessage(Message $message)
+    {
+        if (! $message->isPayment() && ! $message->isRefund()) {
+            throw new XsollaWebhookException('Notification type not implemented');
+        }
+
+        /** @var \Xsolla\SDK\Webhook\Message\PaymentMessage $message */
+        $payment = Payment::find($message->getExternalPaymentId());
+
+        if ($payment === null) {
+            throw new InvalidInvoiceException('Unknown payment id: '.$message->getExternalPaymentId());
+        }
+
+        if ($message->isRefund()) {
+            $payment->update(['status' => 'refunded']);
+
+            return;
+        }
+
+        $this->processPayment($payment, $message->getPaymentId());
+    }
+
+    protected function handleUserValidation(Message $message)
+    {
+        $userId = $message->getUserId();
+
+        if (! is_numeric($userId) || ! User::whereKey($userId)->exists()) {
+            throw new InvalidUserException('Unknown user id: '.$message->getUserId());
+        }
     }
 }

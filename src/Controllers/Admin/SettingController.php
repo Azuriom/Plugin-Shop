@@ -25,6 +25,7 @@ class SettingController extends Controller
             'currentCurrency' => setting('currency', 'USD'),
             'goal' => (int) setting('shop.month_goal', 0),
             'commands' => $commands ? json_decode($commands) : [],
+            'enableHome' => setting('shop.home.enabled', true),
             'homeMessage' => setting('shop.home', ''),
         ]);
     }
@@ -54,7 +55,8 @@ class SettingController extends Controller
             'shop.use_site_money' => $request->has('use_site_money'),
             'shop.month_goal' => $request->input('goal'),
             'shop.webhook' => $request->input('webhook'),
-            'shop.home' => $request->input('home-message'),
+            'shop.home' => $request->input('home_message'),
+            'shop.home.enabled' => $request->has('enable_home'),
             'shop.commands' => is_array($commands) ? json_encode(array_filter($commands)) : null,
         ]);
 

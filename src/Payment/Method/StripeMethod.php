@@ -70,16 +70,24 @@ class StripeMethod extends PaymentMethod
         $payment = $this->createPayment($cart, $amount, $currency);
 
         $successUrl = route('shop.payments.success', [$this->id, '%id%']);
-
-        $session = Session::create([
-            'payment_method_types' => array_merge($this->gateway->data['methods'] ?? [], ['card']),
+        $methods = $this->gateway->data['methods'] ?? [];
+        $params = [
+            'payment_method_types' => array_merge($methods, ['card']),
             'mode' => 'payment',
             'customer_email' => $user->email,
             'line_items' => $items->all(),
             'success_url' => str_replace('%id%', '{CHECKOUT_SESSION_ID}', $successUrl),
             'cancel_url' => route('shop.cart.index'),
             'client_reference_id' => $payment->id,
-        ]);
+        ];
+
+        if (in_array('afterpay', $methods, true)) {
+            $params['shipping_address_collection'] = [
+                'allowed_countries' => ['AU', 'CA', 'GB', 'FR', 'NZ', 'UK', 'US'],
+            ];
+        }
+
+        $session = Session::create($params);
 
         $payment->update(['transaction_id' => $session->id]);
 

@@ -29,6 +29,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property bool $has_quantity
  * @property array $commands
  * @property int|null $role_id
+ * @property float|null $money
  * @property bool $need_online
  * @property int $user_limit
  * @property bool $is_enabled
@@ -62,7 +63,7 @@ class Package extends Model implements Buyable
      */
     protected $fillable = [
         'category_id', 'name', 'short_description', 'description', 'image', 'position', 'price', 'required_packages',
-        'required_roles', 'has_quantity', 'commands', 'role_id', 'need_online', 'user_limit', 'is_enabled',
+        'required_roles', 'has_quantity', 'commands', 'role_id', 'money', 'need_online', 'user_limit', 'is_enabled',
     ];
 
     /**
@@ -73,6 +74,7 @@ class Package extends Model implements Buyable
     protected $casts = [
         'price' => 'float',
         'commands' => 'array',
+        'money' => 'float',
         'required_packages' => 'collection',
         'required_roles' => 'collection',
         'has_quantity' => 'boolean',
@@ -231,6 +233,10 @@ class Package extends Model implements Buyable
 
         if ($this->role !== null && ! $this->role->is_admin && $user->role->power < $this->role->power) {
             $user->role()->associate($this->role)->save();
+        }
+
+        if ($this->money !== null && $this->money > 0) {
+            $user->addMoney($this->money);
         }
 
         event(new PackageDelivered($user, $this, $quantity));

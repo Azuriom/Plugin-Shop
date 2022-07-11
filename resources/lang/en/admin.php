@@ -24,6 +24,7 @@ return [
         'edit' => 'Edit category :category',
         'create' => 'Create category',
 
+        'parent' => 'Parent category',
         'delete_error' => 'A category with packages can\'t be deleted.',
 
         'cumulate_purchases' => 'Cumulate purchases in this category (users will only pay the difference when purchasing a more expensive package)',
@@ -78,6 +79,7 @@ return [
 
         'updated' => 'The packages have been updated.',
 
+        'money' => 'Money to be credited to the user after purchase',
         'command' => 'The command must not start with <code>/</code>. You can use <code>{player}</code> to use the player name. For Steam games, you can also use <code>{steam_id}</code> and <code>{steam_id_32}</code>.',
 
         'require_online' => 'Execute commands when the user is online on the server (only available with AzLink)',
@@ -145,8 +147,10 @@ return [
 
     'settings' => [
         'title' => 'Shop settings',
+        'enable_home' => 'Enable the shop’s home page',
         'home_message' => 'Home message',
         'use_site_money' => 'Enable purchases with the site currency.',
+        'use_site_money_info' => 'When enabled, the packages in the shop can only be purchased with website money. In order for users to credit their account, you can set up offers in the shop.',
         'webhook' => 'Discord Webhook URL',
         'webhook_info' => 'When an user make a payment it will create a notification on this webhook. Leave empty to disable',
         'commands' => 'Global commands',

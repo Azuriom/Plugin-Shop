@@ -34,6 +34,7 @@ class CategoryRequest extends FormRequest
             'slug' => [
                 'required', 'max:100', new Slug(), Rule::unique('shop_categories')->ignore($current, 'slug'),
             ],
+            'parent_id' => ['nullable', 'exists:shop_categories,id'],
             'description' => ['nullable', 'string'],
             'cumulate_purchases' => ['filled', 'boolean'],
             'is_enabled' => ['filled', 'boolean'],

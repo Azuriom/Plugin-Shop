@@ -1,21 +1,66 @@
 @include('admin.elements.editor')
 
+@push('scripts')
+    <script>
+        // Snippet from @thierryc on GitHub
+        // https://gist.github.com/codeguy/6684588?permalink_comment_id=3243980#gistcomment-3243980
+        function slugifyInput(str) {
+            return str
+                .normalize('NFKD')        // The normalize() using NFKD method returns the Unicode Normalization Form of a given string.
+                .toLowerCase()            // Convert the string to lowercase letters
+                .trim()                   // Remove whitespace from both sides of a string (optional)
+                .replace(/\s+/g, '-')     // Replace spaces with -
+                .replace(/[^\w\-]+/g, '') // Remove all non-word chars
+                .replace(/--+/g, '-');    // Replace multiple - with single -
+        }
+
+        function generateSlug() {
+            const name = document.getElementById('nameInput').value;
+
+            document.getElementById('slugInput').value = slugifyInput(name);
+        }
+    </script>
+@endpush
+
 @csrf
 
-<div class="mb-3">
-    <label class="form-label" for="nameInput">{{ trans('messages.fields.name') }}</label>
-    <input type="text" class="form-control @error('name') is-invalid @enderror" id="nameInput" name="name" value="{{ old('name', $category->name ?? '') }}" required>
+<div class="row g-3">
+    <div class="mb-3 col-md-6">
+        <label class="form-label" for="nameInput">{{ trans('messages.fields.name') }}</label>
+        <input type="text" class="form-control @error('name') is-invalid @enderror" id="nameInput" name="name" value="{{ (string) old('name', $category->name ?? '') }}" required>
 
-    @error('name')
-    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
-    @enderror
+        @error('name')
+        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+        @enderror
+    </div>
+
+    <div class="mb-3 col-md-6">
+        <label class="form-label" for="parentSelect">{{ trans('shop::admin.categories.parent') }}</label>
+
+        <select class="form-select" id="parentSelect" name="parent_id">
+            <option value="">{{ trans('messages.none') }}</option>
+            @foreach($categories as $sub)
+                <option value="{{ $sub->id }}" @selected(old('parent_id', $category->parent_id ?? 0) === $sub->id)>
+                    {{ $sub->name }}
+                </option>
+            @endforeach
+        </select>
+
+        @error('category_id')
+        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+        @enderror
+    </div>
 </div>
 
 <div class="mb-3">
     <label class="form-label" for="slugInput">{{ trans('messages.fields.slug') }}</label>
-    <div class="input-group  @error('slug') has-validation @enderror">
+    <div class="input-group @error('slug') has-validation @enderror">
         <div class="input-group-text">{{ route('shop.categories.show', '') }}/</div>
         <input type="text" class="form-control @error('slug') is-invalid @enderror" id="slugInput" name="slug" value="{{ old('slug', $category->slug ?? '') }}" required>
+
+        <button type="button" class="btn btn-outline-secondary" onclick="generateSlug()">
+            <i class="bi bi-arrow-clockwise"></i>
+        </button>
 
         @error('slug')
         <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>

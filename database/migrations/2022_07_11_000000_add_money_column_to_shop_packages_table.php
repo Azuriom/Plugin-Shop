@@ -13,9 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('shop_coupons', function (Blueprint $table) {
-            $table->unsignedInteger('user_limit')->nullable()->after('discount');
-            $table->unsignedInteger('global_limit')->nullable()->after('user_limit');
+        Schema::table('shop_packages', function (Blueprint $table) {
+            $table->unsignedDecimal('money')->nullable()->after('role_id');
         });
     }
 
@@ -26,8 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('shop_coupons', function (Blueprint $table) {
-            $table->dropColumn(['user_limit', 'global_limit']);
+        Schema::table('shop_packages', function (Blueprint $table) {
+            $table->dropColumn('money');
         });
     }
 };

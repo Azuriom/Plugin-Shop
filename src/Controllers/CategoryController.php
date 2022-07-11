@@ -16,11 +16,18 @@ class CategoryController extends Controller
      */
     public function index()
     {
+        $categories = $this->getCategories();
+
+        if (! setting('shop.home.enabled', true) && ! $categories->isEmpty()) {
+            return redirect()->route('shop.categories.show', $categories->first());
+        }
+
         $message = setting('shop.home', trans('shop::messages.welcome'));
 
         return view('shop::categories.index', [
             'category' => null,
-            'categories' => $this->getCategories(),
+            'categories' => $categories,
+            'displayHome' => true,
             'goal' => $this->getMonthGoal(),
             'welcome' => new HtmlString($message),
         ]);
@@ -45,6 +52,7 @@ class CategoryController extends Controller
         return view('shop::categories.show', [
             'category' => $category,
             'categories' => $categories,
+            'displayHome' => setting('shop.home.enabled', true),
             'goal' => $this->getMonthGoal(),
         ]);
     }

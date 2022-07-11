@@ -100,15 +100,17 @@ class CartController extends Controller
             return redirect()->route('shop.cart.index')->with('error', trans('shop::messages.cart.errors.money'));
         }
 
+        $user->removeMoney($total);
+
         try {
             payment_manager()->buyPackages($cart);
         } catch (Exception $e) {
             report($e);
 
+            $user->addMoney($total);
+
             return redirect()->route('shop.cart.index')->with('error', trans('shop::messages.cart.errors.execute'));
         }
-
-        $user->removeMoney($total);
 
         $cart->destroy();
 

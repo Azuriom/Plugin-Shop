@@ -25,7 +25,9 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return view('shop::admin.categories.create');
+        return view('shop::admin.categories.create', [
+            'categories' => Category::all(),
+        ]);
     }
 
     /**
@@ -50,7 +52,10 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        return view('shop::admin.categories.edit', ['category' => $category]);
+        return view('shop::admin.categories.edit', [
+            'category' => $category,
+            'categories' => Category::all()->except($category->id),
+        ]);
     }
 
     /**

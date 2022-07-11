@@ -24,6 +24,7 @@ return [
         'edit' => 'Édition de la catégorie :category',
         'create' => 'Création d\'une catégorie',
 
+        'parent' => 'Catégorie parente',
         'delete_error' => 'Une catégorie contenant des produits ne peut pas être supprimée',
 
         'cumulate_purchases' => 'Cumuler les achats dans cette catégorie (les utilisateurs ne paieront que la différence lors de l\'achat d\'un produit plus cher)',
@@ -78,6 +79,7 @@ return [
 
         'updated' => 'Les produits ont été mis à jour.',
 
+        'money' => 'Argent à créditer à l\'utilisateur lors de l\'achat',
         'command' => 'La commande ne doit pas commencer par <code>/</code>. Vous pouvez utiliser la variable <code>{player}</code> pour le pseudo du joueur. Pour les jeux Steam, les variables sont <code>{steam_id}</code> et <code>{steam_id_32}</code> sont disponibles.',
 
         'require_online' => 'Exécuter les commandes lorsque l\'utilisateur est en ligne sur le serveur (uniquement disponible avec AzLink)',
@@ -145,8 +147,10 @@ return [
 
     'settings' => [
         'title' => 'Paramètres de la boutique',
+        'enable_home' => 'Activer la page d\'accueil de la boutique',
         'home_message' => 'Message de la page d\'accueil',
         'use_site_money' => 'Activer les achats avec l\'argent du site.',
+        'use_site_money_info' => 'Une fois activé, les produits de la boutique ne pourront être achetés qu\'avec l\'argent du site. Afin que les utilisateurs puissent créditer leur compte, vous pouvez configurer des offres dans la boutique.',
         'webhook' => 'URL de webhook Discord',
         'webhook_info' => 'Lorsqu\'un utilisateur fait un paiement sur la boutique, cela va créer une notification sur ce webhook. Laissez vide pour ne pas utiliser de webhook.',
         'commands' => 'Commandes globales',

@@ -1,7 +1,9 @@
 <div class="list-group mb-3">
-    <a href="{{ route('shop.home') }}" class="list-group-item @if($category === null) active @endif">
-        {{ trans('messages.home') }}
-    </a>
+    @if($displayHome)
+        <a href="{{ route('shop.home') }}" class="list-group-item @if($category === null) active @endif">
+            {{ trans('messages.home') }}
+        </a>
+    @endif
 
     @foreach($categories as $subCategory)
         <a href="{{ route('shop.categories.show', $subCategory) }}" class="list-group-item @if($subCategory->is($category)) active @endif">

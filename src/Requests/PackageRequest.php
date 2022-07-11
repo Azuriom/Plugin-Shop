@@ -37,6 +37,7 @@ class PackageRequest extends FormRequest
             'required_roles' => ['sometimes', 'nullable', 'array'],
             'commands' => ['sometimes', 'nullable', 'array'],
             'role_id' => ['nullable', 'integer', 'exists:roles,id'],
+            'money' => ['nullable', 'numeric', 'min:0'],
             'need_online' => ['filled', 'boolean'],
             'is_enabled' => ['filled', 'boolean'],
             'has_quantity' => ['filled', 'boolean'],

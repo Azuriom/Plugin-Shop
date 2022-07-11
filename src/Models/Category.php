@@ -5,6 +5,7 @@ namespace Azuriom\Plugin\Shop\Models;
 use Azuriom\Models\Traits\HasTablePrefix;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\HtmlString;
 
 /**
  * @property int $id
@@ -75,6 +76,11 @@ class Category extends Model
     public function packages()
     {
         return $this->hasMany(Package::class)->orderBy('position');
+    }
+
+    public function getNameAttribute(string $value)
+    {
+        return new HtmlString($value);
     }
 
     /**

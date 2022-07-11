@@ -23,18 +23,28 @@
 
                 <div class="mb-3">
                     <div class="form-check form-switch">
-                        <input type="checkbox" class="form-check-input" id="useSiteMoneyCheckbox" name="use_site_money" @checked(use_site_money())>
+                        <input type="checkbox" class="form-check-input" id="useSiteMoneyCheckbox" name="use_site_money" aria-describedby="moneyLabel" @checked(use_site_money())>
                         <label class="form-check-label" for="useSiteMoneyCheckbox">{{ trans('shop::admin.settings.use_site_money') }}</label>
                     </div>
+                    <small id="moneyLabel" class="form-text">{{ trans('shop::admin.settings.use_site_money_info') }}</small>
                 </div>
 
-                <div class="mb-3">
-                    <label class="form-label" for="homeMessage">{{ trans('shop::admin.settings.home_message') }}</label>
-                    <textarea class="form-control html-editor @error('home-message') is-invalid @enderror" id="homeMessage" name="home-message" rows="5">{{ old('home-message', $homeMessage) }}</textarea>
+                <div class="mb-3 form-check form-switch">
+                    <input type="checkbox" class="form-check-input" id="homeSwitch" name="enable_home" data-bs-toggle="collapse" data-bs-target="#homeMessage" @if($enableHome) checked @endif>
+                    <label class="form-check-label" for="homeSwitch">{{ trans('shop::admin.settings.enable_home') }}</label>
+                </div>
 
-                    @error('home-message')
-                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
-                    @enderror
+                <div id="homeMessage" class="{{ $enableHome ? 'show' : 'collapse' }}">
+                    <div class="card card-body mb-3">
+                        <div class="mb-0">
+                            <label class="form-label" for="homeMessage">{{ trans('shop::admin.settings.home_message') }}</label>
+                            <textarea class="form-control html-editor @error('home_message') is-invalid @enderror" id="homeMessage" name="home_message" rows="5">{{ old('home_message', $homeMessage) }}</textarea>
+
+                            @error('home_message')
+                            <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                            @enderror
+                        </div>
+                    </div>
                 </div>
 
                 <div class="mb-3">
