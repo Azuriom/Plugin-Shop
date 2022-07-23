@@ -38,6 +38,8 @@ class PayPalExpressCheckout extends PaymentMethod
 
     public function startPayment(Cart $cart, float $amount, string $currency)
     {
+        $amount = number_format($amount, 2);
+
         $payment = $this->createPayment($cart, $amount, $currency);
 
         $items = $cart->content()->map(function (CartItem $cartItem) use ($currency) {
