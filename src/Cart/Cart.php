@@ -205,7 +205,7 @@ class Cart implements Arrayable
     public function total()
     {
         return $this->content()->sum(function (CartItem $cartItem) {
-            return $cartItem->total();
+            return round($cartItem->total(), 2);
         });
     }
 
