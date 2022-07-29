@@ -1,8 +1,8 @@
 <?php
 
-use Azuriom\Plugin\Shop\Models\Category;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class AddDescriptionSlugToShopCategoriesTable extends Migration
@@ -14,13 +14,17 @@ class AddDescriptionSlugToShopCategoriesTable extends Migration
      */
     public function up()
     {
-        Schema::table('shop_categories', function (Blueprint $table) {
-            $table->string('slug')->unique()->nullable()->after('name');
-            $table->text('description')->nullable()->after('slug');
-        });
+        if (! Schema::hasColumn('shop_categories', 'slug')) {
+            Schema::table('shop_categories', function (Blueprint $table) {
+                $table->string('slug')->unique()->nullable()->after('name');
+                $table->text('description')->nullable()->after('slug');
+            });
+        }
 
-        foreach (Category::all() as $category) {
-            $category->update(['slug' => $category->id]);
+        foreach (DB::table('shop_categories')->get() as $cat) {
+            DB::table('shop_categories')
+                ->where('id', $cat->id)
+                ->update(['slug' => $cat->id]);
         }
     }
 
