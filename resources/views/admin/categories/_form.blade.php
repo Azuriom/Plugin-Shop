@@ -40,7 +40,7 @@
         <select class="form-select" id="parentSelect" name="parent_id">
             <option value="">{{ trans('messages.none') }}</option>
             @foreach($categories as $sub)
-                <option value="{{ $sub->id }}" @selected(old('parent_id', $category->parent_id ?? 0) === $sub->id)>
+                <option value="{{ $sub->id }}" @selected((int) old('parent_id', $category->parent_id ?? 0) === $sub->id)>
                     {{ $sub->name }}
                 </option>
             @endforeach

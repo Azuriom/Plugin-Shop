@@ -127,3 +127,13 @@ class XsollaMethod extends PaymentMethod
         }
     }
 }
+
+namespace GuzzleHttp\Psr7;
+
+// Workaround for https://github.com/xsolla/xsolla-sdk-php/issues/95
+if (! function_exists('GuzzleHttp\Psr7\str')) {
+    function str($message)
+    {
+        return Message::toString($message);
+    }
+}
