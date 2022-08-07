@@ -42,6 +42,15 @@ return [
         'progress' => ':count% complété|:count% complétés',
     ],
 
+    'recent' => [
+        'title' => 'Paiements récents',
+        'empty' => 'Pas de paiements récents',
+    ],
+
+    'top' => [
+        'title' => 'Meilleur acheteur',
+    ],
+
     'cart' => [
         'title' => 'Panier',
         'success' => 'Votre achat a été effectué avec succès.',

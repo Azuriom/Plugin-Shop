@@ -34,7 +34,7 @@
         @empty
             <div class="col">
                 <div class="alert alert-warning" role="alert">
-                    {{ trans('shop::messages.offers.empty') }}
+                    <i class="bi bi-exclamation-circle"></i> {{ trans('shop::messages.offers.empty') }}
                 </div>
             </div>
         @endforelse

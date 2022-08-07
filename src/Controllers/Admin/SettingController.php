@@ -24,6 +24,8 @@ class SettingController extends Controller
             'currencies' => Currencies::all(),
             'currentCurrency' => setting('currency', 'USD'),
             'goal' => (int) setting('shop.month_goal', 0),
+            'topCustomer' => setting('shop.top_customer', false),
+            'recentPayments' => (int) setting('shop.recent_payments', 0),
             'commands' => $commands ? json_decode($commands) : [],
             'enableHome' => setting('shop.home.enabled', true),
             'homeMessage' => setting('shop.home', ''),
@@ -54,6 +56,8 @@ class SettingController extends Controller
         Setting::updateSettings([
             'shop.use_site_money' => $request->has('use_site_money'),
             'shop.month_goal' => $request->input('goal'),
+            'shop.recent_payments' => $request->input('recent_payments'),
+            'shop.top_customer' => $request->filled('top_customer'),
             'shop.webhook' => $request->input('webhook'),
             'shop.home' => $request->input('home_message'),
             'shop.home.enabled' => $request->has('enable_home'),

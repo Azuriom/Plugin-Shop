@@ -56,7 +56,7 @@
 
                     <p class="text-end mb-1">
                         <button type="submit" class="btn btn-primary btn-sm">
-                            {{ trans('messages.actions.update') }}
+                            <i class="bi bi-check-lg"></i> {{ trans('messages.actions.update') }}
                         </button>
                     </p>
                 </form>
@@ -65,7 +65,7 @@
                     @csrf
 
                     <button type="submit" class="btn btn-danger btn-sm">
-                        {{ trans('shop::messages.cart.clear') }}
+                        <i class="bi bi-trash"></i> {{ trans('shop::messages.cart.clear') }}
                     </button>
                 </form>
 
@@ -80,7 +80,7 @@
                                 <input type="text" class="form-control @error('code') is-invalid @enderror" placeholder="{{ trans('shop::messages.fields.code') }}" id="code" name="code" value="{{ old('code') }}">
 
                                 <button type="submit" class="btn btn-primary">
-                                    {{ trans('messages.actions.add') }}
+                                    <i class="bi bi-plus-lg"></i> {{ trans('messages.actions.add') }}
                                 </button>
 
                                 @error('code')
@@ -133,7 +133,7 @@
                 <div class="row">
                     <div class="col-md-6">
                         <a href="{{ route('shop.home') }}" class="btn btn-secondary">
-                            {{ trans('shop::messages.cart.back') }}
+                            <i class="bi bi-arrow-left"></i> {{ trans('shop::messages.cart.back') }}
                         </a>
                     </div>
 
@@ -145,18 +145,18 @@
                             </button>
                         @else
                             <a href="{{ route('shop.payments.payment') }}" class="btn btn-primary">
-                                {{ trans('shop::messages.cart.checkout') }}
+                                <i class="bi bi-cart-check"></i> {{ trans('shop::messages.cart.checkout') }}
                             </a>
                         @endif
                     </div>
                 </div>
             @else
                 <div class="alert alert-warning" role="alert">
-                    {{ trans('shop::messages.cart.empty') }}
+                    <i class="bi bi-exclamation-circle"></i> {{ trans('shop::messages.cart.empty') }}
                 </div>
 
                 <a href="{{ route('shop.home') }}" class="btn btn-primary">
-                    {{ trans('shop::messages.cart.back') }}
+                    <i class="bi bi-arrow-left"></i> {{ trans('shop::messages.cart.back') }}
                 </a>
             @endif
         </div>

@@ -154,6 +154,8 @@ return [
         'webhook' => 'Discord Webhook URL',
         'webhook_info' => 'When an user make a payment it will create a notification on this webhook. Leave empty to disable',
         'commands' => 'Global commands',
+        'recent_payments' => 'Recent payments limit to display in sidebar (set to 0 to disable)',
+        'top_customer' => 'Display top monthly customer in sidebar',
     ],
 
     'logs' => [

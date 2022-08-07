@@ -16,8 +16,8 @@
 @push('footer-scripts')
     <script>
         document.querySelectorAll('select[multiple]').forEach(function (el) {
-            el.classList.remove('form-select', 'form-control');
-            el.classList.add('selectpicker');
+            el.classList.remove('form-select');
+            el.classList.add('selectpicker', 'form-control');
         });
     </script>
 @endpush

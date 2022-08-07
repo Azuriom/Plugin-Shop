@@ -6,6 +6,7 @@ use Azuriom\Http\Controllers\Controller;
 use Azuriom\Plugin\Shop\Models\Category;
 use Azuriom\Plugin\Shop\Models\Payment;
 use Illuminate\Support\HtmlString;
+use Illuminate\Support\Facades\DB;
 
 class CategoryController extends Controller
 {
@@ -29,6 +30,8 @@ class CategoryController extends Controller
             'categories' => $categories,
             'displayHome' => true,
             'goal' => $this->getMonthGoal(),
+            'topCustomer' => $this->getTopCustomer(),
+            'recentPayments' => $this->getRecentPayments(),
             'welcome' => new HtmlString($message),
         ]);
     }
@@ -54,6 +57,8 @@ class CategoryController extends Controller
             'categories' => $categories,
             'displayHome' => setting('shop.home.enabled', true),
             'goal' => $this->getMonthGoal(),
+            'topCustomer' => $this->getTopCustomer(),
+            'recentPayments' => $this->getRecentPayments(),
         ]);
     }
 
@@ -68,6 +73,46 @@ class CategoryController extends Controller
             ->sum('price');
 
         return round(($total / setting('shop.month_goal')) * 100, 2);
+    }
+
+    protected function getRecentPayments()
+    {
+        $maxPayments = (int) setting('shop.recent_payments', 0);
+
+        if ($maxPayments === 0) {
+            return null;
+        }
+
+        return Payment::scopes(['completed', 'withRealMoney'])
+            ->with('user')
+            ->latest()
+            ->take($maxPayments)
+            ->get();
+    }
+
+    protected function getTopCustomer()
+    {
+        if (! setting('shop.top_customer', false)) {
+            return null;
+        }
+
+        $column = Payment::query()->getGrammar()->wrap('price');
+
+        $payment = Payment::scopes(['completed', 'withRealMoney'])
+            ->select(['user_id', DB::raw("sum({$column}) as aggregate")])
+            ->where('created_at', '>', now()->startOfMonth())
+            ->groupBy('user_id')
+            ->orderByDesc('aggregate')
+            ->first();
+
+        if ($payment === null || $payment->user === null) {
+            return null;
+        }
+
+        return (object) [
+            'user' => $payment->user,
+            'total' => $payment->aggregate,
+        ];
     }
 
     protected function getCategories(Category $current = null)

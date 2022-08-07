@@ -42,6 +42,15 @@ return [
         'progress' => ':count% completed',
     ],
 
+    'recent' => [
+        'title' => 'Recent Payments',
+        'empty' => 'No recent payments',
+    ],
+
+    'top' => [
+        'title' => 'Top customer',
+    ],
+
     'cart' => [
         'title' => 'Cart',
         'success' => 'Your purchase has been successfully completed.',

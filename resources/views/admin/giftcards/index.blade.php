@@ -53,6 +53,7 @@
     </div>
     @else
         <div class="alert alert-warning" role="alert">
+            <i class="bi bi-exclamation-circle"></i>
             <a href="{{route('shop.admin.settings')}}">{{ trans('shop::admin.settings.use_site_money')}}</a>
         </div>
     @endif

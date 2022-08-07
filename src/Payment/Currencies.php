@@ -14,6 +14,7 @@ class Currencies
         'BRL' => 'Brazilian Real',
         'CAD' => 'Canadian Dollar',
         'CLP' => 'Chilean Peso',
+        'CNY' => 'Yuan Renminbi',
         'CZK' => 'Czech Koruna',
         'DKK' => 'Danish Krone',
         'HKD' => 'Hong Kong Dollar',

@@ -154,6 +154,8 @@ return [
         'webhook' => 'URL de webhook Discord',
         'webhook_info' => 'Lorsqu\'un utilisateur fait un paiement sur la boutique, cela va créer une notification sur ce webhook. Laissez vide pour ne pas utiliser de webhook.',
         'commands' => 'Commandes globales',
+        'recent_payments' => 'Limite de paiements récents à afficher dans la barre latérale (ou 0 pour désactiver)',
+        'top_customer' => 'Afficher le meilleur acheteur du mois dans la barre latérale',
     ],
 
     'logs' => [

@@ -30,7 +30,7 @@
                 </div>
 
                 <div class="mb-3 form-check form-switch">
-                    <input type="checkbox" class="form-check-input" id="homeSwitch" name="enable_home" data-bs-toggle="collapse" data-bs-target="#homeMessage" @if($enableHome) checked @endif>
+                    <input type="checkbox" class="form-check-input" id="homeSwitch" name="enable_home" data-bs-toggle="collapse" data-bs-target="#homeMessage" @checked($enableHome)>
                     <label class="form-check-label" for="homeSwitch">{{ trans('shop::admin.settings.enable_home') }}</label>
                 </div>
 
@@ -47,16 +47,35 @@
                     </div>
                 </div>
 
-                <div class="mb-3">
-                    <label class="form-label" for="goalInput">{{ trans('shop::messages.goal.title') }}</label>
+                <div class="row g-3">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label" for="goalInput">{{ trans('shop::messages.goal.title') }}</label>
 
-                    <div class="input-group @error('goal') has-validation @enderror">
-                        <input type="number" min="0" class="form-control @error('goal') is-invalid @enderror" id="goalInput" name="goal" value="{{ old('goal', $goal) }}">
-                        <span class="input-group-text">{{ currency_display() }}</span>
+                        <div class="input-group @error('goal') has-validation @enderror">
+                            <input type="number" min="0" class="form-control @error('goal') is-invalid @enderror" id="goalInput" name="goal" value="{{ old('goal', $goal) }}">
+                            <span class="input-group-text">{{ currency_display() }}</span>
 
-                        @error('goal')
+                            @error('goal')
+                            <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label" for="recentPayments">{{ trans('shop::admin.settings.recent_payments') }}</label>
+
+                        <input type="number" min="0" class="form-control @error('recent_payments') is-invalid @enderror" id="recentPayments" name="recent_payments" value="{{ old('recent_payments', $recentPayments) }}">
+
+                        @error('recent_payments')
                         <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                         @enderror
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <div class="form-check form-switch">
+                        <input type="checkbox" class="form-check-input" id="topCustomerCheckbox" name="top_customer" @checked($topCustomer)>
+                        <label class="form-check-label" for="topCustomerCheckbox">{{ trans('shop::admin.settings.top_customer') }}</label>
                     </div>
                 </div>
 
