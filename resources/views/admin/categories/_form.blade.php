@@ -77,6 +77,17 @@
     @enderror
 </div>
 
+<div class="mb-3 col-md-6">
+    <label class="form-label" for="imageInput">{{ trans('messages.fields.image') }}</label>
+    <input type="file" class="form-control @error('image') is-invalid @enderror" id="imageInput" name="image" accept=".jpg,.jpeg,.jpe,.png,.gif,.bmp,.svg,.webp" data-image-preview="filePreview">
+
+    @error('image')
+    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+    @enderror
+
+    <img src="{{ ($category->image ?? false) ? $category->imageUrl() : '#' }}" class="mt-2 img-fluid rounded img-preview {{ ($category->image ?? false) ? '' : 'd-none' }}" alt="Image" id="imagePreview">
+</div>
+
 <div class="mb-3 form-check form-switch">
     <input type="checkbox" class="form-check-input" id="cumulatePurchasesSwitch" name="cumulate_purchases" @checked(old('cumulate_purchases', $category->cumulate_purchases ?? false))>
     <label class="form-check-label" for="cumulatePurchasesSwitch">{{ trans('shop::admin.categories.cumulate_purchases') }}</label>

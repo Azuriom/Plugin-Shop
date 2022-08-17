@@ -5,6 +5,7 @@ namespace Azuriom\Plugin\Shop\Controllers\Admin;
 use Azuriom\Http\Controllers\Controller;
 use Azuriom\Plugin\Shop\Models\Category;
 use Azuriom\Plugin\Shop\Requests\CategoryRequest;
+use Illuminate\Support\Arr;
 
 class CategoryController extends Controller
 {
@@ -38,7 +39,11 @@ class CategoryController extends Controller
      */
     public function store(CategoryRequest $request)
     {
-        Category::create($request->validated());
+        $category = Category::create(Arr::except($request->validated(), 'image'));
+
+        if ($request->hasFile('image')) {
+            $category->storeImage($request->file('image'), true);
+        }
 
         return redirect()->route('shop.admin.packages.index')
             ->with('success', trans('messages.status.success'));
@@ -67,7 +72,11 @@ class CategoryController extends Controller
      */
     public function update(CategoryRequest $request, Category $category)
     {
-        $category->update($request->validated());
+        if ($request->hasFile('image')) {
+            $category->storeImage($request->file('image'));
+        }
+
+        $category->update(Arr::except($request->validated(), 'image'));
 
         return redirect()->route('shop.admin.packages.index')
             ->with('success', trans('messages.status.success'));

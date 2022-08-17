@@ -7,11 +7,17 @@
 
     @foreach($categories as $subCategory)
         <a href="{{ route('shop.categories.show', $subCategory) }}" class="list-group-item @if($subCategory->is($category)) active @endif">
+            @if($subCategory->hasImage())
+                <img width="24" src="{{$subCategory->imageUrl()}}" alt="">
+            @endif
             {{ $subCategory->name }}
         </a>
 
         @foreach($subCategory->categories as $cat)
             <a href="{{ route('shop.categories.show', $cat) }}" class="list-group-item ps-5 @if($cat->is($category)) active @endif">
+                @if($cat->hasImage())
+                    <img width="24" src="{{$cat->imageUrl()}}" alt="">
+                @endif
                 {{ $cat->name }}
             </a>
         @endforeach
