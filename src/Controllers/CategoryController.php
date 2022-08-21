@@ -5,8 +5,8 @@ namespace Azuriom\Plugin\Shop\Controllers;
 use Azuriom\Http\Controllers\Controller;
 use Azuriom\Plugin\Shop\Models\Category;
 use Azuriom\Plugin\Shop\Models\Payment;
-use Illuminate\Support\HtmlString;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\HtmlString;
 
 class CategoryController extends Controller
 {

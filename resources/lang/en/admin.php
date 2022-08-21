@@ -27,7 +27,8 @@ return [
         'parent' => 'Parent category',
         'delete_error' => 'A category with packages can\'t be deleted.',
 
-        'cumulate_purchases' => 'Cumulate purchases in this category (users will only pay the difference when purchasing a more expensive package)',
+        'cumulate' => 'Cumulate purchases in this category',
+        'cumulate_info' => 'Users who have already purchased a package in this category will get a discount and will only pay the difference when purchasing a more expensive package.',
         'enable' => 'Enable the category',
     ],
 
@@ -98,6 +99,7 @@ return [
 
         'current' => 'Current gateways',
         'add' => 'Add a new gateway',
+        'info' => 'If you are having problems with payments when using Cloudflare or a firewall, try following the steps in the <a href="https://azuriom.com/docs/faq" target="_blank" rel="noopener norefferer">FAQ</a>.',
 
         'country' => 'Country',
         'sandbox' => 'Sandbox',
@@ -152,7 +154,7 @@ return [
         'use_site_money' => 'Enable purchases with the site currency.',
         'use_site_money_info' => 'When enabled, the packages in the shop can only be purchased with website money. In order for users to credit their account, you can set up offers in the shop.',
         'webhook' => 'Discord Webhook URL',
-        'webhook_info' => 'When an user make a payment it will create a notification on this webhook. Leave empty to disable',
+        'webhook_info' => 'When an user make a payment (except for purchases with website money!), it will create a notification on this webhook. Leave empty to disable.',
         'commands' => 'Global commands',
         'recent_payments' => 'Recent payments limit to display in sidebar (set to 0 to disable)',
         'top_customer' => 'Display top monthly customer in sidebar',

@@ -77,9 +77,15 @@
     @enderror
 </div>
 
-<div class="mb-3 form-check form-switch">
-    <input type="checkbox" class="form-check-input" id="cumulatePurchasesSwitch" name="cumulate_purchases" @checked(old('cumulate_purchases', $category->cumulate_purchases ?? false))>
-    <label class="form-check-label" for="cumulatePurchasesSwitch">{{ trans('shop::admin.categories.cumulate_purchases') }}</label>
+<div class="mb-3">
+    <div class="form-check form-switch">
+        <input type="checkbox" class="form-check-input" id="cumulatePurchasesSwitch" name="cumulate_purchases" @checked(old('cumulate_purchases', $category->cumulate_purchases ?? false)) aria-describedby="cumulateInfo">
+        <label class="form-check-label" for="cumulatePurchasesSwitch">{{ trans('shop::admin.categories.cumulate') }}</label>
+    </div>
+
+    <small class="form-text" id="cumulateInfo">
+        {{ trans('shop::admin.categories.cumulate_info') }}
+    </small>
 </div>
 
 <div class="mb-3 form-check form-switch">

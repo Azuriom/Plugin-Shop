@@ -27,7 +27,8 @@ return [
         'parent' => 'Catégorie parente',
         'delete_error' => 'Une catégorie contenant des produits ne peut pas être supprimée',
 
-        'cumulate_purchases' => 'Cumuler les achats dans cette catégorie (les utilisateurs ne paieront que la différence lors de l\'achat d\'un produit plus cher)',
+        'cumulate' => 'Cumuler les achats dans cette catégorie',
+        'cumulate_info' => 'Les utilisateurs ayant déjà acheté un produit dans cette catégorie auront une réduction et ne paieront que la différence lors de l\'achat d\'un produit plus cher.',
         'enable' => 'Activer cette catégorie',
     ],
 
@@ -98,6 +99,7 @@ return [
 
         'current' => 'Moyen de paiement actuel',
         'add' => 'Ajout d\'un nouveau moyen de paiement',
+        'info' => 'Si vous avez des problèmes avec les paiements en utilisant Cloudflare ou un pare-feu, essayez de suivre les étapes indiquées dans la <a href="https://azuriom.com/docs/faq" target="_blank" rel="noopener norefferer">FAQ</a>.',
 
         'country' => 'Pays',
         'sandbox' => 'Sandbox',
@@ -152,9 +154,9 @@ return [
         'use_site_money' => 'Activer les achats avec l\'argent du site.',
         'use_site_money_info' => 'Une fois activé, les produits de la boutique ne pourront être achetés qu\'avec l\'argent du site. Afin que les utilisateurs puissent créditer leur compte, vous pouvez configurer des offres dans la boutique.',
         'webhook' => 'URL de webhook Discord',
-        'webhook_info' => 'Lorsqu\'un utilisateur fait un paiement sur la boutique, cela va créer une notification sur ce webhook. Laissez vide pour ne pas utiliser de webhook.',
+        'webhook_info' => 'Lorsqu\'un utilisateur fait un paiement sur la boutique (hors achats avec l\'argent du site!), cela va créer une notification sur ce webhook. Laissez vide pour ne pas utiliser de webhook.',
         'commands' => 'Commandes globales',
-        'recent_payments' => 'Limite de paiements récents à afficher dans la barre latérale (ou 0 pour désactiver)',
+        'recent_payments' => 'Limite de paiements récents à afficher dans la barre latérale',
         'top_customer' => 'Afficher le meilleur acheteur du mois dans la barre latérale',
     ],
 
