@@ -27,7 +27,8 @@ return [
         'parent' => 'Catégorie parente',
         'delete_error' => 'Une catégorie contenant des produits ne peut pas être supprimée',
 
-        'cumulate_purchases' => 'Cumuler les achats dans cette catégorie (les utilisateurs ne paieront que la différence lors de l\'achat d\'un produit plus cher)',
+        'cumulate' => 'Cumuler les achats dans cette catégorie',
+        'cumulate_info' => 'Les utilisateurs ayant déjà acheté un produit dans cette catégorie auront une réduction et ne paieront que la différence lors de l\'achat d\'un produit plus cher.',
         'enable' => 'Activer cette catégorie',
     ],
 
@@ -98,6 +99,7 @@ return [
 
         'current' => 'Moyen de paiement actuel',
         'add' => 'Ajout d\'un nouveau moyen de paiement',
+        'info' => 'Si vous avez des problèmes avec les paiements en utilisant Cloudflare ou un pare-feu, essayez de suivre les étapes indiquées dans la <a href="https://azuriom.com/docs/faq" target="_blank" rel="noopener norefferer">FAQ</a>.',
 
         'country' => 'Pays',
         'sandbox' => 'Sandbox',
@@ -114,7 +116,7 @@ return [
         'methods-info' => 'Les cartes bancaires sont supportées par défaut. Vous pouvez avoir plus d\'informations dans la <a href=":docs">documentation Stripe</a>.',
 
         'paypal_email' => 'Adresse Email PayPal',
-        'paysafecard_info' => 'Pour pouvoir accepter les paiements par paysafecard, vous devez être un <a href="https://www.paysafecard.com/fr/business/" target="_blank" rel="noopener noreferrer">partenaire paysafecard</a>. D\'autres méthodes existent, mais celle-ci est la seule autorisée par paysafecard.',
+        'paysafecard_info' => 'Pour pouvoir accepter les paiements par paysafecard, vous devez être un <a href="https://www.paysafecard.com/fr/entreprises/" target="_blank" rel="noopener noreferrer">partenaire paysafecard</a>. D\'autres méthodes existent, mais celle-ci est la seule autorisée par paysafecard.',
         'stripe_info' => 'Sur le tableau de bord Stripe, vous devez définir l\'URL du webhook sur <code>:url</code> et séléctionner l\'événement <code>checkout.session.completed</code>.',
         'paymentwall_info' => 'Dans le tableau de bord PaymentWall, vous devez définir l\'URL de pingback sur <code>:url</code>.',
         'xsolla' => 'Dans le tableau de bord Xsolla vous devez définir l\'URL de webhook URL sur <code>:url</code>, activer \'Transaction external ID\' dans les paramètres de la \'Pay station\', tester les webhooks et ensuite activer \'Checkout\' dans les paramètres de la \'Pay Station\'.',
@@ -152,9 +154,9 @@ return [
         'use_site_money' => 'Activer les achats avec l\'argent du site.',
         'use_site_money_info' => 'Une fois activé, les produits de la boutique ne pourront être achetés qu\'avec l\'argent du site. Afin que les utilisateurs puissent créditer leur compte, vous pouvez configurer des offres dans la boutique.',
         'webhook' => 'URL de webhook Discord',
-        'webhook_info' => 'Lorsqu\'un utilisateur fait un paiement sur la boutique, cela va créer une notification sur ce webhook. Laissez vide pour ne pas utiliser de webhook.',
+        'webhook_info' => 'Lorsqu\'un utilisateur fait un paiement sur la boutique (hors achats avec l\'argent du site!), cela va créer une notification sur ce webhook. Laissez vide pour ne pas utiliser de webhook.',
         'commands' => 'Commandes globales',
-        'recent_payments' => 'Limite de paiements récents à afficher dans la barre latérale (ou 0 pour désactiver)',
+        'recent_payments' => 'Limite de paiements récents à afficher dans la barre latérale',
         'top_customer' => 'Afficher le meilleur acheteur du mois dans la barre latérale',
     ],
 

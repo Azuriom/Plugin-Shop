@@ -17,3 +17,7 @@
     <input type="checkbox" class="form-check-input" id="enableSwitch" name="is_enabled" @checked($gateway->is_enabled ?? true)>
     <label class="form-check-label" for="enableSwitch">{{ trans('shop::admin.gateways.enable') }}</label>
 </div>
+
+<div class="alert alert-info">
+    <i class="bi bi-info-circle"></i> @lang('shop::admin.gateways.info')
+</div>
