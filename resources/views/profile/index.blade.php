@@ -31,7 +31,7 @@
                                 {{ trans('shop::admin.payments.status.'.$payment->status) }}
                             </span>
                             </td>
-                            <td>{{ $payment->transaction_id ?? trans('messages.unknown') }}</td>
+                            <td>{{ $payment->transaction_id ?? trans( $payment->id ) }}</td>
                             <td>{{ format_date_compact($payment->created_at) }}</td>
                         </tr>
                     @endforeach
