@@ -22,7 +22,7 @@
                                     {{ trans('shop::admin.payments.status.'.$payment->status) }}
                                 </span>
                             </li>
-                            <li>{{ trans('shop::messages.fields.payment_id') }}: {{ $payment->transaction_id ?? trans('messages.unknown') }}</li>
+                            <li>{{ trans('shop::messages.fields.payment_id') }}: {{ $payment->transaction_id ?? trans( $payment->id ) }}</li>
                         @else
                             <li>{{ trans('shop::messages.fields.price') }}: {{ format_money($payment->price) }}</li>
                         @endif
