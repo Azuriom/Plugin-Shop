@@ -81,13 +81,14 @@ class PaymentManager
         $this->paymentMethods->put($id, $method);
     }
 
-    public function buyPackages(Cart $cart)
+    public function buyPackages(Cart $cart, string $paymentId = null)
     {
         $payment = Payment::create([
             'price' => $cart->total(),
-            'gateway_type' => 'azuriom',
+            'gateway_type' => money_name(),
             'status' => 'completed',
-            'currency' => 'XXX',
+            'currency' => '',
+            'transaction_id' => $paymentId,
         ]);
 
         foreach ($cart->content() as $cartItem) {
