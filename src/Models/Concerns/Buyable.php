@@ -3,6 +3,7 @@
 namespace Azuriom\Plugin\Shop\Models\Concerns;
 
 use Azuriom\Models\User;
+use Azuriom\Plugin\Shop\Models\PaymentItem;
 
 interface Buyable
 {
@@ -53,7 +54,8 @@ interface Buyable
      *
      * @param  \Azuriom\Models\User  $user
      * @param  int  $quantity
+     * @param  \Azuriom\Plugin\Shop\Models\PaymentItem|null  $item
      * @return bool
      */
-    public function deliver(User $user, int $quantity = 1);
+    public function deliver(User $user, int $quantity = 1, PaymentItem $item = null);
 }

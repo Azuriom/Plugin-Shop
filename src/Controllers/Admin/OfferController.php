@@ -6,6 +6,7 @@ use Azuriom\Http\Controllers\Controller;
 use Azuriom\Plugin\Shop\Models\Gateway;
 use Azuriom\Plugin\Shop\Models\Offer;
 use Azuriom\Plugin\Shop\Requests\OfferRequest;
+use Illuminate\Support\Arr;
 
 class OfferController extends Controller
 {
@@ -37,9 +38,13 @@ class OfferController extends Controller
      */
     public function store(OfferRequest $request)
     {
-        $offer = Offer::create($request->validated());
+        $offer = Offer::create(Arr::except($request->validated(), 'image'));
 
         $offer->gateways()->sync($request->input('gateways', []));
+
+        if ($request->hasFile('image')) {
+            $offer->storeImage($request->file('image'), true);
+        }
 
         return redirect()->route('shop.admin.offers.index')
             ->with('success', trans('messages.status.success'));
@@ -68,7 +73,11 @@ class OfferController extends Controller
      */
     public function update(OfferRequest $request, Offer $offer)
     {
-        $offer->update($request->validated());
+        $offer->update(Arr::except($request->validated(), 'image'));
+
+        if ($request->hasFile('image')) {
+            $offer->storeImage($request->file('image'), true);
+        }
 
         $offer->gateways()->sync($request->input('gateways', []));
 

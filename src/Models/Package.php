@@ -120,9 +120,8 @@ class Package extends Model implements Buyable
         $price = $this->discounts
             ->where('is_global', false)
             ->merge($globalDiscounts)
-            ->filter(function (Discount $discount) {
-                return $discount->isActive();
-            })->reduce(function ($result, Discount $discount) {
+            ->filter(fn (Discount $discount) => $discount->isActive())
+            ->reduce(function ($result, Discount $discount) {
                 return $result - ($discount->discount / 100) * $result;
             }, $this->price - $this->getCumulatedPurchasesTotal());
 
@@ -136,13 +135,9 @@ class Package extends Model implements Buyable
         }
 
         $purchasedPackage = $this->category->packages
-            ->filter(function (self $package) {
-                return $package->price < $this->price;
-            })
+            ->filter(fn (self $package) => $package->price < $this->price)
             ->sortByDesc('price')
-            ->first(function (self $package) {
-                return $package->getUserTotalPurchases() > 0;
-            });
+            ->first(fn (self $package) => $package->getUserTotalPurchases() > 0);
 
         return $purchasedPackage->price ?? 0;
     }
@@ -223,10 +218,10 @@ class Package extends Model implements Buyable
         return $this->getPrice() !== $this->getOriginalPrice();
     }
 
-    public function deliver(User $user, int $quantity = 1)
+    public function deliver(User $user, int $quantity = 1, PaymentItem $item = null)
     {
         foreach ($this->servers as $server) {
-            $commands = $this->getCommandsToDispatch($quantity);
+            $commands = $this->getCommandsToDispatch($quantity, $item);
 
             $server->bridge()->sendCommands($commands, $user, $this->need_online);
         }
@@ -253,7 +248,7 @@ class Package extends Model implements Buyable
         return $query->where('is_enabled', true)->orderBy('position');
     }
 
-    protected function getCommandsToDispatch(int $quantity)
+    protected function getCommandsToDispatch(int $quantity, PaymentItem $item = null)
     {
         $commands = [];
 
@@ -265,12 +260,10 @@ class Package extends Model implements Buyable
             $commands[] = json_decode($globalCommands);
         }
 
-        return array_map(function (string $command) use ($quantity) {
-            return str_replace([
-                '{quantity}',
-                '{package_id}',
-                '{package_name}',
-            ], [$quantity, $this->id, $this->name], $command);
-        }, array_merge([], ...$commands));
+        return array_map(fn (string $command) => str_replace([
+            '{quantity}', '{package_id}', '{package_name}', '{transaction_id}',
+        ], [
+            $quantity, $this->id, $this->name, $item?->payment?->transaction_id,
+        ], $command), array_merge([], ...$commands));
     }
 }

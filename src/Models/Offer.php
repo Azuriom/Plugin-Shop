@@ -2,6 +2,7 @@
 
 namespace Azuriom\Plugin\Shop\Models;
 
+use Azuriom\Models\Traits\HasImage;
 use Azuriom\Models\Traits\HasTablePrefix;
 use Azuriom\Models\Traits\Loggable;
 use Azuriom\Models\User;
@@ -13,6 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id
  * @property float $price
  * @property int $money
+ * @property string|null $image
  * @property bool $is_enabled
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
@@ -20,6 +22,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Offer extends Model implements Buyable
 {
+    use HasImage;
     use HasTablePrefix;
     use IsBuyable;
     use Loggable;
@@ -37,7 +40,7 @@ class Offer extends Model implements Buyable
      * @var array
      */
     protected $fillable = [
-        'name', 'price', 'money', 'is_enabled',
+        'name', 'price', 'money', 'image', 'is_enabled',
     ];
 
     /**
@@ -58,7 +61,7 @@ class Offer extends Model implements Buyable
         return $this->belongsToMany(Gateway::class, 'shop_offer_gateways');
     }
 
-    public function deliver(User $user, int $quantity = 1)
+    public function deliver(User $user, int $quantity = 1, PaymentItem $item = null)
     {
         $user->addMoney($this->money * $quantity);
     }

@@ -54,18 +54,16 @@ class StripeMethod extends PaymentMethod
         $user = auth()->user();
         $this->setup();
 
-        $items = $cart->content()->map(function (CartItem $item) use ($currency) {
-            return [
-                'price_data' => [
-                    'currency' => $currency,
-                    'unit_amount' => (int) ($item->price() * 100),
-                    'product_data' => [
-                        'name' => $item->name(),
-                    ],
+        $items = $cart->content()->map(fn (CartItem $item) => [
+            'price_data' => [
+                'currency' => $currency,
+                'unit_amount' => (int) ($item->price() * 100),
+                'product_data' => [
+                    'name' => $item->name(),
                 ],
-                'quantity' => $item->quantity,
-            ];
-        });
+            ],
+            'quantity' => $item->quantity,
+        ]);
 
         $payment = $this->createPayment($cart, $amount, $currency);
 

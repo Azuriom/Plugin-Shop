@@ -5,7 +5,7 @@
 @section('content')
     <div class="card shadow mb-4">
         <div class="card-body">
-            <form action="{{ route('shop.admin.offers.store') }}" method="POST">
+            <form action="{{ route('shop.admin.offers.store') }}" method="POST" enctype="multipart/form-data">
                 @include('shop::admin.offers._form')
 
                 <button type="submit" class="btn btn-primary">

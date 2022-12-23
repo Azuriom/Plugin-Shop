@@ -191,9 +191,7 @@ class Cart implements Arrayable
      */
     public function originalTotal()
     {
-        return $this->content()->sum(function (CartItem $cartItem) {
-            return $cartItem->originalTotal();
-        });
+        return $this->content()->sum(fn (CartItem $item) => $item->originalTotal());
     }
 
     /**
@@ -204,9 +202,9 @@ class Cart implements Arrayable
      */
     public function total()
     {
-        return round($this->content()->sum(function (CartItem $cartItem) {
-            return $cartItem->total();
-        }), 2);
+        $total = $this->content()->sum(fn (CartItem $item) => $item->total());
+
+        return round($total, 2);
     }
 
     protected function getItemId(Buyable $buyable)

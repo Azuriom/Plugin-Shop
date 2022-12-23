@@ -37,6 +37,17 @@
 </div>
 
 <div class="mb-3">
+    <label class="form-label" for="imageInput">{{ trans('messages.fields.image') }}</label>
+    <input type="file" class="form-control @error('image') is-invalid @enderror" id="imageInput" name="image" accept=".jpg,.jpeg,.jpe,.png,.gif,.bmp,.svg,.webp" data-image-preview="imagePreview">
+
+    @error('image')
+    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+    @enderror
+
+    <img src="{{ ($offer->image ?? false) ? $offer->imageUrl() : '#' }}" class="mt-2 img-fluid rounded img-preview {{ ($offer->image ?? false) ? '' : 'd-none' }}" alt="Image" id="imagePreview">
+</div>
+
+<div class="mb-3">
     <label class="form-label">{{ trans('shop::messages.fields.gateways') }}</label>
 
     <div class="card card-body pb-0">

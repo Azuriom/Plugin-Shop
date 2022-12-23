@@ -65,6 +65,6 @@ class PaymentItem extends Model
 
     public function deliver()
     {
-        $this->buyable?->deliver($this->payment->user, $this->quantity);
+        $this->buyable?->deliver($this->payment->user, $this->quantity, $this);
     }
 }

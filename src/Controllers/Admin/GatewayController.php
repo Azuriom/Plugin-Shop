@@ -41,9 +41,7 @@ class GatewayController extends Controller
 
         $paymentMethods = $this->paymentManager->getPaymentMethods()
             ->keys()
-            ->filter(function ($type) use ($gatewayTypes) {
-                return ! $gatewayTypes->contains($type);
-            });
+            ->filter(fn ($type) => ! $gatewayTypes->contains($type));
 
         return view('shop::admin.gateways.index', [
             'gateways' => $gateways,

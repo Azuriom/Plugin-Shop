@@ -25,6 +25,9 @@
                 <div class="card">
                     <a href="{{ route('shop.offers.pay', [$offer->id, $gateway->type]) }}" class="payment-method">
                         <div class="card-body text-center">
+                            @if($offer->hasImage())
+                                <img src="{{ $offer->imageUrl() }}" alt="{{ $offer->name }}" class="img-fluid">
+                            @endif
                             <h3>{{ $offer->name }}</h3>
                             <h4>{{ $offer->price }} {{ currency_display() }}</h4>
                         </div>

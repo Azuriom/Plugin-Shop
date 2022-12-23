@@ -50,7 +50,7 @@ class OfferController extends Controller
 
     public function pay(Offer $offer, Gateway $gateway)
     {
-        abort_if((! $gateway->is_enabled || ! $offer->is_enabled), 403);
+        abort_if(! $gateway->is_enabled || ! $offer->is_enabled, 403);
 
         $cart = Cart::createEmpty();
 

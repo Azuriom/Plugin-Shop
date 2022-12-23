@@ -34,6 +34,7 @@ class Currencies
         'SEK' => 'Swedish Krona',
         'CHF' => 'Swiss Franc',
         'THB' => 'Thai Baht',
+        'UAH' => 'Ukrainian Hryvnia',
         'UYU' => 'Uruguayan Peso',
         'ZAR' => 'South African rand',
     ];

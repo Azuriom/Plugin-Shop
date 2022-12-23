@@ -23,7 +23,7 @@
 @section('content')
     <h1>{{ $category->name }}</h1>
 
-    <div class="row">
+    <div class="row" id="shop">
         <div class="col-lg-3">
             @include('shop::categories._sidebar')
         </div>
@@ -43,7 +43,7 @@
                 @forelse($category->packages as $package)
                     <div class="col-md-4">
                         <div class="card h-100">
-                            @if($package->image !== null)
+                            @if($package->hasImage())
                                 <a href="#" data-package-url="{{ route('shop.packages.show', $package) }}">
                                     <img class="card-img-top" src="{{ $package->imageUrl() }}" alt="{{ $package->name }}">
                                 </a>

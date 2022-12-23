@@ -118,19 +118,19 @@ class CartItem implements Arrayable
         }
 
         $coupons = $this->cart->coupons()
-            ->filter(function (Coupon $coupon) use ($package) {
-                return $coupon->isActiveOn($package);
-            });
+            ->filter(fn (Coupon $coupon) => $coupon->isActiveOn($package));
 
         // Apply % first
-        $price = $coupons->where('is_fixed', false)->reduce(function ($price, Coupon $coupon) {
-            return $coupon->applyOn($price);
-        }, $this->originalPrice());
+        $price = $coupons->where('is_fixed', false)
+            ->reduce(function ($price, Coupon $coupon) {
+                return $coupon->applyOn($price);
+            }, $this->originalPrice());
 
         // Then apply fixed amounts
-        $price = $coupons->where('is_fixed', true)->reduce(function ($price, Coupon $coupon) {
-            return $coupon->applyOn($price);
-        }, $price);
+        $price = $coupons->where('is_fixed', true)
+            ->reduce(function ($price, Coupon $coupon) {
+                return $coupon->applyOn($price);
+            }, $price);
 
         return round($price, 2);
     }

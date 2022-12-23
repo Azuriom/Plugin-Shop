@@ -100,30 +100,33 @@ class Payment extends Model
             $item->deliver();
         }
 
-        if ($this->gateway_type !== 'azuriom') {
-            event(new PaymentPaid($this));
-
-            if (($webhookUrl = setting('shop.webhook')) !== null) {
-                $embed = Embed::create()
-                    ->title(trans('shop::messages.payment.webhook'))
-                    ->author($this->user->name, null, $this->user->getAvatar())
-                    ->addField(trans('shop::messages.fields.price'), $this->price.' '.currency_display($this->currency))
-                    ->addField(trans('messages.fields.type'), $this->getTypeName())
-                    ->addField(trans('shop::messages.fields.payment_id'), $this->transaction_id ?? trans('messages.none'))
-                    ->url(route('shop.admin.payments.show', $this))
-                    ->color('#004de6')
-                    ->footer('Azuriom v'.Azuriom::version())
-                    ->timestamp(now());
-
-                rescue(function () use ($embed, $webhookUrl) {
-                    DiscordWebhook::create()->addEmbed($embed)->send($webhookUrl);
-                });
-            }
-
-            rescue(function () {
-                $this->user->notify(new PaymentPaidNotification($this));
-            });
+        if ($this->gateway_type === 'azuriom') {
+            return;
         }
+
+        event(new PaymentPaid($this));
+
+        if (($webhookUrl = setting('shop.webhook')) !== null) {
+            rescue(fn () => $this->createDiscordWebhook()->send($webhookUrl));
+        }
+
+        rescue(fn () => $this->user->notify(new PaymentPaidNotification($this)));
+    }
+
+    public function createDiscordWebhook()
+    {
+        $embed = Embed::create()
+            ->title(trans('shop::messages.payment.webhook'))
+            ->author($this->user->name, null, $this->user->getAvatar())
+            ->addField(trans('shop::messages.fields.price'), $this->price.' '.currency_display($this->currency))
+            ->addField(trans('messages.fields.type'), $this->getTypeName())
+            ->addField(trans('shop::messages.fields.payment_id'), $this->transaction_id ?? trans('messages.none'))
+            ->url(route('shop.admin.payments.show', $this))
+            ->color('#004de6')
+            ->footer('Azuriom v'.Azuriom::version())
+            ->timestamp(now());
+
+        return DiscordWebhook::create()->addEmbed($embed);
     }
 
     public function statusColor()
