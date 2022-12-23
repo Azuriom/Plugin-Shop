@@ -167,6 +167,11 @@
 </div>
 
 <div class="mb-3 form-check form-switch">
+    <input type="checkbox" class="form-check-input" id="customPriceSwitch" name="custom_price" @checked($package->custom_price ?? false)>
+    <label class="form-check-label" for="customPriceSwitch">{{ trans('shop::admin.packages.custom_price') }}</label>
+</div>
+
+<div class="mb-3 form-check form-switch">
     <input type="checkbox" class="form-check-input" id="needOnlineSwitch" name="need_online" @checked($package->need_online ?? true)>
     <label class="form-check-label" for="needOnlineSwitch">{{ trans('shop::admin.packages.require_online') }}</label>
 </div>

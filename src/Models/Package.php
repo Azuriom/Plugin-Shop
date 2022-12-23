@@ -30,6 +30,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property array $commands
  * @property int|null $role_id
  * @property float|null $money
+ * @property bool $custom_price
  * @property bool $need_online
  * @property int $user_limit
  * @property bool $is_enabled
@@ -62,8 +63,10 @@ class Package extends Model implements Buyable
      * @var array
      */
     protected $fillable = [
-        'category_id', 'name', 'short_description', 'description', 'image', 'position', 'price', 'required_packages',
-        'required_roles', 'has_quantity', 'commands', 'role_id', 'money', 'need_online', 'user_limit', 'is_enabled',
+        'category_id', 'name', 'short_description', 'description', 'image',
+        'position', 'price', 'required_packages', 'required_roles', 'has_quantity',
+        'commands', 'role_id', 'money', 'custom_price', 'need_online', 'user_limit',
+        'is_enabled',
     ];
 
     /**
@@ -77,6 +80,7 @@ class Package extends Model implements Buyable
         'money' => 'float',
         'required_packages' => 'collection',
         'required_roles' => 'collection',
+        'custom_price' => 'boolean',
         'has_quantity' => 'boolean',
         'is_enabled' => 'boolean',
     ];
@@ -260,10 +264,12 @@ class Package extends Model implements Buyable
             $commands[] = json_decode($globalCommands);
         }
 
+        $price = $item?->price ?? $this->price;
+
         return array_map(fn (string $command) => str_replace([
-            '{quantity}', '{package_id}', '{package_name}', '{transaction_id}',
+            '{quantity}', '{package_id}', '{package_name}', '{price}', '{transaction_id}',
         ], [
-            $quantity, $this->id, $this->name, $item?->payment?->transaction_id,
+            $quantity, $this->id, $this->name, $price, $item?->payment?->transaction_id,
         ], $command), array_merge([], ...$commands));
     }
 }

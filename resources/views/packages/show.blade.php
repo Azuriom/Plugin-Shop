@@ -29,8 +29,16 @@
                 @elseif(! $package->hasBoughtRequirements())
                     {{ trans('shop::messages.packages.requirements') }}
                 @else
-                    <form action="{{ route('shop.packages.buy', $package) }}" method="POST" class="row row-cols-lg-auto g-0 align-items-center">
+                    <form action="{{ route('shop.packages.buy', $package) }}" method="POST" class="row row-cols-lg-auto g-0 gy-2 align-items-center">
                         @csrf
+
+                        @if($package->custom_price)
+                            <label for="price">{{ trans('shop::messages.fields.price') }}</label>
+
+                            <div class="mx-3">
+                                <input type="number" min="{{ $package->price }}" size="5" class="form-control" name="price" id="price" value="{{ $package->price }}">
+                            </div>
+                        @endif
 
                         @if($package->has_quantity)
                             <label for="quantity">{{ trans('shop::messages.fields.quantity') }}</label>

@@ -46,6 +46,11 @@ class CartItem implements Arrayable
     private Buyable $buyable;
 
     /**
+     * The user-defined price for this cart item (if applicable).
+     */
+    public ?float $userPrice = null;
+
+    /**
      * Create a new item instance.
      *
      * @param  \Azuriom\Plugin\Shop\Cart\Cart  $cart
@@ -106,7 +111,7 @@ class CartItem implements Arrayable
 
     public function originalPrice()
     {
-        return $this->buyable->getPrice();
+        return $this->userPrice ?? $this->buyable->getPrice();
     }
 
     public function price()
@@ -117,20 +122,12 @@ class CartItem implements Arrayable
             return $this->originalPrice();
         }
 
-        $coupons = $this->cart->coupons()
-            ->filter(fn (Coupon $coupon) => $coupon->isActiveOn($package));
-
-        // Apply % first
-        $price = $coupons->where('is_fixed', false)
+        $price = $this->cart->coupons()
+            ->where('is_fixed', false)
+            ->filter(fn (Coupon $coupon) => $coupon->isActiveOn($package))
             ->reduce(function ($price, Coupon $coupon) {
                 return $coupon->applyOn($price);
             }, $this->originalPrice());
-
-        // Then apply fixed amounts
-        $price = $coupons->where('is_fixed', true)
-            ->reduce(function ($price, Coupon $coupon) {
-                return $coupon->applyOn($price);
-            }, $price);
 
         return round($price, 2);
     }
@@ -155,6 +152,7 @@ class CartItem implements Arrayable
             'itemId' => $this->itemId,
             'type' => $this->type,
             'quantity' => $this->quantity,
+            'userPrice' => $this->userPrice,
         ];
     }
 }

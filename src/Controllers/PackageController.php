@@ -33,7 +33,10 @@ class PackageController extends Controller
      */
     public function buy(Request $request, Package $package)
     {
-        $this->validate($request, ['quantity' => 'nullable|integer']);
+        $this->validate($request, [
+            'quantity' => 'nullable|integer',
+            'price' => 'sometimes|nullable|numeric|min:'.$package->price,
+        ]);
 
         $user = $request->user();
         $cart = Cart::fromSession($request->session());
@@ -46,7 +49,9 @@ class PackageController extends Controller
             return redirect()->back()->with('error', trans('shop::messages.packages.requirements'));
         }
 
-        $cart->add($package, $request->input('quantity') ?? 1);
+        $price = $package->custom_price ? $request->input('price') : null;
+
+        $cart->add($package, $request->input('quantity') ?? 1, $price);
 
         return redirect()->route('shop.cart.index');
     }

@@ -56,7 +56,7 @@ class Cart implements Arrayable
      * @param  \Azuriom\Plugin\Shop\Models\Concerns\Buyable  $buyable
      * @param  int  $quantity
      */
-    public function add(Buyable $buyable, int $quantity = 1)
+    public function add(Buyable $buyable, int $quantity = 1, float $userPrice = null)
     {
         if ($quantity <= 0) {
             return;
@@ -65,12 +65,14 @@ class Cart implements Arrayable
         $cartItem = $this->get($buyable);
 
         if ($cartItem === null) {
-            $this->set($buyable, $quantity);
+            $this->set($buyable, $quantity, $userPrice);
 
             return;
         }
 
         $cartItem->setQuantity($cartItem->quantity + $quantity);
+        $cartItem->userPrice = $userPrice;
+
         $this->save();
     }
 
@@ -80,7 +82,7 @@ class Cart implements Arrayable
      * @param  \Azuriom\Plugin\Shop\Models\Concerns\Buyable  $buyable
      * @param  int  $quantity
      */
-    public function set(Buyable $buyable, int $quantity = 1)
+    public function set(Buyable $buyable, int $quantity = 1, float $userPrice = null)
     {
         if ($quantity <= 0) {
             $this->remove($buyable);
@@ -88,16 +90,18 @@ class Cart implements Arrayable
             return;
         }
 
-        $cartItem = $this->get($buyable);
+        $item = $this->get($buyable);
 
-        if ($cartItem !== null) {
-            $cartItem->setQuantity($quantity);
+        if ($item !== null) {
+            $item->setQuantity($quantity);
+            $item->userPrice = $userPrice;
 
             return;
         }
 
         $id = $this->getItemId($buyable);
         $item = new CartItem($this, $buyable, $id, $quantity);
+        $item->userPrice = $userPrice;
 
         if ($item->quantity > 0) {
             $this->items->put($id, $item);
@@ -191,7 +195,7 @@ class Cart implements Arrayable
      */
     public function originalTotal()
     {
-        return $this->content()->sum(fn (CartItem $item) => $item->originalTotal());
+        return $this->content()->sum(fn (CartItem $item) => $item->total());
     }
 
     /**
@@ -202,7 +206,28 @@ class Cart implements Arrayable
      */
     public function total()
     {
-        $total = $this->content()->sum(fn (CartItem $item) => $item->total());
+        // Store remaining amounts for fixed-price coupons
+        $remaining = $this->coupons
+            ->where('is_fixed', true)
+            ->pluck('discount', 'id');
+
+        $total = $this->content()->sum(function (CartItem $item) use ($remaining) {
+            $package = $item->buyable();
+
+            if (! $package instanceof Package) {
+                return $item->total();
+            }
+
+            return $this->coupons()
+                ->where('is_fixed', true)
+                ->filter(fn (Coupon $coupon) => $coupon->isActiveOn($package))
+                ->reduce(function ($price, Coupon $coupon) use ($remaining) {
+                    $discount = $remaining->get($coupon->id, 0);
+                    $remaining->put($coupon->id, max($discount - $price, 0));
+
+                    return max($price - $discount, 0);
+                }, $item->total());
+        });
 
         return round($total, 2);
     }
@@ -332,6 +357,10 @@ class Cart implements Arrayable
                 }
 
                 $cartItem = new CartItem($this, $models->get($item['id']), $item['itemId'], $item['quantity']);
+
+                if (($userPrice = ($item['userPrice'] ?? null)) !== null) {
+                    $cartItem->userPrice = $userPrice;
+                }
 
                 $this->items->put($item['itemId'], $cartItem);
             });

@@ -83,6 +83,7 @@ return [
         'money' => 'Money to be credited to the user after purchase',
         'command' => 'The command must not start with <code>/</code>. You can use <code>{player}</code> to use the player name. For Steam games, you can also use <code>{steam_id}</code> and <code>{steam_id_32}</code>.',
 
+        'custom_price' => 'Allow the user to choose the price to pay (the package price will then be the minimum)',
         'require_online' => 'Execute commands when the user is online on the server (only available with AzLink)',
         'enable_quantity' => 'Enable the quantity',
 
