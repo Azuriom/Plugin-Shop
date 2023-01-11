@@ -85,6 +85,12 @@ class StripeMethod extends PaymentMethod
             ];
         }
 
+        if (in_array('wechat_pay', $methods, true)) {
+            $params['payment_method_options']['wechat_pay'] = [
+                'client' => 'web',
+            ];
+        }
+
         $session = Session::create($params);
 
         $payment->update(['transaction_id' => $session->id]);
