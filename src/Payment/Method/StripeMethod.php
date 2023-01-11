@@ -84,10 +84,10 @@ class StripeMethod extends PaymentMethod
                 'allowed_countries' => ['AU', 'CA', 'GB', 'FR', 'NZ', 'UK', 'US'],
             ];
         }
-        
+
         if (in_array('wechat_pay', $methods, true)) {
             $params['payment_method_options']['wechat_pay'] = [
-                'client' => 'web'
+                'client' => 'web',
             ];
         }
 
