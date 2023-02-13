@@ -20,6 +20,8 @@ class CategoryController extends Controller
         $categories = $this->getCategories();
 
         if (! setting('shop.home.enabled', true) && ! $categories->isEmpty()) {
+            request()->session()->reflash();
+
             return redirect()->route('shop.categories.show', $categories->first());
         }
 

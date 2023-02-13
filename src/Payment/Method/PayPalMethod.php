@@ -44,7 +44,7 @@ class PayPalMethod extends PaymentMethod
             'cancel_return' => route('shop.cart.index'),
             'notify_url' => route('shop.payments.notification', $this->id),
             'custom' => $payment->id,
-            'bn' => 'Azuriom',
+            'bn' => site_name(),
         ];
 
         return redirect()->away('https://www.paypal.com/cgi-bin/webscr?'.Arr::query($attributes));
@@ -64,9 +64,10 @@ class PayPalMethod extends PaymentMethod
         $amount = $request->input('mc_gross');
         $currency = $request->input('mc_currency');
         $status = $request->input('payment_status');
+        $caseType = $request->input('case_type');
         $receiverEmail = Str::lower($request->input('receiver_email'));
 
-        if ($status === 'Canceled_Reversal') {
+        if ($status === 'Canceled_Reversal' || $caseType !== null) {
             return response()->noContent();
         }
 

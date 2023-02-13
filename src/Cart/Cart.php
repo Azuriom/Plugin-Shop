@@ -71,7 +71,7 @@ class Cart implements Arrayable
         }
 
         $cartItem->setQuantity($cartItem->quantity + $quantity);
-        $cartItem->userPrice = $userPrice;
+        $cartItem->userPrice = $userPrice ?? $cartItem->userPrice;
 
         $this->save();
     }
@@ -94,14 +94,14 @@ class Cart implements Arrayable
 
         if ($item !== null) {
             $item->setQuantity($quantity);
-            $item->userPrice = $userPrice;
+            $item->userPrice = $userPrice ?? $item->userPrice;
 
             return;
         }
 
         $id = $this->getItemId($buyable);
         $item = new CartItem($this, $buyable, $id, $quantity);
-        $item->userPrice = $userPrice;
+        $item->userPrice = $userPrice ?? $item->userPrice;
 
         if ($item->quantity > 0) {
             $this->items->put($id, $item);

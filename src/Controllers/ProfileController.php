@@ -17,7 +17,7 @@ class ProfileController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        $payments = Payment::where('user_id', $user->id)
+        $payments = Payment::whereBelongsTo($user)
             ->scopes(['notPending', 'withRealMoney'])
             ->get();
 

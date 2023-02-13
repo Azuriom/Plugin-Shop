@@ -5,6 +5,7 @@ namespace Azuriom\Plugin\Shop\Models;
 use Azuriom\Azuriom;
 use Azuriom\Models\Traits\HasTablePrefix;
 use Azuriom\Models\Traits\HasUser;
+use Azuriom\Models\Traits\Searchable;
 use Azuriom\Models\User;
 use Azuriom\Plugin\Shop\Events\PaymentPaid;
 use Azuriom\Plugin\Shop\Notifications\PaymentPaid as PaymentPaidNotification;
@@ -37,6 +38,7 @@ class Payment extends Model
 {
     use HasTablePrefix;
     use HasUser;
+    use Searchable;
 
     /**
      * The table prefix associated with the model.
@@ -61,6 +63,15 @@ class Payment extends Model
      */
     protected $casts = [
         'price' => 'float',
+    ];
+
+    /**
+     * The attributes that can be search for.
+     *
+     * @var array
+     */
+    protected $searchable = [
+        'status', 'gateway_type', 'transaction_id', 'user.*',
     ];
 
     /**
@@ -100,14 +111,12 @@ class Payment extends Model
             $item->deliver();
         }
 
-        if ($this->gateway_type === 'azuriom') {
-            return;
-        }
+        if (! $this->isWithSiteMoney()) {
+            event(new PaymentPaid($this));
 
-        event(new PaymentPaid($this));
-
-        if (($webhookUrl = setting('shop.webhook')) !== null) {
-            rescue(fn () => $this->createDiscordWebhook()->send($webhookUrl));
+            if (($webhookUrl = setting('shop.webhook')) !== null) {
+                rescue(fn () => $this->createDiscordWebhook()->send($webhookUrl));
+            }
         }
 
         rescue(fn () => $this->user->notify(new PaymentPaidNotification($this)));
@@ -147,6 +156,11 @@ class Payment extends Model
     public function isCompleted()
     {
         return $this->status === 'completed';
+    }
+
+    public function isWithSiteMoney()
+    {
+        return $this->gateway_type === 'azuriom';
     }
 
     public function scopeCompleted(Builder $query)

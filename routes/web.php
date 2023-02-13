@@ -30,7 +30,7 @@ Route::resource('categories', CategoryController::class)->only('show')->scoped([
 Route::resource('packages', PackageController::class)->only('show');
 Route::post('/packages/{package}/buy', [PackageController::class, 'buy'])->name('packages.buy')->middleware('auth');
 
-Route::prefix('offers')->name('offers.')->middleware(['auth', 'verified'])->group(function () {
+Route::prefix('offers')->name('offers.')->middleware('verified')->group(function () {
     Route::get('/', [OfferController::class, 'selectPayment'])->name('select');
     Route::get('/{gateway:type}', [OfferController::class, 'buy'])->name('buy');
     Route::post('/{offer:id}/{gateway:type}', [OfferController::class, 'pay'])->name('pay');
