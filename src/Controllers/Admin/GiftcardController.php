@@ -5,6 +5,7 @@ namespace Azuriom\Plugin\Shop\Controllers\Admin;
 use Azuriom\Http\Controllers\Controller;
 use Azuriom\Plugin\Shop\Models\Giftcard;
 use Azuriom\Plugin\Shop\Requests\GiftcardRequest;
+use Illuminate\Http\Request;
 
 class GiftcardController extends Controller
 {
@@ -15,7 +16,9 @@ class GiftcardController extends Controller
      */
     public function index()
     {
-        return view('shop::admin.giftcards.index', ['giftcards' => Giftcard::all()]);
+        return view('shop::admin.giftcards.index', [
+            'giftcards' => Giftcard::all(),
+        ]);
     }
 
     /**
@@ -36,7 +39,9 @@ class GiftcardController extends Controller
      */
     public function store(GiftcardRequest $request)
     {
-        Giftcard::create($request->validated());
+        Giftcard::create(array_merge($request->validated(), [
+            'original_balance' => $request->input('balance'),
+        ]));
 
         return redirect()->route('shop.admin.giftcards.index')
             ->with('success', trans('messages.status.success'));
@@ -50,21 +55,24 @@ class GiftcardController extends Controller
      */
     public function edit(Giftcard $giftcard)
     {
-        return view('shop::admin.giftcards.edit', [
-            'giftcard' => $giftcard,
-        ]);
+        return view('shop::admin.giftcards.edit', ['giftcard' => $giftcard]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Azuriom\Plugin\Shop\Requests\GiftcardRequest  $request
+     * @param  \Illuminate\Http\Request  $request
      * @param  \Azuriom\Plugin\Shop\Models\Giftcard  $giftcard
      * @return \Illuminate\Http\Response
      */
-    public function update(GiftcardRequest $request, Giftcard $giftcard)
+    public function update(Request $request, Giftcard $giftcard)
     {
-        $giftcard->update($request->validated());
+        $validated = $this->validate($request, [
+            'start_at' => ['required', 'date'],
+            'expire_at' => ['required', 'date', 'after:start_at'],
+        ]);
+
+        $giftcard->update($validated);
 
         return redirect()->route('shop.admin.giftcards.index')
             ->with('success', trans('messages.status.success'));

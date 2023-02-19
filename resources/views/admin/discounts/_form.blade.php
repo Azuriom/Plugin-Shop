@@ -38,7 +38,7 @@
 
     <div class="mb-3 col-md-6">
         <label class="form-label" for="expireInput">{{ trans('shop::messages.fields.expire_date') }}</label>
-        <input type="text" class="form-control date-picker @error('end_at') is-invalid @enderror" id="expireInput" name="end_at" value="{{ old('end_at', $discount->end_at ?? now()->addWeek()) }}" required>
+        <input type="text" class="form-control date-picker @error('end_at') is-invalid @enderror" id="expireInput" name="end_at" value="{{ old('end_at', $discount->end_at ?? now()->addMonth()) }}" required>
 
         @error('end_at')
         <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>

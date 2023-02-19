@@ -48,6 +48,22 @@
                                 </ul>
                             </li>
                         @endif
+
+                        @if(!$payment->giftcards->isEmpty())
+                            <li>
+                                {{ trans('shop::messages.giftcards.title') }}:
+
+                                <ul>
+                                    @foreach($payment->giftcards as $giftcard)
+                                        <li>
+                                            <a href="{{ route('shop.admin.giftcards.edit', $giftcard) }}">
+                                                {{ $giftcard->code }}
+                                            </a> - {{ shop_format_amount($giftcard->pivot->amount) }}
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </li>
+                        @endif
                     </ul>
                 </div>
             </div>

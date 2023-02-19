@@ -84,7 +84,7 @@ class PaymentManager
     public function buyPackages(Cart $cart)
     {
         $payment = Payment::create([
-            'price' => $cart->total(),
+            'price' => $cart->payableTotal(),
             'gateway_type' => 'azuriom',
             'status' => 'completed',
             'currency' => 'XXX',
@@ -102,7 +102,7 @@ class PaymentManager
         }
 
         $payment->coupons()->sync($cart->coupons());
-
+        $payment->processGiftcards($cart->total(), $cart->giftcards());
         $payment->deliver();
     }
 

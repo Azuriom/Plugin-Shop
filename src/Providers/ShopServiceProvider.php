@@ -6,6 +6,7 @@ use Azuriom\Extensions\Plugin\BasePluginServiceProvider;
 use Azuriom\Models\ActionLog;
 use Azuriom\Models\Permission;
 use Azuriom\Plugin\Shop\Models\Gateway;
+use Azuriom\Plugin\Shop\Models\Giftcard;
 use Azuriom\Plugin\Shop\Models\Offer;
 use Azuriom\Plugin\Shop\Models\Package;
 use Azuriom\Plugin\Shop\Payment\PaymentManager;
@@ -62,6 +63,13 @@ class ShopServiceProvider extends BasePluginServiceProvider
             Package::class,
             Gateway::class,
         ], 'shop::admin.logs');
+
+        ActionLog::registerLogs('shop-giftcards.used', [
+            'icon' => 'credit-card',
+            'color' => 'info',
+            'message' => 'shop::admin.logs.shop-giftcards.used',
+            'model' => Giftcard::class,
+        ]);
     }
 
     /**

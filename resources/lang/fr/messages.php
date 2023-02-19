@@ -9,32 +9,35 @@ return [
     'free' => 'Gratuit',
 
     'fields' => [
-        'price' => 'Prix',
-        'total' => 'Total',
-        'quantity' => 'Quantité',
-        'currency' => 'Devise',
+        'balance' => 'Solde',
         'category' => 'Catégorie',
+        'code' => 'Code',
+        'commands' => 'Commandes',
+        'currency' => 'Devise',
+        'discount' => 'Promotion',
+        'expire_date' => 'Date de fin',
+        'gateways' => 'Moyens de paiements',
+        'original_balance' => 'Solde de départ',
         'package' => 'Produit',
         'packages' => 'Produits',
-        'gateways' => 'Moyens de paiements',
-        'servers' => 'Serveurs',
-        'code' => 'Code',
-        'discount' => 'Promotion',
-        'commands' => 'Commandes',
-        'start_date' => 'Date de début',
-        'expire_date' => 'Date de fin',
-        'required_packages' => 'Articles pré-requis',
-        'user_limit' => 'Limite d\'achats par utilisateur',
-        'status' => 'Status',
         'payment_id' => 'ID du Paiement',
-        'role' => 'Grade à définir lors de l\'achat',
-        'user_id' => 'ID de l\'utilisateur',
+        'payments' => 'Paiements',
+        'price' => 'Prix',
+        'quantity' => 'Quantité',
+        'required_packages' => 'Articles pré-requis',
         'required_roles' => 'Role pré-requis',
+        'role' => 'Grade à définir lors de l\'achat',
+        'servers' => 'Serveurs',
+        'start_date' => 'Date de début',
+        'status' => 'Status',
+        'total' => 'Total',
+        'user_id' => 'ID de l\'utilisateur',
+        'user_limit' => 'Limite d\'achats par utilisateur',
     ],
 
     'actions' => [
-        'remove' => 'Retirer',
         'duplicate' => 'Dupliquer',
+        'remove' => 'Retirer',
     ],
 
     'goal' => [
@@ -62,6 +65,7 @@ return [
         'pay' => 'Payer',
         'back' => 'Retour à la boutique',
         'total' => 'Total : :total',
+        'payable_total' => 'Total à payer: :total',
         'credit' => 'Créditer',
 
         'confirm' => [
@@ -118,8 +122,10 @@ return [
     ],
 
     'giftcards' => [
+        'title' => 'Cartes cadeaux',
         'success' => ':money ont été crédité sur votre compte',
         'error' => 'Cette carte cadeau n\'existe pas, est expirée ou ne peut plus être utilisée.',
-        'add' => 'Échanger une carte cadeau',
+        'add' => 'Utiliser une carte cadeau',
+        'notification' => 'Vous avez reçu une carte cadeau, son code est : :code (:balance).',
     ],
 ];

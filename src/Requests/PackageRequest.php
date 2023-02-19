@@ -38,6 +38,7 @@ class PackageRequest extends FormRequest
             'commands' => ['sometimes', 'nullable', 'array'],
             'role_id' => ['nullable', 'integer', 'exists:roles,id'],
             'money' => ['nullable', 'numeric', 'min:0'],
+            'giftcard_balance' => ['nullable', 'numeric', 'min:0'],
             'custom_price' => ['filled', 'boolean'],
             'need_online' => ['filled', 'boolean'],
             'is_enabled' => ['filled', 'boolean'],

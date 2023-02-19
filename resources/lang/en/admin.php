@@ -81,6 +81,7 @@ return [
         'updated' => 'The packages have been updated.',
 
         'money' => 'Money to be credited to the user after purchase',
+        'giftcard' => 'Balance of the giftcard to create during the purchase',
         'command' => 'The command must not start with <code>/</code>. You can use <code>{player}</code> to use the player name. For Steam games, you can also use <code>{steam_id}</code> and <code>{steam_id_32}</code>.',
 
         'custom_price' => 'Allow the user to choose the price to pay (the package price will then be the minimum)',
@@ -178,6 +179,10 @@ return [
             'created' => 'Created offer #:id',
             'updated' => 'Updated offer #:id',
             'deleted' => 'Deleted offer #:id',
+        ],
+
+        'shop-giftcards' => [
+            'used' => 'Used giftcard #:id (:amount)',
         ],
     ],
 

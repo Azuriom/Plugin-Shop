@@ -13,6 +13,7 @@ use Azuriom\Support\Discord\DiscordWebhook;
 use Azuriom\Support\Discord\Embed;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 
 /**
  * @property int $id
@@ -27,6 +28,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Azuriom\Models\User $user
  * @property \Illuminate\Support\Collection|\Azuriom\Plugin\Shop\Models\PaymentItem[] $items
  * @property \Illuminate\Support\Collection|\Azuriom\Plugin\Shop\Models\Coupon[] $coupons
+ * @property \Illuminate\Support\Collection|\Azuriom\Plugin\Shop\Models\Giftcard[] $giftcards
  *
  * @method static \Illuminate\Database\Eloquent\Builder completed()
  * @method static \Illuminate\Database\Eloquent\Builder pending()
@@ -98,6 +100,15 @@ class Payment extends Model
         return $this->belongsToMany(Coupon::class, 'shop_coupon_payment');
     }
 
+    /**
+     * Get the giftcards used in this payment.
+     */
+    public function giftcards()
+    {
+        return $this->belongsToMany(Giftcard::class, 'shop_giftcard_payment')
+            ->withPivot('amount');
+    }
+
     public function getTypeName()
     {
         return Gateway::getNameByType($this->gateway_type);
@@ -120,6 +131,35 @@ class Payment extends Model
         }
 
         rescue(fn () => $this->user->notify(new PaymentPaidNotification($this)));
+    }
+
+    public function processGiftcards(float $originalTotal, Collection $giftcards)
+    {
+        return $giftcards
+            ->filter(fn (Giftcard $card) => $card->isActive())
+            ->reduce(function ($total, Giftcard $card) {
+                if ($total <= 0) {
+                    return 0;
+                }
+
+                $newTotal = max($total - $card->balance, 0);
+
+                if ($newTotal > 0) {
+                    $this->giftcards()->attach($card, [
+                        'amount' => $card->balance,
+                    ]);
+
+                    $card->update(['balance' => 0]);
+                } else {
+                    $this->giftcards()->attach($card, [
+                        'amount' => $total,
+                    ]);
+
+                    $card->decrement('balance', $total);
+                }
+
+                return $newTotal;
+            }, $originalTotal);
     }
 
     public function createDiscordWebhook()

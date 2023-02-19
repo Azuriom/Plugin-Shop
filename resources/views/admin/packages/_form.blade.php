@@ -146,6 +146,21 @@
     </div>
 </div>
 
+@if(use_site_money())
+    <div class="mb-3">
+        <label class="form-label" for="giftcardInput">{{ trans('shop::admin.packages.giftcard') }}</label>
+
+        <div class="input-group @error('giftcard_balance') has-validation @enderror">
+            <input type="number" min="0" step="0.01" class="form-control @error('giftcard_balance') is-invalid @enderror" id="giftcardInput" name="giftcard_balance" value="{{ old('giftcard_balance', $package->giftcard_balance ?? '') }}">
+            <span class="input-group-text">{{ shop_active_currency() }}</span>
+
+            @error('giftcard_balance')
+            <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+            @enderror
+        </div>
+    </div>
+@endif
+
 <div class="mb-3">
     <label class="form-label">{{ trans('shop::messages.fields.commands') }}</label>
 

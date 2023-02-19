@@ -4,24 +4,23 @@ namespace Azuriom\Plugin\Shop\Models;
 
 use Azuriom\Models\Traits\HasTablePrefix;
 use Azuriom\Models\User;
+use Azuriom\Notifications\AlertNotification;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 
 /**
  * @property int $id
  * @property string $code
- * @property float $amount
- * @property int $used
- * @property int $global_limit
- * @property bool $is_enabled
+ * @property float $balance
+ * @property float $original_balance
  * @property \Carbon\Carbon|null $start_at
  * @property \Carbon\Carbon|null $expire_at
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
- * @property \Illuminate\Support\Collection|\Azuriom\Models\User[] $users
+ * @property \Illuminate\Support\Collection|\Azuriom\Models\Payment[] $payments
  *
  * @method static \Illuminate\Database\Eloquent\Builder active()
- * @method static \Illuminate\Database\Eloquent\Builder enabled()
  */
 class Giftcard extends Model
 {
@@ -40,7 +39,7 @@ class Giftcard extends Model
      * @var array
      */
     protected $fillable = [
-        'code', 'amount', 'start_at', 'expire_at', 'global_limit', 'is_enabled',
+        'code', 'balance', 'original_balance', 'start_at', 'expire_at',
     ];
 
     /**
@@ -51,31 +50,12 @@ class Giftcard extends Model
     protected $casts = [
         'start_at' => 'datetime',
         'expire_at' => 'datetime',
-        'is_enabled' => 'boolean',
     ];
 
-    public function users()
+    public function payments()
     {
-        return $this->belongsToMany(User::class, 'shop_giftcard_user');
-    }
-
-    public function hasReachLimit(User $user)
-    {
-        return $this->hasReachGlobalLimit() || $this->hasReachUserLimit($user);
-    }
-
-    protected function hasReachUserLimit(User $user)
-    {
-        return $this->users()->where('users.id', $user->id)->exists();
-    }
-
-    protected function hasReachGlobalLimit()
-    {
-        if (! $this->global_limit) {
-            return false;
-        }
-
-        return $this->users()->count() >= $this->global_limit;
+        return $this->belongsToMany(Payment::class, 'shop_giftcard_payment')
+            ->withPivot('amount');
     }
 
     /**
@@ -85,7 +65,7 @@ class Giftcard extends Model
      */
     public function isActive()
     {
-        return $this->is_enabled && $this->start_at->isPast() && $this->expire_at->isFuture();
+        return $this->balance > 0 && $this->start_at->isPast() && $this->expire_at->isFuture();
     }
 
     /**
@@ -96,19 +76,23 @@ class Giftcard extends Model
      */
     public function scopeActive(Builder $query)
     {
-        return $query->where('is_enabled', true)
+        return $query->where('balance', '>', 0)
             ->where('start_at', '<', now())
             ->where('expire_at', '>', now());
     }
 
-    /**
-     * Scope a query to only include enabled gift cards.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeEnabled(Builder $query)
+    public function notifyUser(User $user)
     {
-        return $query->where('is_enabled', true);
+        (new AlertNotification(trans('shop::messages.giftcards.notification', [
+            'balance' => shop_format_amount($this->balance),
+            'code' => $this->code,
+        ])))->send($user);
+    }
+
+    public static function randomCode()
+    {
+        return Collection::times(4, function () {
+            return Collection::times(4, fn () => random_int(0, 9))->implode('');
+        })->implode('-');
     }
 }

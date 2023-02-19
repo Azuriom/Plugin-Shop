@@ -4,6 +4,7 @@ namespace Azuriom\Plugin\Shop\Cart;
 
 use Azuriom\Plugin\Shop\Models\Concerns\Buyable;
 use Azuriom\Plugin\Shop\Models\Coupon;
+use Azuriom\Plugin\Shop\Models\Giftcard;
 use Azuriom\Plugin\Shop\Models\Package;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Contracts\Support\Arrayable;
@@ -32,6 +33,11 @@ class Cart implements Arrayable
     private Collection $coupons;
 
     /**
+     * The giftcards applied to the cart.
+     */
+    private Collection $giftcards;
+
+    /**
      * Create a new cart instance.
      *
      * @param  \Illuminate\Contracts\Session\Session|null  $session
@@ -43,6 +49,7 @@ class Cart implements Arrayable
         if ($session === null) {
             $this->items = collect();
             $this->coupons = collect();
+            $this->giftcards = collect();
 
             return;
         }
@@ -232,6 +239,15 @@ class Cart implements Arrayable
         return round($total, 2);
     }
 
+    public function payableTotal()
+    {
+        return $this->giftcards
+            ->filter(fn (Giftcard $card) => $card->isActive())
+            ->reduce(function ($total, Giftcard $card) {
+                return max($total - $card->balance, 0);
+            }, $this->total());
+    }
+
     protected function getItemId(Buyable $buyable)
     {
         return class_basename($buyable).'-'.$buyable->getId();
@@ -267,6 +283,30 @@ class Cart implements Arrayable
     public function removeCoupon(Coupon $coupon)
     {
         $this->coupons->forget($coupon->id);
+
+        $this->save();
+    }
+
+    /**
+     * Get the coupons applied to the cart.
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function giftcards()
+    {
+        return $this->giftcards;
+    }
+
+    public function addGiftcard(Giftcard $giftcard)
+    {
+        $this->giftcards->put($giftcard->id, $giftcard);
+
+        $this->save();
+    }
+
+    public function removeGiftcard(Giftcard $giftcard)
+    {
+        $this->giftcards->forget($giftcard->id);
 
         $this->save();
     }
@@ -339,6 +379,12 @@ class Cart implements Arrayable
             $this->coupons = collect();
         }
 
+        if (! empty($content['giftcards'])) {
+            $this->giftcards = Giftcard::whereIn('code', $content['giftcards'])->get()->keyBy('id');
+        } else {
+            $this->giftcards = collect();
+        }
+
         if (empty($content['items'])) {
             return;
         }
@@ -375,6 +421,7 @@ class Cart implements Arrayable
         return [
             'items' => $this->items->toArray(),
             'coupons' => $this->coupons->pluck('code')->all(),
+            'giftcards' => $this->giftcards->pluck('code')->all(),
         ];
     }
 }

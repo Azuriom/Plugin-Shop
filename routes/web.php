@@ -49,6 +49,11 @@ Route::prefix('cart')->name('cart.')->middleware('auth')->group(function () {
         Route::post('/remove/{coupon}', [CouponController::class, 'remove'])->name('remove');
         Route::post('/clear', [CouponController::class, 'clear'])->name('clear');
     });
+
+    Route::prefix('giftcards')->name('giftcards.')->group(function () {
+        Route::post('/add', [GiftcardController::class, 'add'])->name('add');
+        Route::post('/remove/{giftcard}', [GiftcardController::class, 'remove'])->name('remove');
+    });
 });
 
 Route::prefix('payments')->name('payments.')->group(function () {
@@ -63,4 +68,4 @@ Route::prefix('payments')->name('payments.')->group(function () {
 
 Route::get('/profile', [ProfileController::class, 'index'])->middleware('auth')->name('profile');
 
-Route::post('/giftcards/add', [GiftcardController::class, 'add'])->middleware('auth')->name('giftcards.add');
+Route::post('/giftcards/add', [GiftcardController::class, 'use'])->middleware('auth')->name('giftcards.add');

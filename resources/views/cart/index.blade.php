@@ -131,6 +131,67 @@
                 </h5>
 
                 <div class="row">
+                    <div class="col-md-4">
+                        <h5>{{ trans('shop::messages.giftcards.add') }}</h5>
+
+                        <form action="{{ route('shop.cart.giftcards.add') }}" method="POST" >
+                            @csrf
+
+                            <div class="input-group mb-3 @error('code') has-validation @enderror">
+                                <input type="text" class="form-control @error('code') is-invalid @enderror" placeholder="{{ trans('shop::messages.fields.code') }}" id="code" name="code" value="{{ old('code') }}">
+
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-plus-lg"></i> {{ trans('messages.actions.add') }}
+                                </button>
+
+                                @error('code')
+                                <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                                @enderror
+                            </div>
+                        </form>
+                    </div>
+
+                    @if(! $cart->giftcards()->isEmpty())
+                        <div class="offset-md-2 col-md-6">
+                            <h5>{{ trans('shop::messages.giftcards.title') }}</h5>
+
+                            <table class="table coupons">
+                                <thead>
+                                <tr>
+                                    <th scope="col">{{ trans('messages.fields.name') }}</th>
+                                    <th scope="col">{{ trans('shop::messages.fields.discount') }}</th>
+                                    <th scope="col">{{ trans('messages.fields.action') }}</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                @foreach($cart->giftcards() as $giftcard)
+                                    <tr>
+                                        <th scope="row">{{ $giftcard->code }}</th>
+                                        <td>{{ shop_format_amount($giftcard->balance) }}</td>
+                                        <td>
+                                            <form action="{{ route('shop.cart.giftcards.remove', $giftcard) }}" method="POST" class="d-inline-block">
+                                                @csrf
+
+                                                <button type="submit" class="btn btn-sm btn-danger" title="{{ trans('messages.actions.delete') }}">
+                                                    <i class="bi bi-x-lg"></i>
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @endforeach
+
+                                </tbody>
+                            </table>
+
+                            <h5 class="text-end">
+                                {{ trans('shop::messages.cart.payable_total', ['total' => shop_format_amount($cart->payableTotal())]) }}
+                            </h5>
+                        </div>
+                    @endif
+                </div>
+
+                <div class="row">
                     <div class="col-md-6">
                         <a href="{{ route('shop.home') }}" class="btn btn-secondary">
                             <i class="bi bi-arrow-left"></i> {{ trans('shop::messages.cart.back') }}
@@ -174,7 +235,7 @@
                     </div>
 
                     <div class="modal-body">
-                        {{ trans('shop::messages.cart.confirm.price', ['price' => shop_format_amount($cart->total())]) }}
+                        {{ trans('shop::messages.cart.confirm.price', ['price' => shop_format_amount($cart->payableTotal())]) }}
                     </div>
 
                     <div class="modal-footer">

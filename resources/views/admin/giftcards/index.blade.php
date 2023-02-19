@@ -12,8 +12,7 @@
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col">{{ trans('shop::messages.fields.code') }}</th>
-                        <th scope="col">{{ trans('messages.fields.money') }}</th>
-                        <th scope="col">{{ trans('messages.fields.enabled') }}</th>
+                        <th scope="col">{{ trans('shop::messages.fields.balance') }}</th>
                         <th scope="col">{{ trans('shop::admin.giftcards.active') }}</th>
                         <th scope="col">{{ trans('messages.fields.action') }}</th>
                     </tr>
@@ -24,12 +23,7 @@
                         <tr>
                             <th scope="row">{{ $giftcard->id }}</th>
                             <td>{{ $giftcard->code }}</td>
-                            <td>{{ shop_format_amount($giftcard->amount) }}</td>
-                            <td>
-                                <span class="badge bg-{{ $giftcard->is_enabled ? 'success' : 'danger' }}">
-                                    {{ trans_bool($giftcard->is_enabled) }}
-                                </span>
-                            </td>
+                            <td>{{ shop_format_amount($giftcard->balance) }}</td>
                             <td>
                                 <span class="badge bg-{{ $giftcard->isActive() ? 'success' : 'danger' }}">
                                     {{ trans_bool($giftcard->isActive()) }}

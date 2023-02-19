@@ -9,32 +9,35 @@ return [
     'free' => 'Free',
 
     'fields' => [
-        'price' => 'Price',
-        'total' => 'Total',
-        'quantity' => 'Quantity',
-        'currency' => 'Currency',
+        'balance' => 'Balance',
         'category' => 'Category',
+        'code' => 'Code',
+        'commands' => 'Commands',
+        'currency' => 'Currency',
+        'discount' => 'Discount',
+        'expire_date' => 'Expire date',
+        'gateways' => 'Gateways',
+        'original_balance' => 'Original Balance',
         'package' => 'Package',
         'packages' => 'Packages',
-        'gateways' => 'Gateways',
-        'servers' => 'Servers',
-        'code' => 'Code',
-        'discount' => 'Discount',
-        'commands' => 'Commands',
-        'start_date' => 'Start date',
-        'expire_date' => 'Expire date',
-        'required_packages' => 'Required Packages',
-        'user_limit' => 'User purchase limit',
-        'status' => 'Status',
         'payment_id' => 'Payment ID',
-        'role' => 'Role to set after purchase',
-        'user_id' => 'User ID',
+        'payments' => 'Payments',
+        'price' => 'Price',
+        'quantity' => 'Quantity',
+        'required_packages' => 'Required Packages',
         'required_roles' => 'Required role',
+        'role' => 'Role to set after purchase',
+        'servers' => 'Servers',
+        'start_date' => 'Start date',
+        'status' => 'Status',
+        'total' => 'Total',
+        'user_id' => 'User ID',
+        'user_limit' => 'User purchase limit',
     ],
 
     'actions' => [
-        'remove' => 'Remove',
         'duplicate' => 'Duplicate',
+        'remove' => 'Remove',
     ],
 
     'goal' => [
@@ -62,6 +65,7 @@ return [
         'pay' => 'Pay',
         'back' => 'Back to shop',
         'total' => 'Total: :total',
+        'payable_total' => 'Total to pay: :total',
         'credit' => 'Credit',
 
         'confirm' => [
@@ -118,8 +122,10 @@ return [
     ],
 
     'giftcards' => [
+        'title' => 'Giftcards',
         'success' => ':money have been credited to your account',
         'error' => 'This gift card does not exist, has expired or can no longer be used.',
-        'add' => 'Redeem a gift card',
+        'add' => 'Add a gift card',
+        'notification' => 'You received a giftcard, the code is :code (:balance).',
     ],
 ];

@@ -26,7 +26,7 @@ class CategoryController extends Controller
     public function create()
     {
         return view('shop::admin.categories.create', [
-            'categories' => Category::all(),
+            'categories' => Category::parents()->get(),
         ]);
     }
 
@@ -54,7 +54,7 @@ class CategoryController extends Controller
     {
         return view('shop::admin.categories.edit', [
             'category' => $category,
-            'categories' => Category::all()->except($category->id),
+            'categories' => Category::parents()->get()->except($category),
         ]);
     }
 

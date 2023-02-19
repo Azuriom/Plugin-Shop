@@ -30,6 +30,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property array $commands
  * @property int|null $role_id
  * @property float|null $money
+ * @property float|null $giftcard_balance
  * @property bool $custom_price
  * @property bool $need_online
  * @property int $user_limit
@@ -65,8 +66,8 @@ class Package extends Model implements Buyable
     protected $fillable = [
         'category_id', 'name', 'short_description', 'description', 'image',
         'position', 'price', 'required_packages', 'required_roles', 'has_quantity',
-        'commands', 'role_id', 'money', 'custom_price', 'need_online', 'user_limit',
-        'is_enabled',
+        'commands', 'role_id', 'money', 'giftcard_balance', 'custom_price',
+        'need_online', 'user_limit', 'is_enabled',
     ];
 
     /**
@@ -78,6 +79,7 @@ class Package extends Model implements Buyable
         'price' => 'float',
         'commands' => 'array',
         'money' => 'float',
+        'giftcard_balance' => 'float',
         'required_packages' => 'collection',
         'required_roles' => 'collection',
         'custom_price' => 'boolean',
@@ -234,8 +236,20 @@ class Package extends Model implements Buyable
             $user->role()->associate($this->role)->save();
         }
 
-        if ($this->money !== null && $this->money > 0) {
+        if ($this->money > 0) {
             $user->addMoney($this->money);
+        }
+
+        if ($this->giftcard_balance > 0) {
+            $giftcard = Giftcard::create([
+                'code' => Giftcard::randomCode(),
+                'balance' => $this->giftcard_balance,
+                'original_balance' => $this->giftcard_balance,
+                'start_at' => now(),
+                'expire_at' => now()->addYear(),
+            ]);
+
+            $giftcard->notifyUser($user);
         }
 
         event(new PackageDelivered($user, $this, $quantity));
