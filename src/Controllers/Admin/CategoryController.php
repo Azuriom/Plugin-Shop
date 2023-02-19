@@ -54,7 +54,7 @@ class CategoryController extends Controller
     {
         return view('shop::admin.categories.edit', [
             'category' => $category,
-            'categories' => Category::parents()->get()->except($category),
+            'categories' => Category::parents()->get()->except($category->id),
         ]);
     }
 

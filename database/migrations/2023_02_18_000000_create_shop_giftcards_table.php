@@ -13,8 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::dropIfExists('shop_giftcards');
         Schema::dropIfExists('shop_giftcard_user');
+        Schema::dropIfExists('shop_giftcards');
 
         Schema::create('shop_giftcards', function (Blueprint $table) {
             $table->increments('id');
