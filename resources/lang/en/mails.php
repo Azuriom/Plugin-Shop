@@ -8,4 +8,11 @@ return [
         'transaction' => 'Transaction ID: :transaction (:gateway)',
         'date' => 'Date: :date',
     ],
+
+    'giftcard' => [
+        'subject' => 'Your giftcard code',
+        'intro' => 'Thank you for your purchase! Your giftcard is now available.',
+        'code' => 'Code: :code',
+        'balance' => 'Balance: :balance',
+    ],
 ];

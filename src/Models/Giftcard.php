@@ -5,6 +5,7 @@ namespace Azuriom\Plugin\Shop\Models;
 use Azuriom\Models\Traits\HasTablePrefix;
 use Azuriom\Models\User;
 use Azuriom\Notifications\AlertNotification;
+use Azuriom\Plugin\Shop\Notifications\GiftcardPurchased;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
@@ -87,6 +88,8 @@ class Giftcard extends Model
             'balance' => shop_format_amount($this->balance),
             'code' => $this->code,
         ])))->send($user);
+
+        rescue(fn () => $user->notify(new GiftcardPurchased($this)));
     }
 
     public static function randomCode()

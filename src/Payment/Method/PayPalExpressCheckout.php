@@ -58,7 +58,7 @@ class PayPalExpressCheckout extends PaymentMethod
             'application_context' => [
                 'return_url' => route('shop.payments.success', $this->id),
                 'cancel_url' => route('shop.cart.index'),
-                'brand_name' => 'Azuriom',
+                'brand_name' => site_name(),
                 'locale' => str_replace('_', '-', app()->getLocale()),
                 'landing_page' => 'BILLING',
                 'user_action' => 'PAY_NOW',

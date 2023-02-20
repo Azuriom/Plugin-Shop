@@ -44,7 +44,7 @@ class PayPalMethod extends PaymentMethod
             'cancel_return' => route('shop.cart.index'),
             'notify_url' => route('shop.payments.notification', $this->id),
             'custom' => $payment->id,
-            'bn' => site_name(),
+            'bn' => 'Azuriom',
         ];
 
         return redirect()->away('https://www.paypal.com/cgi-bin/webscr?'.Arr::query($attributes));

@@ -124,10 +124,10 @@ class Payment extends Model
 
         if (! $this->isWithSiteMoney()) {
             event(new PaymentPaid($this));
+        }
 
-            if (($webhookUrl = setting('shop.webhook')) !== null) {
-                rescue(fn () => $this->createDiscordWebhook()->send($webhookUrl));
-            }
+        if (($webhookUrl = setting('shop.webhook')) !== null) {
+            rescue(fn () => $this->createDiscordWebhook()->send($webhookUrl));
         }
 
         rescue(fn () => $this->user->notify(new PaymentPaidNotification($this)));
@@ -164,12 +164,17 @@ class Payment extends Model
 
     public function createDiscordWebhook()
     {
+        $currency = $this->isWithSiteMoney()
+            ? money_name($this->price)
+            : currency_display($this->currency);
+        $transactionId = $this->isWithSiteMoney() ? '#'.$this->id : $this->transaction_id;
+
         $embed = Embed::create()
             ->title(trans('shop::messages.payment.webhook'))
             ->author($this->user->name, null, $this->user->getAvatar())
-            ->addField(trans('shop::messages.fields.price'), $this->price.' '.currency_display($this->currency))
+            ->addField(trans('shop::messages.fields.price'), $this->price.' '.$currency)
             ->addField(trans('messages.fields.type'), $this->getTypeName())
-            ->addField(trans('shop::messages.fields.payment_id'), $this->transaction_id ?? trans('messages.none'))
+            ->addField(trans('shop::messages.fields.payment_id'), $transactionId ?? trans('messages.none'))
             ->url(route('shop.admin.payments.show', $this))
             ->color('#004de6')
             ->footer('Azuriom v'.Azuriom::version())
