@@ -109,6 +109,7 @@ return [
         'public-key' => 'Clé Publique',
         'private-key' => 'Clé Privée',
         'secret-key' => 'Clé Secrète',
+        'endpoint-secret' => 'Clé Secrète de Signature',
         'service-id' => 'ID du Service',
         'client-id' => 'ID du Client',
         'merchant-id' => 'ID du vendeur',
