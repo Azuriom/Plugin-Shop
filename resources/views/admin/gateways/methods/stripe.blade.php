@@ -20,7 +20,7 @@
     </div>
 
     <div class="mb-3 col-md-6">
-        <label class="form-label" for="endpointInput">Endpoint secret</label>
+        <label class="form-label" for="endpointInput">{{ trans('shop::admin.gateways.endpoint-secret') }}</label>
         <input type="text" class="form-control @error('endpoint-secret') is-invalid @enderror" id="endpointInput" name="endpoint-secret" value="{{ old('endpoint-secret', $gateway->data['endpoint-secret'] ?? '') }}" placeholder="whsec_...">
 
         @error('endpoint-secret')
