@@ -109,6 +109,7 @@ return [
         'public-key' => 'Public key',
         'private-key' => 'Private key',
         'secret-key' => 'Secret key',
+        'endpoint-secret' => 'Signing Secret',
         'service-id' => 'Service ID',
         'client-id' => 'Client ID',
         'merchant-id' => 'Merchant ID',
