@@ -79,5 +79,5 @@ class PaymentController extends Controller
     {
         return $gateway->paymentMethod()->failure($request);
     }
-    
+
 }
