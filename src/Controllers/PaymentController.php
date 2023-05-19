@@ -38,7 +38,7 @@ class PaymentController extends Controller
         if ($gateways->count() === 1) {
             $gateway = $gateways->first();
 
-            return $this->pay($request, $gateway);
+            return $gateway->paymentMethod()->startPayment($cart, $cart->total(), currency());
         }
 
         return view('shop::payments.pay', ['gateways' => $gateways]);
