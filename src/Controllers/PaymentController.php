@@ -34,6 +34,13 @@ class PaymentController extends Controller
                 return ! $gateway->paymentMethod()->hasFixedAmount();
             });
 
+        // If there is only one payment gateway, redirect to it directly
+        if ($gateways->count() === 1) {
+            $gateway = $gateways->first();
+
+            return $gateway->paymentMethod()->startPayment($cart, $cart->total(), currency());
+        }
+
         return view('shop::payments.pay', ['gateways' => $gateways]);
     }
 
