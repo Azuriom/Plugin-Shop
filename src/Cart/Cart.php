@@ -202,7 +202,7 @@ class Cart implements Arrayable
      */
     public function originalTotal()
     {
-        return $this->content()->sum(fn (CartItem $item) => $item->total());
+        return $this->content()->sum(fn (CartItem $item) => $item->originalTotal());
     }
 
     /**
