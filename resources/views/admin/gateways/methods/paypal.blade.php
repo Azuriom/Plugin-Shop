@@ -6,3 +6,7 @@
     <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
     @enderror
 </div>
+
+<div class="alert alert-info" role="alert">
+    <i class="bi bi-info-circle"></i> @lang('shop::admin.gateways.paypal_info')
+</div>
