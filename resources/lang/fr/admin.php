@@ -119,6 +119,7 @@ return [
         'methods-info' => 'Les cartes bancaires sont supportées par défaut. Vous pouvez avoir plus d\'informations dans la <a href=":docs">documentation Stripe</a>.',
 
         'paypal_email' => 'Adresse Email PayPal',
+        'paypal_info' => 'Assurez vous d\'indiquer l\'adresse e-mail <strong>principale</strong> du compte PayPal.',
         'paysafecard_info' => 'Pour pouvoir accepter les paiements par paysafecard, vous devez être un <a href="https://www.paysafecard.com/fr/entreprises/" target="_blank" rel="noopener noreferrer">partenaire paysafecard</a>. D\'autres méthodes existent, mais celle-ci est la seule autorisée par paysafecard.',
         'stripe_info' => 'Sur le tableau de bord Stripe, vous devez définir l\'URL du webhook sur <code>:url</code> et séléctionner l\'événement <code>checkout.session.completed</code>.',
         'paymentwall_info' => 'Dans le tableau de bord PaymentWall, vous devez définir l\'URL de pingback sur <code>:url</code>.',

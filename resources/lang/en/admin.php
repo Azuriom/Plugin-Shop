@@ -119,6 +119,7 @@ return [
         'methods-info' => 'Credit cards are enabled by default. You can find more information in the <a href=":docs">Stripe documentation</a>.',
 
         'paypal_email' => 'PayPal Email Address',
+        'paypal_info' => 'Please make sure to input the <strong>main</strong> email address of the PayPal account.',
         'paysafecard_info' => 'In order to be able to accept payments by paysafecard, you must be a <a href="https://www.paysafecard.com/en/business/" target="_blank" rel="noopener noreferrer">paysafecard partner</a>. Other methods exist but only this one is allowed by paysafecard.',
         'stripe_info' => 'On the Stripe dashboard you need to set the webhook URL to <code>:url</code> and select the event <code>checkout.session.completed</code>.',
         'paymentwall_info' => 'On the PaymentWall dashboard you need to set the pingback URL to <code>:url</code>.',
