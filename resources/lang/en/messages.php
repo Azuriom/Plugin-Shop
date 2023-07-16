@@ -98,6 +98,7 @@ return [
         'success' => 'Payment completed, you\'ll receive your purchase in-game in less than a minute.',
 
         'webhook' => 'New payment on the shop',
+        'webhook_info' => 'Total: :total, ID: :id (:gateway)',
     ],
 
     'categories' => [

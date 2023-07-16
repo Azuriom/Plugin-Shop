@@ -80,9 +80,9 @@ return [
 
         'updated' => 'Les produits ont été mis à jour.',
 
-        'money' => 'Argent à créditer à l\'utilisateur lors de l\'achat',
+        'money' => 'Argent à donner à l\'utilisateur lors de l\'achat',
         'giftcard' => 'Montant de la carte cadeau à créer lors de l\'achat',
-        'command' => 'La commande ne doit pas commencer par <code>/</code>. Vous pouvez utiliser la variable <code>{player}</code> pour le pseudo du joueur. Pour les jeux Steam, les variables sont <code>{steam_id}</code> et <code>{steam_id_32}</code> sont disponibles.',
+        'command' => 'La commande ne doit pas commencer par <code>/</code>. Vous pouvez utiliser <code>{player}</code> pour le pseudo du joueur. Pour les jeux Steam, les variables <code>{steam_id}</code> et <code>{steam_id_32}</code> sont disponibles. Les autres variables disponibles sont : :placeholders.',
 
         'custom_price' => 'Permettre à l\'utilisateur de choisir le prix à payer (le prix du produit sera alors le minimum)',
         'require_online' => 'Exécuter les commandes lorsque l\'utilisateur est en ligne sur le serveur (uniquement disponible avec AzLink)',
@@ -115,8 +115,6 @@ return [
         'merchant-id' => 'ID du vendeur',
         'project-id' => 'ID du projet',
         'env' => 'Environnement',
-        'methods' => 'Méthodes de paiement',
-        'methods-info' => 'Les cartes bancaires sont supportées par défaut. Vous pouvez avoir plus d\'informations dans la <a href=":docs">documentation Stripe</a>.',
 
         'paypal_email' => 'Adresse Email PayPal',
         'paypal_info' => 'Assurez vous d\'indiquer l\'adresse e-mail <strong>principale</strong> du compte PayPal.',

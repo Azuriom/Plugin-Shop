@@ -13,7 +13,7 @@ class GiftcardPurchased extends Notification
     /**
      * Create a new notification instance.
      *
-     * @param  \Azuriom\Plugin\Shop\Models\Payment  $payment
+     * @param  \Azuriom\Plugin\Shop\Models\Giftcard  $giftcard
      */
     public function __construct(Giftcard $giftcard)
     {

@@ -20,7 +20,9 @@ class PackageController extends Controller
      */
     public function index()
     {
-        $categories = Category::parents()->with('packages')->get();
+        $categories = Category::parents()
+            ->with(['categories', 'packages'])
+            ->get();
 
         return view('shop::admin.packages.index', ['categories' => $categories]);
     }
@@ -107,7 +109,7 @@ class PackageController extends Controller
     public function create()
     {
         return view('shop::admin.packages.create', [
-            'categories' => Category::all(),
+            'categories' => Category::with('packages')->get(),
             'roles' => Role::where('is_admin', false)->get(),
             'servers' => Server::executable()->get(),
         ]);
@@ -143,7 +145,7 @@ class PackageController extends Controller
     {
         return view('shop::admin.packages.edit', [
             'package' => $package,
-            'categories' => Category::all(),
+            'categories' => Category::with('packages')->get(),
             'roles' => Role::where('is_admin', false)->get(),
             'servers' => Server::executable()->get(),
         ]);

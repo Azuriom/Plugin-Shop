@@ -98,6 +98,7 @@ return [
         'success' => 'Paiement effectué, vous recevrez votre achat dans le jeu en moins d\'une minute',
 
         'webhook' => 'Nouveau paiement effectué sur la boutique',
+        'webhook_info' => 'Total : :total, ID : :id (:gateway)',
     ],
 
     'categories' => [

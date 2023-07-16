@@ -45,6 +45,9 @@ class PaymentPaid extends Notification
         $transactionId = $this->payment->isWithSiteMoney()
             ? '#'.$this->payment->id
             : $this->payment->transaction_id;
+        $gateway = $this->payment->isWithSiteMoney()
+            ? site_name()
+            : $this->payment->getTypeName();
 
         return (new MailMessage())
             ->subject(trans('shop::mails.payment.subject'))
@@ -56,7 +59,7 @@ class PaymentPaid extends Notification
             ]))
             ->line(trans('shop::mails.payment.transaction', [
                 'transaction' => $transactionId,
-                'gateway' => $this->payment->getTypeName(),
+                'gateway' => $gateway,
             ]))
             ->line(trans('shop::mails.payment.date', [
                 'date' => format_date($this->payment->created_at, true),

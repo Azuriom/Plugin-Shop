@@ -125,6 +125,7 @@ class ShopServiceProvider extends BasePluginServiceProvider
             'shop' => [
                 'route' => 'shop.profile',
                 'name' => trans('shop::messages.profile.payments'),
+                'icon' => 'bi bi-cash-coin',
             ],
         ];
     }

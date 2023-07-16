@@ -80,9 +80,9 @@ return [
 
         'updated' => 'The packages have been updated.',
 
-        'money' => 'Money to be credited to the user after purchase',
+        'money' => 'Money to give to the user after purchase',
         'giftcard' => 'Balance of the giftcard to create during the purchase',
-        'command' => 'The command must not start with <code>/</code>. You can use <code>{player}</code> to use the player name. For Steam games, you can also use <code>{steam_id}</code> and <code>{steam_id_32}</code>.',
+        'command' => 'The command must not start with <code>/</code>. You can use <code>{player}</code> for the player name. For Steam games, you can also use <code>{steam_id}</code> and <code>{steam_id_32}</code>. The others available placeholders are: :placeholders.',
 
         'custom_price' => 'Allow the user to choose the price to pay (the package price will then be the minimum)',
         'require_online' => 'Execute commands when the user is online on the server (only available with AzLink)',
@@ -115,8 +115,6 @@ return [
         'merchant-id' => 'Merchant ID',
         'project-id' => 'Project ID',
         'env' => 'Environment',
-        'methods' => 'Payment methods',
-        'methods-info' => 'Credit cards are enabled by default. You can find more information in the <a href=":docs">Stripe documentation</a>.',
 
         'paypal_email' => 'PayPal Email Address',
         'paypal_info' => 'Please make sure to input the <strong>main</strong> email address of the PayPal account.',

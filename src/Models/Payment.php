@@ -167,18 +167,31 @@ class Payment extends Model
         $currency = $this->isWithSiteMoney()
             ? money_name($this->price)
             : currency_display($this->currency);
+        $gateway = $this->isWithSiteMoney() ? site_name() : $this->getTypeName();
         $transactionId = $this->isWithSiteMoney() ? '#'.$this->id : $this->transaction_id;
 
         $embed = Embed::create()
             ->title(trans('shop::messages.payment.webhook'))
+            ->description(trans('shop::messages.payment.webhook_info', [
+                'total' => $this->price.' '.$currency,
+                'gateway' => $gateway,
+                'id' => $transactionId ?? trans('messages.none'),
+            ]))
             ->author($this->user->name, null, $this->user->getAvatar())
-            ->addField(trans('shop::messages.fields.price'), $this->price.' '.$currency)
-            ->addField(trans('messages.fields.type'), $this->getTypeName())
-            ->addField(trans('shop::messages.fields.payment_id'), $transactionId ?? trans('messages.none'))
             ->url(route('shop.admin.payments.show', $this))
             ->color('#004de6')
             ->footer('Azuriom v'.Azuriom::version())
             ->timestamp(now());
+
+        foreach ($this->items as $item) {
+            $name = $item->name;
+
+            if ($item->quantity > 1) {
+                $name .= ' (x'.$item->quantity.')';
+            }
+
+            $embed->addField($name, $item->price.' '.$currency);
+        }
 
         return DiscordWebhook::create()->addEmbed($embed);
     }

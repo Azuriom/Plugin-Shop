@@ -46,7 +46,11 @@
     @endforelse
 </div>
 
-<small class="form-text">@lang('shop::admin.packages.command')</small>
+<small class="form-text">@lang('shop::admin.packages.command', [
+    'placeholders' => '<code>'.implode('</code>, <code>', [
+        '{quantity}', '{package_id}', '{package_name}', '{price}', '{transaction_id}',
+    ]).'</code>',
+])</small>
 
 <div class="my-1">
     <button type="button" id="addCommandButton" class="btn btn-sm btn-success">

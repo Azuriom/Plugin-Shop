@@ -5,6 +5,7 @@ namespace Azuriom\Plugin\Shop\Controllers;
 use Azuriom\Http\Controllers\Controller;
 use Azuriom\Plugin\Shop\Models\Category;
 use Azuriom\Plugin\Shop\Models\Payment;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\HtmlString;
 
@@ -48,7 +49,9 @@ class CategoryController extends Controller
     {
         $categories = $this->getCategories($category);
 
-        $category->load('packages.discounts');
+        $category->load(['packages' => function (Builder $query) {
+            $query->with('discounts')->scopes(['enabled']);
+        }]);
 
         foreach ($category->packages as $package) {
             $package->setRelation('category', $category);

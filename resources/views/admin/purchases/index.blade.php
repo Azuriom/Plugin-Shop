@@ -53,7 +53,7 @@
                 </table>
             </div>
 
-            {{ $purchases->links() }}
+            {{ $purchases->withQueryString()->links() }}
         </div>
     </div>
 @endsection
