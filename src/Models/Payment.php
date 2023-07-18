@@ -111,6 +111,10 @@ class Payment extends Model
 
     public function getTypeName()
     {
+        if ($this->isWithSiteMoney()) {
+            return site_name();
+        }
+
         return Gateway::getNameByType($this->gateway_type);
     }
 
@@ -164,17 +168,13 @@ class Payment extends Model
 
     public function createDiscordWebhook()
     {
-        $currency = $this->isWithSiteMoney()
-            ? money_name($this->price)
-            : currency_display($this->currency);
-        $gateway = $this->isWithSiteMoney() ? site_name() : $this->getTypeName();
         $transactionId = $this->isWithSiteMoney() ? '#'.$this->id : $this->transaction_id;
 
         $embed = Embed::create()
             ->title(trans('shop::messages.payment.webhook'))
             ->description(trans('shop::messages.payment.webhook_info', [
-                'total' => $this->price.' '.$currency,
-                'gateway' => $gateway,
+                'total' => $this->formatPrice(),
+                'gateway' => $this->getTypeName(),
                 'id' => $transactionId ?? trans('messages.none'),
             ]))
             ->author($this->user->name, null, $this->user->getAvatar())
@@ -190,7 +190,7 @@ class Payment extends Model
                 $name .= ' (x'.$item->quantity.')';
             }
 
-            $embed->addField($name, $item->price.' '.$currency);
+            $embed->addField($name, $item->formatPrice());
         }
 
         return DiscordWebhook::create()->addEmbed($embed);
@@ -204,6 +204,15 @@ class Payment extends Model
             'completed' => 'success',
             default => 'secondary',
         };
+    }
+
+    public function formatPrice()
+    {
+        $currency = $this->isWithSiteMoney()
+            ? money_name($this->price)
+            : currency_display($this->currency);
+
+        return $this->price.' '.$currency;
     }
 
     public function isPending()

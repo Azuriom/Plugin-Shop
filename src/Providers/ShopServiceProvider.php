@@ -2,6 +2,7 @@
 
 namespace Azuriom\Plugin\Shop\Providers;
 
+use Azuriom\Extensions\Plugin\AdminUserEditComposer;
 use Azuriom\Extensions\Plugin\BasePluginServiceProvider;
 use Azuriom\Models\ActionLog;
 use Azuriom\Models\Permission;
@@ -11,6 +12,7 @@ use Azuriom\Plugin\Shop\Models\Offer;
 use Azuriom\Plugin\Shop\Models\Package;
 use Azuriom\Plugin\Shop\Payment\PaymentManager;
 use Azuriom\Plugin\Shop\View\Composers\ShopAdminDashboardComposer;
+use Azuriom\Plugin\Shop\View\Composers\ShopAdminUserComposer;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\View;
 
@@ -55,6 +57,10 @@ class ShopServiceProvider extends BasePluginServiceProvider
         $this->registerAdminNavigation();
 
         View::composer('admin.dashboard', ShopAdminDashboardComposer::class);
+
+        if (class_exists(AdminUserEditComposer::class)) {
+            View::composer('admin.users.edit', ShopAdminUserComposer::class);
+        }
 
         Permission::registerPermissions(['shop.admin' => 'shop::admin.permissions.admin']);
 

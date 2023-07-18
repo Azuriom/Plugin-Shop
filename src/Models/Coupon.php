@@ -96,13 +96,15 @@ class Coupon extends Model
         return $count >= $this->user_limit;
     }
 
-    protected function hasReachGlobalLimit()
+    public function hasReachGlobalLimit()
     {
         if (! $this->global_limit) {
             return false;
         }
 
-        $count = $this->payments()->scopes('completed')->count();
+        $count = $this->relationLoaded('payments')
+            ? $this->payments->filter(fn ($payment) => $payment->isCompleted())->count()
+            : $this->payments()->scopes('completed')->count();
 
         return $count >= $this->global_limit;
     }

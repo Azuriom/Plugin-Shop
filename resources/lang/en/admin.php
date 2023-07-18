@@ -50,6 +50,7 @@ return [
         'user_limit' => 'User limit',
         'global_limit' => 'Global limit',
         'active' => 'Active',
+        'usage' => 'Under usage limit',
         'enable' => 'Enable the coupon',
     ],
 
@@ -159,6 +160,7 @@ return [
         'webhook_info' => 'When an user make a payment (except for purchases with website money!), it will create a notification on this webhook. Leave empty to disable.',
         'commands' => 'Global commands',
         'recent_payments' => 'Recent payments limit to display in sidebar (set to 0 to disable)',
+        'display_amount' => 'Display amount spend in recent payments and top customer',
         'top_customer' => 'Display top monthly customer in sidebar',
     ],
 

@@ -32,7 +32,6 @@ class PayGolMethod extends PaymentMethod
     public function startPayment(Cart $cart, float $amount, string $currency)
     {
         $payment = $this->createPayment($cart, $amount, $currency);
-        $user = auth()->user();
 
         $paygol = $this->createWebcheckout();
 
@@ -47,8 +46,8 @@ class PayGolMethod extends PaymentMethod
         $paygol->setPrice($amount, $currency);
 
         $payer = new Payer();
-        $payer->setEmail($user->email);
-        $payer->setPersonalID($user->id);
+        $payer->setEmail($payment->user->email);
+        $payer->setPersonalID($payment->user->id);
         $paygol->setPayer($payer);
         $paygol->setName($this->getPurchaseDescription($payment->id));
         $paygol->setCustom($payment->id);

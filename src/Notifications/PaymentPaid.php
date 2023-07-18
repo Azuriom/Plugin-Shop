@@ -39,15 +39,9 @@ class PaymentPaid extends Notification
      */
     public function toMail($notifiable)
     {
-        $currency = $this->payment->isWithSiteMoney()
-            ? money_name($this->payment->price)
-            : currency_display($this->payment->currency);
         $transactionId = $this->payment->isWithSiteMoney()
             ? '#'.$this->payment->id
             : $this->payment->transaction_id;
-        $gateway = $this->payment->isWithSiteMoney()
-            ? site_name()
-            : $this->payment->getTypeName();
 
         return (new MailMessage())
             ->subject(trans('shop::mails.payment.subject'))
@@ -55,11 +49,11 @@ class PaymentPaid extends Notification
                 'user' => $this->payment->user->name,
             ]))
             ->line(trans('shop::mails.payment.total', [
-                'total' => $this->payment->price.' '.$currency,
+                'total' => $this->payment->formatPrice(),
             ]))
             ->line(trans('shop::mails.payment.transaction', [
                 'transaction' => $transactionId,
-                'gateway' => $gateway,
+                'gateway' => $this->payment->getTypeName(),
             ]))
             ->line(trans('shop::mails.payment.date', [
                 'date' => format_date($this->payment->created_at, true),

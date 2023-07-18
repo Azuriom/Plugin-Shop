@@ -35,14 +35,13 @@ class XsollaMethod extends PaymentMethod
     public function startPayment(Cart $cart, float $amount, string $currency)
     {
         $sandbox = ($this->gateway->data['sandbox'] === 'true');
-        $user = auth()->user();
-
+        $projectId = $this->gateway->data['project-id'];
         $payment = $this->createPayment($cart, $amount, $currency);
 
         // Their PHP SDK need casts everywhere...
-        $tokenRequest = new TokenRequest((int) $this->gateway->data['project-id'], (string) $user->id);
-        $tokenRequest->setUserEmail($user->mail)
-            ->setUserName($user->name)
+        $tokenRequest = new TokenRequest((int) $projectId, (string) $payment->user->id);
+        $tokenRequest->setUserEmail($payment->user->mail)
+            ->setUserName($payment->user->name)
             ->setExternalPaymentId((string) $payment->id)
             ->setSandboxMode($sandbox)
             ->setPurchase($amount, $currency);

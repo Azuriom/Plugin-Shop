@@ -213,19 +213,28 @@ class Cart implements Arrayable
      */
     public function total()
     {
+        return $this->itemsPrice()->sum(fn (array $item) => $item['price']);
+    }
+
+    public function itemsPrice()
+    {
         // Store remaining amounts for fixed-price coupons
         $remaining = $this->coupons
             ->where('is_fixed', true)
             ->pluck('discount', 'id');
 
-        $total = $this->content()->sum(function (CartItem $item) use ($remaining) {
+        return $this->content()->map(function (CartItem $item) use ($remaining) {
             $package = $item->buyable();
 
             if (! $package instanceof Package) {
-                return $item->total();
+                return [
+                    'item' => $item,
+                    'price' => $item->total(),
+                    'unit_price' => $item->price(),
+                ];
             }
 
-            return $this->coupons()
+            $total = $this->coupons()
                 ->where('is_fixed', true)
                 ->filter(fn (Coupon $coupon) => $coupon->isActiveOn($package))
                 ->reduce(function ($price, Coupon $coupon) use ($remaining) {
@@ -234,9 +243,13 @@ class Cart implements Arrayable
 
                     return max($price - $discount, 0);
                 }, $item->total());
-        });
 
-        return round($total, 2);
+            return [
+                'item' => $item,
+                'price' => $total,
+                'unit_price' => $total / $item->quantity,
+            ];
+        });
     }
 
     public function payableTotal()

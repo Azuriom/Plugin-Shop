@@ -80,6 +80,13 @@
                 </div>
 
                 <div class="mb-3">
+                    <div class="form-check form-switch">
+                        <input type="checkbox" class="form-check-input" id="displayAmount" name="display_amount" @checked($displayAmount)>
+                        <label class="form-check-label" for="displayAmount">{{ trans('shop::admin.settings.display_amount') }}</label>
+                    </div>
+                </div>
+
+                <div class="mb-3">
                     <label class="form-label">{{ trans('shop::admin.settings.commands') }}</label>
 
                     @include('shop::admin.elements.commands', ['commands' => $commands])

@@ -16,7 +16,9 @@ class CouponController extends Controller
      */
     public function index()
     {
-        return view('shop::admin.coupons.index', ['coupons' => Coupon::all()]);
+        return view('shop::admin.coupons.index', [
+            'coupons' => Coupon::with('payments')->get(),
+        ]);
     }
 
     /**
@@ -59,9 +61,12 @@ class CouponController extends Controller
             ->whereHas('packages')
             ->get();
 
+        $payments = $coupon->payments()->with('user')->paginate();
+
         return view('shop::admin.coupons.edit', [
             'coupon' => $coupon,
             'categories' => $categories,
+            'payments' => $payments,
         ]);
     }
 

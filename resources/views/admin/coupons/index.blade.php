@@ -14,6 +14,7 @@
                         <th scope="col">{{ trans('shop::messages.fields.discount') }}</th>
                         <th scope="col">{{ trans('messages.fields.enabled') }}</th>
                         <th scope="col">{{ trans('shop::admin.coupons.active') }}</th>
+                        <th scope="col">{{ trans('shop::admin.coupons.usage') }}</th>
                         <th scope="col">{{ trans('messages.fields.action') }}</th>
                     </tr>
                     </thead>
@@ -32,6 +33,11 @@
                             <td>
                                 <span class="badge bg-{{ $coupon->isActive() ? 'success' : 'danger' }}">
                                     {{ trans_bool($coupon->isActive()) }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="badge bg-{{ $coupon->hasReachGlobalLimit() ? 'danger' : 'success' }}">
+                                    {{ trans_bool(! $coupon->hasReachGlobalLimit()) }}
                                 </span>
                             </td>
                             <td>

@@ -24,7 +24,7 @@
                     @foreach($payments as $payment)
                         <tr>
                             <th scope="row">{{ $payment->id }}</th>
-                            <td>{{ $payment->price }} {{ currency_display($payment->currency) }}</td>
+                            <td>{{ $payment->formatPrice() }}</td>
                             <td>{{ $payment->getTypeName() }}</td>
                             <td>
                             <span class="badge bg-{{ $payment->statusColor() }}">

@@ -50,6 +50,7 @@ return [
         'user_limit' => 'Limite d\'utilisations par utilisateur',
         'global_limit' => 'Limite d\'utilisations globale',
         'active' => 'Actif',
+        'usage' => 'Utilisations restantes',
         'enable' => 'Activer ce code promotionnel',
     ],
 
@@ -159,6 +160,7 @@ return [
         'webhook_info' => 'Lorsqu\'un utilisateur fait un paiement sur la boutique (hors achats avec l\'argent du site!), cela va créer une notification sur ce webhook. Laissez vide pour ne pas utiliser de webhook.',
         'commands' => 'Commandes globales',
         'recent_payments' => 'Limite de paiements récents à afficher dans la barre latérale',
+        'display_amount' => 'Afficher le montant dans les paiements récents et meilleur acheteur',
         'top_customer' => 'Afficher le meilleur acheteur du mois dans la barre latérale',
     ],
 

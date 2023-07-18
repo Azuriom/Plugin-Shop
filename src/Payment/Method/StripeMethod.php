@@ -3,7 +3,6 @@
 namespace Azuriom\Plugin\Shop\Payment\Method;
 
 use Azuriom\Plugin\Shop\Cart\Cart;
-use Azuriom\Plugin\Shop\Cart\CartItem;
 use Azuriom\Plugin\Shop\Models\Payment;
 use Azuriom\Plugin\Shop\Payment\PaymentMethod;
 use Illuminate\Http\Request;
@@ -30,18 +29,17 @@ class StripeMethod extends PaymentMethod
 
     public function startPayment(Cart $cart, float $amount, string $currency)
     {
-        $user = auth()->user();
         $this->setup();
 
-        $items = $cart->content()->map(fn (CartItem $item) => [
+        $items = $cart->itemsPrice()->map(fn (array $data) => [
             'price_data' => [
                 'currency' => $currency,
-                'unit_amount' => (int) ($item->price() * 100),
+                'unit_amount' => ((int) $data['unit_price'] * 100),
                 'product_data' => [
-                    'name' => $item->name(),
+                    'name' => $data['item']->name(),
                 ],
             ],
-            'quantity' => $item->quantity,
+            'quantity' => $data['item']->quantity,
         ]);
 
         $payment = $this->createPayment($cart, $amount, $currency);
@@ -49,7 +47,7 @@ class StripeMethod extends PaymentMethod
         $successUrl = route('shop.payments.success', [$this->id, '%id%']);
         $params = [
             'mode' => 'payment',
-            'customer_email' => $user->email,
+            'customer_email' => $payment->user->email,
             'line_items' => $items->all(),
             'success_url' => str_replace('%id%', '{CHECKOUT_SESSION_ID}', $successUrl),
             'cancel_url' => route('shop.cart.index'),

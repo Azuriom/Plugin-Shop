@@ -67,4 +67,13 @@ class PaymentItem extends Model
     {
         $this->buyable?->deliver($this->payment->user, $this->quantity, $this);
     }
+
+    public function formatPrice()
+    {
+        $currency = $this->payment->isWithSiteMoney()
+            ? money_name($this->price)
+            : currency_display($this->payment->currency);
+
+        return $this->price.' '.$currency;
+    }
 }

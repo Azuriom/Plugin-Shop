@@ -35,6 +35,7 @@ class CategoryController extends Controller
             'goal' => $this->getMonthGoal(),
             'topCustomer' => $this->getTopCustomer(),
             'recentPayments' => $this->getRecentPayments(),
+            'displaySidebarAmount' => setting('shop.display_amount', true),
             'welcome' => new HtmlString($message),
         ]);
     }
@@ -64,6 +65,7 @@ class CategoryController extends Controller
             'goal' => $this->getMonthGoal(),
             'topCustomer' => $this->getTopCustomer(),
             'recentPayments' => $this->getRecentPayments(),
+            'displaySidebarAmount' => setting('shop.display_amount', true),
         ]);
     }
 

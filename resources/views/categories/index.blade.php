@@ -2,7 +2,6 @@
 
 @section('title', trans('shop::messages.title'))
 
-
 @section('content')
     <h1>{{ trans('shop::messages.title') }}</h1>
 

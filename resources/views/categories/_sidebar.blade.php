@@ -64,7 +64,9 @@
             </div>
             <div class="flex-grow-1">
                 <p class="h4 mb-1">{{ $topCustomer->user->name }}</p>
-                {{ $topCustomer->total.' '.currency_display() }}
+                @if($displaySidebarAmount)
+                    {{ $topCustomer->total.' '.currency_display() }}
+                @endif
             </div>
         </div>
     </div>
@@ -83,7 +85,12 @@
                     </div>
                     <div class="flex-grow-1">
                         <p class="mb-1">{{ $payment->user->name }}</p>
-                        <small>{{ $payment->price.' '.currency_display() }} - {{ format_date($payment->created_at) }}</small>
+                        <small>
+                            @if($displaySidebarAmount)
+                                {{ $payment->price.' '.currency_display() }} -
+                            @endif
+                            {{ format_date($payment->created_at) }}
+                        </small>
                     </div>
                 </div>
             @empty

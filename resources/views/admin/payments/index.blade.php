@@ -44,7 +44,7 @@
                             <td>
                                 <a href="{{ route('admin.users.edit', $payment->user) }}">{{ $payment->user->name }}</a>
                             </td>
-                            <td>{{ $payment->price }} {{ currency_display($payment->currency) }}</td>
+                            <td>{{ $payment->formatPrice() }}</td>
                             <td>{{ $payment->getTypeName() }}</td>
                             <td>
                                 <span class="badge bg-{{ $payment->statusColor() }}">
