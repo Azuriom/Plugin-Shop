@@ -34,7 +34,7 @@ class StripeMethod extends PaymentMethod
         $items = $cart->itemsPrice()->map(fn (array $data) => [
             'price_data' => [
                 'currency' => $currency,
-                'unit_amount' => ((int) $data['unit_price'] * 100),
+                'unit_amount' => ((intval( $data['unit_price'] * 100 )),
                 'product_data' => [
                     'name' => $data['item']->name(),
                 ],
