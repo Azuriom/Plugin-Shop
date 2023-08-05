@@ -29,15 +29,13 @@ class Giftcard extends Model
 
     /**
      * The table prefix associated with the model.
-     *
-     * @var string
      */
-    protected $prefix = 'shop_';
+    protected string $prefix = 'shop_';
 
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var array<int, string>
      */
     protected $fillable = [
         'code', 'balance', 'original_balance', 'start_at', 'expire_at',
@@ -46,7 +44,7 @@ class Giftcard extends Model
     /**
      * The attributes that should be cast to native types.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
         'start_at' => 'datetime',
@@ -61,28 +59,13 @@ class Giftcard extends Model
 
     /**
      * Determine if this giftcard is currently active.
-     *
-     * @return bool
      */
-    public function isActive()
+    public function isActive(): bool
     {
         return $this->balance > 0 && $this->start_at->isPast() && $this->expire_at->isFuture();
     }
 
-    /**
-     * Scope a query to only include active gift cards.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeActive(Builder $query)
-    {
-        return $query->where('balance', '>', 0)
-            ->where('start_at', '<', now())
-            ->where('expire_at', '>', now());
-    }
-
-    public function notifyUser(User $user)
+    public function notifyUser(User $user): void
     {
         (new AlertNotification(trans('shop::messages.giftcards.notification', [
             'balance' => shop_format_amount($this->balance),
@@ -92,7 +75,17 @@ class Giftcard extends Model
         rescue(fn () => $user->notify(new GiftcardPurchased($this)));
     }
 
-    public static function randomCode()
+    /**
+     * Scope a query to only include active gift cards.
+     */
+    public function scopeActive(Builder $query): void
+    {
+        $query->where('balance', '>', 0)
+            ->where('start_at', '<', now())
+            ->where('expire_at', '>', now());
+    }
+
+    public static function randomCode(): string
     {
         return Collection::times(4, function () {
             return Collection::times(4, fn () => random_int(0, 9))->implode('');

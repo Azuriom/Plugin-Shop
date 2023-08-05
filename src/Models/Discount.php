@@ -28,15 +28,13 @@ class Discount extends Model
 
     /**
      * The table prefix associated with the model.
-     *
-     * @var string
      */
-    protected $prefix = 'shop_';
+    protected string $prefix = 'shop_';
 
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var array<int, string>
      */
     protected $fillable = [
         'name', 'discount', 'packages', 'is_global', 'is_enabled', 'start_at', 'end_at',
@@ -45,7 +43,7 @@ class Discount extends Model
     /**
      * The attributes that should be cast to native types.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
         'start_at' => 'datetime',
@@ -64,15 +62,16 @@ class Discount extends Model
 
     /**
      * Determine if this discount is currently active.
-     *
-     * @return bool
      */
-    public function isActive()
+    public function isActive(): bool
     {
         return $this->is_enabled && $this->start_at->isPast() && $this->end_at->isFuture();
     }
 
-    public function isActiveOn(Package $package)
+    /**
+     * Determine if this discount is active on the given package.
+     */
+    public function isActiveOn(Package $package): bool
     {
         if (! $this->isActive()) {
             return false;
@@ -87,36 +86,27 @@ class Discount extends Model
 
     /**
      * Scope a query to only include active discounts.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeActive(Builder $query)
+    public function scopeActive(Builder $query): void
     {
-        return $query->where('is_enabled', true)
+        $query->where('is_enabled', true)
             ->where('start_at', '<', now())
             ->where('end_at', '>', now());
     }
 
     /**
      * Scope a query to only include enabled discounts.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeEnabled(Builder $query)
+    public function scopeEnabled(Builder $query): void
     {
-        return $query->where('is_enabled', true);
+        $query->where('is_enabled', true);
     }
 
     /**
      * Scope a query to only include global discounts.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeGlobal(Builder $query)
+    public function scopeGlobal(Builder $query): void
     {
-        return $query->where('is_global', true);
+        $query->where('is_global', true);
     }
 }

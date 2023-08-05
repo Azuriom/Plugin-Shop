@@ -13,8 +13,6 @@ class SettingController extends Controller
 {
     /**
      * Display the shop settings.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function show()
     {
@@ -27,7 +25,7 @@ class SettingController extends Controller
             'topCustomer' => setting('shop.top_customer', false),
             'recentPayments' => (int) setting('shop.recent_payments', 0),
             'displayAmount' => setting('shop.display_amount', true),
-            'commands' => $commands ? json_decode($commands) : [],
+            'commands' => $commands ? json_decode($commands, true) : [],
             'enableHome' => setting('shop.home.enabled', true),
             'homeMessage' => setting('shop.home', ''),
         ]);
@@ -35,9 +33,6 @@ class SettingController extends Controller
 
     /**
      * Update the shop settings.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
      *
      * @throws \Illuminate\Validation\ValidationException
      */
@@ -66,7 +61,7 @@ class SettingController extends Controller
             'shop.commands' => is_array($commands) ? json_encode(array_filter($commands)) : null,
         ]);
 
-        return redirect()->route('shop.admin.settings')
+        return to_route('shop.admin.settings')
             ->with('success', trans('admin.settings.updated'));
     }
 }

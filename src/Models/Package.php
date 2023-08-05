@@ -53,15 +53,13 @@ class Package extends Model implements Buyable
 
     /**
      * The table prefix associated with the model.
-     *
-     * @var string
      */
-    protected $prefix = 'shop_';
+    protected string $prefix = 'shop_';
 
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var array<int, string>
      */
     protected $fillable = [
         'category_id', 'name', 'short_description', 'description', 'image',
@@ -73,7 +71,7 @@ class Package extends Model implements Buyable
     /**
      * The attributes that should be cast to native types.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
         'price' => 'float',
@@ -110,12 +108,12 @@ class Package extends Model implements Buyable
         return $this->belongsToMany(Discount::class, 'shop_discount_package');
     }
 
-    public function getDescription()
+    public function getDescription(): string
     {
         return $this->short_description;
     }
 
-    public function getPrice()
+    public function getPrice(): float
     {
         static $globalDiscounts = null;
 
@@ -134,7 +132,7 @@ class Package extends Model implements Buyable
         return round(max($price, 0), 2);
     }
 
-    protected function getCumulatedPurchasesTotal()
+    protected function getCumulatedPurchasesTotal(): float
     {
         if (! $this->category->cumulate_purchases) {
             return 0;
@@ -148,7 +146,7 @@ class Package extends Model implements Buyable
         return $purchasedPackage->price ?? 0;
     }
 
-    public function hasRequiredRole(Role $role)
+    public function hasRequiredRole(Role $role): bool
     {
         if ($this->required_roles === null || $this->required_roles->isEmpty()) {
             return true;
@@ -157,7 +155,7 @@ class Package extends Model implements Buyable
         return $role->is_admin || $this->required_roles->contains($role->id);
     }
 
-    public function hasBoughtRequirements()
+    public function hasBoughtRequirements(): bool
     {
         if ($this->required_packages === null || $this->required_packages->isEmpty()) {
             return true;
@@ -172,10 +170,8 @@ class Package extends Model implements Buyable
 
     /**
      * Get the total purchases for this package for the current user.
-     *
-     * @return int
      */
-    public function getUserTotalPurchases()
+    public function getUserTotalPurchases(): int
     {
         if (auth()->guest()) {
             return 0;
@@ -195,17 +191,17 @@ class Package extends Model implements Buyable
         return $purchases->get($this->id, 0);
     }
 
-    public function getRemainingUserPurchases()
+    public function getRemainingUserPurchases(): int
     {
         return max($this->getMaxQuantity() - $this->getUserTotalPurchases(), 0);
     }
 
-    public function getOriginalPrice()
+    public function getOriginalPrice(): float
     {
         return $this->price;
     }
 
-    public function getMaxQuantity()
+    public function getMaxQuantity(): int
     {
         if ($this->user_limit < 1) {
             return 100;
@@ -214,17 +210,17 @@ class Package extends Model implements Buyable
         return max($this->user_limit - $this->getUserTotalPurchases(), 0);
     }
 
-    public function isInCart()
+    public function isInCart(): bool
     {
         return shop_cart()->has($this);
     }
 
-    public function isDiscounted()
+    public function isDiscounted(): bool
     {
         return $this->getPrice() !== $this->getOriginalPrice();
     }
 
-    public function deliver(User $user, int $quantity = 1, PaymentItem $item = null)
+    public function deliver(User $user, int $quantity = 1, PaymentItem $item = null): void
     {
         foreach ($this->servers as $server) {
             $commands = $this->getCommandsToDispatch($quantity, $item);
@@ -257,16 +253,13 @@ class Package extends Model implements Buyable
 
     /**
      * Scope a query to only include enabled packages.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeEnabled(Builder $query)
+    public function scopeEnabled(Builder $query): void
     {
-        return $query->where('is_enabled', true)->orderBy('position');
+        $query->where('is_enabled', true)->orderBy('position');
     }
 
-    protected function getCommandsToDispatch(int $quantity, PaymentItem $item = null)
+    protected function getCommandsToDispatch(int $quantity, PaymentItem $item = null): array
     {
         $commands = [];
 

@@ -18,15 +18,11 @@ abstract class PaymentMethod
 
     /**
      * The associated gateway.
-     *
-     * @var Gateway|null
      */
-    protected $gateway;
+    protected ?Gateway $gateway;
 
     /**
      * Create a new method instance.
-     *
-     * @param  \Azuriom\Plugin\Shop\Models\Gateway|null  $gateway
      */
     public function __construct(?Gateway $gateway)
     {
@@ -36,32 +32,31 @@ abstract class PaymentMethod
     /**
      * Start a new payment with this method.
      *
-     * @param  \Azuriom\Plugin\Shop\Cart\Cart  $cart
-     * @param  float  $amount
-     * @param  string  $currency
      * @return \Illuminate\Http\Response
      */
     abstract public function startPayment(Cart $cart, float $amount, string $currency);
 
     /**
-     * @param  \Illuminate\Http\Request  $request
-     * @param  string|null  $paymentId
+     * Handle a payment notification request.
+     *
      * @return \Illuminate\Http\Response
      */
     abstract public function notification(Request $request, ?string $paymentId);
 
     /**
-     * @param  \Illuminate\Http\Request  $request
+     * Return the payment success response.
+     *
      * @return \Illuminate\Http\Response
      */
     public function success(Request $request)
     {
-        return redirect()->route('shop.home')
+        return to_route('shop.home')
             ->with('success', trans('shop::messages.payment.success'));
     }
 
     /**
-     * @param  \Illuminate\Http\Request  $request
+     * Return the payment failure response.
+     *
      * @return \Illuminate\Http\Response
      */
     public function failure(Request $request)
@@ -88,12 +83,12 @@ abstract class PaymentMethod
         return asset('plugins/shop/img/payments/'.($this->image ?? ($this->id().'.svg')));
     }
 
-    public function id()
+    public function id(): string
     {
         return $this->id;
     }
 
-    public function name()
+    public function name(): string
     {
         return $this->name;
     }
@@ -113,7 +108,7 @@ abstract class PaymentMethod
         ]);
     }
 
-    protected function createPayment(Cart $cart, float $price, string $currency, string $paymentId = null)
+    protected function createPayment(Cart $cart, float $price, string $currency, string $paymentId = null): Payment
     {
         return PaymentManager::createPayment($cart, $price, $currency, $this->id, $paymentId);
     }
@@ -156,7 +151,7 @@ abstract class PaymentMethod
 
     protected function errorResponse()
     {
-        return redirect()->route('shop.cart.index')->with('error', trans('shop::messages.payment.error'));
+        return to_route('shop.cart.index')->with('error', trans('shop::messages.payment.error'));
     }
 
     protected function getPurchaseDescription(int $id)

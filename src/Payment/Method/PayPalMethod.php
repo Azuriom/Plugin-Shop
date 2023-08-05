@@ -111,12 +111,12 @@ class PayPalMethod extends PaymentMethod
         return $this->processPayment($payment, $paymentId);
     }
 
-    public function view()
+    public function view(): string
     {
         return 'shop::admin.gateways.methods.paypal';
     }
 
-    public function rules()
+    public function rules(): array
     {
         return [
             'email' => ['required', 'email'],

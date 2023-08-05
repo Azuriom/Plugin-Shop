@@ -12,20 +12,20 @@ class OfferRequest extends FormRequest
     use ConvertCheckbox;
 
     /**
-     * The checkboxes attributes.
+     * The attributes represented by checkboxes.
      *
-     * @var array
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
      */
-    protected $checkboxes = [
+    protected array $checkboxes = [
         'is_enabled',
     ];
 
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'name' => ['required', 'string', 'max:50', Rule::unique(Offer::class)->ignore($this->offer, 'name')],

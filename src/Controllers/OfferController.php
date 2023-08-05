@@ -6,6 +6,8 @@ use Azuriom\Http\Controllers\Controller;
 use Azuriom\Plugin\Shop\Cart\Cart;
 use Azuriom\Plugin\Shop\Models\Gateway;
 use Azuriom\Plugin\Shop\Models\Offer;
+use Closure;
+use Illuminate\Http\Request;
 
 class OfferController extends Controller
 {
@@ -14,7 +16,7 @@ class OfferController extends Controller
      */
     public function __construct()
     {
-        $this->middleware(function ($request, $next) {
+        $this->middleware(function (Request $request, Closure $next) {
             abort_if(! use_site_money(), 403);
 
             return $next($request);

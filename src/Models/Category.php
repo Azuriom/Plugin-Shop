@@ -31,15 +31,13 @@ class Category extends Model
 
     /**
      * The table prefix associated with the model.
-     *
-     * @var string
      */
-    protected $prefix = 'shop_';
+    protected string $prefix = 'shop_';
 
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var array<int, string>
      */
     protected $fillable = [
         'name', 'slug', 'description', 'position', 'parent_id', 'cumulate_purchases', 'is_enabled',
@@ -48,7 +46,7 @@ class Category extends Model
     /**
      * The attributes that should be cast to native types.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
         'is_enabled' => 'boolean',
@@ -85,23 +83,17 @@ class Category extends Model
 
     /**
      * Scope a query to only include enabled categories.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeEnabled(Builder $query)
+    public function scopeEnabled(Builder $query): void
     {
-        return $query->where('is_enabled', true)->orderBy('position');
+        $query->where('is_enabled', true)->orderBy('position');
     }
 
     /**
-     * Scope a query to only include parent forums.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
+     * Scope a query to only include parent categories.
      */
-    public function scopeParents(Builder $query)
+    public function scopeParents(Builder $query): void
     {
-        return $query->whereNull('parent_id')->orderBy('position');
+        $query->whereNull('parent_id')->orderBy('position');
     }
 }

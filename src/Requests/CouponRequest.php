@@ -4,6 +4,7 @@ namespace Azuriom\Plugin\Shop\Requests;
 
 use Azuriom\Http\Requests\Traits\ConvertCheckbox;
 use Azuriom\Plugin\Shop\Models\Coupon;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -12,20 +13,18 @@ class CouponRequest extends FormRequest
     use ConvertCheckbox;
 
     /**
-     * The checkboxes attributes.
+     * The attributes represented by checkboxes.
      *
-     * @var array
+     * @var array<int, string>
      */
-    protected $checkboxes = [
+    protected array $checkboxes = [
         'can_cumulate', 'is_enabled', 'is_global',
     ];
 
     /**
      * Get the validator instance for the request.
-     *
-     * @return \Illuminate\Contracts\Validation\Validator
      */
-    protected function getValidatorInstance()
+    protected function getValidatorInstance(): Validator
     {
         return parent::getValidatorInstance()->sometimes('discount', 'max:100', function ($input) {
             return ! $input->is_fixed;
@@ -35,9 +34,9 @@ class CouponRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'code' => ['required', 'string', 'max:50', Rule::unique(Coupon::class)->ignore($this->coupon, 'code')],

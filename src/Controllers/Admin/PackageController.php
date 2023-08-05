@@ -15,8 +15,6 @@ class PackageController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function index()
     {
@@ -29,9 +27,6 @@ class PackageController extends Controller
 
     /**
      * Update the order of the resources.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
      *
      * @throws \Illuminate\Validation\ValidationException
      */
@@ -86,9 +81,6 @@ class PackageController extends Controller
 
     /**
      * Duplicate the specified package.
-     *
-     * @param  \Azuriom\Plugin\Shop\Models\Package  $package
-     * @return \Illuminate\Http\Response
      */
     public function duplicate(Package $package)
     {
@@ -98,13 +90,11 @@ class PackageController extends Controller
 
         $replicate->servers()->sync($package->servers);
 
-        return redirect()->route('shop.admin.packages.edit', ['package' => $replicate]);
+        return to_route('shop.admin.packages.edit', ['package' => $replicate]);
     }
 
     /**
      * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function create()
     {
@@ -117,9 +107,6 @@ class PackageController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  \Azuriom\Plugin\Shop\Requests\PackageRequest  $request
-     * @return \Illuminate\Http\Response
      */
     public function store(PackageRequest $request)
     {
@@ -131,15 +118,12 @@ class PackageController extends Controller
 
         $package->servers()->sync($request->input('servers', []));
 
-        return redirect()->route('shop.admin.packages.index')
+        return to_route('shop.admin.packages.index')
             ->with('success', trans('messages.status.success'));
     }
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param  \Azuriom\Plugin\Shop\Models\Package  $package
-     * @return \Illuminate\Http\Response
      */
     public function edit(Package $package)
     {
@@ -153,10 +137,6 @@ class PackageController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  \Azuriom\Plugin\Shop\Requests\PackageRequest  $request
-     * @param  \Azuriom\Plugin\Shop\Models\Package  $package
-     * @return \Illuminate\Http\Response
      */
     public function update(PackageRequest $request, Package $package)
     {
@@ -168,23 +148,20 @@ class PackageController extends Controller
 
         $package->servers()->sync($request->input('servers', []));
 
-        return redirect()->route('shop.admin.packages.index')
+        return to_route('shop.admin.packages.index')
             ->with('success', trans('messages.status.success'));
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \Azuriom\Plugin\Shop\Models\Package  $package
-     * @return \Illuminate\Http\Response
-     *
-     * @throws \Exception
+     * @throws \LogicException
      */
     public function destroy(Package $package)
     {
         $package->delete();
 
-        return redirect()->route('shop.admin.packages.index')
+        return to_route('shop.admin.packages.index')
             ->with('success', trans('messages.status.success'));
     }
 }

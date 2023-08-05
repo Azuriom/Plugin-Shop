@@ -24,15 +24,13 @@ class PaymentItem extends Model
 
     /**
      * The table prefix associated with the model.
-     *
-     * @var string
      */
-    protected $prefix = 'shop_';
+    protected string $prefix = 'shop_';
 
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var array<int, string>
      */
     protected $fillable = [
         'name', 'price', 'quantity',
@@ -41,7 +39,7 @@ class PaymentItem extends Model
     /**
      * The attributes that should be cast to native types.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
         'price' => 'float',
@@ -63,12 +61,12 @@ class PaymentItem extends Model
         return $this->morphTo('buyable');
     }
 
-    public function deliver()
+    public function deliver(): void
     {
         $this->buyable?->deliver($this->payment->user, $this->quantity, $this);
     }
 
-    public function formatPrice()
+    public function formatPrice(): string
     {
         $currency = $this->payment->isWithSiteMoney()
             ? money_name($this->price)

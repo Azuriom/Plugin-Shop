@@ -76,12 +76,12 @@ class PayGolMethod extends PaymentMethod
         return $this->processPayment($payment, $transactionId);
     }
 
-    public function view()
+    public function view(): string
     {
         return 'shop::admin.gateways.methods.paygol';
     }
 
-    public function rules()
+    public function rules(): array
     {
         return [
             'key' => ['required', 'string'],
@@ -90,17 +90,17 @@ class PayGolMethod extends PaymentMethod
         ];
     }
 
-    public function countries()
+    public function countries(): array
     {
         return Countries::countries();
     }
 
-    private function createWebcheckout()
+    private function createWebcheckout(): Webcheckout
     {
         return new Webcheckout($this->gateway->data['service-id'], $this->gateway->data['key']);
     }
 
-    private function createNotification()
+    private function createNotification(): Notification
     {
         return new Notification($this->gateway->data['service-id'], $this->gateway->data['key']);
     }

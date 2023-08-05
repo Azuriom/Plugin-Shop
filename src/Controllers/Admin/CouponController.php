@@ -11,8 +11,6 @@ class CouponController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function index()
     {
@@ -23,8 +21,6 @@ class CouponController extends Controller
 
     /**
      * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function create()
     {
@@ -35,9 +31,6 @@ class CouponController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  \Azuriom\Plugin\Shop\Requests\CouponRequest  $request
-     * @return \Illuminate\Http\Response
      */
     public function store(CouponRequest $request)
     {
@@ -45,15 +38,12 @@ class CouponController extends Controller
 
         $coupon->packages()->sync($request->input('packages'));
 
-        return redirect()->route('shop.admin.coupons.index')
+        return to_route('shop.admin.coupons.index')
             ->with('success', trans('messages.status.success'));
     }
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param  \Azuriom\Plugin\Shop\Models\Coupon  $coupon
-     * @return \Illuminate\Http\Response
      */
     public function edit(Coupon $coupon)
     {
@@ -72,10 +62,6 @@ class CouponController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  \Azuriom\Plugin\Shop\Requests\CouponRequest  $request
-     * @param  \Azuriom\Plugin\Shop\Models\Coupon  $coupon
-     * @return \Illuminate\Http\Response
      */
     public function update(CouponRequest $request, Coupon $coupon)
     {
@@ -83,23 +69,20 @@ class CouponController extends Controller
 
         $coupon->packages()->sync($request->input('packages'));
 
-        return redirect()->route('shop.admin.coupons.index')
+        return to_route('shop.admin.coupons.index')
             ->with('success', trans('messages.status.success'));
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \Azuriom\Plugin\Shop\Models\Coupon  $coupon
-     * @return \Illuminate\Http\Response
-     *
-     * @throws \Exception
+     * @throws \LogicException
      */
     public function destroy(Coupon $coupon)
     {
         $coupon->delete();
 
-        return redirect()->route('shop.admin.coupons.index')
+        return to_route('shop.admin.coupons.index')
             ->with('success', trans('messages.status.success'));
     }
 }

@@ -14,9 +14,6 @@ class GiftcardController extends Controller
     /**
      * Add a giftcard to the cart.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     *
      * @throws \Illuminate\Validation\ValidationException
      */
     public function add(Request $request)
@@ -33,36 +30,27 @@ class GiftcardController extends Controller
 
         Cart::fromSession($request->session())->addGiftcard($giftcard);
 
-        return redirect()->route('shop.cart.index');
+        return to_route('shop.cart.index');
     }
 
     /**
      * Remove a giftcard from the cart.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Azuriom\Plugin\Shop\Models\Giftcard  $giftcard
-     * @return \Illuminate\Http\Response
      */
     public function remove(Request $request, Giftcard $giftcard)
     {
         Cart::fromSession($request->session())->removeGiftcard($giftcard);
 
-        return redirect()->route('shop.cart.index');
+        return to_route('shop.cart.index');
     }
 
     /**
      * Credit the amount of the giftcard to the user.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     *
      * @throws \Illuminate\Validation\ValidationException
      */
     public function use(Request $request)
     {
-        $validated = $this->validate($request, [
-            'code' => ['required'],
-        ]);
+        $validated = $this->validate($request, ['code' => 'required']);
 
         $giftcard = Giftcard::active()->firstWhere($validated);
         $user = $request->user();

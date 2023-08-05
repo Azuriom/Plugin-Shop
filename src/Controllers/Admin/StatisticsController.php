@@ -37,12 +37,12 @@ class StatisticsController extends Controller
         ]);
     }
 
-    protected function getCompletedPayments()
+    protected function getCompletedPayments(): Builder
     {
         return Payment::scopes(['completed', 'withRealMoney']);
     }
 
-    protected function getDeliveredPackages()
+    protected function getDeliveredPackages(): Builder
     {
         return PaymentItem::where('buyable_type', 'shop.packages')
             ->whereHas('payment', function (Builder $query) {

@@ -12,8 +12,6 @@ class GiftcardPurchased extends Notification
 
     /**
      * Create a new notification instance.
-     *
-     * @param  \Azuriom\Plugin\Shop\Models\Giftcard  $giftcard
      */
     public function __construct(Giftcard $giftcard)
     {
@@ -21,23 +19,9 @@ class GiftcardPurchased extends Notification
     }
 
     /**
-     * Get the notification's delivery channels.
-     *
-     * @param  mixed  $notifiable
-     * @return array
-     */
-    public function via($notifiable)
-    {
-        return ['mail'];
-    }
-
-    /**
      * Get the mail representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
      */
-    public function toMail($notifiable)
+    public function toMail(): MailMessage
     {
         return (new MailMessage())
             ->subject(trans('shop::mails.giftcard.subject'))
@@ -51,5 +35,15 @@ class GiftcardPurchased extends Notification
             ->line(trans('shop::mails.payment.date', [
                 'date' => format_date($this->giftcard->created_at, true),
             ]));
+    }
+
+    /**
+     * Get the notification's delivery channels.
+     *
+     * @return array<int, string>
+     */
+    public function via(object $notifiable): array
+    {
+        return ['mail'];
     }
 }

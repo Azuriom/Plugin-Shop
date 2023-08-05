@@ -13,8 +13,6 @@ class PaymentPaid
 
     /**
      * Create a new event instance.
-     *
-     * @param  \Azuriom\Plugin\Shop\Models\Payment  $payment
      */
     public function __construct(Payment $payment)
     {

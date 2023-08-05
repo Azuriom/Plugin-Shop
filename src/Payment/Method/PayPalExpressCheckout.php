@@ -12,6 +12,7 @@ use PayPalCheckoutSdk\Core\PayPalHttpClient;
 use PayPalCheckoutSdk\Core\ProductionEnvironment;
 use PayPalCheckoutSdk\Orders\OrdersCaptureRequest;
 use PayPalCheckoutSdk\Orders\OrdersCreateRequest;
+use PayPalHttp\HttpClient;
 
 class PayPalExpressCheckout extends PaymentMethod
 {
@@ -134,12 +135,12 @@ class PayPalExpressCheckout extends PaymentMethod
         return parent::success($request);
     }
 
-    public function view()
+    public function view(): string
     {
         return 'shop::admin.gateways.methods.paypal-express-checkout';
     }
 
-    public function rules()
+    public function rules(): array
     {
         return [
             'client-id' => ['required', 'string'],
@@ -147,7 +148,7 @@ class PayPalExpressCheckout extends PaymentMethod
         ];
     }
 
-    private function getClient()
+    private function getClient(): HttpClient
     {
         $id = $this->gateway->data['client-id'];
         $secret = $this->gateway->data['secret'];

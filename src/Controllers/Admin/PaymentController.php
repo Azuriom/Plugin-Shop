@@ -15,9 +15,6 @@ class PaymentController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
     {
@@ -37,9 +34,6 @@ class PaymentController extends Controller
 
     /**
      * Display the specified resource.
-     *
-     * @param  \Azuriom\Plugin\Shop\Models\Payment  $payment
-     * @return \Illuminate\Http\Response
      */
     public function show(Payment $payment)
     {
@@ -50,8 +44,6 @@ class PaymentController extends Controller
 
     /**
      * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function create()
     {
@@ -62,9 +54,6 @@ class PaymentController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  \Azuriom\Plugin\Shop\Requests\PaymentRequest  $request
-     * @return \Illuminate\Http\Response
      */
     public function store(PaymentRequest $request)
     {
@@ -91,6 +80,6 @@ class PaymentController extends Controller
 
         $payment->deliver();
 
-        return redirect()->route('shop.admin.payments.show', $payment);
+        return to_route('shop.admin.payments.show', $payment);
     }
 }

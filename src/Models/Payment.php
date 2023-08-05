@@ -44,15 +44,13 @@ class Payment extends Model
 
     /**
      * The table prefix associated with the model.
-     *
-     * @var string
      */
-    protected $prefix = 'shop_';
+    protected string $prefix = 'shop_';
 
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var array<int, string>
      */
     protected $fillable = [
         'price', 'currency', 'status', 'gateway_type', 'transaction_id', 'user_id',
@@ -61,18 +59,18 @@ class Payment extends Model
     /**
      * The attributes that should be cast to native types.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
         'price' => 'float',
     ];
 
     /**
-     * The attributes that can be search for.
+     * The attributes that can be used for search.
      *
-     * @var array
+     * @var array<int, string>
      */
-    protected $searchable = [
+    protected array $searchable = [
         'status', 'gateway_type', 'transaction_id', 'user.*',
     ];
 
@@ -109,7 +107,7 @@ class Payment extends Model
             ->withPivot('amount');
     }
 
-    public function getTypeName()
+    public function getTypeName(): string
     {
         if ($this->isWithSiteMoney()) {
             return site_name();
@@ -118,7 +116,7 @@ class Payment extends Model
         return Gateway::getNameByType($this->gateway_type);
     }
 
-    public function deliver()
+    public function deliver(): void
     {
         $this->update(['status' => 'completed']);
 
@@ -137,7 +135,7 @@ class Payment extends Model
         rescue(fn () => $this->user->notify(new PaymentPaidNotification($this)));
     }
 
-    public function processGiftcards(float $originalTotal, Collection $giftcards)
+    public function processGiftcards(float $originalTotal, Collection $giftcards): float
     {
         return $giftcards
             ->filter(fn (Giftcard $card) => $card->isActive())
@@ -166,7 +164,7 @@ class Payment extends Model
             }, $originalTotal);
     }
 
-    public function createDiscordWebhook()
+    public function createDiscordWebhook(): DiscordWebhook
     {
         $transactionId = $this->isWithSiteMoney() ? '#'.$this->id : $this->transaction_id;
 
@@ -196,7 +194,7 @@ class Payment extends Model
         return DiscordWebhook::create()->addEmbed($embed);
     }
 
-    public function statusColor()
+    public function statusColor(): string
     {
         return match ($this->status) {
             'pending', 'expired' => 'warning',
@@ -206,7 +204,7 @@ class Payment extends Model
         };
     }
 
-    public function formatPrice()
+    public function formatPrice(): string
     {
         $currency = $this->isWithSiteMoney()
             ? money_name($this->price)
@@ -215,53 +213,43 @@ class Payment extends Model
         return $this->price.' '.$currency;
     }
 
-    public function isPending()
+    public function isPending(): bool
     {
         return $this->status === 'pending';
     }
 
-    public function isCompleted()
+    public function isCompleted(): bool
     {
         return $this->status === 'completed';
     }
 
-    public function isWithSiteMoney()
+    public function isWithSiteMoney(): bool
     {
         return $this->gateway_type === 'azuriom';
     }
 
-    public function scopeCompleted(Builder $query)
+    public function scopeCompleted(Builder $query): void
     {
-        return $query->where('status', 'completed');
+        $query->where('status', 'completed');
     }
 
-    public function scopePending(Builder $query)
+    public function scopePending(Builder $query): void
     {
-        return $query->where('status', 'pending');
+        $query->where('status', 'pending');
     }
 
-    public function scopeNotPending(Builder $query)
+    public function scopeNotPending(Builder $query): void
     {
-        return $query->where('status', '!=', 'pending');
+        $query->where('status', '!=', 'pending');
     }
 
-    public function scopeWithSiteMoney(Builder $query)
+    public function scopeWithSiteMoney(Builder $query): void
     {
-        return $query->where('gateway_type', '=', 'azuriom');
+        $query->where('gateway_type', '=', 'azuriom');
     }
 
-    public function scopeWithRealMoney(Builder $query)
+    public function scopeWithRealMoney(Builder $query): void
     {
-        return $query->where('gateway_type', '!=', 'azuriom');
-    }
-
-    public function getPaymentIdAttribute()
-    {
-        return $this->transaction_id;
-    }
-
-    public function setPaymentIdAttribute($value)
-    {
-        $this->transaction_id = $value;
+        $query->where('gateway_type', '!=', 'azuriom');
     }
 }

@@ -4,6 +4,7 @@ namespace Azuriom\Plugin\Shop\Models;
 
 use Azuriom\Models\Traits\HasTablePrefix;
 use Azuriom\Models\Traits\Loggable;
+use Azuriom\Plugin\Shop\Payment\PaymentMethod;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
@@ -27,15 +28,13 @@ class Gateway extends Model
 
     /**
      * The table prefix associated with the model.
-     *
-     * @var string
      */
-    protected $prefix = 'shop_';
+    protected string $prefix = 'shop_';
 
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var array<int, string>
      */
     protected $fillable = [
         'name', 'type', 'fees', 'data', 'is_enabled',
@@ -44,7 +43,7 @@ class Gateway extends Model
     /**
      * The attributes that should be cast to native types.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
         'data' => 'array',
@@ -61,20 +60,18 @@ class Gateway extends Model
 
     /**
      * Get the associated payment method.
-     *
-     * @return \Azuriom\Plugin\Shop\Payment\PaymentMethod
      */
-    public function paymentMethod()
+    public function paymentMethod(): PaymentMethod
     {
         return payment_manager()->getPaymentMethodOrFail($this->type, $this);
     }
 
-    public function getTypeName()
+    public function getTypeName(): string
     {
         return self::getNameByType($this->type);
     }
 
-    public static function getNameByType(string $gatewayType)
+    public static function getNameByType(string $gatewayType): string
     {
         if ($gatewayType === 'free') {
             return trans('shop::messages.free');
@@ -91,12 +88,9 @@ class Gateway extends Model
 
     /**
      * Scope a query to only include enabled payment gateways.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeEnabled(Builder $query)
+    public function scopeEnabled(Builder $query): void
     {
-        return $query->where('is_enabled', true);
+        $query->where('is_enabled', true);
     }
 }

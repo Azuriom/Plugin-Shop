@@ -13,15 +13,14 @@ use Azuriom\Plugin\Shop\Payment\Method\PayPalMethod;
 use Azuriom\Plugin\Shop\Payment\Method\PaysafecardMethod;
 use Azuriom\Plugin\Shop\Payment\Method\StripeMethod;
 use Azuriom\Plugin\Shop\Payment\Method\XsollaMethod;
+use Illuminate\Support\Collection;
 
 class PaymentManager
 {
     /**
      * The loaded payment methods.
-     *
-     * @var \Illuminate\Support\Collection
      */
-    protected $paymentMethods;
+    protected Collection $paymentMethods;
 
     /**
      * Construct a new payment manager instance.
@@ -42,46 +41,40 @@ class PaymentManager
 
     /**
      * Get the payment methods.
-     *
-     * @return \Illuminate\Support\Collection
      */
-    public function getPaymentMethods()
+    public function getPaymentMethods(): Collection
     {
         return $this->paymentMethods;
     }
 
     /**
-     * Get a payment method.
-     *
-     * @param  string  $type
-     * @param  \Azuriom\Plugin\Shop\Models\Gateway|null  $gateway
-     * @return \Azuriom\Plugin\Shop\Payment\PaymentMethod|null
+     * Get the payment method with the given type.
      */
-    public function getPaymentMethod(string $type, Gateway $gateway = null)
+    public function getPaymentMethod(string $type, Gateway $gateway = null): ?PaymentMethod
     {
         $class = $this->paymentMethods->get($type);
 
         return $class ? app($class, $gateway ? ['gateway' => $gateway] : []) : null;
     }
 
-    public function getPaymentMethodOrFail(string $type, Gateway $gateway = null)
+    public function getPaymentMethodOrFail(string $type, Gateway $gateway = null): PaymentMethod
     {
         abort_if(! $this->paymentMethods->has($type), 404);
 
         return $this->getPaymentMethod($type, $gateway);
     }
 
-    public function hasPaymentMethod(string $type)
+    public function hasPaymentMethod(string $type): bool
     {
         return $this->paymentMethods->has($type);
     }
 
-    public function registerPaymentMethod(string $id, $method)
+    public function registerPaymentMethod(string $id, string $method): void
     {
         $this->paymentMethods->put($id, $method);
     }
 
-    public function buyPackages(Cart $cart)
+    public function buyPackages(Cart $cart): void
     {
         $payment = Payment::create([
             'price' => $cart->payableTotal(),
@@ -106,7 +99,7 @@ class PaymentManager
         $payment->deliver();
     }
 
-    public static function createPayment(Cart $cart, float $price, string $currency, string $gatewayId, string $paymentId = null)
+    public static function createPayment(Cart $cart, float $price, string $currency, string $gatewayId, string $paymentId = null): Payment
     {
         $payment = Payment::create([
             'price' => $price,

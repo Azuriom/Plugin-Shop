@@ -65,7 +65,7 @@
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">{{ trans('messages.fields.user') }}</th>
-                            <th scope="col">{{ trans('shop::messages.fields.balance') }}</th>
+                            <th scope="col">{{ trans('shop::messages.fields.price') }}</th>
                             <th scope="col">{{ trans('messages.fields.action') }}</th>
                         </tr>
                         </thead>

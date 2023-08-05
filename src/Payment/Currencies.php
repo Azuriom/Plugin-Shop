@@ -46,22 +46,22 @@ class Currencies
         'USD' => '$',
     ];
 
-    public static function all()
+    public static function all(): array
     {
         return self::CURRENCIES;
     }
 
-    public static function codes()
+    public static function codes(): array
     {
         return array_keys(self::CURRENCIES);
     }
 
-    public static function symbols()
+    public static function symbols(): array
     {
         return self::SYMBOLS;
     }
 
-    public static function symbol(string $currencyCode)
+    public static function symbol(string $currencyCode): string
     {
         return self::SYMBOLS[$currencyCode] ?? $currencyCode;
     }

@@ -4,32 +4,32 @@ namespace Azuriom\Plugin\Shop\Models\Concerns;
 
 trait IsBuyable
 {
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    public function getPrice()
+    public function getPrice(): float
     {
         return $this->price;
     }
 
-    public function getDescription()
+    public function getDescription(): string
     {
         return $this->description;
     }
 
-    public function hasQuantity()
+    public function hasQuantity(): bool
     {
         return $this->has_quantity ?? false;
     }
 
-    public function getMaxQuantity()
+    public function getMaxQuantity(): int
     {
         return 1;
     }

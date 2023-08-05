@@ -17,11 +17,7 @@ class User extends BaseUser
         return $this->hasManyThrough(PaymentItem::class, Payment::class);
     }
 
-    /**
-     * @param  \Azuriom\Models\User  $baseUser
-     * @return static
-     */
-    public static function ofUser(BaseUser $baseUser)
+    public static function ofUser(BaseUser $baseUser): self
     {
         return (new self())->newFromBuilder($baseUser->getAttributes());
     }

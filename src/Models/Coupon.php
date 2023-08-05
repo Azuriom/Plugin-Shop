@@ -33,15 +33,13 @@ class Coupon extends Model
 
     /**
      * The table prefix associated with the model.
-     *
-     * @var string
      */
-    protected $prefix = 'shop_';
+    protected string $prefix = 'shop_';
 
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var array<int, string>
      */
     protected $fillable = [
         'code', 'discount', 'start_at', 'expire_at', 'user_limit', 'global_limit', 'can_cumulate', 'is_enabled', 'is_global', 'is_fixed',
@@ -50,7 +48,7 @@ class Coupon extends Model
     /**
      * The attributes that should be cast to native types.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
         'start_at' => 'datetime',
@@ -77,12 +75,12 @@ class Coupon extends Model
         return $this->belongsToMany(Payment::class, 'shop_coupon_payment');
     }
 
-    public function hasReachLimit(User $user)
+    public function hasReachLimit(User $user): bool
     {
         return $this->hasReachGlobalLimit() || $this->hasReachUserLimit($user);
     }
 
-    protected function hasReachUserLimit(User $user)
+    protected function hasReachUserLimit(User $user): bool
     {
         if (! $this->user_limit) {
             return false;
@@ -96,7 +94,7 @@ class Coupon extends Model
         return $count >= $this->user_limit;
     }
 
-    public function hasReachGlobalLimit()
+    public function hasReachGlobalLimit(): bool
     {
         if (! $this->global_limit) {
             return false;
@@ -111,15 +109,16 @@ class Coupon extends Model
 
     /**
      * Determine if this coupon is currently active.
-     *
-     * @return bool
      */
-    public function isActive()
+    public function isActive(): bool
     {
         return $this->is_enabled && $this->start_at->isPast() && $this->expire_at->isFuture();
     }
 
-    public function isActiveOn(Package $package)
+    /**
+     * Determine if this coupon is currently active and can be used on the given package.
+     */
+    public function isActiveOn(Package $package): bool
     {
         if (! $this->isActive()) {
             return false;
@@ -132,7 +131,10 @@ class Coupon extends Model
         return $this->packages->contains($package);
     }
 
-    public function applyOn(float $price)
+    /**
+     * Get the discount amount for this coupon.
+     */
+    public function applyOn(float $price): float
     {
         $discount = $this->is_fixed ? $this->discount : (($this->discount / 100) * $price);
 
@@ -141,25 +143,19 @@ class Coupon extends Model
 
     /**
      * Scope a query to only include active coupons.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeActive(Builder $query)
+    public function scopeActive(Builder $query): void
     {
-        return $query->where('is_enabled', true)
+        $query->where('is_enabled', true)
             ->where('start_at', '<', now())
             ->where('expire_at', '>', now());
     }
 
     /**
      * Scope a query to only include enabled coupons.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeEnabled(Builder $query)
+    public function scopeEnabled(Builder $query): void
     {
-        return $query->where('is_enabled', true);
+        $query->where('is_enabled', true);
     }
 }

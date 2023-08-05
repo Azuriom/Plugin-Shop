@@ -20,10 +20,8 @@ class ShopServiceProvider extends BasePluginServiceProvider
 {
     /**
      * Register any plugin services.
-     *
-     * @return void
      */
-    public function register()
+    public function register(): void
     {
         require_once __DIR__.'/../../vendor/autoload.php';
 
@@ -37,10 +35,8 @@ class ShopServiceProvider extends BasePluginServiceProvider
 
     /**
      * Bootstrap any plugin services.
-     *
-     * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         $this->registerPolicies();
 
@@ -81,9 +77,9 @@ class ShopServiceProvider extends BasePluginServiceProvider
     /**
      * Returns the routes that should be able to be added to the navbar.
      *
-     * @return array
+     * @return array<string, string>
      */
-    protected function routeDescriptions()
+    protected function routeDescriptions(): array
     {
         return [
             'shop.home' => trans('shop::messages.title'),
@@ -93,9 +89,9 @@ class ShopServiceProvider extends BasePluginServiceProvider
     /**
      * Return the admin navigations routes to register in the dashboard.
      *
-     * @return array
+     * @return array<string, array<string, string>>
      */
-    protected function adminNavigation()
+    protected function adminNavigation(): array
     {
         return [
             'shop' => [
@@ -123,9 +119,9 @@ class ShopServiceProvider extends BasePluginServiceProvider
     /**
      * Return the user navigations routes to register in the user menu.
      *
-     * @return array
+     * @return array<string, array<string, string>>
      */
-    protected function userNavigation()
+    protected function userNavigation(): array
     {
         return [
             'shop' => [

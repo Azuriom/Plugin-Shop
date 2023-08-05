@@ -10,20 +10,20 @@ class PackageRequest extends FormRequest
     use ConvertCheckbox;
 
     /**
-     * The checkboxes attributes.
+     * The attributes represented by checkboxes.
      *
-     * @var array
+     * @var array<int, string>
      */
-    protected $checkboxes = [
+    protected array $checkboxes = [
         'custom_price', 'need_online', 'has_quantity', 'is_enabled',
     ];
 
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'category_id' => ['required', 'exists:shop_categories,id'],
@@ -48,15 +48,11 @@ class PackageRequest extends FormRequest
     }
 
     /**
-     * Get the validated data from the request.
-     *
-     * @param  mixed|null  $key
-     * @param  mixed|null  $default
-     * @return array
+     * Handle a passed validation attempt.
      */
-    public function validated($key = null, $default = null)
+    public function passedValidation(): void
     {
-        return array_merge(parent::validated(), [
+        $this->merge([
             'commands' => array_filter($this->input('commands', [])),
             'required_packages' => $this->input('required_packages', []),
         ]);

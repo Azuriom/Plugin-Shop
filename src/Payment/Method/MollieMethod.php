@@ -37,6 +37,7 @@ class MollieMethod extends PaymentMethod
             ],
             'description' => $this->getPurchaseDescription($payment->id),
             'redirectUrl' => route('shop.payments.success', $this->id),
+            'cancelUrl' => route('shop.cart.index'),
             'webhookUrl' => route('shop.payments.notification', ['gateway' => 'mollie']),
             'metadata' => [
                 'order_id' => $payment->id,
@@ -63,23 +64,20 @@ class MollieMethod extends PaymentMethod
         return $this->processPayment($payment, $orderId);
     }
 
-    public function view()
+    public function view(): string
     {
         return 'shop::admin.gateways.methods.mollie';
     }
 
-    public function rules()
+    public function rules(): array
     {
         return [
             'key' => ['required', 'string', 'starts_with:test_,live_', 'min:30'],
         ];
     }
 
-    protected function createMollieClient()
+    protected function createMollieClient(): MollieApiClient
     {
-        $mollie = new MollieApiClient();
-        $mollie->setApiKey($this->gateway->data['key']);
-
-        return $mollie;
+        return (new MollieApiClient())->setApiKey($this->gateway->data['key']);
     }
 }

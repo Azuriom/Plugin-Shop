@@ -11,8 +11,6 @@ class GiftcardController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function index()
     {
@@ -23,8 +21,6 @@ class GiftcardController extends Controller
 
     /**
      * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function create()
     {
@@ -33,9 +29,6 @@ class GiftcardController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  \Azuriom\Plugin\Shop\Requests\GiftcardRequest  $request
-     * @return \Illuminate\Http\Response
      */
     public function store(GiftcardRequest $request)
     {
@@ -43,15 +36,12 @@ class GiftcardController extends Controller
             'original_balance' => $request->input('balance'),
         ]));
 
-        return redirect()->route('shop.admin.giftcards.index')
+        return to_route('shop.admin.giftcards.index')
             ->with('success', trans('messages.status.success'));
     }
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param  \Azuriom\Plugin\Shop\Models\Giftcard  $giftcard
-     * @return \Illuminate\Http\Response
      */
     public function edit(Giftcard $giftcard)
     {
@@ -60,10 +50,6 @@ class GiftcardController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Azuriom\Plugin\Shop\Models\Giftcard  $giftcard
-     * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Giftcard $giftcard)
     {
@@ -74,23 +60,20 @@ class GiftcardController extends Controller
 
         $giftcard->update($validated);
 
-        return redirect()->route('shop.admin.giftcards.index')
+        return to_route('shop.admin.giftcards.index')
             ->with('success', trans('messages.status.success'));
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \Azuriom\Plugin\Shop\Models\Giftcard  $giftcard
-     * @return \Illuminate\Http\Response
-     *
-     * @throws \Exception
+     * @throws \LogicException
      */
     public function destroy(Giftcard $giftcard)
     {
         $giftcard->delete();
 
-        return redirect()->route('shop.admin.giftcards.index')
+        return to_route('shop.admin.giftcards.index')
             ->with('success', trans('messages.status.success'));
     }
 }

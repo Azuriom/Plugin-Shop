@@ -21,7 +21,7 @@ class PaymentController extends Controller
 
             $cart->destroy();
 
-            return redirect()->route('shop.home')->with('success', trans('shop::messages.cart.success'));
+            return to_route('shop.home')->with('success', trans('shop::messages.cart.success'));
         }
 
         $gateways = Gateway::enabled()
@@ -45,11 +45,7 @@ class PaymentController extends Controller
     }
 
     /**
-     * Make a new payment.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Azuriom\Plugin\Shop\Models\Gateway  $gateway
-     * @return \Illuminate\Http\Response
+     * Start a new payment.
      */
     public function pay(Request $request, Gateway $gateway)
     {
@@ -58,7 +54,7 @@ class PaymentController extends Controller
         $cart = Cart::fromSession($request->session());
 
         if ($cart->isEmpty()) {
-            return redirect()->route('shop.cart.index');
+            return to_route('shop.cart.index');
         }
 
         return $gateway->paymentMethod()->startPayment($cart, $cart->total(), currency());

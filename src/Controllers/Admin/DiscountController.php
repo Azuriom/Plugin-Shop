@@ -12,8 +12,6 @@ class DiscountController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function index()
     {
@@ -22,8 +20,6 @@ class DiscountController extends Controller
 
     /**
      * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function create()
     {
@@ -34,9 +30,6 @@ class DiscountController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  \Azuriom\Plugin\Shop\Requests\DiscountRequest  $request
-     * @return \Illuminate\Http\Response
      */
     public function store(DiscountRequest $request)
     {
@@ -44,14 +37,11 @@ class DiscountController extends Controller
 
         $discount->packages()->sync($request->input('packages'));
 
-        return redirect()->route('shop.admin.discounts.index')->with('success', 'Discount created');
+        return to_route('shop.admin.discounts.index')->with('success', 'Discount created');
     }
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param  \Azuriom\Plugin\Shop\Models\Discount  $discount
-     * @return \Illuminate\Http\Response
      */
     public function edit(Discount $discount)
     {
@@ -65,10 +55,6 @@ class DiscountController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  \Azuriom\Plugin\Shop\Requests\DiscountRequest  $request
-     * @param  \Azuriom\Plugin\Shop\Models\Discount  $discount
-     * @return \Illuminate\Http\Response
      */
     public function update(DiscountRequest $request, Discount $discount)
     {
@@ -76,21 +62,18 @@ class DiscountController extends Controller
 
         $discount->packages()->sync($request->input('packages'));
 
-        return redirect()->route('shop.admin.discounts.index')->with('success', 'Discount updated');
+        return to_route('shop.admin.discounts.index')->with('success', 'Discount updated');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \Azuriom\Plugin\Shop\Models\Discount  $discount
-     * @return \Illuminate\Http\Response
-     *
-     * @throws \Exception
+     * @throws \LogicException
      */
     public function destroy(Discount $discount)
     {
         $discount->delete();
 
-        return redirect()->route('shop.admin.discounts.index')->with('success', 'Discount deleted');
+        return to_route('shop.admin.discounts.index')->with('success', 'Discount deleted');
     }
 }

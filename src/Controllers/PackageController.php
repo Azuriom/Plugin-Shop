@@ -11,9 +11,6 @@ class PackageController extends Controller
 {
     /**
      * Display the specified resource.
-     *
-     * @param  \Azuriom\Plugin\Shop\Models\Package  $package
-     * @return \Illuminate\Http\Response
      */
     public function show(Package $package)
     {
@@ -24,10 +21,6 @@ class PackageController extends Controller
 
     /**
      * Buy the specified resource.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Azuriom\Plugin\Shop\Models\Package  $package
-     * @return \Illuminate\Http\Response
      *
      * @throws \Illuminate\Validation\ValidationException
      */
@@ -53,6 +46,6 @@ class PackageController extends Controller
 
         $cart->add($package, $request->input('quantity') ?? 1, $price);
 
-        return redirect()->route('shop.cart.index');
+        return to_route('shop.cart.index');
     }
 }

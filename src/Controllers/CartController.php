@@ -12,9 +12,6 @@ class CartController extends Controller
 {
     /**
      * Display the user cart.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
     {
@@ -25,10 +22,6 @@ class CartController extends Controller
 
     /**
      * Remove a package from the cart.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Azuriom\Plugin\Shop\Models\Package  $package
-     * @return \Illuminate\Http\Response
      */
     public function remove(Request $request, Package $package)
     {
@@ -36,14 +29,11 @@ class CartController extends Controller
 
         $cart->remove($package);
 
-        return redirect()->route('shop.cart.index');
+        return to_route('shop.cart.index');
     }
 
     /**
      * Update the quantity of the items in the cart.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
      */
     public function update(Request $request)
     {
@@ -59,45 +49,39 @@ class CartController extends Controller
             $cart->save();
         }
 
-        return redirect()->route('shop.cart.index');
+        return to_route('shop.cart.index');
     }
 
     /**
      * Clear the user cart.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
      */
     public function clear(Request $request)
     {
         Cart::fromSession($request->session())->clear();
 
-        return redirect()->route('shop.cart.index');
+        return to_route('shop.cart.index');
     }
 
     /**
      * Pay using the website money.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
      */
     public function payment(Request $request)
     {
         if (! use_site_money()) {
-            return redirect()->route('shop.cart.index');
+            return to_route('shop.cart.index');
         }
 
         $cart = Cart::fromSession($request->session());
 
         if ($cart->isEmpty()) {
-            return redirect()->route('shop.cart.index');
+            return to_route('shop.cart.index');
         }
 
         $user = $request->user();
         $total = $cart->payableTotal();
 
         if (! $user->hasMoney($total)) {
-            return redirect()->route('shop.cart.index')->with('error', trans('shop::messages.cart.errors.money'));
+            return to_route('shop.cart.index')->with('error', trans('shop::messages.cart.errors.money'));
         }
 
         $user->removeMoney($total);
@@ -109,11 +93,11 @@ class CartController extends Controller
 
             $user->addMoney($total);
 
-            return redirect()->route('shop.cart.index')->with('error', trans('shop::messages.cart.errors.execute'));
+            return to_route('shop.cart.index')->with('error', trans('shop::messages.cart.errors.execute'));
         }
 
         $cart->destroy();
 
-        return redirect()->route('shop.home')->with('success', trans('shop::messages.cart.success'));
+        return to_route('shop.home')->with('success', trans('shop::messages.cart.success'));
     }
 }

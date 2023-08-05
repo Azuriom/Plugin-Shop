@@ -79,12 +79,12 @@ class XsollaMethod extends PaymentMethod
         return $webhookServer->getSymfonyResponse($webhookRequest);
     }
 
-    public function view()
+    public function view(): string
     {
         return 'shop::admin.gateways.methods.xsolla';
     }
 
-    public function rules()
+    public function rules(): array
     {
         return [
             'merchant-id' => ['required', 'string'],
@@ -95,7 +95,7 @@ class XsollaMethod extends PaymentMethod
         ];
     }
 
-    protected function handleMessage(Message $message)
+    protected function handleMessage(Message $message): void
     {
         if (! $message->isPayment() && ! $message->isRefund()) {
             throw new XsollaWebhookException('Notification type not implemented');
@@ -117,7 +117,7 @@ class XsollaMethod extends PaymentMethod
         $this->processPayment($payment, $message->getPaymentId());
     }
 
-    protected function handleUserValidation(Message $message)
+    protected function handleUserValidation(Message $message): void
     {
         $userId = $message->getUserId();
 

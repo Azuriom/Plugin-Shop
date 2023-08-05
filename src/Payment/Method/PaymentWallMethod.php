@@ -76,12 +76,12 @@ class PaymentWallMethod extends PaymentMethod
         return $this->processPayment($payment, $pingback->getReferenceId());
     }
 
-    public function view()
+    public function view(): string
     {
         return 'shop::admin.gateways.methods.paymentwall';
     }
 
-    public function rules()
+    public function rules(): array
     {
         return [
             'private-key' => ['required', 'string'],
@@ -89,7 +89,7 @@ class PaymentWallMethod extends PaymentMethod
         ];
     }
 
-    private function setupConfig()
+    private function setupConfig(): void
     {
         PaymentWallConfig::getInstance()->set([
             'api_type' => PaymentWallConfig::API_GOODS,

@@ -29,15 +29,13 @@ class Offer extends Model implements Buyable
 
     /**
      * The table prefix associated with the model.
-     *
-     * @var string
      */
-    protected $prefix = 'shop_';
+    protected string $prefix = 'shop_';
 
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var array<int, string>
      */
     protected $fillable = [
         'name', 'price', 'money', 'image', 'is_enabled',
@@ -46,7 +44,7 @@ class Offer extends Model implements Buyable
     /**
      * The attributes that should be cast to native types.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
         'price' => 'float',
@@ -61,7 +59,7 @@ class Offer extends Model implements Buyable
         return $this->belongsToMany(Gateway::class, 'shop_offer_gateways');
     }
 
-    public function deliver(User $user, int $quantity = 1, PaymentItem $item = null)
+    public function deliver(User $user, int $quantity = 1, PaymentItem $item = null): void
     {
         $user->addMoney($this->money * $quantity);
     }

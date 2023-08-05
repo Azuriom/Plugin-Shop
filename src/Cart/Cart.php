@@ -39,8 +39,6 @@ class Cart implements Arrayable
 
     /**
      * Create a new cart instance.
-     *
-     * @param  \Illuminate\Contracts\Session\Session|null  $session
      */
     private function __construct(Session $session = null)
     {
@@ -59,11 +57,8 @@ class Cart implements Arrayable
 
     /**
      * Add an item to the cart.
-     *
-     * @param  \Azuriom\Plugin\Shop\Models\Concerns\Buyable  $buyable
-     * @param  int  $quantity
      */
-    public function add(Buyable $buyable, int $quantity = 1, float $userPrice = null)
+    public function add(Buyable $buyable, int $quantity = 1, float $userPrice = null): void
     {
         if ($quantity <= 0) {
             return;
@@ -85,11 +80,8 @@ class Cart implements Arrayable
 
     /**
      * Set the quantity of an item in the cart.
-     *
-     * @param  \Azuriom\Plugin\Shop\Models\Concerns\Buyable  $buyable
-     * @param  int  $quantity
      */
-    public function set(Buyable $buyable, int $quantity = 1, float $userPrice = null)
+    public function set(Buyable $buyable, int $quantity = 1, float $userPrice = null): void
     {
         if ($quantity <= 0) {
             $this->remove($buyable);
@@ -119,10 +111,8 @@ class Cart implements Arrayable
 
     /**
      * Remove the given model from cart.
-     *
-     * @param  \Azuriom\Plugin\Shop\Models\Concerns\Buyable  $buyable
      */
-    public function remove(Buyable $buyable)
+    public function remove(Buyable $buyable): void
     {
         $this->items->forget($this->getItemId($buyable));
 
@@ -130,93 +120,79 @@ class Cart implements Arrayable
     }
 
     /**
-     * Get from the cartt items associated to this model.
-     * Return null if this model is not in this cart.
-     *
-     * @param  \Azuriom\Plugin\Shop\Models\Concerns\Buyable  $buyable
-     * @return \Azuriom\Plugin\Shop\Cart\CartItem|null
+     * Get the cart item associated with the given model.
      */
-    public function get(Buyable $buyable)
+    public function get(Buyable $buyable): ?CartItem
     {
         return $this->items->get($this->getItemId($buyable));
     }
 
-    public function getById(string $id)
+    /**
+     * Get a cart item by its id.
+     */
+    public function getById(string $id): ?CartItem
     {
         return $this->items->get($id);
     }
 
     /**
      * Determine if a cart item is in the cart.
-     *
-     * @param  \Azuriom\Plugin\Shop\Models\Concerns\Buyable  $buyable
-     * @return bool
      */
-    public function has(Buyable $buyable)
+    public function has(Buyable $buyable): bool
     {
         return $this->items->has($this->getItemId($buyable));
     }
 
     /**
-     * Clear the current cart instance.
-     *
-     * @return void
+     * Clear the current cart content.
      */
-    public function clear()
+    public function clear(): void
     {
         $this->items = collect();
 
         $this->save();
     }
 
-    public function isEmpty()
+    public function isEmpty(): bool
     {
         return $this->items->isEmpty();
     }
 
     /**
      * Get the content of the cart.
-     *
-     * @return \Illuminate\Support\Collection
      */
-    public function content()
+    public function content(): Collection
     {
         return $this->items->values();
     }
 
     /**
      * Get the number of items in the cart.
-     *
-     * @return int
      */
-    public function count()
+    public function count(): int
     {
         return $this->content()->sum('quantity');
     }
 
     /**
      * Get the total price of the items in the cart without
-     * applying coupons discounts.
-     *
-     * @return float
+     * applying coupons or discounts.
      */
-    public function originalTotal()
+    public function originalTotal(): float
     {
         return $this->content()->sum(fn (CartItem $item) => $item->originalTotal());
     }
 
     /**
      * Get the total price of the items in the cart after
-     * applying coupons discounts.
-     *
-     * @return float
+     * applying discounts and percentage coupons.
      */
-    public function total()
+    public function total(): float
     {
         return $this->itemsPrice()->sum(fn (array $item) => $item['price']);
     }
 
-    public function itemsPrice()
+    public function itemsPrice(): Collection
     {
         // Store remaining amounts for fixed-price coupons
         $remaining = $this->coupons
@@ -252,7 +228,11 @@ class Cart implements Arrayable
         });
     }
 
-    public function payableTotal()
+    /**
+     * Get the final total price of the items in the cart after
+     * applying discounts, percentage coupons and giftcards.
+     */
+    public function payableTotal(): float
     {
         return $this->giftcards
             ->filter(fn (Giftcard $card) => $card->isActive())
@@ -261,27 +241,18 @@ class Cart implements Arrayable
             }, $this->total());
     }
 
-    protected function getItemId(Buyable $buyable)
-    {
-        return class_basename($buyable).'-'.$buyable->getId();
-    }
-
     /**
      * Get the coupons applied to the cart.
-     *
-     * @return \Illuminate\Support\Collection
      */
-    public function coupons()
+    public function coupons(): Collection
     {
         return $this->coupons;
     }
 
     /**
      * Add a coupon to the cart.
-     *
-     * @param  \Azuriom\Plugin\Shop\Models\Coupon  $coupon
      */
-    public function addCoupon(Coupon $coupon)
+    public function addCoupon(Coupon $coupon): void
     {
         $this->coupons->put($coupon->id, $coupon);
 
@@ -290,10 +261,8 @@ class Cart implements Arrayable
 
     /**
      * Remove a coupon from the cart.
-     *
-     * @param  \Azuriom\Plugin\Shop\Models\Coupon  $coupon
      */
-    public function removeCoupon(Coupon $coupon)
+    public function removeCoupon(Coupon $coupon): void
     {
         $this->coupons->forget($coupon->id);
 
@@ -301,23 +270,27 @@ class Cart implements Arrayable
     }
 
     /**
-     * Get the coupons applied to the cart.
-     *
-     * @return \Illuminate\Support\Collection
+     * Get all the giftcards applied to the cart.
      */
-    public function giftcards()
+    public function giftcards(): Collection
     {
         return $this->giftcards;
     }
 
-    public function addGiftcard(Giftcard $giftcard)
+    /**
+     * Add a new giftcard to the cart.
+     */
+    public function addGiftcard(Giftcard $giftcard): void
     {
         $this->giftcards->put($giftcard->id, $giftcard);
 
         $this->save();
     }
 
-    public function removeGiftcard(Giftcard $giftcard)
+    /**
+     * Remove a giftcard from the cart.
+     */
+    public function removeGiftcard(Giftcard $giftcard): void
     {
         $this->giftcards->forget($giftcard->id);
 
@@ -327,60 +300,55 @@ class Cart implements Arrayable
     /**
      * Remove all the coupons in the cart.
      */
-    public function clearCoupon()
+    public function clearCoupons(): void
     {
         $this->coupons = collect();
 
         $this->save();
     }
 
-    public function type()
-    {
-        return strtoupper(class_basename($this->items->first()->buyable()));
-    }
-
     /**
      * Save the cart content to the associated session (if any).
      */
-    public function save()
+    public function save(): void
     {
         $this->session?->put('shop.cart', $this->toArray());
     }
 
     /**
-     * Clear the items and the coupons and remove the current cart
-     * from the session.
+     * Clear the items, coupons and giftcard from the cart.
      */
-    public function destroy()
+    public function destroy(): void
     {
         $this->items = collect();
         $this->coupons = collect();
+        $this->giftcards = collect();
 
         $this->session?->remove('shop.cart');
     }
 
     /**
-     * Create a new empty cart without associated session.
-     *
-     * @return self
+     * Create a new empty cart without an associated session.
      */
-    public static function createEmpty()
+    public static function createEmpty(): self
     {
         return new self(null);
     }
 
     /**
-     * Create a new cart instance and load the content of the associated session.
-     *
-     * @param  \Illuminate\Contracts\Session\Session  $session
-     * @return self
+     * Create a new cart instance and load the content from the given session.
      */
-    public static function fromSession(Session $session)
+    public static function fromSession(Session $session): self
     {
         return new self($session);
     }
 
-    protected function loadFromSession(Session $session)
+    protected function getItemId(Buyable $buyable): string
+    {
+        return class_basename($buyable).'-'.$buyable->getId();
+    }
+
+    protected function loadFromSession(Session $session): void
     {
         $this->items = collect();
 
@@ -429,7 +397,7 @@ class Cart implements Arrayable
     /**
      * {@inheritdoc}
      */
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'items' => $this->items->toArray(),

@@ -260,12 +260,12 @@ class Countries
         'ZW' => 'Zimbabwe',
     ];
 
-    public static function countries()
+    public static function countries(): array
     {
         return self::COUNTRIES;
     }
 
-    public static function codes()
+    public static function codes(): array
     {
         return array_keys(self::COUNTRIES);
     }

@@ -2,6 +2,7 @@
 
 namespace Azuriom\Plugin\Shop\Payment\Method;
 
+use Azuriom\Azuriom;
 use Azuriom\Plugin\Shop\Cart\Cart;
 use Azuriom\Plugin\Shop\Models\Payment;
 use Azuriom\Plugin\Shop\Payment\PaymentMethod;
@@ -83,12 +84,12 @@ class StripeMethod extends PaymentMethod
         return $this->processPayment($payment, $paymentId);
     }
 
-    public function view()
+    public function view(): string
     {
         return 'shop::admin.gateways.methods.stripe';
     }
 
-    public function rules()
+    public function rules(): array
     {
         return [
             'secret-key' => ['required', 'string'],
@@ -97,8 +98,9 @@ class StripeMethod extends PaymentMethod
         ];
     }
 
-    private function setup()
+    protected function setup(): void
     {
+        Stripe::setAppInfo('Azuriom', Azuriom::version(), 'https://azuriom.com');
         Stripe::setLogger(logger()->driver());
         Stripe::setApiKey($this->gateway->data['secret-key']);
     }

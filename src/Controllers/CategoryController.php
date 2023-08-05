@@ -6,6 +6,7 @@ use Azuriom\Http\Controllers\Controller;
 use Azuriom\Plugin\Shop\Models\Category;
 use Azuriom\Plugin\Shop\Models\Payment;
 use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\HtmlString;
 
@@ -13,8 +14,6 @@ class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function index()
     {
@@ -23,7 +22,7 @@ class CategoryController extends Controller
         if (! setting('shop.home.enabled', true) && ! $categories->isEmpty()) {
             request()->session()->reflash();
 
-            return redirect()->route('shop.categories.show', $categories->first());
+            return to_route('shop.categories.show', $categories->first());
         }
 
         $message = setting('shop.home', trans('shop::messages.welcome'));
@@ -42,13 +41,10 @@ class CategoryController extends Controller
 
     /**
      * Display the specified resource.
-     *
-     * @param  \Azuriom\Plugin\Shop\Models\Category  $category
-     * @return \Illuminate\Http\Response
      */
     public function show(Category $category)
     {
-        $categories = $this->getCategories($category);
+        $categories = $this->getCategories();
 
         $category->load(['packages' => function (Builder $query) {
             $query->with('discounts')->scopes(['enabled']);
@@ -69,7 +65,7 @@ class CategoryController extends Controller
         ]);
     }
 
-    protected function getMonthGoal()
+    protected function getMonthGoal(): float
     {
         if (! setting('shop.month_goal')) {
             return false;
@@ -82,7 +78,7 @@ class CategoryController extends Controller
         return round(($total / setting('shop.month_goal')) * 100, 2);
     }
 
-    protected function getRecentPayments()
+    protected function getRecentPayments(): ?Collection
     {
         $maxPayments = (int) setting('shop.recent_payments', 0);
 
@@ -97,7 +93,7 @@ class CategoryController extends Controller
             ->get();
     }
 
-    protected function getTopCustomer()
+    protected function getTopCustomer(): ?object
     {
         if (! setting('shop.top_customer', false)) {
             return null;
@@ -122,7 +118,7 @@ class CategoryController extends Controller
         ];
     }
 
-    protected function getCategories(Category $current = null)
+    protected function getCategories(): Collection
     {
         return Category::scopes(['parents', 'enabled'])
             ->with('categories')

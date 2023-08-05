@@ -13,16 +13,11 @@ class CouponController extends Controller
     /**
      * Add a coupon to the cart.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     *
      * @throws \Illuminate\Validation\ValidationException
      */
     public function add(Request $request)
     {
-        $validated = $this->validate($request, [
-            'code' => ['required'],
-        ]);
+        $validated = $this->validate($request, ['code' => 'required']);
 
         $coupon = Coupon::active()->firstWhere($validated);
 
@@ -43,33 +38,26 @@ class CouponController extends Controller
 
         $cart->addCoupon($coupon);
 
-        return redirect()->route('shop.cart.index');
+        return to_route('shop.cart.index');
     }
 
     /**
      * Remove a coupon from the cart.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Azuriom\Plugin\Shop\Models\Coupon  $coupon
-     * @return \Illuminate\Http\Response
      */
     public function remove(Request $request, Coupon $coupon)
     {
         Cart::fromSession($request->session())->removeCoupon($coupon);
 
-        return redirect()->route('shop.cart.index');
+        return to_route('shop.cart.index');
     }
 
     /**
      * Clear the coupons in the cart.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
      */
     public function clear(Request $request)
     {
-        Cart::fromSession($request->session())->clearCoupon();
+        Cart::fromSession($request->session())->clearCoupons();
 
-        return redirect()->route('shop.cart.index');
+        return to_route('shop.cart.index');
     }
 }

@@ -8,10 +8,8 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('shop_coupons', function (Blueprint $table) {
             $table->unsignedInteger('user_limit')->nullable()->after('discount');
@@ -21,10 +19,8 @@ return new class extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('shop_coupons', function (Blueprint $table) {
             $table->dropColumn(['user_limit', 'global_limit']);

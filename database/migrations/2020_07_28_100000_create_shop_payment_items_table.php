@@ -10,10 +10,8 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('shop_payment_items', function (Blueprint $table) {
             $table->increments('id');
@@ -37,10 +35,8 @@ return new class extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('shop_payment_items');
     }
@@ -49,7 +45,8 @@ return new class extends Migration
     {
         @set_time_limit(180); // 3 minutes
 
-        $payments = json_decode(file_get_contents($path), true);
+        $content = file_get_contents($path);
+        $payments = json_decode($content, true, flags: JSON_THROW_ON_ERROR);
 
         foreach ($payments as $payment) {
             $paymentID = DB::table('shop_payments')->insertGetId(Arr::except($payment, 'items'));

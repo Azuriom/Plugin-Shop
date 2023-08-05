@@ -11,15 +11,11 @@ class GatewayController extends Controller
 {
     /**
      * The payment manager instance.
-     *
-     * @var PaymentManager
      */
-    protected $paymentManager;
+    protected PaymentManager $paymentManager;
 
     /**
      * Create a new controller instance.
-     *
-     * @param  \Azuriom\Plugin\Shop\Payment\PaymentManager  $paymentManager
      */
     public function __construct(PaymentManager $paymentManager)
     {
@@ -28,8 +24,6 @@ class GatewayController extends Controller
 
     /**
      * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function index()
     {
@@ -51,9 +45,6 @@ class GatewayController extends Controller
 
     /**
      * Show the form for creating a new resource.
-     *
-     * @param  string  $type
-     * @return \Illuminate\Http\Response
      */
     public function create(string $type)
     {
@@ -64,9 +55,6 @@ class GatewayController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  \Azuriom\Plugin\Shop\Requests\GatewayRequest  $request
-     * @return \Illuminate\Http\Response
      *
      * @throws \Illuminate\Validation\ValidationException
      */
@@ -83,15 +71,12 @@ class GatewayController extends Controller
             'type' => $type,
         ] + $request->validated());
 
-        return redirect()->route('shop.admin.gateways.index')
+        return to_route('shop.admin.gateways.index')
             ->with('success', trans('messages.status.success'));
     }
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param  \Azuriom\Plugin\Shop\Models\Gateway  $gateway
-     * @return \Illuminate\Http\Response
      */
     public function edit(Gateway $gateway)
     {
@@ -104,10 +89,6 @@ class GatewayController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Azuriom\Plugin\Shop\Requests\GatewayRequest  $request
-     * @param  \Azuriom\Plugin\Shop\Models\Gateway  $gateway
-     * @return \Illuminate\Http\Response
-     *
      * @throws \Illuminate\Validation\ValidationException
      */
     public function update(GatewayRequest $request, Gateway $gateway)
@@ -116,23 +97,20 @@ class GatewayController extends Controller
 
         $gateway->update(['data' => $data] + $request->validated());
 
-        return redirect()->route('shop.admin.gateways.index')
+        return to_route('shop.admin.gateways.index')
             ->with('success', trans('messages.status.success'));
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \Azuriom\Plugin\Shop\Models\Gateway  $gateway
-     * @return \Illuminate\Http\Response
-     *
-     * @throws \Exception
+     * @throws \LogicException
      */
     public function destroy(Gateway $gateway)
     {
         $gateway->delete();
 
-        return redirect()->route('shop.admin.gateways.index')
+        return to_route('shop.admin.gateways.index')
             ->with('success', trans('messages.status.success'));
     }
 }

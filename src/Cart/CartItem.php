@@ -51,12 +51,7 @@ class CartItem implements Arrayable
     public ?float $userPrice = null;
 
     /**
-     * Create a new item instance.
-     *
-     * @param  \Azuriom\Plugin\Shop\Cart\Cart  $cart
-     * @param  \Azuriom\Plugin\Shop\Models\Concerns\Buyable  $buyable
-     * @param  string  $itemId
-     * @param  int  $quantity
+     * Create a new cart item instance.
      */
     public function __construct(Cart $cart, Buyable $buyable, string $itemId, int $quantity = 1)
     {
@@ -70,10 +65,8 @@ class CartItem implements Arrayable
 
     /**
      * Set the quantity for this cart item.
-     *
-     * @param  int  $quantity
      */
-    public function setQuantity(int $quantity)
+    public function setQuantity(int $quantity): void
     {
         $maxQuantity = $this->buyable->getMaxQuantity();
 
@@ -86,35 +79,33 @@ class CartItem implements Arrayable
 
     /**
      * Retrieve the buyable model.
-     *
-     * @return \Azuriom\Plugin\Shop\Models\Concerns\Buyable
      */
-    public function buyable()
+    public function buyable(): Buyable
     {
         return $this->buyable;
     }
 
-    public function hasQuantity()
+    public function hasQuantity(): bool
     {
         return $this->buyable->hasQuantity();
     }
 
-    public function maxQuantity()
+    public function maxQuantity(): int
     {
         return $this->buyable->getMaxQuantity();
     }
 
-    public function name()
+    public function name(): string
     {
         return $this->buyable->getName();
     }
 
-    public function originalPrice()
+    public function originalPrice(): float
     {
         return $this->userPrice ?? $this->buyable->getPrice();
     }
 
-    public function price()
+    public function price(): float
     {
         $package = $this->buyable;
 
@@ -132,12 +123,12 @@ class CartItem implements Arrayable
         return round($price, 2);
     }
 
-    public function originalTotal()
+    public function originalTotal(): float
     {
         return $this->originalPrice() * $this->quantity;
     }
 
-    public function total()
+    public function total(): float
     {
         return $this->price() * $this->quantity;
     }
@@ -145,7 +136,7 @@ class CartItem implements Arrayable
     /**
      * {@inheritdoc}
      */
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'id' => $this->id,
