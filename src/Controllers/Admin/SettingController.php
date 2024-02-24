@@ -32,6 +32,7 @@ class SettingController extends Controller
             'servers' => Server::executable()->get(),
             'enableHome' => setting('shop.home.enabled', true),
             'homeMessage' => setting('shop.home', ''),
+            'enableCoupons' => setting('shop.enable_coupons', true),
         ]);
     }
 
@@ -63,6 +64,7 @@ class SettingController extends Controller
             'shop.home' => $request->input('home_message'),
             'shop.home.enabled' => $request->has('enable_home'),
             'shop.commands' => is_array($commands) ? json_encode($commands) : null,
+            'shop.enable_coupons' => $request->has('enable_coupons'),
         ]);
 
         return to_route('shop.admin.settings')
