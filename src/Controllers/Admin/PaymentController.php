@@ -49,7 +49,15 @@ class PaymentController extends Controller
     {
         $categories = Category::with('packages')->whereHas('packages')->get();
 
-        return view('shop::admin.payments.create', ['categories' => $categories]);
+        $quantifiablePackages = $categories->pluck('packages')
+            ->flatten()
+            ->where('has_quantity', true)
+            ->pluck('id');
+
+        return view('shop::admin.payments.create', [
+            'categories' => $categories,
+            'quantifiablePackages' => $quantifiablePackages,
+        ]);
     }
 
     /**
@@ -57,24 +65,25 @@ class PaymentController extends Controller
      */
     public function store(PaymentRequest $request)
     {
+        $packageIds = Arr::pluck($request->input('packages', []), 'quantity', 'id');
         $attributes = array_merge($request->validated(), [
-            'price' => 0,
             'currency' => currency(),
             'status' => 'completed',
             'gateway_type' => 'manual',
         ]);
 
         $payment = Payment::create(Arr::except($attributes, 'packages'));
-        $packages = Package::findMany($request->input('packages'));
+        $packages = Package::findMany(array_keys($packageIds));
 
         foreach ($packages as $package) {
             $payment->items()
                 ->make([
                     'name' => $package->name,
                     'price' => 0,
-                    'quantity' => 1,
+                    'quantity' => Arr::get($packageIds, $package->id) ?? 1,
                 ])
-                ->buyable()->associate($package)
+                ->buyable()
+                ->associate($package)
                 ->save();
         }
 

@@ -268,7 +268,7 @@ class Package extends Model implements Buyable
             ->filter(fn (array $command) => $command['trigger'] === $trigger)
             ->groupBy('server');
 
-        $servers = Server::find($commandsByServer->keys());
+        $servers = Server::findMany($commandsByServer->keys());
 
         foreach ($servers as $server) {
             $commands = $commandsByServer[$server->id];
