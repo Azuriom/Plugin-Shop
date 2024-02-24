@@ -32,6 +32,7 @@ class SettingController extends Controller
             'servers' => Server::executable()->get(),
             'enableHome' => setting('shop.home.enabled', true),
             'homeMessage' => setting('shop.home', ''),
+            'enableGiftCards' => setting('shop.enable_gift_cards', true),
         ]);
     }
 
@@ -63,6 +64,7 @@ class SettingController extends Controller
             'shop.home' => $request->input('home_message'),
             'shop.home.enabled' => $request->has('enable_home'),
             'shop.commands' => is_array($commands) ? json_encode($commands) : null,
+            'shop.enable_gift_cards' => $request->has('enable_gift_cards'),
         ]);
 
         return to_route('shop.admin.settings')

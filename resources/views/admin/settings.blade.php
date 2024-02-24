@@ -29,6 +29,13 @@
                     <small id="moneyLabel" class="form-text">{{ trans('shop::admin.settings.use_site_money_info') }}</small>
                 </div>
 
+                <div class="mb-3">
+                    <div class="form-check form-switch">
+                        <input type="checkbox" class="form-check-input" id="enableGiftCards" name="enable_gift_cards" @checked($enableGiftCards)>
+                        <label class="form-check-label" for="enableGiftCards">{{ trans('shop::admin.settings.enable_gift_cards') }}</label>
+                    </div>
+                </div>
+
                 <div class="mb-3 form-check form-switch">
                     <input type="checkbox" class="form-check-input" id="homeSwitch" name="enable_home" data-bs-toggle="collapse" data-bs-target="#homeMessage" @checked($enableHome)>
                     <label class="form-check-label" for="homeSwitch">{{ trans('shop::admin.settings.enable_home') }}</label>

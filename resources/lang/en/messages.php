@@ -129,4 +129,8 @@ return [
         'add' => 'Add a gift card',
         'notification' => 'You received a giftcard, the code is :code (:balance).',
     ],
+
+    'exceptions' => [
+        'feature_disabled_settings' => 'This feature has been disabled via the settings',
+    ],
 ];

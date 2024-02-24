@@ -130,6 +130,7 @@
                     {{ trans('shop::messages.cart.total', ['total' => shop_format_amount($cart->total())]) }}
                 </h5>
 
+            @if (setting('shop.enable_gift_cards', true))
                 <div class="row">
                     <div class="col-md-4">
                         <h5>{{ trans('shop::messages.giftcards.add') }}</h5>
@@ -190,6 +191,7 @@
                         </div>
                     @endif
                 </div>
+            @endif
 
                 <div class="row">
                     <div class="col-md-6">

@@ -234,6 +234,10 @@ class Cart implements Arrayable
      */
     public function payableTotal(): float
     {
+        if (! $this->hasGiftCardsEnabled()) {
+            return $this->total();
+        }
+
         return $this->giftcards
             ->filter(fn (Giftcard $card) => $card->isActive())
             ->reduce(function ($total, Giftcard $card) {
@@ -274,6 +278,10 @@ class Cart implements Arrayable
      */
     public function giftcards(): Collection
     {
+        if (! $this->hasGiftCardsEnabled()) {
+            return collect();
+        }
+
         return $this->giftcards;
     }
 
@@ -282,6 +290,10 @@ class Cart implements Arrayable
      */
     public function addGiftcard(Giftcard $giftcard): void
     {
+        if (! $this->hasGiftCardsEnabled()) {
+            return;
+        }
+
         $this->giftcards->put($giftcard->id, $giftcard);
 
         $this->save();
@@ -292,6 +304,10 @@ class Cart implements Arrayable
      */
     public function removeGiftcard(Giftcard $giftcard): void
     {
+        if (! $this->hasGiftCardsEnabled()) {
+            return;
+        }
+
         $this->giftcards->forget($giftcard->id);
 
         $this->save();
@@ -360,7 +376,7 @@ class Cart implements Arrayable
             $this->coupons = collect();
         }
 
-        if (! empty($content['giftcards'])) {
+        if (! empty($content['giftcards']) && $this->hasGiftCardsEnabled()) {
             $this->giftcards = Giftcard::whereIn('code', $content['giftcards'])->get()->keyBy('id');
         } else {
             $this->giftcards = collect();
@@ -402,7 +418,12 @@ class Cart implements Arrayable
         return [
             'items' => $this->items->toArray(),
             'coupons' => $this->coupons->pluck('code')->all(),
-            'giftcards' => $this->giftcards->pluck('code')->all(),
+            'giftcards' => $this->hasGiftCardsEnabled() ? $this->giftcards->pluck('code')->all() : [],
         ];
+    }
+
+    private function hasGiftCardsEnabled(): bool
+    {
+        return setting('shop.enable_gift_cards', true);
     }
 }

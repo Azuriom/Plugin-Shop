@@ -5,6 +5,7 @@ namespace Azuriom\Plugin\Shop\Controllers;
 use Azuriom\Http\Controllers\Controller;
 use Azuriom\Models\ActionLog;
 use Azuriom\Plugin\Shop\Cart\Cart;
+use Azuriom\Plugin\Shop\Exceptions\FeatureNotEnabledException;
 use Azuriom\Plugin\Shop\Models\Giftcard;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
@@ -18,6 +19,10 @@ class GiftcardController extends Controller
      */
     public function add(Request $request)
     {
+        if (! $this->hasGiftCardsEnabled()) {
+            throw new FeatureNotEnabledException();
+        }
+
         $validated = $this->validate($request, ['code' => 'required']);
 
         $giftcard = Giftcard::active()->firstWhere($validated);
@@ -38,6 +43,10 @@ class GiftcardController extends Controller
      */
     public function remove(Request $request, Giftcard $giftcard)
     {
+        if (! $this->hasGiftCardsEnabled()) {
+            throw new FeatureNotEnabledException();
+        }
+
         Cart::fromSession($request->session())->removeGiftcard($giftcard);
 
         return to_route('shop.cart.index');
@@ -50,6 +59,10 @@ class GiftcardController extends Controller
      */
     public function use(Request $request)
     {
+        if (! $this->hasGiftCardsEnabled()) {
+            throw new FeatureNotEnabledException();
+        }
+
         $validated = $this->validate($request, ['code' => 'required']);
 
         $giftcard = Giftcard::active()->firstWhere($validated);
@@ -73,5 +86,10 @@ class GiftcardController extends Controller
         return redirect()->back()->with('success', trans('shop::messages.giftcards.success', [
             'money' => format_money($amount),
         ]));
+    }
+
+    private function hasGiftCardsEnabled(): bool
+    {
+        return setting('shop.enable_gift_cards', true);
     }
 }

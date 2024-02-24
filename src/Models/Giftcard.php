@@ -67,6 +67,10 @@ class Giftcard extends Model
 
     public function notifyUser(User $user): void
     {
+        if (! setting('shop.enable_gift_cards', true)) {
+            return;
+        }
+
         (new AlertNotification(trans('shop::messages.giftcards.notification', [
             'balance' => shop_format_amount($this->balance),
             'code' => $this->code,
