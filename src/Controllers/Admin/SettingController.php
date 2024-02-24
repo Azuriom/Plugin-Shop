@@ -3,7 +3,9 @@
 namespace Azuriom\Plugin\Shop\Controllers\Admin;
 
 use Azuriom\Http\Controllers\Controller;
+use Azuriom\Models\Server;
 use Azuriom\Models\Setting;
+use Azuriom\Plugin\Shop\Models\Package;
 use Azuriom\Plugin\Shop\Payment\Currencies;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -25,7 +27,9 @@ class SettingController extends Controller
             'topCustomer' => setting('shop.top_customer', false),
             'recentPayments' => (int) setting('shop.recent_payments', 0),
             'displayAmount' => setting('shop.display_amount', true),
-            'commands' => $commands ? json_decode($commands, true) : [],
+            'commands' => $commands ? json_decode($commands) : [],
+            'commandTriggers' => Package::COMMAND_TRIGGERS,
+            'servers' => Server::executable()->get(),
             'enableHome' => setting('shop.home.enabled', true),
             'homeMessage' => setting('shop.home', ''),
         ]);
@@ -58,7 +62,7 @@ class SettingController extends Controller
             'shop.webhook' => $request->input('webhook'),
             'shop.home' => $request->input('home_message'),
             'shop.home.enabled' => $request->has('enable_home'),
-            'shop.commands' => is_array($commands) ? json_encode(array_filter($commands)) : null,
+            'shop.commands' => is_array($commands) ? json_encode($commands) : null,
         ]);
 
         return to_route('shop.admin.settings')

@@ -86,13 +86,30 @@ return [
         'command' => 'The command must not start with <code>/</code>. You can use <code>{player}</code> for the player name. For Steam games, you can also use <code>{steam_id}</code> and <code>{steam_id_32}</code>. The others available placeholders are: :placeholders.',
 
         'custom_price' => 'Allow the user to choose the price to pay (the package price will then be the minimum)',
-        'require_online' => 'Execute commands when the user is online on the server (only available with AzLink)',
         'enable_quantity' => 'Enable the quantity',
 
         'create_category' => 'Create category',
         'create_package' => 'Create package',
 
         'enable' => 'Enable this package',
+    ],
+
+    'commands' => [
+        'online' => 'Wait for the player to be online before executing the command (requires AzLink)',
+        'offline' => 'Execute the command directly, wherever the player is online or not',
+        'servers' => 'You need to add at least one server to create a command.',
+
+        'trigger' => 'Command trigger',
+        'command' => 'Command',
+        'condition' => 'Condition to execute the command',
+
+        'triggers' => [
+            'purchase' => 'Initial Purchase',
+            'expiration' => 'After Expiration',
+            'refund' => 'Payment Refunded',
+            'chargeback' => 'Chargeback',
+            'renewal' => 'Subscription Renewal',
+        ],
     ],
 
     'gateways' => [
@@ -118,7 +135,7 @@ return [
         'env' => 'Environment',
 
         'paypal_email' => 'PayPal Email Address',
-        'paypal_info' => 'Please make sure to input the <strong>main</strong> email address of the PayPal account.',
+        'paypal_info' => 'Please make sure to input the <strong>primary</strong> email address of the PayPal account.',
         'paysafecard_info' => 'In order to be able to accept payments by paysafecard, you must be a <a href="https://www.paysafecard.com/en/business/" target="_blank" rel="noopener noreferrer">paysafecard partner</a>. Other methods exist but only this one is allowed by paysafecard.',
         'stripe_info' => 'On the Stripe dashboard you need to set the webhook URL to <code>:url</code> and select the event <code>checkout.session.completed</code>.',
         'paymentwall_info' => 'On the PaymentWall dashboard you need to set the pingback URL to <code>:url</code>.',

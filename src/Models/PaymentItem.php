@@ -63,7 +63,14 @@ class PaymentItem extends Model
 
     public function deliver(): void
     {
-        $this->buyable?->deliver($this->payment->user, $this->quantity, $this);
+        $this->buyable?->deliver($this);
+    }
+
+    public function dispatchCommands(string $status): void
+    {
+        if ($this->buyable instanceof Package) {
+            $this->buyable->dispatchCommands($status, $this);
+        }
     }
 
     public function formatPrice(): string

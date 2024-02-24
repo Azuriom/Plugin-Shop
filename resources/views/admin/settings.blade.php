@@ -89,7 +89,7 @@
                 <div class="mb-3">
                     <label class="form-label">{{ trans('shop::admin.settings.commands') }}</label>
 
-                    @include('shop::admin.elements.commands', ['commands' => $commands])
+                    @include('shop::admin.commands._form', ['commands' => $commands])
                 </div>
 
                 <div class="mb-3">

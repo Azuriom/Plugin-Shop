@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedDecimal('price');
             $table->char('currency', 3);
             $table->string('gateway_type');
-            $table->string('status'); // pending, expired, completed, error, chargeback, refund
+            $table->string('status'); // pending, expired, completed, error, chargeback, refunded
             $table->string('transaction_id')->nullable();
             $table->timestamps();
 

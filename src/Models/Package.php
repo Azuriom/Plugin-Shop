@@ -14,6 +14,7 @@ use Azuriom\Plugin\Shop\Models\Concerns\IsBuyable;
 use Azuriom\Plugin\Shop\Models\User as ShopUser;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 
 /**
  * @property int $id
@@ -32,14 +33,12 @@ use Illuminate\Database\Eloquent\Model;
  * @property float|null $money
  * @property float|null $giftcard_balance
  * @property bool $custom_price
- * @property bool $need_online
  * @property int $user_limit
  * @property bool $is_enabled
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
  * @property \Azuriom\Plugin\Shop\Models\Category $category
  * @property \Azuriom\Models\Role|null $role
- * @property \Illuminate\Support\Collection|\Azuriom\Models\Server[] $servers
  * @property \Illuminate\Support\Collection|\Azuriom\Plugin\Shop\Models\Discount[] $discounts
  *
  * @method static \Illuminate\Database\Eloquent\Builder enabled()
@@ -50,6 +49,8 @@ class Package extends Model implements Buyable
     use HasTablePrefix;
     use IsBuyable;
     use Loggable;
+
+    public const COMMAND_TRIGGERS = ['purchase', 'refund', 'chargeback'];
 
     /**
      * The table prefix associated with the model.
@@ -65,7 +66,7 @@ class Package extends Model implements Buyable
         'category_id', 'name', 'short_description', 'description', 'image',
         'position', 'price', 'required_packages', 'required_roles', 'has_quantity',
         'commands', 'role_id', 'money', 'giftcard_balance', 'custom_price',
-        'need_online', 'user_limit', 'is_enabled',
+        'user_limit', 'is_enabled',
     ];
 
     /**
@@ -220,13 +221,11 @@ class Package extends Model implements Buyable
         return $this->getPrice() !== $this->getOriginalPrice();
     }
 
-    public function deliver(User $user, int $quantity = 1, PaymentItem $item = null): void
+    public function deliver(PaymentItem $item): void
     {
-        foreach ($this->servers as $server) {
-            $commands = $this->getCommandsToDispatch($quantity, $item);
+        $user = $item->payment->user;
 
-            $server->bridge()->sendCommands($commands, $user, $this->need_online);
-        }
+        $this->dispatchCommands('purchase', $item);
 
         if ($this->role !== null && ! $this->role->is_admin && $user->role->power < $this->role->power) {
             $user->role()->associate($this->role)->save();
@@ -248,7 +247,7 @@ class Package extends Model implements Buyable
             $giftcard->notifyUser($user);
         }
 
-        event(new PackageDelivered($user, $this, $quantity));
+        event(new PackageDelivered($user, $this, $item->quantity));
     }
 
     /**
@@ -259,24 +258,44 @@ class Package extends Model implements Buyable
         $query->where('is_enabled', true)->orderBy('position');
     }
 
-    protected function getCommandsToDispatch(int $quantity, PaymentItem $item = null): array
+    public function dispatchCommands(string $trigger, PaymentItem $item): void
     {
-        $commands = [];
+        $user = $item->payment->user;
 
-        for ($i = 0; $i < $quantity; $i++) {
-            $commands[] = $this->commands;
+        $commandsByServer = collect($this->commands)
+            ->merge(($json = setting('shop.commands')) ? json_decode($json, true) : [])
+            ->filter(fn (mixed $command) => is_array($command))
+            ->filter(fn (array $command) => $command['trigger'] === $trigger)
+            ->groupBy('server');
+
+        $servers = Server::find($commandsByServer->keys());
+
+        foreach ($servers as $server) {
+            $commands = $commandsByServer[$server->id];
+
+            $onlineCommands = $this->mapCommands($commands, true, $item);
+            $offlineCommands = $this->mapCommands($commands, false, $item);
+
+            if (! empty($onlineCommands)) {
+                $server->bridge()->sendCommands($onlineCommands, $user, true);
+            }
+
+            if (! empty($offlineCommands)) {
+                $server->bridge()->sendCommands($offlineCommands, $user, false);
+            }
         }
+    }
 
-        if ($globalCommands = setting('shop.commands')) {
-            $commands[] = json_decode($globalCommands);
-        }
+    protected function mapCommands(Collection $commands, bool $onlineOnly, PaymentItem $item): array
+    {
+        $commands = $commands->filter(fn (array $command) => ((bool) $command['require_online']) === $onlineOnly);
 
-        $price = $item?->price ?? $this->price;
-
-        return array_map(fn (string $command) => str_replace([
-            '{quantity}', '{package_id}', '{package_name}', '{price}', '{transaction_id}',
-        ], [
-            $quantity, $this->id, $this->name, $price, $item?->payment?->transaction_id,
-        ], $command), array_merge([], ...$commands));
+        return $commands->pluck('command')
+            ->map(fn (string $command) => str_replace([
+                '{quantity}', '{package_id}', '{package_name}', '{price}', '{transaction_id}',
+            ], [
+                $item->quantity, $this->id, $this->name, $item->price, $item->payment->transaction_id,
+            ], $command))
+            ->all();
     }
 }

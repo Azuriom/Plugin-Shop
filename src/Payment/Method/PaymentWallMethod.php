@@ -67,11 +67,15 @@ class PaymentWallMethod extends PaymentMethod
             return response()->json(['status' => false, 'message' => 'Payment not validated']);
         }
 
+        $payment = Payment::find(str_replace('payment_', '', $pingback->getProduct()->getId()));
+
+        if ($pingback->isCancelable()) {
+            return $this->processRefund($payment);
+        }
+
         if (! $pingback->isDeliverable()) {
             return response()->json(['status' => false, 'message' => 'Payment not deliverable']);
         }
-
-        $payment = Payment::find(str_replace('payment_', '', $pingback->getProduct()->getId()));
 
         return $this->processPayment($payment, $pingback->getReferenceId());
     }

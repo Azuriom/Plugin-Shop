@@ -102,6 +102,7 @@ class PackageController extends Controller
             'categories' => Category::with('packages')->get(),
             'roles' => Role::where('is_admin', false)->get(),
             'servers' => Server::executable()->get(),
+            'commandTriggers' => Package::COMMAND_TRIGGERS,
         ]);
     }
 
@@ -132,6 +133,7 @@ class PackageController extends Controller
             'categories' => Category::with('packages')->get(),
             'roles' => Role::where('is_admin', false)->get(),
             'servers' => Server::executable()->get(),
+            'commandTriggers' => Package::COMMAND_TRIGGERS,
         ]);
     }
 

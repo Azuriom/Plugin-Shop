@@ -27,7 +27,7 @@ return [
         'required_packages' => 'Articles pré-requis',
         'required_roles' => 'Role pré-requis',
         'role' => 'Grade à définir lors de l\'achat',
-        'servers' => 'Serveurs',
+        'server' => 'Serveur',
         'start_date' => 'Date de début',
         'status' => 'Status',
         'total' => 'Total',

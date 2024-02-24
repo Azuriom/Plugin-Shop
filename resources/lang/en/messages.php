@@ -27,7 +27,7 @@ return [
         'required_packages' => 'Required Packages',
         'required_roles' => 'Required role',
         'role' => 'Role to set after purchase',
-        'servers' => 'Servers',
+        'server' => 'Server',
         'start_date' => 'Start date',
         'status' => 'Status',
         'total' => 'Total',

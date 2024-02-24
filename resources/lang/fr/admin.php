@@ -86,13 +86,30 @@ return [
         'command' => 'La commande ne doit pas commencer par <code>/</code>. Vous pouvez utiliser <code>{player}</code> pour le pseudo du joueur. Pour les jeux Steam, les variables <code>{steam_id}</code> et <code>{steam_id_32}</code> sont disponibles. Les autres variables disponibles sont : :placeholders.',
 
         'custom_price' => 'Permettre à l\'utilisateur de choisir le prix à payer (le prix du produit sera alors le minimum)',
-        'require_online' => 'Exécuter les commandes lorsque l\'utilisateur est en ligne sur le serveur (uniquement disponible avec AzLink)',
         'enable_quantity' => 'Activer la quantité',
 
         'create_category' => 'Créer une catégorie',
         'create_package' => 'Créer un produit',
 
         'enable' => 'Activer ce produit',
+    ],
+
+    'commands' => [
+        'online' => 'Attendre que le joueur soit connecté en jeu (nécessite AzLink)',
+        'offline' => 'Exécuter la commande directement, que le joueur soit connecté en jeu ou non',
+        'servers' => 'Vous devez ajouter au moins un serveur pour créer une commande.',
+
+        'trigger' => 'Événement',
+        'command' => 'Commande',
+        'condition' => 'Condition pour la commande',
+
+        'triggers' => [
+            'purchase' => 'Achat',
+            'expiration' => 'Après expiration',
+            'refund' => 'Paiement remboursé',
+            'chargeback' => 'Litige / Opposition',
+            'renewal' => 'Renouvellement de l\'abonnement',
+        ],
     ],
 
     'gateways' => [

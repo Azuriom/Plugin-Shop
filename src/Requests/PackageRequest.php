@@ -53,7 +53,6 @@ class PackageRequest extends FormRequest
     public function passedValidation(): void
     {
         $this->merge([
-            'commands' => array_filter($this->input('commands', [])),
             'required_packages' => $this->input('required_packages', []),
         ]);
     }

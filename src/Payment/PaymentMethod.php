@@ -149,6 +149,36 @@ abstract class PaymentMethod
         return response()->json(['status' => true]);
     }
 
+    protected function processChargeback(Payment $payment)
+    {
+        return $this->processRefund($payment, true);
+    }
+
+    protected function processRefund(Payment $payment, bool $isChargeback = false)
+    {
+        if ($payment->status === 'refunded' || $payment->status === 'chargeback') {
+            return response()->json([
+                'status' => true,
+                'message' => 'Payment already refunded',
+            ]);
+        }
+
+        if (! $payment->isCompleted()) {
+            logger()->warning("[Shop] Invalid payment status for #{$payment->id}: ".$payment->status);
+
+            return response()->json([
+                'status' => false,
+                'message' => 'Invalid payment status: '.$payment->status,
+            ]);
+        }
+
+        $payment->update(['status' => $isChargeback ? 'chargeback' : 'refunded']);
+
+        $payment->dispatchCommands($isChargeback ? 'chargeback' : 'refund');
+
+        return response()->json(['status' => true]);
+    }
+
     protected function errorResponse()
     {
         return to_route('shop.cart.index')->with('error', trans('shop::messages.payment.error'));

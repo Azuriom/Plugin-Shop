@@ -23,7 +23,6 @@ return new class extends Migration
             $table->text('commands');
             $table->unsignedInteger('role_id')->nullable();
             $table->text('required_roles')->nullable();
-            $table->boolean('need_online')->default(false);
             $table->unsignedInteger('user_limit')->nullable();
             $table->text('required_packages')->nullable();
             $table->boolean('has_quantity')->default(true);
@@ -33,14 +32,6 @@ return new class extends Migration
             $table->foreign('category_id')->references('id')->on('shop_categories');
             $table->foreign('role_id')->references('id')->on('roles')->nullOnDelete();
         });
-
-        Schema::create('shop_package_server', function (Blueprint $table) {
-            $table->unsignedInteger('package_id');
-            $table->unsignedInteger('server_id');
-
-            $table->foreign('package_id')->references('id')->on('shop_packages')->onDelete('cascade');
-            $table->foreign('server_id')->references('id')->on('servers')->onDelete('cascade');
-        });
     }
 
     /**
@@ -49,6 +40,5 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('shop_packages');
-        Schema::dropIfExists('shop_package_server');
     }
 };

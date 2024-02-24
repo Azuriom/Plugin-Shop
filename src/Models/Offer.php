@@ -5,7 +5,6 @@ namespace Azuriom\Plugin\Shop\Models;
 use Azuriom\Models\Traits\HasImage;
 use Azuriom\Models\Traits\HasTablePrefix;
 use Azuriom\Models\Traits\Loggable;
-use Azuriom\Models\User;
 use Azuriom\Plugin\Shop\Models\Concerns\Buyable;
 use Azuriom\Plugin\Shop\Models\Concerns\IsBuyable;
 use Illuminate\Database\Eloquent\Model;
@@ -59,8 +58,8 @@ class Offer extends Model implements Buyable
         return $this->belongsToMany(Gateway::class, 'shop_offer_gateways');
     }
 
-    public function deliver(User $user, int $quantity = 1, PaymentItem $item = null): void
+    public function deliver(PaymentItem $item): void
     {
-        $user->addMoney($this->money * $quantity);
+        $item->payment->user->addMoney($this->money * $item->quantity);
     }
 }

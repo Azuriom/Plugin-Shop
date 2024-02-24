@@ -161,34 +161,23 @@
     </div>
 @endif
 
-<div class="mb-3">
-    <label class="form-label">{{ trans('shop::messages.fields.commands') }}</label>
+<h2 class="h4">{{ trans('shop::messages.fields.commands') }}</h2>
 
-    @include('shop::admin.elements.commands', ['commands' => $package->commands ?? []])
-</div>
+@if($servers->isEmpty())
+    <div class="alert alert-info" role="alert">
+        <p><i class="bi bi-info-circle"></i> @lang('shop::admin.commands.servers')</p>
 
-<div class="mb-3">
-    <label class="form-label" for="serversSelect">{{ trans('shop::messages.fields.servers') }}</label>
-
-    <select class="form-select @error('servers') is-invalid @enderror" id="serversSelect" name="servers[]" multiple>
-        @foreach($servers as $server)
-            <option value="{{ $server->id }}" @selected(isset($package) && $package->servers->contains($server) ?? false)>{{ $server->name }}</option>
-        @endforeach
-    </select>
-
-    @error('servers')
-    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
-    @enderror
-</div>
+        <a href="{{ route('admin.servers.index') }}" target="_blank" class="btn btn-primary btn-sm">
+            <i class="bi bi-hdd-network"></i> {{ trans('admin.servers.title') }}
+        </a>
+    </div>
+@else
+    @include('shop::admin.commands._form', ['commands' => $package->commands ?? []])
+@endif
 
 <div class="mb-3 form-check form-switch">
     <input type="checkbox" class="form-check-input" id="customPriceSwitch" name="custom_price" @checked($package->custom_price ?? false)>
     <label class="form-check-label" for="customPriceSwitch">{{ trans('shop::admin.packages.custom_price') }}</label>
-</div>
-
-<div class="mb-3 form-check form-switch">
-    <input type="checkbox" class="form-check-input" id="needOnlineSwitch" name="need_online" @checked($package->need_online ?? true)>
-    <label class="form-check-label" for="needOnlineSwitch">{{ trans('shop::admin.packages.require_online') }}</label>
 </div>
 
 <div class="mb-3 form-check form-switch">

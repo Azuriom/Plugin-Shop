@@ -2,7 +2,6 @@
 
 namespace Azuriom\Plugin\Shop\Models\Concerns;
 
-use Azuriom\Models\User;
 use Azuriom\Plugin\Shop\Models\PaymentItem;
 
 interface Buyable
@@ -40,5 +39,5 @@ interface Buyable
     /**
      * Deliver this buyable once it is paid.
      */
-    public function deliver(User $user, int $quantity = 1, PaymentItem $item = null): void;
+    public function deliver(PaymentItem $item): void;
 }

@@ -135,6 +135,13 @@ class Payment extends Model
         rescue(fn () => $this->user->notify(new PaymentPaidNotification($this)));
     }
 
+    public function dispatchCommands(string $status): void
+    {
+        foreach ($this->items as $item) {
+            $item->dispatchCommands($status);
+        }
+    }
+
     public function processGiftcards(float $originalTotal, Collection $giftcards): float
     {
         return $giftcards

@@ -74,9 +74,9 @@ class PayPalMethod extends PaymentMethod
         if ($status === 'Reversed') {
             $parentTransactionId = $request->input('parent_txn_id');
 
-            Payment::firstWhere('transaction_id', $parentTransactionId)->update(['status' => 'refund']);
+            $payment = Payment::firstWhere('transaction_id', $parentTransactionId);
 
-            return response()->noContent();
+            return $this->processChargeback($payment);
         }
 
         $payment = Payment::findOrFail($request->input('custom'));

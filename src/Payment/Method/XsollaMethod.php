@@ -109,7 +109,7 @@ class XsollaMethod extends PaymentMethod
         }
 
         if ($message->isRefund()) {
-            $payment->update(['status' => 'refunded']);
+            $this->processRefund($payment);
 
             return;
         }
