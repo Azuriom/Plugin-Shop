@@ -32,6 +32,7 @@ class SettingController extends Controller
             'servers' => Server::executable()->get(),
             'enableHome' => setting('shop.home.enabled', true),
             'homeMessage' => setting('shop.home', ''),
+            'checkoutTOSRequired' => setting('shop.checkout_tos_required', false),
         ]);
     }
 
@@ -47,6 +48,7 @@ class SettingController extends Controller
             'goal' => ['nullable', 'integer', 'min:0'],
             'webhook' => ['nullable', 'url'],
             'commands' => ['sometimes', 'nullable', 'array'],
+            'tos_link' => ['required_if:checkout_tos_required,on', 'nullable', 'url'],
         ]);
 
         $commands = $request->input('commands');
@@ -63,6 +65,8 @@ class SettingController extends Controller
             'shop.home' => $request->input('home_message'),
             'shop.home.enabled' => $request->has('enable_home'),
             'shop.commands' => is_array($commands) ? json_encode($commands) : null,
+            'shop.checkout_tos_required' => $request->has('checkout_tos_required'),
+            'shop.tos_link' => $request->input('tos_link'),
         ]);
 
         return to_route('shop.admin.settings')

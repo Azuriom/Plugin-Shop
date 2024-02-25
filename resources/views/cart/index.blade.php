@@ -199,6 +199,12 @@
                     </div>
 
                     <div class="col-md-6 text-end">
+                        @if(setting('shop.checkout_tos_required'))
+                            <span class="p-2">
+                                {{ trans('shop::messages.cart.accept_tos_prefix', ['buy' => use_site_money() ? trans('shop::messages.buy') : trans('shop::messages.cart.checkout') ]) }}
+                                <a class="link-info" href="{{ setting('shop.tos_link') }}" target="_blank">{{ trans('shop::messages.cart.accept_tos') }}</a>
+                            </span>
+                        @endif
 
                         @if(use_site_money())
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#confirmBuyModal">

@@ -103,6 +103,24 @@
                     <small id="webhookInfo" class="form-text">{{ trans('shop::admin.settings.webhook_info') }}</small>
                 </div>
 
+                <div class="mb-3">
+                    <label class="form-label" for="tosLink">{{ trans('shop::admin.settings.tos_link') }}</label>
+                    <input type="text" class="form-control @error('tos_link') is-invalid @enderror" id="tosLink" name="tos_link" placeholder="https://yoursiteaddress.example/pages/terms-of-service" value="{{ old('tos_link', setting('shop.tos_link')) }}" aria-describedby="tosLinkInfo">
+
+                    @error('tos_link')
+                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                    @enderror
+
+                    <small id="tosLinkInfo" class="form-text">{{ trans('shop::admin.settings.tos_link_info') }}</small>
+                </div>
+
+                <div class="mb-3">
+                    <div class="form-check form-switch">
+                        <input type="checkbox" class="form-check-input" id="checkoutTOSRequired" name="checkout_tos_required" @checked($checkoutTOSRequired)>
+                        <label class="form-check-label" for="checkoutTOSRequired">{{ trans('shop::admin.settings.tos_required') }}</label>
+                    </div>
+                </div>
+
                 <button type="submit" class="btn btn-primary">
                     <i class="bi bi-save"></i> {{ trans('messages.actions.save') }}
                 </button>

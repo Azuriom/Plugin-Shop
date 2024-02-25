@@ -179,6 +179,9 @@ return [
         'recent_payments' => 'Recent payments limit to display in sidebar (set to 0 to disable)',
         'display_amount' => 'Display amount spend in recent payments and top customer',
         'top_customer' => 'Display top monthly customer in sidebar',
+        'tos_required' => 'Force users to accept TOS before checkout',
+        'tos_link' => 'Link to your terms of service',
+        'tos_link_info' => 'The full URL to your terms of service page for users to read',
     ],
 
     'logs' => [
