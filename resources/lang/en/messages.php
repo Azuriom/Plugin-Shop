@@ -78,8 +78,8 @@ return [
             'execute' => 'An unexpected error occurred during payment, your purchase got refund.',
         ],
 
-        'accept_tos_prefix' => 'By clicking ":buy" I accept the',
-        'accept_tos' => 'terms of service',
+        'terms' => 'I accept the :terms.',
+        'terms_link' => 'terms of service',
     ],
 
     'coupons' => [

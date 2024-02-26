@@ -179,6 +179,8 @@ return [
         'recent_payments' => 'Limite de paiements récents à afficher dans la barre latérale',
         'display_amount' => 'Afficher le montant dans les paiements récents et meilleur acheteur',
         'top_customer' => 'Afficher le meilleur acheteur du mois dans la barre latérale',
+
+        'terms_required' => 'Conditions d\'utilisation obligatoires',
     ],
 
     'logs' => [

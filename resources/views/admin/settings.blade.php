@@ -103,21 +103,21 @@
                     <small id="webhookInfo" class="form-text">{{ trans('shop::admin.settings.webhook_info') }}</small>
                 </div>
 
-                <div class="mb-3">
-                    <label class="form-label" for="tosLink">{{ trans('shop::admin.settings.tos_link') }}</label>
-                    <input type="text" class="form-control @error('tos_link') is-invalid @enderror" id="tosLink" name="tos_link" placeholder="https://yoursiteaddress.example/pages/terms-of-service" value="{{ old('tos_link', setting('shop.tos_link')) }}" aria-describedby="tosLinkInfo">
-
-                    @error('tos_link')
-                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
-                    @enderror
-
-                    <small id="tosLinkInfo" class="form-text">{{ trans('shop::admin.settings.tos_link_info') }}</small>
+                <div class="mb-3 form-check form-switch">
+                    <input type="checkbox" class="form-check-input" id="termsSwitch" name="terms_required" data-bs-toggle="collapse" data-bs-target="#terms" @checked($termsRequired)>
+                    <label class="form-check-label" for="termsSwitch">{{ trans('shop::admin.settings.terms_required') }}</label>
                 </div>
 
-                <div class="mb-3">
-                    <div class="form-check form-switch">
-                        <input type="checkbox" class="form-check-input" id="checkoutTOSRequired" name="checkout_tos_required" @checked($checkoutTOSRequired)>
-                        <label class="form-check-label" for="checkoutTOSRequired">{{ trans('shop::admin.settings.tos_required') }}</label>
+                <div id="terms" class="{{ $termsRequired ? 'show' : 'collapse' }}">
+                    <div class="card card-body mb-3">
+                        <div class="mb-0">
+                            <label class="form-label" for="termsLink">{{ trans('shop::admin.settings.terms_link') }}</label>
+                            <input type="text" class="form-control @error('terms') is-invalid @enderror" id="termsLink" name="terms" value="{{ old('terms', setting('shop.terms')) }}">
+
+                            @error('terms_url')
+                            <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                            @enderror
+                        </div>
                     </div>
                 </div>
 
