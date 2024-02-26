@@ -62,6 +62,7 @@ return [
         'global_limit' => 'Limite d\'utilisations globale',
         'active' => 'Actif',
         'enable' => 'Activer cette carte cadeau',
+        'link' => 'Lien à partager',
     ],
 
     'discounts' => [

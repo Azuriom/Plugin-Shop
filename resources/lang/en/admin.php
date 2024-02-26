@@ -62,6 +62,7 @@ return [
         'global_limit' => 'Global limit',
         'active' => 'Active',
         'enable' => 'Enable the gift card',
+        'link' => 'Shareable link',
     ],
 
     'discounts' => [
