@@ -32,6 +32,7 @@ class SettingController extends Controller
             'servers' => Server::executable()->get(),
             'enableHome' => setting('shop.home.enabled', true),
             'homeMessage' => setting('shop.home', ''),
+            'termsRequired' => old('terms_required', setting('shop.terms') !== null),
             'enableCoupons' => setting('shop.enable_coupons', true),
         ]);
     }
@@ -48,6 +49,7 @@ class SettingController extends Controller
             'goal' => ['nullable', 'integer', 'min:0'],
             'webhook' => ['nullable', 'url'],
             'commands' => ['sometimes', 'nullable', 'array'],
+            'terms' => ['required_with:terms_required', 'nullable', 'string'],
         ]);
 
         $commands = $request->input('commands');
@@ -64,6 +66,7 @@ class SettingController extends Controller
             'shop.home' => $request->input('home_message'),
             'shop.home.enabled' => $request->has('enable_home'),
             'shop.commands' => is_array($commands) ? json_encode($commands) : null,
+            'shop.terms' => $request->filled('terms_required') ? $request->input('terms') : null,
             'shop.enable_coupons' => $request->has('enable_coupons'),
         ]);
 

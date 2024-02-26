@@ -62,6 +62,7 @@ return [
         'global_limit' => 'Limite d\'utilisations globale',
         'active' => 'Actif',
         'enable' => 'Activer cette carte cadeau',
+        'link' => 'Lien à partager',
     ],
 
     'discounts' => [
@@ -179,6 +180,9 @@ return [
         'recent_payments' => 'Limite de paiements récents à afficher dans la barre latérale',
         'display_amount' => 'Afficher le montant dans les paiements récents et meilleur acheteur',
         'top_customer' => 'Afficher le meilleur acheteur du mois dans la barre latérale',
+
+        'terms_required' => 'Demander aux utilisateurs d\'accepter les conditions avant un achat',
+        'terms_link' => 'Liens vers les conditions générales de vente',
     ],
 
     'logs' => [
