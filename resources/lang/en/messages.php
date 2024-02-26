@@ -33,6 +33,7 @@ return [
         'total' => 'Total',
         'user_id' => 'User ID',
         'user_limit' => 'User purchase limit',
+        'global_limit' => 'Global purchase limit',
     ],
 
     'actions' => [

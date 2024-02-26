@@ -59,27 +59,21 @@
     </div>
 
     <div class="mb-3 col-md-6">
-        <label class="form-label" for="roleSelect">{{ trans('shop::messages.fields.role') }}</label>
-        <select class="form-select @error('role_id') is-invalid @enderror" id="roleSelect" name="role_id">
-            <option value="">{{ trans('messages.none') }}</option>
-            @foreach($roles as $role)
-                <option value="{{ $role->id }}" @selected(isset($package) && $role->is($package->role))>
-                    {{ $role->name }}
-                </option>
-            @endforeach
-        </select>
-
-        @error('role_id')
-        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
-        @enderror
-    </div>
-
-    <div class="mb-3 col-md-6">
         <label class="form-label" for="userLimitInput">{{ trans('shop::messages.fields.user_limit') }}</label>
 
         <input type="number" min="0" step="1" class="form-control @error('user_limit') is-invalid @enderror" id="userLimitInput" name="user_limit" value="{{ old('user_limit', $package->user_limit ?? '') }}">
 
         @error('user_limit')
+        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+        @enderror
+    </div>
+
+    <div class="mb-3 col-md-6">
+        <label class="form-label" for="globalLimitInput">{{ trans('shop::messages.fields.global_limit') }}</label>
+
+        <input type="number" min="0" step="1" class="form-control @error('global_limit') is-invalid @enderror" id="globalLimitInput" name="global_limit" value="{{ old('global_limit', $package->global_limit ?? '') }}">
+
+        @error('global_limit')
         <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
         @enderror
     </div>
@@ -133,6 +127,22 @@
     </div>
 
     <div class="mb-3 col-md-6">
+        <label class="form-label" for="roleSelect">{{ trans('shop::messages.fields.role') }}</label>
+        <select class="form-select @error('role_id') is-invalid @enderror" id="roleSelect" name="role_id">
+            <option value="">{{ trans('messages.none') }}</option>
+            @foreach($roles as $role)
+                <option value="{{ $role->id }}" @selected(isset($package) && $role->is($package->role))>
+                    {{ $role->name }}
+                </option>
+            @endforeach
+        </select>
+
+        @error('role_id')
+        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+        @enderror
+    </div>
+
+    <div class="mb-3 col-md-6">
         <label class="form-label" for="moneyInput">{{ trans('shop::admin.packages.money') }}</label>
 
         <div class="input-group @error('money') has-validation @enderror">
@@ -144,10 +154,8 @@
             @enderror
         </div>
     </div>
-</div>
 
-@if(use_site_money())
-    <div class="mb-3">
+    <div class="mb-3 col-md-6">
         <label class="form-label" for="giftcardInput">{{ trans('shop::admin.packages.giftcard') }}</label>
 
         <div class="input-group @error('giftcard_balance') has-validation @enderror">
@@ -159,7 +167,7 @@
             @enderror
         </div>
     </div>
-@endif
+</div>
 
 <h2 class="h4">{{ trans('shop::messages.fields.commands') }}</h2>
 

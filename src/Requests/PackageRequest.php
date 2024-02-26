@@ -32,6 +32,7 @@ class PackageRequest extends FormRequest
             'description' => ['required', 'string'],
             'price' => ['required', 'numeric', 'min:0'],
             'user_limit' => ['nullable', 'integer', 'min:0'],
+            'global_limit' => ['nullable', 'integer', 'min:0', 'gte:user_limit'],
             'servers.*' => ['required', 'exists:servers,id'],
             'required_packages' => ['sometimes', 'nullable', 'array'],
             'required_roles' => ['sometimes', 'nullable', 'array'],

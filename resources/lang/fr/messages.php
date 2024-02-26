@@ -33,6 +33,7 @@ return [
         'total' => 'Total',
         'user_id' => 'ID de l\'utilisateur',
         'user_limit' => 'Limite d\'achats par utilisateur',
+        'global_limit' => 'Limite d\'achats globale',
     ],
 
     'actions' => [

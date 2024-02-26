@@ -14,6 +14,7 @@ use Azuriom\Plugin\Shop\Models\Concerns\IsBuyable;
 use Azuriom\Plugin\Shop\Models\User as ShopUser;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 
 /**
@@ -34,6 +35,7 @@ use Illuminate\Support\Collection;
  * @property float|null $giftcard_balance
  * @property bool $custom_price
  * @property int $user_limit
+ * @property int $global_limit
  * @property bool $is_enabled
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
@@ -66,7 +68,7 @@ class Package extends Model implements Buyable
         'category_id', 'name', 'short_description', 'description', 'image',
         'position', 'price', 'required_packages', 'required_roles', 'has_quantity',
         'commands', 'role_id', 'money', 'giftcard_balance', 'custom_price',
-        'user_limit', 'is_enabled',
+        'user_limit', 'global_limit', 'is_enabled',
     ];
 
     /**
@@ -137,7 +139,7 @@ class Package extends Model implements Buyable
         $purchasedPackage = $this->category->packages
             ->filter(fn (self $package) => $package->price < $this->price)
             ->sortByDesc('price')
-            ->first(fn (self $package) => $package->getUserTotalPurchases() > 0);
+            ->first(fn (self $package) => $package->countUserPurchases() > 0);
 
         return $purchasedPackage->price ?? 0;
     }
@@ -160,14 +162,14 @@ class Package extends Model implements Buyable
         $packages = self::findMany($this->required_packages);
 
         return ! $packages->contains(function (self $package) {
-            return $package->getUserTotalPurchases() < 1;
+            return $package->countUserPurchases() < 1;
         });
     }
 
     /**
      * Get the total purchases for this package for the current user.
      */
-    public function getUserTotalPurchases(): int
+    public function countUserPurchases(): int
     {
         if (auth()->guest()) {
             return 0;
@@ -181,15 +183,28 @@ class Package extends Model implements Buyable
                 ->where('shop_payments.status', 'completed')
                 ->where('shop_payment_items.buyable_type', 'shop.packages')
                 ->get()
-                ->countBy('buyable_id');
+                ->groupBy('buyable_id')
+                ->map(fn (Collection $items) => $items->sum('quantity'));
         }
 
         return $purchases->get($this->id, 0);
     }
 
-    public function getRemainingUserPurchases(): int
+    /**
+     * Get the total purchases for this package for the current user.
+     */
+    public function countTotalPurchases(): int
     {
-        return max($this->getMaxQuantity() - $this->getUserTotalPurchases(), 0);
+        static $purchases = [];
+
+        return Arr::get($purchases, $this->id, function () use (&$purchases) {
+            return $purchases[$this->id] = PaymentItem::where('buyable_id', $this->id)
+                ->where('buyable_type', 'shop.packages')
+                ->whereHas('payment', function (Builder $query) {
+                    $query->where('status', 'completed');
+                })
+                ->sum('quantity');
+        });
     }
 
     public function getOriginalPrice(): float
@@ -199,11 +214,12 @@ class Package extends Model implements Buyable
 
     public function getMaxQuantity(): int
     {
-        if ($this->user_limit < 1) {
-            return 100;
-        }
+        $user = $this->user_limit > 0
+            ? $this->user_limit - $this->countUserPurchases() : 100;
+        $global = $this->global_limit > 0
+            ? $this->global_limit - $this->countTotalPurchases() : 100;
 
-        return max($this->user_limit - $this->getUserTotalPurchases(), 0);
+        return max(min($user, $global), 0);
     }
 
     public function isInCart(): bool

@@ -44,7 +44,7 @@
                             <label for="quantity">{{ trans('shop::messages.fields.quantity') }}</label>
 
                             <div class="mx-3">
-                                <input type="number" min="0" max="{{ $package->getMaxQuantity() }}" size="5" class="form-control" name="quantity" id="quantity" value="1" required>
+                                <input type="number" min="1" max="{{ $package->getMaxQuantity() }}" size="5" class="form-control" name="quantity" id="quantity" value="1" required>
                             </div>
                         @endif
 
