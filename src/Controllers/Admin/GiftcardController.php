@@ -14,9 +14,11 @@ class GiftcardController extends Controller
      */
     public function index()
     {
-        return view('shop::admin.giftcards.index', [
-            'giftcards' => Giftcard::all(),
-        ]);
+        $giftcards = Giftcard::with('payments')->get();
+
+        $giftcards->each(fn (Giftcard $card) => $card->refreshBalance());
+
+        return view('shop::admin.giftcards.index', ['giftcards' => $giftcards]);
     }
 
     /**
@@ -45,6 +47,8 @@ class GiftcardController extends Controller
      */
     public function edit(Giftcard $giftcard)
     {
+        $giftcard->load('payments')->refreshBalance();
+
         return view('shop::admin.giftcards.edit', ['giftcard' => $giftcard]);
     }
 

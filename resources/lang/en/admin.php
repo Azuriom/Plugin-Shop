@@ -63,6 +63,7 @@ return [
         'active' => 'Active',
         'enable' => 'Enable the gift card',
         'link' => 'Shareable link',
+        'pending' => 'A payment is pending, the balance might not be updated yet.',
     ],
 
     'discounts' => [

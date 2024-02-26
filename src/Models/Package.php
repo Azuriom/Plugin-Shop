@@ -99,11 +99,6 @@ class Package extends Model implements Buyable
         return $this->belongsTo(Role::class);
     }
 
-    public function servers()
-    {
-        return $this->belongsToMany(Server::class, 'shop_package_server');
-    }
-
     public function discounts()
     {
         return $this->belongsToMany(Discount::class, 'shop_discount_package');

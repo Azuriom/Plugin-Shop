@@ -131,5 +131,6 @@ return [
         'error' => 'Cette carte cadeau n\'existe pas, est expirée ou ne peut plus être utilisée.',
         'add' => 'Utiliser une carte cadeau',
         'notification' => 'Vous avez reçu une carte cadeau, son code est : :code (:balance).',
+        'pending' => 'Un paiement est déjà en cours pour cette carte cadeau. Complétez le paiement ou attendez un peu.',
     ],
 ];

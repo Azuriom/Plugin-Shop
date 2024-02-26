@@ -20,7 +20,15 @@ class GiftcardController extends Controller
     {
         $validated = $this->validate($request, ['code' => 'required']);
 
-        $giftcard = Giftcard::active()->firstWhere($validated);
+        $giftcard = Giftcard::firstWhere($validated);
+
+        if ($giftcard !== null && $giftcard->isPending()) {
+            throw ValidationException::withMessages([
+                'code' => trans('shop::messages.giftcards.pending'),
+            ]);
+        }
+
+        $giftcard?->refreshBalance();
 
         if ($giftcard === null || ! $giftcard->isActive()) {
             throw ValidationException::withMessages([
@@ -50,6 +58,8 @@ class GiftcardController extends Controller
      */
     public function use(Request $request)
     {
+        abort_if(! use_site_money(), 404);
+
         $validated = $this->validate($request, ['code' => 'required']);
 
         $giftcard = Giftcard::active()->firstWhere($validated);

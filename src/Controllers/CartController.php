@@ -87,6 +87,8 @@ class CartController extends Controller
 
         $user->removeMoney($total);
 
+        $cart->destroy();
+
         try {
             payment_manager()->buyPackages($cart);
         } catch (Exception $e) {
@@ -96,8 +98,6 @@ class CartController extends Controller
 
             return to_route('shop.cart.index')->with('error', trans('shop::messages.cart.errors.execute'));
         }
-
-        $cart->destroy();
 
         return to_route('shop.home')->with('success', trans('shop::messages.cart.success'));
     }

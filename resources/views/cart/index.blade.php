@@ -191,7 +191,7 @@
                     @endif
                 </div>
 
-                <form @if(use_site_money()) action="{{ route('shop.payments.payment') }}" @endif>
+                <form @if(! use_site_money()) action="{{ route('shop.payments.payment') }}" @endif>
                     @if(! use_site_money())
                         <div class="d-flex justify-content-end">
                             @include('shop::cart._terms', ['termsUrl' => $termsUrl])

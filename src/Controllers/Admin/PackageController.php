@@ -117,8 +117,6 @@ class PackageController extends Controller
             $package->storeImage($request->file('image'), true);
         }
 
-        $package->servers()->sync($request->input('servers', []));
-
         return to_route('shop.admin.packages.index')
             ->with('success', trans('messages.status.success'));
     }
@@ -147,8 +145,6 @@ class PackageController extends Controller
         }
 
         $package->update(Arr::except($request->validated(), 'image'));
-
-        $package->servers()->sync($request->input('servers', []));
 
         return to_route('shop.admin.packages.index')
             ->with('success', trans('messages.status.success'));

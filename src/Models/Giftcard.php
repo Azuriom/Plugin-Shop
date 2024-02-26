@@ -9,6 +9,7 @@ use Azuriom\Plugin\Shop\Notifications\GiftcardPurchased;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 
 /**
  * @property int $id
@@ -63,6 +64,24 @@ class Giftcard extends Model
     public function isActive(): bool
     {
         return $this->balance > 0 && $this->start_at->isPast() && $this->expire_at->isFuture();
+    }
+
+    public function isPending()
+    {
+        return Cache::has('shop.giftcards.pending.'.$this->id);
+    }
+
+    public function refreshBalance()
+    {
+        if ($this->isPending()) {
+            return;
+        }
+
+        $total = $this->payments()->scopes('notPending')->sum('amount');
+
+        $this->update([
+            'balance' => max($this->original_balance - $total, 0),
+        ]);
     }
 
     public function notifyUser(User $user): void

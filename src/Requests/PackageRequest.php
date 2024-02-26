@@ -48,11 +48,14 @@ class PackageRequest extends FormRequest
     }
 
     /**
-     * Handle a passed validation attempt.
+     * Prepare the data for validation.
      */
-    public function passedValidation(): void
+    protected function prepareForValidation(): void
     {
+        $this->mergeCheckboxes();
+
         $this->merge([
+            'commands' => $this->input('commands', []),
             'required_packages' => $this->input('required_packages', []),
         ]);
     }

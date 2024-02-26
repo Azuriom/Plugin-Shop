@@ -131,5 +131,6 @@ return [
         'error' => 'This gift card does not exist, has expired or can no longer be used.',
         'add' => 'Add a gift card',
         'notification' => 'You received a giftcard, the code is :code (:balance).',
+        'pending' => 'A payment has already started for this giftcard. Complete the payment or wait a few minutes.',
     ],
 ];
