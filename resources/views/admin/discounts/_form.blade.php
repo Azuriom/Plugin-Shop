@@ -77,3 +77,8 @@
     <input type="checkbox" class="form-check-input" id="enableSwitch" name="is_enabled" @checked($discount->is_enabled ?? true)>
     <label class="form-check-label" for="enableSwitch">{{ trans('shop::admin.discounts.enable') }}</label>
 </div>
+
+<div class="mb-3 form-check form-switch">
+    <input type="checkbox" class="form-check-input" id="allowCouponsSwitch" name="coupons_allowed" @checked($discount->coupons_allowed ?? true)>
+    <label class="form-check-label" for="allowCouponsSwitch">{{ trans('shop::admin.discounts.coupons') }}</label>
+</div>

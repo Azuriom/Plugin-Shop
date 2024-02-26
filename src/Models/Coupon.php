@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $user_limit
  * @property int $global_limit
  * @property bool $can_cumulate
+ * @property bool $discount_allowed
  * @property bool $is_enabled
  * @property bool $is_global
  * @property bool $is_fixed
@@ -42,7 +43,7 @@ class Coupon extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'code', 'discount', 'start_at', 'expire_at', 'user_limit', 'global_limit', 'can_cumulate', 'is_enabled', 'is_global', 'is_fixed',
+        'code', 'discount', 'start_at', 'expire_at', 'user_limit', 'global_limit', 'can_cumulate', 'is_enabled', 'is_global', 'is_fixed', 'discount_allowed',
     ];
 
     /**
@@ -57,6 +58,7 @@ class Coupon extends Model
         'is_enabled' => 'boolean',
         'is_global' => 'boolean',
         'is_fixed' => 'boolean',
+        'discount_allowed' => 'boolean',
     ];
 
     /**

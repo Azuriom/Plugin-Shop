@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id
  * @property string $name
  * @property int $discount
+ * @property bool $coupons_allowed
  * @property bool $is_global
  * @property bool $is_enabled
  * @property \Carbon\Carbon $start_at
@@ -37,7 +38,7 @@ class Discount extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'name', 'discount', 'packages', 'is_global', 'is_enabled', 'start_at', 'end_at',
+        'name', 'discount', 'packages', 'is_global', 'is_enabled', 'start_at', 'end_at', 'coupons_allowed',
     ];
 
     /**
@@ -50,6 +51,7 @@ class Discount extends Model
         'end_at' => 'datetime',
         'is_global' => 'boolean',
         'is_enabled' => 'boolean',
+        'coupons_allowed' => 'boolean',
     ];
 
     /**

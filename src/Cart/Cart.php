@@ -2,8 +2,10 @@
 
 namespace Azuriom\Plugin\Shop\Cart;
 
+use Azuriom\Plugin\Shop\Exceptions\CouponNotAllowedException;
 use Azuriom\Plugin\Shop\Models\Concerns\Buyable;
 use Azuriom\Plugin\Shop\Models\Coupon;
+use Azuriom\Plugin\Shop\Models\Discount;
 use Azuriom\Plugin\Shop\Models\Giftcard;
 use Azuriom\Plugin\Shop\Models\Package;
 use Illuminate\Contracts\Session\Session;
@@ -38,11 +40,20 @@ class Cart implements Arrayable
     private Collection $giftcards;
 
     /**
+     * A collection of discounts applied to the cart.
+     */
+    private Collection $packageDiscounts;
+
+    /**
      * Create a new cart instance.
      */
-    private function __construct(Session $session = null)
+    private function __construct(?Session $session = null)
     {
         $this->session = $session;
+        $this->packageDiscounts = collect();
+
+        // Always add active global discounts instantly.
+        $this->addAppliedDiscounts(Discount::global()->active()->get());
 
         if ($session === null) {
             $this->items = collect();
@@ -58,13 +69,19 @@ class Cart implements Arrayable
     /**
      * Add an item to the cart.
      */
-    public function add(Buyable $buyable, int $quantity = 1, float $userPrice = null): void
+    public function add(Buyable $buyable, int $quantity = 1, ?float $userPrice = null): void
     {
         if ($quantity <= 0) {
             return;
         }
 
         $cartItem = $this->get($buyable);
+
+        if ($buyable instanceof Package) {
+            /** @var Collection $discounts */
+            $discounts = $buyable->discounts()->active()->get();
+            $this->addAppliedDiscounts($discounts);
+        }
 
         if ($cartItem === null) {
             $this->set($buyable, $quantity, $userPrice);
@@ -81,7 +98,7 @@ class Cart implements Arrayable
     /**
      * Set the quantity of an item in the cart.
      */
-    public function set(Buyable $buyable, int $quantity = 1, float $userPrice = null): void
+    public function set(Buyable $buyable, int $quantity = 1, ?float $userPrice = null): void
     {
         if ($quantity <= 0) {
             $this->remove($buyable);
@@ -115,6 +132,10 @@ class Cart implements Arrayable
     public function remove(Buyable $buyable): void
     {
         $this->items->forget($this->getItemId($buyable));
+
+        if ($buyable instanceof Package) {
+            $this->removeAppliedDiscounts($buyable->discounts()->active()->get());
+        }
 
         $this->save();
     }
@@ -251,9 +272,15 @@ class Cart implements Arrayable
 
     /**
      * Add a coupon to the cart.
+     *
+     * @throws CouponNotAllowedException
      */
     public function addCoupon(Coupon $coupon): void
     {
+        if ($this->couponClashesWithActiveDiscount($coupon)) {
+            throw new CouponNotAllowedException();
+        }
+
         $this->coupons->put($coupon->id, $coupon);
 
         $this->save();
@@ -404,5 +431,60 @@ class Cart implements Arrayable
             'coupons' => $this->coupons->pluck('code')->all(),
             'giftcards' => $this->giftcards->pluck('code')->all(),
         ];
+    }
+
+    /**
+     * Add discounts applied to cart.
+     */
+    private function addAppliedDiscounts(Collection $discounts): void
+    {
+        if ($discounts->count() > 0) {
+            $discounts->each(function (Discount $discount) {
+                if (! $this->packageDiscounts->contains($discount->id)) {
+                    $this->packageDiscounts->put($discount->id, $discount);
+                }
+            });
+        }
+    }
+
+    /**
+     * Remove given discounts from applied discounts collection.
+     * Skip global discounts as they are always applied regardless of what item
+     * has been placed in or removed from the cart.
+     */
+    private function removeAppliedDiscounts(Collection $discounts): void
+    {
+        if ($discounts->count() > 0) {
+            $discounts->each(function (Discount $discount) {
+                if ($this->packageDiscounts->contains($discount->id) && ! $discount->is_global) {
+                    $this->packageDiscounts->forget($discount->id);
+                }
+            });
+        }
+    }
+
+    /**
+     * Determine if the given coupon will clash with applied discounts.
+     */
+    private function couponClashesWithActiveDiscount(Coupon $coupon): bool
+    {
+        $couponClashes = false;
+
+        if ($this->packageDiscounts->count() === 0) {
+            return false;
+        }
+
+        if (! $coupon->discount_allowed) {
+            return true;
+        }
+
+        /** @var Discount $discount */
+        foreach ($this->packageDiscounts as $discount) {
+            if (! $discount->coupons_allowed) {
+                $couponClashes = true;
+            }
+        }
+
+        return $couponClashes;
     }
 }

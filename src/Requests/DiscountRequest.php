@@ -15,7 +15,7 @@ class DiscountRequest extends FormRequest
      * @var array<int, string>
      */
     protected array $checkboxes = [
-        'is_global', 'is_enabled',
+        'is_global', 'is_enabled', 'coupons_allowed',
     ];
 
     /**
@@ -33,6 +33,7 @@ class DiscountRequest extends FormRequest
             'end_at' => ['required', 'date', 'after:start_at'],
             'is_global' => ['filled', 'boolean'],
             'is_enabled' => ['filled', 'boolean'],
+            'coupons_allowed' => ['filled', 'boolean'],
         ];
     }
 }

@@ -52,6 +52,7 @@ return [
         'active' => 'Active',
         'usage' => 'Under usage limit',
         'enable' => 'Enable the coupon',
+        'discount' => 'Allow usage of discounts with coupon',
     ],
 
     'giftcards' => [
@@ -72,6 +73,7 @@ return [
         'global' => 'Should the discount be active on all the shop ?',
         'active' => 'Active',
         'enable' => 'Enable the discount',
+        'coupons' => 'Allow usage of coupons with discount',
     ],
 
     'packages' => [

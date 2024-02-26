@@ -84,6 +84,7 @@ return [
         'add' => 'Add a coupon',
         'error' => 'This coupon does not exist, has expired or can no longer be used.',
         'cumulate' => 'You cannot use this coupon with an other coupon.',
+        'discount' => 'You cannot use this coupon with one or more of the existing discounts applied.',
     ],
 
     'payment' => [
