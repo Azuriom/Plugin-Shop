@@ -114,7 +114,7 @@
                             <label class="form-label" for="termsLink">{{ trans('shop::admin.settings.terms_link') }}</label>
                             <input type="text" class="form-control @error('terms') is-invalid @enderror" id="termsLink" name="terms" value="{{ old('terms', setting('shop.terms')) }}">
 
-                            @error('terms_url')
+                            @error('terms')
                             <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
                         </div>

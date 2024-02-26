@@ -48,7 +48,7 @@ class SettingController extends Controller
             'goal' => ['nullable', 'integer', 'min:0'],
             'webhook' => ['nullable', 'url'],
             'commands' => ['sometimes', 'nullable', 'array'],
-            'terms_required' => ['required_with:terms_required', 'nullable', 'string'],
+            'terms' => ['required_with:terms_required', 'nullable', 'string'],
         ]);
 
         $commands = $request->input('commands');
