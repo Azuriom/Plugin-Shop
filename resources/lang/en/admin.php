@@ -179,6 +179,9 @@ return [
         'recent_payments' => 'Recent payments limit to display in sidebar (set to 0 to disable)',
         'display_amount' => 'Display amount spend in recent payments and top customer',
         'top_customer' => 'Display top monthly customer in sidebar',
+
+        'terms_required' => 'Require users to accept terms of service before purchase',
+        'terms_link' => 'Links to terms of service',
     ],
 
     'logs' => [

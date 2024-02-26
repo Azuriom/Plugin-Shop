@@ -191,26 +191,29 @@
                     @endif
                 </div>
 
-                <div class="row">
-                    <div class="col-md-6">
+                <form @if(use_site_money()) action="{{ route('shop.payments.payment') }}" @endif>
+                    @if(! use_site_money())
+                        <div class="d-flex justify-content-end">
+                            @include('shop::cart._terms', ['termsUrl' => $termsUrl])
+                        </div>
+                    @endif
+
+                    <div class="d-flex">
                         <a href="{{ route('shop.home') }}" class="btn btn-secondary">
                             <i class="bi bi-arrow-left"></i> {{ trans('shop::messages.cart.back') }}
                         </a>
-                    </div>
-
-                    <div class="col-md-6 text-end">
 
                         @if(use_site_money())
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#confirmBuyModal">
+                            <button type="button" class="btn btn-primary ms-auto" data-bs-toggle="modal" data-bs-target="#confirmBuyModal">
                                 {{ trans('shop::messages.buy') }}
                             </button>
                         @else
-                            <a href="{{ route('shop.payments.payment') }}" class="btn btn-primary">
+                            <button type="submit" class="btn btn-primary ms-auto">
                                 <i class="bi bi-cart-check"></i> {{ trans('shop::messages.cart.checkout') }}
-                            </a>
+                            </button>
                         @endif
                     </div>
-                </div>
+                </form>
             @else
                 <div class="alert alert-warning" role="alert">
                     <i class="bi bi-exclamation-circle"></i> {{ trans('shop::messages.cart.empty') }}
@@ -238,19 +241,21 @@
                         {{ trans('shop::messages.cart.confirm.price', ['price' => shop_format_amount($cart->payableTotal())]) }}
                     </div>
 
-                    <div class="modal-footer">
-                        <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">
-                            {{ trans('messages.actions.cancel') }}
-                        </button>
+                    <form class="modal-footer" method="POST" action="{{ route('shop.cart.payment') }}">
+                        @csrf
 
-                        <form method="POST" action="{{ route('shop.cart.payment') }}">
-                            @csrf
+                        @include('shop::cart._terms', ['termsUrl' => $termsUrl])
+
+                        <div class="ms-auto">
+                            <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">
+                                {{ trans('messages.actions.cancel') }}
+                            </button>
 
                             <button class="btn btn-primary" type="submit">
                                 {{ trans('shop::messages.cart.pay') }}
                             </button>
-                        </form>
-                    </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
