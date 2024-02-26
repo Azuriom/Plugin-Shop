@@ -21,6 +21,7 @@ class ProfileController extends Controller
         return view('shop::profile.index', [
             'user' => $user,
             'payments' => $payments,
+            'giftCardCode' => $request->query('giftcard'),
         ]);
     }
 }

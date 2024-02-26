@@ -77,6 +77,9 @@ return [
             'money' => 'Vous n\'avez pas assez d\'argent pour faire cet achat.',
             'execute' => 'Une erreur est survenue lors du paiement, votre achat a été remboursé.',
         ],
+
+        'terms' => 'J\'accepte les :terms.',
+        'terms_link' => 'conditions générales de vente',
     ],
 
     'coupons' => [

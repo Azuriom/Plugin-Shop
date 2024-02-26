@@ -62,6 +62,7 @@ return [
         'global_limit' => 'Global limit',
         'active' => 'Active',
         'enable' => 'Enable the gift card',
+        'link' => 'Shareable link',
     ],
 
     'discounts' => [
@@ -180,6 +181,8 @@ return [
         'display_amount' => 'Display amount spend in recent payments and top customer',
         'top_customer' => 'Display top monthly customer in sidebar',
         'enable_gift_cards' => 'Enable gift cards',
+        'terms_required' => 'Require users to accept terms of service before purchase',
+        'terms_link' => 'Links to terms of service',
     ],
 
     'logs' => [

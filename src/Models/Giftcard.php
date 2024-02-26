@@ -95,4 +95,13 @@ class Giftcard extends Model
             return Collection::times(4, fn () => random_int(0, 9))->implode('');
         })->implode('-');
     }
+
+    /**
+     * Creates an url to the user profile page
+     * with the gift card code as query param for easy share.
+     */
+    public function shareableLink(): string
+    {
+        return route('shop.profile', ['giftcard' => $this->code]);
+    }
 }

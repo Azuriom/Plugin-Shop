@@ -50,7 +50,9 @@
                 </div>
             </div>
         </div>
+    </div>
 
+    <div class="row">
         <div class="col-md-6">
             <div class="card shadow mb-4">
                 <div class="card-body">
@@ -90,6 +92,17 @@
 
                         </tbody>
                     </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card shadow mb-4">
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label" for="shareableLink">{{ trans('shop::admin.giftcards.link') }}</label>
+                        <input type="text" class="form-control" id="shareableLink" value="{{ $giftcard->shareableLink() }}" readonly>
+                    </div>
                 </div>
             </div>
         </div>

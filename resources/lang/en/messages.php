@@ -77,6 +77,9 @@ return [
             'money' => 'You don\'t have enough money to make this purchase.',
             'execute' => 'An unexpected error occurred during payment, your purchase got refund.',
         ],
+
+        'terms' => 'I accept the :terms.',
+        'terms_link' => 'terms of service',
     ],
 
     'coupons' => [

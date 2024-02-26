@@ -51,7 +51,7 @@
                     @csrf
 
                     <div class="mb-3">
-                        <input type="text" class="form-control @error('code') is-invalid @enderror" placeholder="{{ trans('shop::messages.fields.code') }}" id="code" name="code" value="{{ old('code') }}">
+                        <input type="text" class="form-control @error('code') is-invalid @enderror" placeholder="{{ trans('shop::messages.fields.code') }}" id="code" name="code" value="{{ old('code', $giftCardCode) }}">
 
                         @error('code')
                         <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
