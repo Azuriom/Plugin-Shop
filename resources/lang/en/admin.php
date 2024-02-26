@@ -180,8 +180,8 @@ return [
         'display_amount' => 'Display amount spend in recent payments and top customer',
         'top_customer' => 'Display top monthly customer in sidebar',
 
-        'terms_required' => 'Demander aux utilisateurs d\'accepter les conditions avant un achat',
-        'terms_link' => 'Liens vers les conditions générales de vente',
+        'terms_required' => 'Require users to accept terms of service before purchase',
+        'terms_link' => 'Links to terms of service',
     ],
 
     'logs' => [

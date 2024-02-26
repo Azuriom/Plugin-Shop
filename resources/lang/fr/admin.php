@@ -180,7 +180,8 @@ return [
         'display_amount' => 'Afficher le montant dans les paiements récents et meilleur acheteur',
         'top_customer' => 'Afficher le meilleur acheteur du mois dans la barre latérale',
 
-        'terms_required' => 'Conditions d\'utilisation obligatoires',
+        'terms_required' => 'Demander aux utilisateurs d\'accepter les conditions avant un achat',
+        'terms_link' => 'Liens vers les conditions générales de vente',
     ],
 
     'logs' => [
