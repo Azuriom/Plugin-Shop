@@ -21,22 +21,7 @@ class ProfileController extends Controller
         return view('shop::profile.index', [
             'user' => $user,
             'payments' => $payments,
-            'giftCardCode' => $this->getGiftCardCodeFromUrl($request),
+            'giftCardCode' => $request->query('giftcard'),
         ]);
-    }
-
-    private function getGiftCardCodeFromUrl(Request $request): ?string
-    {
-        $giftCardCode = $request->query('giftcard', null);
-
-        if ($giftCardCode === null) {
-            return null;
-        }
-
-        if (is_array($giftCardCode)) {
-            return null;
-        }
-
-        return $giftCardCode;
     }
 }

@@ -33,7 +33,6 @@ return [
         'total' => 'Total',
         'user_id' => 'User ID',
         'user_limit' => 'User purchase limit',
-        'shareable_link' => 'Shareable link',
     ],
 
     'actions' => [

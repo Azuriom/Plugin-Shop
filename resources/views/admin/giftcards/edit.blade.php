@@ -100,8 +100,8 @@
             <div class="card shadow mb-4">
                 <div class="card-body">
                     <div class="mb-3">
-                        <label class="form-label" for="shareableLink">{{ trans('shop::messages.fields.shareable_link') }}</label>
-                        <input type="text" class="form-control disabled" id="shareableLink" disabled value="{{ $giftcard->shareableLink() }}">
+                        <label class="form-label" for="shareableLink">{{ trans('shop::admin.giftcards.link') }}</label>
+                        <input type="text" class="form-control" id="shareableLink" value="{{ $giftcard->shareableLink() }}" readonly>
                     </div>
                 </div>
             </div>
