@@ -28,11 +28,24 @@ class DiscountRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:50'],
             'discount' => ['required', 'integer', 'between:0,100'],
+            'roles' => ['sometimes', 'nullable', 'array'],
             'packages' => ['required_without:is_global', 'array'],
             'start_at' => ['required', 'date'],
             'end_at' => ['required', 'date', 'after:start_at'],
             'is_global' => ['filled', 'boolean'],
             'is_enabled' => ['filled', 'boolean'],
         ];
+    }
+
+    /**
+     * Prepare the data for validation.
+     */
+    protected function prepareForValidation(): void
+    {
+        $this->mergeCheckboxes();
+
+        if (! $this->filled('is_restricted') || ! $this->has('roles')) {
+            $this->merge(['roles' => null]);
+        }
     }
 }

@@ -3,6 +3,7 @@
 namespace Azuriom\Plugin\Shop\Controllers\Admin;
 
 use Azuriom\Http\Controllers\Controller;
+use Azuriom\Models\Role;
 use Azuriom\Plugin\Shop\Models\Category;
 use Azuriom\Plugin\Shop\Models\Discount;
 use Azuriom\Plugin\Shop\Requests\DiscountRequest;
@@ -25,7 +26,10 @@ class DiscountController extends Controller
     {
         $categories = Category::with('packages')->whereHas('packages')->get();
 
-        return view('shop::admin.discounts.create', ['categories' => $categories]);
+        return view('shop::admin.discounts.create', [
+            'categories' => $categories,
+            'roles' => Role::all(),
+        ]);
     }
 
     /**
@@ -50,6 +54,7 @@ class DiscountController extends Controller
         return view('shop::admin.discounts.edit', [
             'discount' => $discount->load('packages'),
             'categories' => $categories,
+            'roles' => Role::all(),
         ]);
     }
 

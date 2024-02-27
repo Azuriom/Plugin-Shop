@@ -73,6 +73,30 @@
     </div>
 </div>
 
+<div class="mb-3 mt-0 form-check form-switch">
+    <input type="checkbox" class="form-check-input" id="restrictedSwitch" name="is_restricted" data-bs-toggle="collapse" data-bs-target="#rolesGroup" @checked(isset($discount) && $discount->roles !== null)>
+    <label class="form-check-label" for="restrictedSwitch">{{ trans('shop::admin.discounts.restricted') }}</label>
+</div>
+
+<div id="rolesGroup" class="{{ (isset($discount) && $discount->roles !== null) ? 'show' : 'collapse' }}">
+    <div class="card card-body mb-2">
+        <div class="row">
+            @foreach($roles as $role)
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="role{{ $role->id }}" name="roles[]" value="{{ $role->id }}" @checked(in_array($role->id, old('roles', $discount->roles ?? []), true))>
+                        <label class="form-check-label" for="role{{ $role->id }}">
+                            <span class="badge" style="{{ $role->getBadgeStyle() }}">
+                                {{ $role->name }}
+                            </span>
+                        </label>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    </div>
+</div>
+
 <div class="mb-3 form-check form-switch">
     <input type="checkbox" class="form-check-input" id="enableSwitch" name="is_enabled" @checked($discount->is_enabled ?? true)>
     <label class="form-check-label" for="enableSwitch">{{ trans('shop::admin.discounts.enable') }}</label>

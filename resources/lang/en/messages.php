@@ -8,6 +8,14 @@ return [
 
     'free' => 'Free',
 
+    'periods' => [
+        'hours' => 'hours',
+        'days' => 'days',
+        'weeks' => 'weeks',
+        'months' => 'months',
+        'years' => 'years',
+    ],
+
     'fields' => [
         'balance' => 'Balance',
         'category' => 'Category',
@@ -24,7 +32,7 @@ return [
         'payments' => 'Payments',
         'price' => 'Price',
         'quantity' => 'Quantity',
-        'required_packages' => 'Required Packages',
+        'required_packages' => 'Required packages',
         'required_roles' => 'Required role',
         'role' => 'Role to set after purchase',
         'server' => 'Server',

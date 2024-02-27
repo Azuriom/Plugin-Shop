@@ -31,21 +31,6 @@
 
 <div class="row g-3">
     <div class="mb-3 col-md-6">
-        <label class="form-label" for="categorySelect">{{ trans('shop::messages.fields.category') }}</label>
-        <select class="form-select @error('category_id') is-invalid @enderror" id="categorySelect" name="category_id" required>
-            @foreach($categories as $category)
-                <option value="{{ $category->id }}" @selected(isset($package) && $category->is($package->category))>
-                    {{ $category->name }}
-                </option>
-            @endforeach
-        </select>
-
-        @error('category_id')
-        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
-        @enderror
-    </div>
-
-    <div class="mb-3 col-md-6">
         <label class="form-label" for="priceInput">{{ trans('shop::messages.fields.price') }}</label>
 
         <div class="input-group @error('price') has-validation @enderror">
@@ -59,25 +44,27 @@
     </div>
 
     <div class="mb-3 col-md-6">
-        <label class="form-label" for="userLimitInput">{{ trans('shop::messages.fields.user_limit') }}</label>
+        <label class="form-label" for="categorySelect">{{ trans('shop::messages.fields.category') }}</label>
+        <select class="form-select @error('category_id') is-invalid @enderror" id="categorySelect" name="category_id" required>
+            @foreach($categories as $category)
+                <option value="{{ $category->id }}" @selected(isset($package) && $category->is($package->category))>
+                    {{ $category->name }}
+                </option>
+            @endforeach
+        </select>
 
-        <input type="number" min="0" step="1" class="form-control @error('user_limit') is-invalid @enderror" id="userLimitInput" name="user_limit" value="{{ old('user_limit', $package->user_limit ?? '') }}">
-
-        @error('user_limit')
+        @error('category_id')
         <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
         @enderror
     </div>
+</div>
 
-    <div class="mb-3 col-md-6">
-        <label class="form-label" for="globalLimitInput">{{ trans('shop::messages.fields.global_limit') }}</label>
+<div class="mb-3 form-check form-switch">
+    <input type="checkbox" class="form-check-input" id="customPriceSwitch" name="custom_price" @checked($package->custom_price ?? false)>
+    <label class="form-check-label" for="customPriceSwitch">{{ trans('shop::admin.packages.custom_price') }}</label>
+</div>
 
-        <input type="number" min="0" step="1" class="form-control @error('global_limit') is-invalid @enderror" id="globalLimitInput" name="global_limit" value="{{ old('global_limit', $package->global_limit ?? '') }}">
-
-        @error('global_limit')
-        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
-        @enderror
-    </div>
-
+<div class="row g-3 mt-4">
     <div class="mb-3 col-md-6">
         <label class="form-label" for="requiredRoleSelect">{{ trans('shop::messages.fields.required_roles') }}</label>
         <select class="form-select @error('required_roles') is-invalid @enderror" id="requiredRoleSelect" name="required_roles[]" multiple>
@@ -114,18 +101,103 @@
         <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
         @enderror
     </div>
+</div>
 
-    <div class="mb-3 col-md-6">
-        <label class="form-label" for="imageInput">{{ trans('messages.fields.image') }}</label>
-        <input type="file" class="form-control @error('image') is-invalid @enderror" id="imageInput" name="image" accept=".jpg,.jpeg,.jpe,.png,.gif,.bmp,.svg,.webp" data-image-preview="imagePreview">
+<div class="mb-3 form-check form-switch">
+    <input type="checkbox" class="form-check-input" id="userLimitSwitch" name="has_user_limit" data-bs-toggle="collapse" data-bs-target="#userLimit" @checked(old('user_limit', $package->user_limit ?? false))>
+    <label class="form-check-label" for="userLimitSwitch">{{ trans('shop::admin.packages.has_user_limit') }}</label>
+</div>
 
-        @error('image')
-        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
-        @enderror
+<div id="userLimit" class="{{ old('user_limit', $package->user_limit ?? false) ? 'show' : 'collapse' }}">
+    <div class="card mb-3">
+        <div class="card-body row g-3">
+            <div class="mb-3 col-md-6">
+                <label class="form-label" for="userLimitInput">{{ trans('shop::messages.fields.user_limit') }}</label>
+                <input type="number" class="form-control @error('user_limit') is-invalid @enderror" id="userLimitInput" name="user_limit" value="{{ old('user_limit', $package->user_limit ?? '') }}">
 
-        <img src="{{ ($package->image ?? false) ? $package->imageUrl() : '#' }}" class="mt-2 img-fluid rounded img-preview {{ ($package->image ?? false) ? '' : 'd-none' }}" alt="Image" id="imagePreview">
+                @error('user_limit')
+                <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                @enderror
+            </div>
+
+            <div class="mb-3 col-md-6" v-scope="{ ...parseLimitPeriod('{{ old('user_limit_period', $package->user_limit_period ?? '') }}') }">
+                <label class="form-label" for="userLimitInput">{{ trans('shop::admin.packages.limit_period') }}</label>
+
+                <div class="input-group @error('user_limit_period') has-validation @enderror">
+                    <span v-if="unit" class="input-group-text">
+                        {{ trans('shop::admin.packages.every') }}
+                    </span>
+
+                    <input v-if="unit" type="number" min="0" class="form-control" id="userLimitInput" v-model="value">
+
+                    <select class="form-select @error('user_limit_period') is-invalid @enderror" id="userLimitUnit" v-model="unit" aria-label="{{ trans('shop::admin.packages.limit_period') }}">
+                        <option value="">{{ trans('shop::admin.packages.no_period') }}</option>
+                        @foreach(['hours', 'days', 'weeks', 'months', 'years'] as $unit)
+                            <option value="{{ $unit }}">
+                                {{ trans('shop::messages.periods.'.$unit) }}
+                            </option>
+                        @endforeach
+                    </select>
+
+                    @error('user_limit_period')
+                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                    @enderror
+                </div>
+
+                <input type="hidden" name="user_limit_period" :value="unit ? value + ' ' + unit : ''">
+            </div>
+        </div>
     </div>
+</div>
 
+<div class="mb-3 form-check form-switch">
+    <input type="checkbox" class="form-check-input" id="globalLimitSwitch" name="has_global_limit" data-bs-toggle="collapse" data-bs-target="#globalLimit" @checked(old('global_limit', $package->global_limit ?? false))>
+    <label class="form-check-label" for="globalLimitSwitch">{{ trans('shop::admin.packages.has_global_limit') }}</label>
+</div>
+
+<div id="globalLimit" class="{{ old('global_limit', $package->global_limit ?? false) ? 'show' : 'collapse' }}">
+    <div class="card mb-3">
+        <div class="card-body row g-3">
+            <div class="mb-3 col-md-6">
+                <label class="form-label" for="globalLimitInput">{{ trans('shop::messages.fields.global_limit') }}</label>
+                <input type="number" class="form-control @error('global_limit') is-invalid @enderror" id="globalLimitInput" name="global_limit" value="{{ old('global_limit', $package->global_limit ?? '') }}">
+
+                @error('global_limit')
+                <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                @enderror
+            </div>
+
+            <div class="mb-3 col-md-6" v-scope="{ ...parseLimitPeriod('{{ old('global_limit_period', $package->global_limit_period ?? '') }}') }">
+                <label class="form-label" for="globalLimitInput">{{ trans('shop::admin.packages.limit_period') }}</label>
+
+                <div class="input-group @error('global_limit_period') has-validation @enderror">
+                    <span v-if="unit" class="input-group-text">
+                        {{ trans('shop::admin.packages.every') }}
+                    </span>
+
+                    <input v-if="unit" type="number" min="0" class="form-control" id="globalLimitInput" v-model="value">
+
+                    <select class="form-select @error('global_limit_period') is-invalid @enderror" id="globalLimitUnit" v-model="unit" aria-label="{{ trans('shop::admin.packages.limit_period') }}">
+                        <option value="">{{ trans('shop::admin.packages.no_period') }}</option>
+                        @foreach(['hours', 'days', 'weeks', 'months', 'years'] as $unit)
+                            <option value="{{ $unit }}">
+                                {{ trans('shop::messages.periods.'.$unit) }}
+                            </option>
+                        @endforeach
+                    </select>
+
+                    @error('global_limit_period')
+                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                    @enderror
+                </div>
+
+                <input type="hidden" name="global_limit_period" :value="unit ? value + ' ' + unit : ''">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3">
     <div class="mb-3 col-md-6">
         <label class="form-label" for="roleSelect">{{ trans('shop::messages.fields.role') }}</label>
         <select class="form-select @error('role_id') is-invalid @enderror" id="roleSelect" name="role_id">
@@ -154,19 +226,17 @@
             @enderror
         </div>
     </div>
+</div>
 
-    <div class="mb-3 col-md-6">
-        <label class="form-label" for="giftcardInput">{{ trans('shop::admin.packages.giftcard') }}</label>
+<div class="mb-3">
+    <label class="form-label" for="imageInput">{{ trans('messages.fields.image') }}</label>
+    <input type="file" class="form-control @error('image') is-invalid @enderror" id="imageInput" name="image" accept=".jpg,.jpeg,.jpe,.png,.gif,.bmp,.svg,.webp" data-image-preview="imagePreview">
 
-        <div class="input-group @error('giftcard_balance') has-validation @enderror">
-            <input type="number" min="0" step="0.01" class="form-control @error('giftcard_balance') is-invalid @enderror" id="giftcardInput" name="giftcard_balance" value="{{ old('giftcard_balance', $package->giftcard_balance ?? '') }}">
-            <span class="input-group-text">{{ shop_active_currency() }}</span>
+    @error('image')
+    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+    @enderror
 
-            @error('giftcard_balance')
-            <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
-            @enderror
-        </div>
-    </div>
+    <img src="{{ ($package->image ?? false) ? $package->imageUrl() : '#' }}" class="mt-2 img-fluid rounded img-preview {{ ($package->image ?? false) ? '' : 'd-none' }}" alt="Image" id="imagePreview">
 </div>
 
 <h2 class="h4">{{ trans('shop::messages.fields.commands') }}</h2>
@@ -184,8 +254,29 @@
 @endif
 
 <div class="mb-3 form-check form-switch">
-    <input type="checkbox" class="form-check-input" id="customPriceSwitch" name="custom_price" @checked($package->custom_price ?? false)>
-    <label class="form-check-label" for="customPriceSwitch">{{ trans('shop::admin.packages.custom_price') }}</label>
+    <input type="checkbox" class="form-check-input" id="giftcardSwitch" name="has_giftcard" data-bs-toggle="collapse" data-bs-target="#giftcard" @checked(old('has_giftcard', optional($package ?? null)->hasGiftcard()))>
+    <label class="form-check-label" for="giftcardSwitch">{{ trans('shop::admin.packages.has_giftcard') }}</label>
+</div>
+
+<div id="giftcard" class="{{ old('has_giftcard', optional($package ?? null)->hasGiftcard()) ? 'show' : 'collapse' }}">
+    <div class="card mb-3">
+        <div class="card-body" v-scope="{ balance: '{{ old('giftcard_balance', $package->giftcard_balance ?? '') }}', balanceFixed: '{{ old('giftcard_fixed', ($package->giftcard_balance ?? 1) > 0) }}' }">
+            <label class="form-label" for="balanceInput">{{ trans('shop::admin.packages.giftcard_balance') }}</label>
+
+            <div class="input-group @error('giftcard_balance') has-validation @enderror">
+                <input v-if="balanceFixed" type="number" step="0.01" min="0" class="form-control @error('giftcard_balance') is-invalid @enderror" id="balanceInput" name="giftcard_balance" v-model="balance">
+
+                <select class="form-select @error('giftcard_balance') is-invalid @enderror" v-model="balanceFixed" name="giftcard_fixed">
+                    <option value="1">{{ shop_active_currency() }}</option>
+                    <option value="">{{ trans('shop::admin.packages.giftcard_dynamic') }}</option>
+                </select>
+
+                @error('giftcard_balance')
+                <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                @enderror
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="mb-3 form-check form-switch">
@@ -197,3 +288,17 @@
     <input type="checkbox" class="form-check-input" id="enableSwitch" name="is_enabled" @checked($package->is_enabled ?? true)>
     <label class="form-check-label" for="enableSwitch">{{ trans('shop::admin.packages.enable') }}</label>
 </div>
+
+@push('scripts')
+    <script>
+        function parseLimitPeriod(value) {
+            if (!value) {
+                return { value: '', unit: '' }
+            }
+
+            const parsed = value.split(' ', 2)
+
+            return { value: parsed[0], unit: parsed[1] }
+        }
+    </script>
+@endpush

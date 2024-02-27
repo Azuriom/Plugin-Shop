@@ -8,6 +8,14 @@ return [
 
     'free' => 'Gratuit',
 
+    'periods' => [
+        'hours' => 'heures',
+        'days' => 'jours',
+        'weeks' => 'semaines',
+        'months' => 'mois',
+        'years' => 'années',
+    ],
+
     'fields' => [
         'balance' => 'Solde',
         'category' => 'Catégorie',

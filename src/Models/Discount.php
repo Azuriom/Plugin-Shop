@@ -2,14 +2,17 @@
 
 namespace Azuriom\Plugin\Shop\Models;
 
+use Azuriom\Models\Role;
 use Azuriom\Models\Traits\HasTablePrefix;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Json;
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property int $id
  * @property string $name
  * @property int $discount
+ * @property array|null $roles
  * @property bool $is_global
  * @property bool $is_enabled
  * @property \Carbon\Carbon $start_at
@@ -37,7 +40,7 @@ class Discount extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'name', 'discount', 'packages', 'is_global', 'is_enabled', 'start_at', 'end_at',
+        'name', 'discount', 'packages', 'roles', 'is_global', 'is_enabled', 'start_at', 'end_at',
     ];
 
     /**
@@ -46,6 +49,7 @@ class Discount extends Model
      * @var array<string, string>
      */
     protected $casts = [
+        'roles' => 'array',
         'start_at' => 'datetime',
         'end_at' => 'datetime',
         'is_global' => 'boolean',
@@ -69,19 +73,15 @@ class Discount extends Model
     }
 
     /**
-     * Determine if this discount is active on the given package.
+     * Determine if this discount is active for the given role.
      */
-    public function isActiveOn(Package $package): bool
+    public function activeForRole(?Role $role): bool
     {
-        if (! $this->isActive()) {
-            return false;
-        }
-
-        if ($this->is_global) {
+        if ($this->roles === null) {
             return true;
         }
 
-        return $this->packages->contains($package);
+        return $role !== null && in_array($role->id, $this->roles, true);
     }
 
     /**
@@ -108,5 +108,12 @@ class Discount extends Model
     public function scopeGlobal(Builder $query): void
     {
         $query->where('is_global', true);
+    }
+
+    public function setRolesAttribute(?array $roles): void
+    {
+        $this->attributes['roles'] = optional($roles, function (array $roles) {
+            return Json::encode(array_map(fn ($val) => (int) $val, $roles));
+        });
     }
 }

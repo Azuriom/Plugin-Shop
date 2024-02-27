@@ -110,14 +110,12 @@
 
                 <div id="terms" class="{{ $termsRequired ? 'show' : 'collapse' }}">
                     <div class="card card-body mb-3">
-                        <div class="mb-0">
-                            <label class="form-label" for="termsLink">{{ trans('shop::admin.settings.terms_link') }}</label>
-                            <input type="text" class="form-control @error('terms') is-invalid @enderror" id="termsLink" name="terms" value="{{ old('terms', setting('shop.terms')) }}">
+                        <label class="form-label" for="termsLink">{{ trans('shop::admin.settings.terms_link') }}</label>
+                        <input type="text" class="form-control @error('terms') is-invalid @enderror" id="termsLink" name="terms" value="{{ old('terms', setting('shop.terms')) }}">
 
-                            @error('terms')
-                            <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
-                            @enderror
-                        </div>
+                        @error('terms')
+                        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                        @enderror
                     </div>
                 </div>
 
