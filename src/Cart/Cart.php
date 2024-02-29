@@ -210,15 +210,18 @@ class Cart implements Arrayable
                 ];
             }
 
-            $total = $this->coupons()
-                ->where('is_fixed', true)
-                ->filter(fn (Coupon $coupon) => $coupon->isActiveOn($package))
-                ->reduce(function ($price, Coupon $coupon) use ($remaining) {
-                    $discount = $remaining->get($coupon->id, 0);
-                    $remaining->put($coupon->id, max($discount - $price, 0));
+            $total = $item->total();
+            if ($this->hasCouponsEnabled()) {
+                $total = $this->coupons()
+                    ->where('is_fixed', true)
+                    ->filter(fn (Coupon $coupon) => $coupon->isActiveOn($package))
+                    ->reduce(function ($price, Coupon $coupon) use ($remaining) {
+                        $discount = $remaining->get($coupon->id, 0);
+                        $remaining->put($coupon->id, max($discount - $price, 0));
 
-                    return max($price - $discount, 0);
-                }, $item->total());
+                        return max($price - $discount, 0);
+                    }, $item->total());
+            }
 
             return [
                 'item' => $item,
@@ -246,6 +249,10 @@ class Cart implements Arrayable
      */
     public function coupons(): Collection
     {
+        if (! $this->hasCouponsEnabled()) {
+            return collect();
+        }
+
         return $this->coupons;
     }
 
@@ -254,6 +261,10 @@ class Cart implements Arrayable
      */
     public function addCoupon(Coupon $coupon): void
     {
+        if (! $this->hasCouponsEnabled()) {
+            return;
+        }
+
         $this->coupons->put($coupon->id, $coupon);
 
         $this->save();
@@ -264,6 +275,10 @@ class Cart implements Arrayable
      */
     public function removeCoupon(Coupon $coupon): void
     {
+        if (! $this->hasCouponsEnabled()) {
+            return;
+        }
+
         $this->coupons->forget($coupon->id);
 
         $this->save();
@@ -302,6 +317,10 @@ class Cart implements Arrayable
      */
     public function clearCoupons(): void
     {
+        if (! $this->hasCouponsEnabled()) {
+            return;
+        }
+
         $this->coupons = collect();
 
         $this->save();
@@ -325,6 +344,18 @@ class Cart implements Arrayable
         $this->giftcards = collect();
 
         $this->session?->remove('shop.cart');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function toArray(): array
+    {
+        return [
+            'items' => $this->items->toArray(),
+            'coupons' => $this->hasCouponsEnabled() ? $this->coupons->pluck('code')->all() : [],
+            'giftcards' => $this->giftcards->pluck('code')->all(),
+        ];
     }
 
     /**
@@ -354,7 +385,7 @@ class Cart implements Arrayable
 
         $content = $session->get('shop.cart', []);
 
-        if (! empty($content['coupons'])) {
+        if (! empty($content['coupons']) && $this->hasCouponsEnabled()) {
             $this->coupons = Coupon::whereIn('code', $content['coupons'])->get()->keyBy('id');
         } else {
             $this->coupons = collect();
@@ -394,15 +425,8 @@ class Cart implements Arrayable
         });
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function toArray(): array
+    private function hasCouponsEnabled(): bool
     {
-        return [
-            'items' => $this->items->toArray(),
-            'coupons' => $this->coupons->pluck('code')->all(),
-            'giftcards' => $this->giftcards->pluck('code')->all(),
-        ];
+        return setting('shop.enable_coupons', true);
     }
 }

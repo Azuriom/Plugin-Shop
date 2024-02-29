@@ -69,6 +69,7 @@
                     </button>
                 </form>
 
+            @if (setting('shop.enable_coupons', true))
                 <div class="row">
                     <div class="col-md-4">
                         <h5>{{ trans('shop::messages.coupons.add') }}</h5>
@@ -125,6 +126,7 @@
                         </div>
                     @endif
                 </div>
+            @endif
 
                 <h5 class="text-end">
                     {{ trans('shop::messages.cart.total', ['total' => shop_format_amount($cart->total())]) }}
