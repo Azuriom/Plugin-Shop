@@ -76,14 +76,14 @@
                         <form action="{{ route('shop.cart.coupons.add') }}" method="POST" >
                             @csrf
 
-                            <div class="input-group mb-3 @error('code') has-validation @enderror">
-                                <input type="text" class="form-control @error('code') is-invalid @enderror" placeholder="{{ trans('shop::messages.fields.code') }}" id="code" name="code" value="{{ old('code') }}">
+                            <div class="input-group mb-3 @error('coupon_code') has-validation @enderror">
+                                <input type="text" class="form-control @error('coupon_code') is-invalid @enderror" placeholder="{{ trans('shop::messages.fields.code') }}" id="coupon_code" name="coupon_code" value="{{ old('coupon_code') }}">
 
                                 <button type="submit" class="btn btn-primary">
                                     <i class="bi bi-plus-lg"></i> {{ trans('messages.actions.add') }}
                                 </button>
 
-                                @error('code')
+                                @error('coupon_code')
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                                 @enderror
                             </div>

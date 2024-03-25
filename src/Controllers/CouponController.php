@@ -4,6 +4,7 @@ namespace Azuriom\Plugin\Shop\Controllers;
 
 use Azuriom\Http\Controllers\Controller;
 use Azuriom\Plugin\Shop\Cart\Cart;
+use Azuriom\Plugin\Shop\Exceptions\CouponNotAllowedException;
 use Azuriom\Plugin\Shop\Models\Coupon;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
@@ -17,13 +18,14 @@ class CouponController extends Controller
      */
     public function add(Request $request)
     {
-        $validated = $this->validate($request, ['code' => 'required']);
+        $validated = $this->validate($request, ['coupon_code' => 'required']);
 
-        $coupon = Coupon::active()->firstWhere($validated);
+        /** @var Coupon $coupon */
+        $coupon = Coupon::active()->firstWhere(['code' => $validated['coupon_code']]);
 
         if ($coupon === null || $coupon->hasReachLimit($request->user())) {
             throw ValidationException::withMessages([
-                'code' => trans('shop::messages.coupons.error'),
+                'coupon_code' => trans('shop::messages.coupons.error'),
             ]);
         }
 
@@ -32,11 +34,17 @@ class CouponController extends Controller
         if ((! $coupon->can_cumulate && ! $cart->coupons()->isEmpty())
             || $cart->coupons()->contains('can_cumulate', false)) {
             throw ValidationException::withMessages([
-                'code' => trans('shop::messages.coupons.cumulate'),
+                'coupon_code' => trans('shop::messages.coupons.cumulate'),
             ]);
         }
 
-        $cart->addCoupon($coupon);
+        try {
+            $cart->addCoupon($coupon);
+        } catch (CouponNotAllowedException) {
+            throw ValidationException::withMessages([
+                'coupon_code' => trans('shop::messages.coupons.discount'),
+            ]);
+        }
 
         return to_route('shop.cart.index');
     }
