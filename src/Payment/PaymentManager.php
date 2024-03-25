@@ -4,6 +4,7 @@ namespace Azuriom\Plugin\Shop\Payment;
 
 use Azuriom\Plugin\Shop\Cart\Cart;
 use Azuriom\Plugin\Shop\Models\Gateway;
+use Azuriom\Plugin\Shop\Models\Giftcard;
 use Azuriom\Plugin\Shop\Models\Payment;
 use Azuriom\Plugin\Shop\Payment\Method\MollieMethod;
 use Azuriom\Plugin\Shop\Payment\Method\PayGolMethod;
@@ -121,6 +122,8 @@ class PaymentManager
         }
 
         $payment->coupons()->sync($cart->coupons());
+        $payment->processGiftcards($cart->total(), $cart->giftcards());
+        $cart->giftcards()->each(fn (Giftcard $card) => $cart->removeGiftcard($card));
 
         return $payment;
     }

@@ -14,6 +14,7 @@ use Azuriom\Support\Discord\Embed;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 
 /**
  * @property int $id
@@ -120,6 +121,10 @@ class Payment extends Model
     {
         $this->update(['status' => 'completed']);
 
+        foreach ($this->giftcards as $giftcard) {
+            Cache::forget('shop.giftcards.pending.'.$giftcard->id);
+        }
+
         foreach ($this->items as $item) {
             $item->deliver();
         }
@@ -166,6 +171,8 @@ class Payment extends Model
 
                     $card->decrement('balance', $total);
                 }
+
+                Cache::put('shop.giftcards.pending.'.$card->id, true, now()->addMinutes(15));
 
                 return $newTotal;
             }, $originalTotal);

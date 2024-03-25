@@ -8,6 +8,14 @@ return [
 
     'free' => 'Gratuit',
 
+    'periods' => [
+        'hours' => 'heures',
+        'days' => 'jours',
+        'weeks' => 'semaines',
+        'months' => 'mois',
+        'years' => 'années',
+    ],
+
     'fields' => [
         'balance' => 'Solde',
         'category' => 'Catégorie',
@@ -33,6 +41,7 @@ return [
         'total' => 'Total',
         'user_id' => 'ID de l\'utilisateur',
         'user_limit' => 'Limite d\'achats par utilisateur',
+        'global_limit' => 'Limite d\'achats globale',
     ],
 
     'actions' => [
@@ -77,6 +86,9 @@ return [
             'money' => 'Vous n\'avez pas assez d\'argent pour faire cet achat.',
             'execute' => 'Une erreur est survenue lors du paiement, votre achat a été remboursé.',
         ],
+
+        'terms' => 'J\'accepte les :terms.',
+        'terms_link' => 'conditions générales de vente',
     ],
 
     'coupons' => [
@@ -108,6 +120,7 @@ return [
     'packages' => [
         'limit' => 'Vous avez acheté le maximum possible pour cet article.',
         'requirements' => 'Vous n\'avez pas les pré-requis pour acheter cet article.',
+        'cumulate' => 'Vous ne pouvez pas acheter ce produit avec un autre de la même catégorie dans le même achat.',
     ],
 
     'offers' => [
@@ -128,5 +141,6 @@ return [
         'error' => 'Cette carte cadeau n\'existe pas, est expirée ou ne peut plus être utilisée.',
         'add' => 'Utiliser une carte cadeau',
         'notification' => 'Vous avez reçu une carte cadeau, son code est : :code (:balance).',
+        'pending' => 'Un paiement est déjà en cours pour cette carte cadeau. Complétez le paiement ou attendez un peu.',
     ],
 ];

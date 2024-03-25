@@ -63,6 +63,8 @@ return [
         'global_limit' => 'Global limit',
         'active' => 'Active',
         'enable' => 'Enable the gift card',
+        'link' => 'Shareable link',
+        'pending' => 'A payment is pending, the balance might not be updated yet.',
     ],
 
     'discounts' => [
@@ -74,6 +76,7 @@ return [
         'active' => 'Active',
         'enable' => 'Enable the discount',
         'coupons' => 'Allow usage of coupons with discount',
+        'restricted' => 'Restrict this discount to certain roles only',
     ],
 
     'packages' => [
@@ -81,12 +84,20 @@ return [
         'edit' => 'Edit package :package',
         'create' => 'Create package',
 
+        'every' => 'every',
+
         'updated' => 'The packages have been updated.',
 
         'money' => 'Money to give to the user after purchase',
-        'giftcard' => 'Balance of the giftcard to create during the purchase',
+        'has_giftcard' => 'Create a giftcard after the purchase and give it to the user',
+        'giftcard_balance' => 'Giftcard balance',
+        'giftcard_fixed' => 'Fixed amount',
+        'giftcard_dynamic' => 'Price of the package',
         'command' => 'The command must not start with <code>/</code>. You can use <code>{player}</code> for the player name. For Steam games, you can also use <code>{steam_id}</code> and <code>{steam_id_32}</code>. The others available placeholders are: :placeholders.',
-
+        'has_user_limit' => 'Add an individual purchase limit per user for this package',
+        'has_global_limit' => 'Add a global purchase limit for this package',
+        'limit_period' => 'Limit period',
+        'no_period' => 'No period',
         'custom_price' => 'Allow the user to choose the price to pay (the package price will then be the minimum)',
         'enable_quantity' => 'Enable the quantity',
 
@@ -181,6 +192,9 @@ return [
         'recent_payments' => 'Recent payments limit to display in sidebar (set to 0 to disable)',
         'display_amount' => 'Display amount spend in recent payments and top customer',
         'top_customer' => 'Display top monthly customer in sidebar',
+
+        'terms_required' => 'Require users to accept terms of service before purchase',
+        'terms_link' => 'Links to terms of service',
     ],
 
     'logs' => [

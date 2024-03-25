@@ -8,6 +8,14 @@ return [
 
     'free' => 'Free',
 
+    'periods' => [
+        'hours' => 'hours',
+        'days' => 'days',
+        'weeks' => 'weeks',
+        'months' => 'months',
+        'years' => 'years',
+    ],
+
     'fields' => [
         'balance' => 'Balance',
         'category' => 'Category',
@@ -24,7 +32,7 @@ return [
         'payments' => 'Payments',
         'price' => 'Price',
         'quantity' => 'Quantity',
-        'required_packages' => 'Required Packages',
+        'required_packages' => 'Required packages',
         'required_roles' => 'Required role',
         'role' => 'Role to set after purchase',
         'server' => 'Server',
@@ -33,6 +41,7 @@ return [
         'total' => 'Total',
         'user_id' => 'User ID',
         'user_limit' => 'User purchase limit',
+        'global_limit' => 'Global purchase limit',
     ],
 
     'actions' => [
@@ -77,6 +86,9 @@ return [
             'money' => 'You don\'t have enough money to make this purchase.',
             'execute' => 'An unexpected error occurred during payment, your purchase got refund.',
         ],
+
+        'terms' => 'I accept the :terms.',
+        'terms_link' => 'terms of service',
     ],
 
     'coupons' => [
@@ -109,6 +121,7 @@ return [
     'packages' => [
         'limit' => 'You have purchased the maximum possible for this packages.',
         'requirements' => 'You don\'t have the requirements to purchase this package.',
+        'cumulate' => 'You cannot buy this package with an other from the same category in the same purchase.',
     ],
 
     'offers' => [
@@ -129,5 +142,6 @@ return [
         'error' => 'This gift card does not exist, has expired or can no longer be used.',
         'add' => 'Add a gift card',
         'notification' => 'You received a giftcard, the code is :code (:balance).',
+        'pending' => 'A payment has already started for this giftcard. Complete the payment or wait a few minutes.',
     ],
 ];

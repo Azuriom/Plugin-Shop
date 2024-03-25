@@ -3,7 +3,6 @@
 @section('title', trans('shop::admin.giftcards.title'))
 
 @section('content')
-    @if (use_site_money())
     <div class="card shadow mb-4">
         <div class="card-body">
             <div class="table-responsive">
@@ -23,7 +22,12 @@
                         <tr>
                             <th scope="row">{{ $giftcard->id }}</th>
                             <td>{{ $giftcard->code }}</td>
-                            <td>{{ shop_format_amount($giftcard->balance) }}</td>
+                            <td>
+                                {{ shop_format_amount($giftcard->balance) }}
+                                @if($giftcard->isPending())
+                                    <i class="bi bi-hourglass text-warning" title="{{ trans('shop::admin.giftcards.pending') }}" data-bs-toggle="tooltip"></i>
+                                @endif
+                            </td>
                             <td>
                                 <span class="badge bg-{{ $giftcard->isActive() ? 'success' : 'danger' }}">
                                     {{ trans_bool($giftcard->isActive()) }}
@@ -45,11 +49,4 @@
             </a>
         </div>
     </div>
-    @else
-        <div class="alert alert-warning" role="alert">
-            <i class="bi bi-exclamation-circle"></i>
-            <a href="{{route('shop.admin.settings')}}">{{ trans('shop::admin.settings.use_site_money')}}</a>
-        </div>
-    @endif
-
 @endsection

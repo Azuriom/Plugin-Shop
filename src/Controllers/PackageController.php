@@ -4,6 +4,7 @@ namespace Azuriom\Plugin\Shop\Controllers;
 
 use Azuriom\Http\Controllers\Controller;
 use Azuriom\Plugin\Shop\Cart\Cart;
+use Azuriom\Plugin\Shop\Cart\CartItem;
 use Azuriom\Plugin\Shop\Models\Package;
 use Illuminate\Http\Request;
 
@@ -42,10 +43,31 @@ class PackageController extends Controller
             return redirect()->back()->with('error', trans('shop::messages.packages.requirements'));
         }
 
+        if ($this->categoryCumulateError($cart, $package)) {
+            return redirect()->back()->with('error', trans('shop::messages.packages.cumulate'));
+        }
+
         $price = $package->custom_price ? $request->input('price') : null;
 
         $cart->add($package, $request->input('quantity') ?? 1, $price);
 
         return to_route('shop.cart.index');
+    }
+
+    private function categoryCumulateError(Cart $cart, Package $package)
+    {
+        if (! $package->category->cumulate_purchases) {
+            return false;
+        }
+
+        return $cart->content()->contains(function (CartItem $item) use ($package) {
+            $other = $item->buyable();
+
+            if (! $other instanceof Package || $other->getId() === $package->id) {
+                return false;
+            }
+
+            return $other->category_id === $package->category_id;
+        });
     }
 }

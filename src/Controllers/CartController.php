@@ -17,6 +17,7 @@ class CartController extends Controller
     {
         return view('shop::cart.index', [
             'cart' => Cart::fromSession($request->session()),
+            'termsUrl' => setting('shop.terms'),
         ]);
     }
 

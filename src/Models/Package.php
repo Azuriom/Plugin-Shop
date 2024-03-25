@@ -12,8 +12,10 @@ use Azuriom\Plugin\Shop\Events\PackageDelivered;
 use Azuriom\Plugin\Shop\Models\Concerns\Buyable;
 use Azuriom\Plugin\Shop\Models\Concerns\IsBuyable;
 use Azuriom\Plugin\Shop\Models\User as ShopUser;
+use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 
 /**
@@ -34,6 +36,9 @@ use Illuminate\Support\Collection;
  * @property float|null $giftcard_balance
  * @property bool $custom_price
  * @property int $user_limit
+ * @property string|null $user_limit_period
+ * @property int $global_limit
+ * @property string|null $global_limit_period
  * @property bool $is_enabled
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
@@ -66,7 +71,8 @@ class Package extends Model implements Buyable
         'category_id', 'name', 'short_description', 'description', 'image',
         'position', 'price', 'required_packages', 'required_roles', 'has_quantity',
         'commands', 'role_id', 'money', 'giftcard_balance', 'custom_price',
-        'user_limit', 'is_enabled',
+        'user_limit', 'user_limit_period', 'global_limit', 'global_limit_period',
+        'is_enabled',
     ];
 
     /**
@@ -99,11 +105,6 @@ class Package extends Model implements Buyable
         return $this->belongsTo(Role::class);
     }
 
-    public function servers()
-    {
-        return $this->belongsToMany(Server::class, 'shop_package_server');
-    }
-
     public function discounts()
     {
         return $this->belongsToMany(Discount::class, 'shop_discount_package');
@@ -114,6 +115,11 @@ class Package extends Model implements Buyable
         return $this->short_description;
     }
 
+    public function hasGiftcard(): bool
+    {
+        return $this->giftcard_balance !== null;
+    }
+
     public function getPrice(): float
     {
         static $globalDiscounts = null;
@@ -122,10 +128,13 @@ class Package extends Model implements Buyable
             $globalDiscounts = Discount::scopes(['active', 'global'])->get();
         }
 
+        $role = auth()->user()?->role;
+
         $price = $this->discounts
             ->where('is_global', false)
             ->merge($globalDiscounts)
             ->filter(fn (Discount $discount) => $discount->isActive())
+            ->filter(fn (Discount $discount) => $discount->activeForRole($role))
             ->reduce(function ($result, Discount $discount) {
                 return $result - ($discount->discount / 100) * $result;
             }, $this->price - $this->getCumulatedPurchasesTotal());
@@ -142,7 +151,7 @@ class Package extends Model implements Buyable
         $purchasedPackage = $this->category->packages
             ->filter(fn (self $package) => $package->price < $this->price)
             ->sortByDesc('price')
-            ->first(fn (self $package) => $package->getUserTotalPurchases() > 0);
+            ->first(fn (self $package) => $package->countUserPurchases() > 0);
 
         return $purchasedPackage->price ?? 0;
     }
@@ -165,14 +174,14 @@ class Package extends Model implements Buyable
         $packages = self::findMany($this->required_packages);
 
         return ! $packages->contains(function (self $package) {
-            return $package->getUserTotalPurchases() < 1;
+            return $package->countUserPurchases() < 1;
         });
     }
 
     /**
      * Get the total purchases for this package for the current user.
      */
-    public function getUserTotalPurchases(): int
+    public function countUserPurchases(CarbonInterface $startDate = null): int
     {
         if (auth()->guest()) {
             return 0;
@@ -185,16 +194,35 @@ class Package extends Model implements Buyable
                 ->items()
                 ->where('shop_payments.status', 'completed')
                 ->where('shop_payment_items.buyable_type', 'shop.packages')
+                ->when($startDate, function (Builder $query) use ($startDate) {
+                    $query->where('shop_payments.created_at', '>', $startDate);
+                })
                 ->get()
-                ->countBy('buyable_id');
+                ->groupBy('buyable_id')
+                ->map(fn (Collection $items) => $items->sum('quantity'));
         }
 
         return $purchases->get($this->id, 0);
     }
 
-    public function getRemainingUserPurchases(): int
+    /**
+     * Get the total purchases for this package for the current user.
+     */
+    public function countTotalPurchases(CarbonInterface $startDate = null): int
     {
-        return max($this->getMaxQuantity() - $this->getUserTotalPurchases(), 0);
+        static $purchases = [];
+
+        return Arr::get($purchases, $this->id, function () use (&$purchases, $startDate) {
+            return $purchases[$this->id] = PaymentItem::where('buyable_id', $this->id)
+                ->where('buyable_type', 'shop.packages')
+                ->whereHas('payment', function (Builder $query) use ($startDate) {
+                    $query->where('status', 'completed')
+                        ->when($startDate, function () use ($query, $startDate) {
+                            $query->where('created_at', '>', $startDate);
+                        });
+                })
+                ->sum('quantity');
+        });
     }
 
     public function getOriginalPrice(): float
@@ -204,11 +232,15 @@ class Package extends Model implements Buyable
 
     public function getMaxQuantity(): int
     {
-        if ($this->user_limit < 1) {
-            return 100;
-        }
+        $userStart = optional($this->user_limit_period, fn ($period) => now()->sub($period));
+        $globalStart = optional($this->global_limit_period, fn ($period) => now()->sub($period));
 
-        return max($this->user_limit - $this->getUserTotalPurchases(), 0);
+        $user = $this->user_limit > 0
+            ? $this->user_limit - $this->countUserPurchases($userStart) : 100;
+        $global = $this->global_limit > 0
+            ? $this->global_limit - $this->countTotalPurchases($globalStart) : 100;
+
+        return max(min($user, $global), 0);
     }
 
     public function isInCart(): bool
@@ -235,11 +267,15 @@ class Package extends Model implements Buyable
             $user->addMoney($this->money);
         }
 
-        if ($this->giftcard_balance > 0) {
+        if ($this->hasGiftcard()) {
+            $balance = $this->giftcard_balance > 0
+                ? $this->giftcard_balance
+                : $item->price;
+
             $giftcard = Giftcard::create([
                 'code' => Giftcard::randomCode(),
-                'balance' => $this->giftcard_balance,
-                'original_balance' => $this->giftcard_balance,
+                'balance' => $balance,
+                'original_balance' => $balance,
                 'start_at' => now(),
                 'expire_at' => now()->addYear(),
             ]);

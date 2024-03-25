@@ -62,6 +62,8 @@ return [
         'global_limit' => 'Limite d\'utilisations globale',
         'active' => 'Actif',
         'enable' => 'Activer cette carte cadeau',
+        'link' => 'Lien à partager',
+        'pending' => 'Un paiement est en cours, le solde peut ne pas être à jour.',
     ],
 
     'discounts' => [
@@ -72,6 +74,7 @@ return [
         'global' => 'La réduction doit-elle être active sur toute la boutique ?',
         'active' => 'Active',
         'enable' => 'Activer cette réduction',
+        'restricted' => 'Limiter cette réduction à certains rôles uniquement',
     ],
 
     'packages' => [
@@ -79,12 +82,20 @@ return [
         'edit' => 'Édition du produit :package',
         'create' => 'Création d\'un produit',
 
+        'every' => 'tous les',
+
         'updated' => 'Les produits ont été mis à jour.',
 
         'money' => 'Argent à donner à l\'utilisateur lors de l\'achat',
-        'giftcard' => 'Montant de la carte cadeau à créer lors de l\'achat',
+        'has_giftcard' => 'Créer une carte cadeau lors de l\'achat et la donner à l\'utilisateur',
+        'giftcard_balance' => 'Valeur de la carte cadeau',
+        'giftcard_fixed' => 'Montant fixe',
+        'giftcard_dynamic' => 'Prix du produit',
         'command' => 'La commande ne doit pas commencer par <code>/</code>. Vous pouvez utiliser <code>{player}</code> pour le pseudo du joueur. Pour les jeux Steam, les variables <code>{steam_id}</code> et <code>{steam_id_32}</code> sont disponibles. Les autres variables disponibles sont : :placeholders.',
-
+        'has_user_limit' => 'Activer une limite d\'achat par utilisateur pour ce produit',
+        'has_global_limit' => 'Activer une limite d\'achat globale à tous les utilisateurs pour ce produit',
+        'limit_period' => 'Période de la limite d\'achat',
+        'no_period' => 'Aucune période',
         'custom_price' => 'Permettre à l\'utilisateur de choisir le prix à payer (le prix du produit sera alors le minimum)',
         'enable_quantity' => 'Activer la quantité',
 
@@ -179,6 +190,9 @@ return [
         'recent_payments' => 'Limite de paiements récents à afficher dans la barre latérale',
         'display_amount' => 'Afficher le montant dans les paiements récents et meilleur acheteur',
         'top_customer' => 'Afficher le meilleur acheteur du mois dans la barre latérale',
+
+        'terms_required' => 'Demander aux utilisateurs d\'accepter les conditions avant un achat',
+        'terms_link' => 'Liens vers les conditions générales de vente',
     ],
 
     'logs' => [
