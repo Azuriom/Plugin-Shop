@@ -137,7 +137,6 @@ return [
 
     'giftcards' => [
         'title' => 'Cartes cadeaux',
-        'success' => ':money ont été crédité sur votre compte',
         'error' => 'Cette carte cadeau n\'existe pas, est expirée ou ne peut plus être utilisée.',
         'add' => 'Utiliser une carte cadeau',
         'notification' => 'Vous avez reçu une carte cadeau, son code est : :code (:balance).',

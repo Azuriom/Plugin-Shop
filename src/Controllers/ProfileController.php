@@ -16,6 +16,7 @@ class ProfileController extends Controller
         $user = $request->user();
         $payments = Payment::whereBelongsTo($user)
             ->scopes(['notPending', 'withRealMoney'])
+            ->latest()
             ->get();
 
         return view('shop::profile.index', [

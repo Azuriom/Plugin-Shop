@@ -161,15 +161,55 @@
             </div>
         </div>
 
+        <div class="col-xl-8 col-lg-7">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h5 class="card-title mb-0">
+                        {{ trans('shop::admin.packages.title') }}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead class="table-dark">
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">{{ trans('shop::messages.fields.price') }}</th>
+                                <th scope="col">{{ trans('shop::admin.statistics.count') }}</th>
+                                <th scope="col">{{ trans('shop::admin.statistics.total') }}</th>
+                                <th scope="col">{{ trans('messages.fields.action') }}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            @foreach($packages as $package)
+                                <tr>
+                                    <th scope="row">{{ $package->id }}</th>
+                                    <td>{{ $package->name  }}</td>
+                                    <td>{{ shop_format_amount($package->count) }}</td>
+                                    <td>{{ $package->total }}</td>
+                                    <td>
+                                        <a href="{{ route('shop.admin.statistics.package', $package) }}" class="mx-1" title="{{ trans('messages.actions.show') }}" data-bs-toggle="tooltip"><i class="bi bi-graph-up"></i></a>
+                                    </td>
+                                </tr>
+                            @endforeach
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 @endsection
 
 @push('footer-scripts')
-    <script src="{{ asset('vendor/chart.js/Chart.min.js') }}"></script>
+    <script src="{{ asset('vendor/chart.js/chart.umd.js') }}"></script>
     <script src="{{ asset('admin/js/charts.js') }}"></script>
     <script>
         createPieChart('gatewaysChart', @json($gatewaysChart));
-        createPieChart('itemsChart', @json($itemsChart));
+        createPieChart('itemsChart', @json($packages->pluck('count', 'name')));
 
         createShopMultiLineChart('paymentsPerMonthsChart', [
             {
@@ -196,87 +236,71 @@
             @endforeach
         ]);
 
-        function createShopMultiLineChart(elementId, values, labels) {
-            const colors = ['#4e73df', '#1cc88a', '#36b9cc', '#e9aa0b'];
+        function createShopMultiLineChart(elementId, data, labelNames) {
+            const colors = ['#3b7ddd', '#1cbb8c', '#17a2b8', '#fcb92c'];
             let count = 0;
 
-            if (!Array.isArray(labels) && values.length > 0) {
-                labels = Object.keys(values[0].data)
+            if (!Array.isArray(labelNames) && data.length > 0) {
+                labelNames = Object.keys(data[0].data)
             }
-
-            const datasets = values.map(function (value) {
-                const color = colors[count++ % colors.length];
-
-                return {
-                    label: value.label,
-                    lineTension: 0.3,
-                    backgroundColor: "rgba(78, 115, 223, 0.05)",
-                    borderColor: color,
-                    pointRadius: 3,
-                    pointBackgroundColor: color,
-                    pointBorderColor: color,
-                    pointHoverRadius: 3,
-                    pointHoverBackgroundColor: color,
-                    pointHoverBorderColor: color,
-                    pointHitRadius: 10,
-                    pointBorderWidth: 2,
-                    data: Object.values(value.data),
-                }
-            });
 
             new Chart(document.getElementById(elementId), {
                 type: 'line',
                 data: {
-                    labels: labels,
-                    datasets: datasets,
+                    labels: labelNames.reverse(),
+                    datasets: data.map(function (value) {
+                        const color = colors[count++ % colors.length];
+
+                        return {
+                            label: value.label,
+                            backgroundColor: 'rgba(78, 115, 223, 0.05)',
+                            borderColor: color,
+                            pointRadius: 3,
+                            pointBackgroundColor: color,
+                            pointBorderColor: color,
+                            pointHoverRadius: 3,
+                            pointHoverBackgroundColor: color,
+                            pointHoverBorderColor: color,
+                            pointHitRadius: 10,
+                            pointBorderWidth: 2,
+                            tension: 0.25,
+                            data: Object.values(value.data).reverse(),
+                        }
+                    }),
                 },
                 options: {
                     maintainAspectRatio: false,
+                    hover: {
+                        intersect: true,
+                    },
+                    plugins: {
+                        filler: {
+                            propagate: false,
+                        },
+                        legend: {
+                            display: false,
+                        },
+                        tooltip: {
+                            intersect: false,
+                        },
+                    },
                     scales: {
-                        xAxes: [{
-                            time: {
-                                unit: 'date'
+                        x: {
+                            reverse: true,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0)'
                             },
-                            gridLines: {
-                                display: false,
-                                drawBorder: false
-                            },
+                        },
+                        y: {
                             ticks: {
-                                maxTicksLimit: 7
+                                stepSize: 1000
                             },
-                        }],
-                        yAxes: [{
-                            ticks: {
-                                maxTicksLimit: 5,
-                                padding: 10,
+                            display: true,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0)',
                             },
-                            gridLines: {
-                                color: "rgb(234, 236, 244)",
-                                zeroLineColor: "rgb(234, 236, 244)",
-                                drawBorder: false,
-                                borderDash: [2],
-                                zeroLineBorderDash: [2],
-                            },
-                        }],
-                    },
-                    legend: {
-                        display: true
-                    },
-                    tooltips: {
-                        backgroundColor: "rgb(255,255,255)",
-                        bodyFontColor: "#858796",
-                        titleMarginBottom: 10,
-                        titleFontColor: '#6e707e',
-                        titleFontSize: 14,
-                        borderColor: '#dddfeb',
-                        borderWidth: 1,
-                        xPadding: 15,
-                        yPadding: 15,
-                        displayColors: false,
-                        intersect: false,
-                        mode: 'index',
-                        caretPadding: 10,
-                    },
+                        }
+                    }
                 }
             });
         }

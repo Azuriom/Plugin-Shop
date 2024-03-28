@@ -50,38 +50,4 @@ class GiftcardController extends Controller
 
         return to_route('shop.cart.index');
     }
-
-    /**
-     * Credit the amount of the giftcard to the user.
-     *
-     * @throws \Illuminate\Validation\ValidationException
-     */
-    public function use(Request $request)
-    {
-        abort_if(! use_site_money(), 404);
-
-        $validated = $this->validate($request, ['code' => 'required']);
-
-        $giftcard = Giftcard::active()->firstWhere($validated);
-        $user = $request->user();
-
-        if ($giftcard === null || ! $giftcard->isActive()) {
-            throw ValidationException::withMessages([
-                'code' => trans('shop::messages.giftcards.error'),
-            ]);
-        }
-
-        $amount = $giftcard->balance;
-        $user->addMoney($amount);
-
-        $giftcard->update(['balance' => 0]);
-
-        ActionLog::log('shop-giftcards.used', $giftcard, [
-            'amount' => shop_format_amount($amount),
-        ]);
-
-        return redirect()->back()->with('success', trans('shop::messages.giftcards.success', [
-            'money' => format_money($amount),
-        ]));
-    }
 }

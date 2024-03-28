@@ -27,9 +27,8 @@ class OfferController extends Controller
     {
         $gateways = Gateway::enabled()
             ->get()
-            ->filter(function ($gateway) {
-                return payment_manager()->hasPaymentMethod($gateway->type);
-            })->load('offers');
+            ->filter(fn (Gateway $gateway) => $gateway->isSupported())
+            ->load('offers');
 
         return view('shop::offers.payment', ['gateways' => $gateways]);
     }

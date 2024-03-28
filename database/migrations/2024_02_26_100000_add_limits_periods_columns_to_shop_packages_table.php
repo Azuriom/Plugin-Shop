@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('shop_packages', function (Blueprint $table) {
             $table->string('user_limit_period')->nullable()->after('user_limit');
-            $table->string('global_limit_period')->nullable()->after('global');
+            $table->string('global_limit_period')->nullable()->after('global_limit');
         });
     }
 

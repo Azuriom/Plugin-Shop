@@ -33,7 +33,7 @@ return new class extends Migration
                             'trigger' => 'purchase',
                             'require_online' => $package->need_online,
                             'server' => $serverId,
-                        ], $commands);
+                        ], array_filter($commands));
                     });
 
                 DB::table('shop_packages')->where('id', $package->id)->update([

@@ -88,8 +88,6 @@ class PackageController extends Controller
 
         $replicate->fill(['image' => null])->save();
 
-        $replicate->servers()->sync($package->servers);
-
         return to_route('shop.admin.packages.edit', ['package' => $replicate]);
     }
 

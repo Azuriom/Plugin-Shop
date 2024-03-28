@@ -26,13 +26,8 @@ class PaymentController extends Controller
 
         $gateways = Gateway::enabled()
             ->get()
-            ->filter(function ($gateway) {
-                if (! payment_manager()->hasPaymentMethod($gateway->type)) {
-                    return false;
-                }
-
-                return ! $gateway->paymentMethod()->hasFixedAmount();
-            });
+            ->filter(fn (Gateway $gateway) => $gateway->isSupported())
+            ->reject(fn (Gateway $gateway) => $gateway->paymentMethod()->hasFixedAmount());
 
         // If there is only one payment gateway, redirect to it directly
         if ($gateways->count() === 1) {

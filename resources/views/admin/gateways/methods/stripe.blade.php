@@ -1,6 +1,6 @@
 @include('shop::admin.elements.select')
 
-<div class="row g-3">
+<div class="row gx-3">
     <div class="mb-3 col-md-6">
         <label class="form-label" for="keyInput">{{ trans('shop::admin.gateways.public-key') }}</label>
         <input type="text" class="form-control @error('public-key') is-invalid @enderror" id="keyInput" name="public-key" value="{{ old('public-key', $gateway->data['public-key'] ?? '') }}" required placeholder="pk_...">
@@ -18,15 +18,15 @@
         <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
         @enderror
     </div>
+</div>
 
-    <div class="mb-3 col-md-6">
-        <label class="form-label" for="endpointInput">{{ trans('shop::admin.gateways.endpoint-secret') }}</label>
-        <input type="text" class="form-control @error('endpoint-secret') is-invalid @enderror" id="endpointInput" name="endpoint-secret" value="{{ old('endpoint-secret', $gateway->data['endpoint-secret'] ?? '') }}" placeholder="whsec_...">
+<div class="mb-3">
+    <label class="form-label" for="endpointInput">{{ trans('shop::admin.gateways.endpoint-secret') }}</label>
+    <input type="text" class="form-control @error('endpoint-secret') is-invalid @enderror" id="endpointInput" name="endpoint-secret" value="{{ old('endpoint-secret', $gateway->data['endpoint-secret'] ?? '') }}" placeholder="whsec_...">
 
-        @error('endpoint-secret')
-        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
-        @enderror
-    </div>
+    @error('endpoint-secret')
+    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+    @enderror
 </div>
 
 <div class="alert alert-info" role="alert">

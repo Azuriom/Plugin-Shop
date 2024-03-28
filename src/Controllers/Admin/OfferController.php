@@ -87,8 +87,8 @@ class OfferController extends Controller
 
     private function getGateways(): Collection
     {
-        return Gateway::all()->filter(function (Gateway $gateway) {
-            return payment_manager()->hasPaymentMethod($gateway->type) && ! $gateway->paymentMethod()->hasFixedAmount();
-        });
+        return Gateway::all()
+            ->filter(fn (Gateway $gateway) => $gateway->isSupported())
+            ->reject(fn (Gateway $gateway) => $gateway->paymentMethod()->hasFixedAmount());
     }
 }

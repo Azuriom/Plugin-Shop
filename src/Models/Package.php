@@ -264,7 +264,7 @@ class Package extends Model implements Buyable
         }
 
         if ($this->money > 0) {
-            $user->addMoney($this->money);
+            $user->addMoney($this->money * $item->quantity);
         }
 
         if ($this->hasGiftcard()) {
@@ -332,6 +332,7 @@ class Package extends Model implements Buyable
             ], [
                 $item->quantity, $this->id, $this->name, $item->price, $item->payment->transaction_id,
             ], $command))
+            ->flatMap(fn (string $command) => array_fill(0, $item->quantity, $command))
             ->all();
     }
 }

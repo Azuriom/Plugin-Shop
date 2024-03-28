@@ -68,4 +68,4 @@ Route::prefix('payments')->name('payments.')->group(function () {
 
 Route::get('/profile', [ProfileController::class, 'index'])->middleware('auth')->name('profile');
 
-Route::post('/giftcards/add', [GiftcardController::class, 'use'])->middleware('auth')->name('giftcards.add');
+Route::post('/giftcards/add', [GiftcardController::class, 'add'])->middleware('auth')->name('giftcards.add');

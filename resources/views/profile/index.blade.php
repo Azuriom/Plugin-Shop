@@ -27,9 +27,9 @@
                             <td>{{ $payment->formatPrice() }}</td>
                             <td>{{ $payment->getTypeName() }}</td>
                             <td>
-                            <span class="badge bg-{{ $payment->statusColor() }}">
-                                {{ trans('shop::admin.payments.status.'.$payment->status) }}
-                            </span>
+                                <span class="badge bg-{{ $payment->statusColor() }}">
+                                    {{ trans('shop::admin.payments.status.'.$payment->status) }}
+                                </span>
                             </td>
                             <td>{{ $payment->transaction_id ?? trans('messages.unknown') }}</td>
                             <td>{{ format_date_compact($payment->created_at) }}</td>

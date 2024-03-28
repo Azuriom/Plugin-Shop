@@ -11,8 +11,11 @@
                 @include('shop::admin.coupons._form')
 
                 <button type="submit" class="btn btn-primary">
-                    <i class="bi bi-save"></i> {{ trans('messages.actions.save') }}</button>
-                <a href="{{ route('shop.admin.coupons.destroy', $coupon) }}" class="btn btn-danger" data-confirm="delete"><i class="bi bi-trash"></i> {{ trans('messages.actions.delete') }}
+                    <i class="bi bi-save"></i> {{ trans('messages.actions.save') }}
+                </button>
+
+                <a href="{{ route('shop.admin.coupons.destroy', $coupon) }}" class="btn btn-danger" data-confirm="delete">
+                    <i class="bi bi-trash"></i> {{ trans('messages.actions.delete') }}
                 </a>
             </form>
         </div>

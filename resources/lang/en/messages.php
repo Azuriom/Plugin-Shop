@@ -137,7 +137,6 @@ return [
 
     'giftcards' => [
         'title' => 'Giftcards',
-        'success' => ':money have been credited to your account',
         'error' => 'This gift card does not exist, has expired or can no longer be used.',
         'add' => 'Add a gift card',
         'notification' => 'You received a giftcard, the code is :code (:balance).',

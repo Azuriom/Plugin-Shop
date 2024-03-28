@@ -36,7 +36,7 @@
     </div>
 @endauth
 
-@if($goal !== false)
+@if($goal > 0)
     <div class="card mb-4">
         <div class="card-header">
             <i class="bi bi-graph-up"></i> {{ trans('shop::messages.goal.title') }}

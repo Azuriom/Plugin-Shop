@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('shop_discounts', function (Blueprint $table) {
-            $table->unsignedInteger('roles')->nullable()->after('discount');
+            $table->text('roles')->nullable()->after('discount');
         });
     }
 

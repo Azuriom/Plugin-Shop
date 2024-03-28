@@ -27,9 +27,8 @@ class GatewayController extends Controller
      */
     public function index()
     {
-        $gateways = Gateway::all()->filter(function ($gateway) {
-            return payment_manager()->hasPaymentMethod($gateway->type);
-        });
+        $gateways = Gateway::all()
+            ->filter(fn (Gateway $gateway) => $gateway->isSupported());
 
         $gatewayTypes = $gateways->pluck('type');
 

@@ -66,6 +66,11 @@ class Gateway extends Model
         return payment_manager()->getPaymentMethodOrFail($this->type, $this);
     }
 
+    public function isSupported(): bool
+    {
+        return payment_manager()->hasPaymentMethod($this->type);
+    }
+
     public function getTypeName(): string
     {
         return self::getNameByType($this->type);

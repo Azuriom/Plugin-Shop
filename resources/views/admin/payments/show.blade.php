@@ -13,8 +13,9 @@
                 </div>
                 <div class="card-body">
                     <ul>
-                        @if($payment->gateway_type !== 'azuriom')
-                            <li>{{ trans('shop::messages.fields.price') }}: {{ $payment->formatPrice() }}</li>
+                        <li>{{ trans('shop::messages.fields.price') }}: {{ $payment->formatPrice() }}</li>
+
+                        @if(! $payment->isWithSiteMoney())
                             <li>{{ trans('messages.fields.type') }}: {{ $payment->getTypeName() }}</li>
                             <li>
                                 {{ trans('messages.fields.status') }}:
@@ -23,8 +24,6 @@
                                 </span>
                             </li>
                             <li>{{ trans('shop::messages.fields.payment_id') }}: {{ $payment->transaction_id ?? trans('messages.unknown') }}</li>
-                        @else
-                            <li>{{ trans('shop::messages.fields.price') }}: {{ format_money($payment->price) }}</li>
                         @endif
 
                         <li>
@@ -93,7 +92,7 @@
                                 <th scope="row">{{ $item->buyable_id }}</th>
                                 <td>{{ $item->name }}</td>
 
-                                @if($payment->gateway_type !== 'azuriom')
+                                @if(! $payment->isWithSiteMoney())
                                     <td>{{ $item->formatPrice() }}</td>
                                 @else
                                     <td>{{ format_money($item->price) }}</td>
