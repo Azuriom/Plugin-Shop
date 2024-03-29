@@ -62,4 +62,9 @@ class Offer extends Model implements Buyable
     {
         $item->payment->user->addMoney($this->money * $item->quantity);
     }
+
+    public function getDescription(): string
+    {
+        return $this->name;
+    }
 }
