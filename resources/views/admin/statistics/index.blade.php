@@ -186,8 +186,8 @@
                                 <tr>
                                     <th scope="row">{{ $package->id }}</th>
                                     <td>{{ $package->name  }}</td>
-                                    <td>{{ shop_format_amount($package->count) }}</td>
-                                    <td>{{ $package->total }}</td>
+                                    <td>{{ $package->count }}</td>
+                                    <td>{{ shop_format_amount($package->total) }}</td>
                                     <td>
                                         <a href="{{ route('shop.admin.statistics.package', $package) }}" class="mx-1" title="{{ trans('messages.actions.show') }}" data-bs-toggle="tooltip"><i class="bi bi-graph-up"></i></a>
                                     </td>
