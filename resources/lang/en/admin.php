@@ -45,7 +45,7 @@ return [
         'edit' => 'Edit coupon :coupon',
         'create' => 'Create coupon',
 
-        'global' => 'Should the coupon be active on all the shop ?',
+        'global' => 'Should the coupon be active on all the shop?',
         'cumulate' => 'Allow to use this coupon with other coupons',
         'user_limit' => 'User limit',
         'global_limit' => 'Global limit',
@@ -71,7 +71,7 @@ return [
         'edit' => 'Edit discount :discount',
         'create' => 'Create discount',
 
-        'global' => 'Should the discount be active on all the shop ?',
+        'global' => 'Should the discount be active on all the shop?',
         'active' => 'Active',
         'enable' => 'Enable the discount',
         'restricted' => 'Restrict this discount to certain roles only',
@@ -107,7 +107,7 @@ return [
 
     'commands' => [
         'online' => 'Wait for the player to be online before executing the command (requires AzLink)',
-        'offline' => 'Execute the command directly, wherever the player is online or not',
+        'offline' => 'Execute the command directly, whether the player is online or not',
         'servers' => 'You need to add at least one server to create a command.',
 
         'trigger' => 'Command trigger',

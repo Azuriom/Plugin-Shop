@@ -111,6 +111,8 @@ return [
 
         'webhook' => 'New payment on the shop',
         'webhook_info' => 'Total: :total, ID: :id (:gateway)',
+        'webhook_chargeback' => 'Payment chargeback on the shop',
+        'webhook_refund' => 'Payment refund on the shop',
     ],
 
     'categories' => [

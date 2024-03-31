@@ -3,7 +3,6 @@
 namespace Azuriom\Plugin\Shop\Controllers;
 
 use Azuriom\Http\Controllers\Controller;
-use Azuriom\Models\ActionLog;
 use Azuriom\Plugin\Shop\Cart\Cart;
 use Azuriom\Plugin\Shop\Models\Giftcard;
 use Illuminate\Http\Request;

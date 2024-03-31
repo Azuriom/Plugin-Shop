@@ -25,7 +25,7 @@ class StatisticsController extends Controller
             ];
         });
         $packagesCounts = Charts::count($this->getDeliveredPackages(), 'buyable_id');
-        $packagesTotals = Charts::sum($this->getDeliveredPackages(), 'total', 'buyable_id');
+        $packagesTotals = Charts::sum($this->getDeliveredPackages(), 'price', 'buyable_id');
 
         $packages = Package::all()->map(fn (Package $package) => $package->forceFill([
             'count' => $packagesCounts->get($package->id, 0),

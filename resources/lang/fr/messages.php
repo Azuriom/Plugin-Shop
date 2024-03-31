@@ -111,6 +111,8 @@ return [
 
         'webhook' => 'Nouveau paiement effectué sur la boutique',
         'webhook_info' => 'Total : :total, ID : :id (:gateway)',
+        'webhook_chargeback' => 'Litige effectué sur la boutique',
+        'webhook_refund' => 'Remboursement effectué sur la boutique',
     ],
 
     'categories' => [

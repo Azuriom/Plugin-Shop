@@ -110,6 +110,9 @@ abstract class PaymentMethod
 
     protected function createPayment(Cart $cart, float $price, string $currency, string $paymentId = null): Payment
     {
+        // Clear expired pending payments before creating a new one
+        Payment::clearExpiredPayments();
+
         return PaymentManager::createPayment($cart, $price, $currency, $this->id, $paymentId);
     }
 
@@ -175,6 +178,10 @@ abstract class PaymentMethod
         $payment->update(['status' => $isChargeback ? 'chargeback' : 'refunded']);
 
         $payment->dispatchCommands($isChargeback ? 'chargeback' : 'refund');
+
+        if (($webhook = setting('shop.webhook')) !== null) {
+            rescue(fn () => $payment->createRefundDiscordWebhook($isChargeback)->send($webhook));
+        }
 
         return response()->json(['status' => true]);
     }

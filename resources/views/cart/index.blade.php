@@ -72,10 +72,6 @@
                 <div class="alert alert-warning" role="alert">
                     <i class="bi bi-exclamation-circle"></i> {{ trans('shop::messages.cart.empty') }}
                 </div>
-
-                <a href="{{ route('shop.home') }}" class="btn btn-primary">
-                    <i class="bi bi-arrow-left"></i> {{ trans('shop::messages.cart.back') }}
-                </a>
             @endif
 
             <div class="row">

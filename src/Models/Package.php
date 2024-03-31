@@ -326,7 +326,8 @@ class Package extends Model implements Buyable
     {
         $commands = $commands->filter(fn (array $command) => ((bool) $command['require_online']) === $onlineOnly);
 
-        return $commands->pluck('command')
+        return $commands->pluck('commands')
+            ->flatten()
             ->map(fn (string $command) => str_replace([
                 '{quantity}', '{package_id}', '{package_name}', '{price}', '{transaction_id}',
             ], [

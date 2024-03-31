@@ -29,7 +29,7 @@ return new class extends Migration
                 $commands = $servers->pluck('server_id')
                     ->flatMap(function (int $serverId) use ($commands, $package) {
                         return array_map(fn (string $command) => [
-                            'command' => $command,
+                            'commands' => [$command],
                             'trigger' => 'purchase',
                             'require_online' => $package->need_online,
                             'server' => $serverId,

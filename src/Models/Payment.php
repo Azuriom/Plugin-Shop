@@ -208,6 +208,29 @@ class Payment extends Model
         return DiscordWebhook::create()->addEmbed($embed);
     }
 
+    public function createRefundDiscordWebhook(bool $isChargeback = false): DiscordWebhook
+    {
+        $transactionId = $this->isWithSiteMoney() ? '#'.$this->id : $this->transaction_id;
+        $title = $isChargeback
+            ? trans('shop::messages.payment.webhook_chargeback')
+            : trans('shop::messages.payment.webhook_refund');
+
+        $embed = Embed::create()
+            ->title($title)
+            ->description(trans('shop::messages.payment.webhook_info', [
+                'total' => $this->formatPrice(),
+                'gateway' => $this->getTypeName(),
+                'id' => $transactionId ?? trans('messages.none'),
+            ]))
+            ->author($this->user->name, null, $this->user->getAvatar())
+            ->url(route('shop.admin.payments.show', $this))
+            ->color($isChargeback ? '#dc3545' : '#ffc107')
+            ->footer('Azuriom v'.Azuriom::version())
+            ->timestamp(now());
+
+        return DiscordWebhook::create()->addEmbed($embed);
+    }
+
     public function statusColor(): string
     {
         return match ($this->status) {
@@ -265,5 +288,10 @@ class Payment extends Model
     public function scopeWithRealMoney(Builder $query): void
     {
         $query->where('gateway_type', '!=', 'azuriom');
+    }
+
+    public static function clearExpiredPayments(): void
+    {
+        self::pending()->where('created_at', '<', now()->subWeeks(2))->delete();
     }
 }

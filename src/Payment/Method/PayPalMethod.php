@@ -88,6 +88,10 @@ class PayPalMethod extends PaymentMethod
             return response()->noContent();
         }
 
+        if ($status === 'Refunded') {
+            return $this->processRefund($payment);
+        }
+
         if ($status !== 'Completed') {
             logger()->warning("[Shop] Invalid payment status for #{$paymentId}: {$status}");
 
