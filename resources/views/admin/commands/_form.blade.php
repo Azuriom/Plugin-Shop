@@ -1,7 +1,7 @@
 <div id="commands" class="mb-3" v-scope="{ shopCommands: shopCommandsList }">
     <div class="card" v-for="(command, i) in shopCommands">
         <div class="card-body">
-            <div class="row g-3">
+            <div class="row gx-3">
                 <div class="mb-3 col-md-6">
                     <label class="form-label" :for="'triggerSelect' + i">{{ trans('shop::admin.commands.trigger') }}</label>
 
@@ -32,7 +32,7 @@
                 </div>
             </div>
 
-            <div class="row g-3">
+            <div class="row gx-3">
                 <div class="col-md-8">
                     <label class="form-label" :for="'commandInput' + i">{{ trans('shop::admin.commands.command') }}</label>
 

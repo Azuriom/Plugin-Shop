@@ -24,8 +24,8 @@ return new class extends Migration
             $table->unsignedInteger('offer_id');
             $table->unsignedInteger('gateway_id');
 
-            $table->foreign('offer_id')->references('id')->on('shop_offers')->onDelete('cascade');
-            $table->foreign('gateway_id')->references('id')->on('shop_gateways')->onDelete('cascade');
+            $table->foreign('offer_id')->references('id')->on('shop_offers')->cascadeOnDelete();
+            $table->foreign('gateway_id')->references('id')->on('shop_gateways')->cascadeOnDelete();
         });
     }
 

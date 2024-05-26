@@ -1,4 +1,4 @@
-<div class="row g-3">
+<div class="row gx-3">
     <div class="mb-3 col-md-6">
         <label class="form-label" for="keyInput">{{ trans('shop::admin.gateways.api-key') }}</label>
         <input type="text" class="form-control @error('api-key') is-invalid @enderror" id="keyInput" name="api-key" value="{{ old('api-key', $gateway->data['api-key'] ?? '') }}" required>
@@ -18,7 +18,7 @@
     </div>
 </div>
 
-<div class="row g-3">
+<div class="row gx-3">
     <div class="mb-3 col-md-5">
         <label class="form-label" for="keyInput">{{ trans('shop::admin.gateways.merchant-id') }}</label>
         <input type="text" class="form-control @error('merchant-id') is-invalid @enderror" id="keyInput" name="merchant-id" value="{{ old('merchant-id', $gateway->data['merchant-id'] ?? '') }}" required>

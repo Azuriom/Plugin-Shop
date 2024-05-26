@@ -3,7 +3,7 @@
 
 @csrf
 
-<div class="row g-3">
+<div class="row gx-3">
     <div class="mb-3 col-md-6">
         <label class="form-label" for="nameInput">{{ trans('messages.fields.name') }}</label>
         <input type="text" class="form-control @error('name') is-invalid @enderror" id="nameInput" name="name" value="{{ old('name', $discount->name ?? '') }}" required>
@@ -26,7 +26,7 @@
     </div>
 </div>
 
-<div class="row g-3">
+<div class="row gx-3">
     <div class="mb-3 col-md-6">
         <label class="form-label" for="startInput">{{ trans('shop::messages.fields.start_date') }}</label>
         <input type="text" class="form-control date-picker @error('start_at') is-invalid @enderror" id="startInput" name="start_at" value="{{ old('start_at', $discount->start_at ?? now()) }}" required>

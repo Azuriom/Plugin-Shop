@@ -1,4 +1,4 @@
-<div class="row g-3">
+<div class="row gx-3">
     <div class="mb-3 col-md-7">
         <label class="form-label" for="keyInput">{{ trans('shop::admin.gateways.api-key') }}</label>
         <input type="text" class="form-control @error('key') is-invalid @enderror" id="keyInput" name="key" value="{{ old('key', $gateway->data['key'] ?? '') }}" required placeholder="psc_..">

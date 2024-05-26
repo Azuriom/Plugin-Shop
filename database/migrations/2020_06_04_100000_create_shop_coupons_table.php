@@ -28,8 +28,8 @@ return new class extends Migration
             $table->unsignedInteger('coupon_id');
             $table->unsignedInteger('package_id');
 
-            $table->foreign('coupon_id')->references('id')->on('shop_coupons')->onDelete('cascade');
-            $table->foreign('package_id')->references('id')->on('shop_packages')->onDelete('cascade');
+            $table->foreign('coupon_id')->references('id')->on('shop_coupons')->cascadeOnDelete();
+            $table->foreign('package_id')->references('id')->on('shop_packages')->cascadeOnDelete();
         });
     }
 

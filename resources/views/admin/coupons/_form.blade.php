@@ -12,7 +12,7 @@
 
 @csrf
 
-<div class="row g-3">
+<div class="row gx-3">
     <div class="mb-3 col-md-6">
         <label class="form-label" for="codeInput">{{ trans('shop::messages.fields.code') }}</label>
         <input type="text" class="form-control @error('code') is-invalid @enderror" id="codeInput" name="code" value="{{ old('code', $coupon->code ?? '') }}" required>
@@ -40,7 +40,7 @@
     </div>
 </div>
 
-<div class="row g-3">
+<div class="row gx-3">
     <div class="mb-3 col-md-6">
         <label class="form-label" for="userLimitInput">{{ trans('shop::admin.coupons.user_limit') }}</label>
         <input type="number" min="0" class="form-control @error('user_limit') is-invalid @enderror" id="userLimitInput" name="user_limit" value="{{ old('user_limit', $coupon->user_limit ?? '') }}">
@@ -60,7 +60,7 @@
     </div>
 </div>
 
-<div class="row g-3">
+<div class="row gx-3">
     <div class="mb-3 col-md-6">
         <label class="form-label" for="startInput">{{ trans('shop::messages.fields.start_date') }}</label>
         <input type="text" class="form-control date-picker @error('start_at') is-invalid @enderror" id="startInput" name="start_at" value="{{ old('start_at', $coupon->start_at ?? now()) }}" required>

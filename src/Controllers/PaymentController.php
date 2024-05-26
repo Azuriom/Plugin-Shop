@@ -16,8 +16,8 @@ class PaymentController extends Controller
 
         // If the cart isn't empty and the total is 0, just complete
         // the payment now as gateways won't accept null payment
-        if (! $cart->isEmpty() && $cart->total() < 0.1) {
-            PaymentManager::createPayment($cart, $cart->total(), currency(), 'free')->deliver();
+        if (! $cart->isEmpty() && $cart->payableTotal() < 0.1) {
+            PaymentManager::createPayment($cart, 0, currency(), 'free')->deliver();
 
             $cart->destroy();
 
@@ -33,7 +33,7 @@ class PaymentController extends Controller
         if ($gateways->count() === 1) {
             $gateway = $gateways->first();
 
-            return $gateway->paymentMethod()->startPayment($cart, $cart->total(), currency());
+            return $gateway->paymentMethod()->startPayment($cart, $cart->payableTotal(), currency());
         }
 
         return view('shop::payments.pay', ['gateways' => $gateways]);
@@ -52,7 +52,7 @@ class PaymentController extends Controller
             return to_route('shop.cart.index');
         }
 
-        return $gateway->paymentMethod()->startPayment($cart, $cart->total(), currency());
+        return $gateway->paymentMethod()->startPayment($cart, $cart->payableTotal(), currency());
     }
 
     public function success(Request $request, Gateway $gateway)

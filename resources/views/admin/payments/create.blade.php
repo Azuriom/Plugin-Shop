@@ -10,7 +10,7 @@
 
                 @csrf
 
-                <div class="row g-3">
+                <div class="row gx-3">
                     <div class="mb-3 col-md-4">
                         <label class="form-label" for="userInput">{{ trans('shop::messages.fields.user_id') }}</label>
                         <input type="number" class="form-control @error('user_id') is-invalid @enderror" id="userInput" name="user_id" value="{{ old('user_id') }}" required>

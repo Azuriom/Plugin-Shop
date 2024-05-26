@@ -26,8 +26,8 @@ return new class extends Migration
             $table->unsignedInteger('discount_id');
             $table->unsignedInteger('package_id');
 
-            $table->foreign('discount_id')->references('id')->on('shop_discounts')->onDelete('cascade');
-            $table->foreign('package_id')->references('id')->on('shop_packages')->onDelete('cascade');
+            $table->foreign('discount_id')->references('id')->on('shop_discounts')->cascadeOnDelete();
+            $table->foreign('package_id')->references('id')->on('shop_packages')->cascadeOnDelete();
         });
     }
 

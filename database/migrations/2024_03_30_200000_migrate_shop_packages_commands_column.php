@@ -18,7 +18,11 @@ return new class extends Migration
             try {
                 $commands = json_decode($package->commands, true, flags: JSON_THROW_ON_ERROR);
 
-                if (empty($commands) || ! is_array($commands)) {
+                if (! is_array($commands) || empty($commands = array_filter($commands))) {
+                    DB::table('shop_packages')->where('id', $package->id)->update([
+                        'commands' => null,
+                    ]);
+
                     continue;
                 }
 

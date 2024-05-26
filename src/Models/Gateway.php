@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $type
  * @property int $fees
  * @property array $data
+ * @property int $position
  * @property bool $is_enabled
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
@@ -37,7 +38,7 @@ class Gateway extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'name', 'type', 'fees', 'data', 'is_enabled',
+        'name', 'type', 'fees', 'data', 'position', 'is_enabled',
     ];
 
     /**
@@ -96,6 +97,6 @@ class Gateway extends Model
      */
     public function scopeEnabled(Builder $query): void
     {
-        $query->where('is_enabled', true);
+        $query->where('is_enabled', true)->orderBy('position');
     }
 }

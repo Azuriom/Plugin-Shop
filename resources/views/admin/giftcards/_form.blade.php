@@ -2,7 +2,7 @@
 
 @csrf
 
-<div class="@if($row) row g-3 @endif">
+<div class="@if($row) row gx-3 @endif">
     <div class="mb-3  @if($row) col-md-6 @endif">
         <label class="form-label" for="startInput">{{ trans('shop::messages.fields.start_date') }}</label>
         <input type="text" class="form-control date-picker @error('start_at') is-invalid @enderror" id="startInput" name="start_at" value="{{ old('start_at', $giftcard->start_at ?? now()) }}" required>

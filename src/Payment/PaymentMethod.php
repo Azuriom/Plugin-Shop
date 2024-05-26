@@ -30,7 +30,7 @@ abstract class PaymentMethod
     }
 
     /**
-     * Start a new payment with this method.
+     * Start a new payment with this method and return the payment response to the user (redirect, form, ...).
      *
      * @return \Illuminate\Http\Response
      */
@@ -65,19 +65,22 @@ abstract class PaymentMethod
     }
 
     /**
-     * Get the view for the gateway config.
+     * Get the view for the gateway config in the admin panel.
      *
      * @return string
      */
     abstract public function view();
 
     /**
-     * Get the validation rules for the gateway config.
+     * Get the validation rules for the gateway config in the admin panel.
      *
      * @return array
      */
     abstract public function rules();
 
+    /**
+     * Get the payment method image.
+     */
     public function image()
     {
         return asset('plugins/shop/img/payments/'.($this->image ?? ($this->id().'.svg')));
@@ -93,6 +96,12 @@ abstract class PaymentMethod
         return $this->name;
     }
 
+    /**
+     * Return whether this payment method supports payment with user-defined amounts,
+     * or if it only supports amounts defined by the payment gateway.
+     *
+     * @return bool
+     */
     public function hasFixedAmount()
     {
         return false;
@@ -108,6 +117,9 @@ abstract class PaymentMethod
         ]);
     }
 
+    /**
+     * Create a new pending payment for the given cart, associated with this payment method.
+     */
     protected function createPayment(Cart $cart, float $price, string $currency, string $paymentId = null): Payment
     {
         // Clear expired pending payments before creating a new one
@@ -152,11 +164,17 @@ abstract class PaymentMethod
         return response()->json(['status' => true]);
     }
 
+    /**
+     * Mark the payment as chargebacked, and dispatch the necessary commands.
+     */
     protected function processChargeback(Payment $payment)
     {
         return $this->processRefund($payment, true);
     }
 
+    /**
+     * Mark the payment as refunded, and dispatch the necessary commands.
+     */
     protected function processRefund(Payment $payment, bool $isChargeback = false)
     {
         if ($payment->status === 'refunded' || $payment->status === 'chargeback') {
@@ -186,12 +204,15 @@ abstract class PaymentMethod
         return response()->json(['status' => true]);
     }
 
+    /**
+     * Return a redirect response with a generic payment error message.
+     */
     protected function errorResponse()
     {
         return to_route('shop.cart.index')->with('error', trans('shop::messages.payment.error'));
     }
 
-    protected function getPurchaseDescription(int $id)
+    protected function getPurchaseDescription(int $id): string
     {
         return trans('shop::messages.payment.info', [
             'id' => $id,

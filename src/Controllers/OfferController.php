@@ -57,6 +57,6 @@ class OfferController extends Controller
 
         $cart->add($offer);
 
-        return $gateway->paymentMethod()->startPayment($cart, $cart->total(), currency());
+        return $gateway->paymentMethod()->startPayment($cart, $offer->price, currency());
     }
 }

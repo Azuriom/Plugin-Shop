@@ -65,6 +65,6 @@ class Currencies
 
     public static function symbol(string $currencyCode): string
     {
-        return self::SYMBOLS[$currencyCode] ?? $currencyCode;
+        return self::SYMBOLS[strtoupper($currencyCode)] ?? $currencyCode;
     }
 }

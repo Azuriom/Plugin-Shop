@@ -47,7 +47,7 @@
                     </div>
                 </div>
 
-                <div class="row g-3">
+                <div class="row gx-3">
                     <div class="col-md-6 mb-3">
                         <label class="form-label" for="goalInput">{{ trans('shop::messages.goal.title') }}</label>
 

@@ -25,7 +25,7 @@ return new class extends Migration
             $table->foreign('payment_id')
                 ->references('id')
                 ->on('shop_payments')
-                ->onDelete('cascade');
+                ->cascadeOnDelete();
         });
 
         if (file_exists($path = storage_path('shop_backup.json'))) {

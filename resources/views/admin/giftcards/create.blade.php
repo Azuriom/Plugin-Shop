@@ -6,7 +6,7 @@
     <div class="card shadow mb-4">
         <div class="card-body">
             <form action="{{ route('shop.admin.giftcards.store') }}" method="POST">
-                <div class="row g-3">
+                <div class="row gx-3">
                     <div class="mb-3 col-md-6">
                         <label class="form-label" for="codeInput">{{ trans('shop::messages.fields.code') }}</label>
                         <input type="text" class="form-control @error('code') is-invalid @enderror" id="codeInput" name="code" value="{{ old('code') }}" required>

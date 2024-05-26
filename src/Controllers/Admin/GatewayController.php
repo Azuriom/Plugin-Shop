@@ -6,6 +6,7 @@ use Azuriom\Http\Controllers\Controller;
 use Azuriom\Plugin\Shop\Models\Gateway;
 use Azuriom\Plugin\Shop\Payment\PaymentManager;
 use Azuriom\Plugin\Shop\Requests\GatewayRequest;
+use Illuminate\Http\Request;
 
 class GatewayController extends Controller
 {
@@ -27,7 +28,8 @@ class GatewayController extends Controller
      */
     public function index()
     {
-        $gateways = Gateway::all()
+        $gateways = Gateway::orderBy('position')
+            ->get()
             ->filter(fn (Gateway $gateway) => $gateway->isSupported());
 
         $gatewayTypes = $gateways->pluck('type');
@@ -40,6 +42,23 @@ class GatewayController extends Controller
             'gateways' => $gateways,
             'paymentMethods' => $paymentMethods,
         ]);
+    }
+
+    public function updateOrder(Request $request)
+    {
+        $this->validate($request, [
+            'gateways' => ['required', 'array'],
+        ]);
+
+        $roles = $request->input('gateways');
+
+        $position = 1;
+
+        foreach ($roles as $id) {
+            Gateway::whereKey($id)->update(['position' => $position++]);
+        }
+
+        return response()->json(['message' => trans('messages.status.success')]);
     }
 
     /**

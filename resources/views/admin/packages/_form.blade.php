@@ -29,7 +29,7 @@
     @enderror
 </div>
 
-<div class="row g-3">
+<div class="row gx-3">
     <div class="mb-3 col-md-6">
         <label class="form-label" for="priceInput">{{ trans('shop::messages.fields.price') }}</label>
 
@@ -64,7 +64,7 @@
     <label class="form-check-label" for="customPriceSwitch">{{ trans('shop::admin.packages.custom_price') }}</label>
 </div>
 
-<div class="row g-3 mt-4">
+<div class="row gx-3 mt-4">
     <div class="mb-3 col-md-6">
         <label class="form-label" for="requiredRoleSelect">{{ trans('shop::messages.fields.required_roles') }}</label>
         <select class="form-select @error('required_roles') is-invalid @enderror" id="requiredRoleSelect" name="required_roles[]" multiple>
@@ -110,7 +110,7 @@
 
 <div id="userLimit" class="{{ old('user_limit', $package->user_limit ?? false) ? 'show' : 'collapse' }}">
     <div class="card mb-3">
-        <div class="card-body row g-3">
+        <div class="card-body row gx-3">
             <div class="mb-3 col-md-6">
                 <label class="form-label" for="userLimitInput">{{ trans('shop::messages.fields.user_limit') }}</label>
                 <input type="number" class="form-control @error('user_limit') is-invalid @enderror" id="userLimitInput" name="user_limit" value="{{ old('user_limit', $package->user_limit ?? '') }}">
@@ -120,7 +120,7 @@
                 @enderror
             </div>
 
-            <div class="mb-3 col-md-6" v-scope="{ ...parseLimitPeriod('{{ old('user_limit_period', $package->user_limit_period ?? '') }}') }">
+            <div class="mb-3 col-md-6" v-scope="{ ...parsePeriod('{{ old('user_limit_period', $package->user_limit_period ?? '') }}') }">
                 <label class="form-label" for="userLimitInput">{{ trans('shop::admin.packages.limit_period') }}</label>
 
                 <div class="input-group @error('user_limit_period') has-validation @enderror">
@@ -157,7 +157,7 @@
 
 <div id="globalLimit" class="{{ old('global_limit', $package->global_limit ?? false) ? 'show' : 'collapse' }}">
     <div class="card mb-3">
-        <div class="card-body row g-3">
+        <div class="card-body row gx-3">
             <div class="mb-3 col-md-6">
                 <label class="form-label" for="globalLimitInput">{{ trans('shop::messages.fields.global_limit') }}</label>
                 <input type="number" class="form-control @error('global_limit') is-invalid @enderror" id="globalLimitInput" name="global_limit" value="{{ old('global_limit', $package->global_limit ?? '') }}">
@@ -167,7 +167,7 @@
                 @enderror
             </div>
 
-            <div class="mb-3 col-md-6" v-scope="{ ...parseLimitPeriod('{{ old('global_limit_period', $package->global_limit_period ?? '') }}') }">
+            <div class="mb-3 col-md-6" v-scope="{ ...parsePeriod('{{ old('global_limit_period', $package->global_limit_period ?? '') }}') }">
                 <label class="form-label" for="globalLimitInput">{{ trans('shop::admin.packages.limit_period') }}</label>
 
                 <div class="input-group @error('global_limit_period') has-validation @enderror">
@@ -197,7 +197,7 @@
     </div>
 </div>
 
-<div class="row g-3">
+<div class="row gx-3">
     <div class="mb-3 col-md-6">
         <label class="form-label" for="roleSelect">{{ trans('shop::messages.fields.role') }}</label>
         <select class="form-select @error('role_id') is-invalid @enderror" id="roleSelect" name="role_id">
@@ -291,7 +291,7 @@
 
 @push('scripts')
     <script>
-        function parseLimitPeriod(value) {
+        function parsePeriod(value) {
             if (!value) {
                 return { value: '', unit: '' }
             }

@@ -50,8 +50,7 @@ class StatisticsController extends Controller
         $query = $this->getDeliveredPackages()->where('buyable_id', $package->id);
         $byGateway = $this->getCompletedPayments()
             ->whereHas('items', function (Builder $query) use ($package) {
-                $query->where('buyable_type', 'shop.packages')
-                    ->where('buyable_id', $package->id);
+                $query->whereMorphedTo('buyable', $package);
             });
 
         return view('shop::admin.statistics.package', [
