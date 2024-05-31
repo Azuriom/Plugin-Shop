@@ -18,6 +18,3 @@
     <label class="form-check-label" for="enableSwitch">{{ trans('shop::admin.gateways.enable') }}</label>
 </div>
 
-<div class="alert alert-info">
-    <i class="bi bi-info-circle"></i> @lang('shop::admin.gateways.info')
-</div>

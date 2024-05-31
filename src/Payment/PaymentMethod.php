@@ -2,10 +2,14 @@
 
 namespace Azuriom\Plugin\Shop\Payment;
 
+use Azuriom\Models\User;
 use Azuriom\Plugin\Shop\Cart\Cart;
 use Azuriom\Plugin\Shop\Models\Gateway;
+use Azuriom\Plugin\Shop\Models\Package;
 use Azuriom\Plugin\Shop\Models\Payment;
+use Azuriom\Plugin\Shop\Models\Subscription;
 use Illuminate\Http\Request;
+use InvalidArgumentException;
 
 abstract class PaymentMethod
 {
@@ -37,7 +41,22 @@ abstract class PaymentMethod
     abstract public function startPayment(Cart $cart, float $amount, string $currency);
 
     /**
-     * Handle a payment notification request.
+     * Start a new subscription with this method.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function startSubscription(User $user, Package $package)
+    {
+        throw new InvalidArgumentException('This payment method does not support subscriptions.');
+    }
+
+    public function cancelSubscription(Subscription $subscription): void
+    {
+        throw new InvalidArgumentException('This payment method does not support subscriptions.');
+    }
+
+    /**
+     * Handle a payment notification request sent by the payment gateway and return a response.
      *
      * @return \Illuminate\Http\Response
      */
@@ -107,6 +126,16 @@ abstract class PaymentMethod
         return false;
     }
 
+    /**
+     * Return whether this payment method supports subscriptions.
+     *
+     * @return bool
+     */
+    public function supportsSubscriptions()
+    {
+        return false;
+    }
+
     protected function invalidPayment(Payment $payment, string $paymentId, string $message)
     {
         $payment->update(['status' => 'error', 'transaction_id' => $paymentId]);
@@ -123,11 +152,46 @@ abstract class PaymentMethod
     protected function createPayment(Cart $cart, float $price, string $currency, string $paymentId = null): Payment
     {
         // Clear expired pending payments before creating a new one
-        Payment::clearExpiredPayments();
+        Payment::purgePendingPayments();
 
         return PaymentManager::createPayment($cart, $price, $currency, $this->id, $paymentId);
     }
 
+    /**
+     * Create a new active subscription for the given user and package.
+     */
+    protected function createSubscription(User $user, Package $package, string $subscriptionId, float $price = null, string $currency = null)
+    {
+        return $package->subscriptions()->create([
+            'user_id' => $user->id,
+            'package_id' => $package->id,
+            'subscription_id' => $subscriptionId,
+            'gateway_type' => $this->id,
+            'status' => 'active',
+            'price' => $price ?? $package->price,
+            'currency' => $currency ?? currency(),
+        ]);
+    }
+
+    protected function renewSubscription(Subscription $subscription, string $transactionId, bool $initial = false)
+    {
+        if ($subscription->payments()->where('transaction_id', $transactionId)->exists()) {
+            return response()->json(['status' => 'duplicate_id']);
+        }
+
+        $payment = $subscription->addRenewalPayment($transactionId);
+
+        $payment->deliver(! $initial);
+
+        return response()->json([
+            'status' => $initial ? 'subscription_created' : 'subscription_renewed',
+        ]);
+    }
+
+    /**
+     * Try to process the given payment, and return a response with the result.
+     * If a payment ID is provided, it will be used to update the payment transaction ID.
+     */
     protected function processPayment(?Payment $payment, string $paymentId = null)
     {
         if ($payment === null) {
@@ -217,6 +281,14 @@ abstract class PaymentMethod
         return trans('shop::messages.payment.info', [
             'id' => $id,
             'website' => site_name(),
+        ]);
+    }
+
+    protected function getSubscriptionDescription(User $user, Package $package): string
+    {
+        return trans('shop::messages.payment.subscription', [
+            'user' => $user->id,
+            'package' => $package->name,
         ]);
     }
 }

@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Cache;
 /**
  * @property int $id
  * @property int $user_id
+ * @property int|null $subscription_id
  * @property float $price
  * @property string $currency
  * @property string $status
@@ -30,6 +31,7 @@ use Illuminate\Support\Facades\Cache;
  * @property \Illuminate\Support\Collection|\Azuriom\Plugin\Shop\Models\PaymentItem[] $items
  * @property \Illuminate\Support\Collection|\Azuriom\Plugin\Shop\Models\Coupon[] $coupons
  * @property \Illuminate\Support\Collection|\Azuriom\Plugin\Shop\Models\Giftcard[] $giftcards
+ * @property \Azuriom\Plugin\Shop\Models\Subscription|null $subscription
  *
  * @method static \Illuminate\Database\Eloquent\Builder completed()
  * @method static \Illuminate\Database\Eloquent\Builder pending()
@@ -72,7 +74,7 @@ class Payment extends Model
      * @var array<int, string>
      */
     protected array $searchable = [
-        'status', 'gateway_type', 'transaction_id', 'user.*',
+        'status', 'gateway_type', 'transaction_id', 'subscription_id', 'user.*',
     ];
 
     /**
@@ -100,6 +102,14 @@ class Payment extends Model
     }
 
     /**
+     * Get the associated subscription if this payment is for a subscription.
+     */
+    public function subscription()
+    {
+        return $this->belongsTo(Subscription::class);
+    }
+
+    /**
      * Get the giftcards used in this payment.
      */
     public function giftcards()
@@ -117,7 +127,7 @@ class Payment extends Model
         return Gateway::getNameByType($this->gateway_type);
     }
 
-    public function deliver(): void
+    public function deliver(bool $renewal = false): void
     {
         $this->update(['status' => 'completed']);
 
@@ -126,7 +136,7 @@ class Payment extends Model
         }
 
         foreach ($this->items as $item) {
-            $item->deliver();
+            $item->deliver($renewal);
         }
 
         if (! $this->isWithSiteMoney()) {
@@ -290,7 +300,7 @@ class Payment extends Model
         $query->where('gateway_type', '!=', 'azuriom');
     }
 
-    public static function clearExpiredPayments(): void
+    public static function purgePendingPayments(): void
     {
         self::pending()->where('created_at', '<', now()->subWeeks(2))->delete();
     }

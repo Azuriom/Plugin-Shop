@@ -7,6 +7,8 @@ return [
         'total' => 'Total : :total',
         'transaction' => 'ID de la transaction : :transaction (:gateway)',
         'date' => 'Date : :date',
+        'subscription' => 'Ce paiement est pour un abonnement commencé le :date, vous pouvez le gérer dans votre profil.',
+        'profile' => 'Aller au profil',
     ],
 
     'giftcard' => [

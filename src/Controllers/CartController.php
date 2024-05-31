@@ -5,8 +5,11 @@ namespace Azuriom\Plugin\Shop\Controllers;
 use Azuriom\Http\Controllers\Controller;
 use Azuriom\Plugin\Shop\Cart\Cart;
 use Azuriom\Plugin\Shop\Models\Package;
+use Azuriom\Support\Markdown;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\HtmlString;
+use Illuminate\Support\Str;
 
 class CartController extends Controller
 {
@@ -15,9 +18,17 @@ class CartController extends Controller
      */
     public function index(Request $request)
     {
+        $terms = setting('shop.required_terms');
+
+        if ($terms === null) {
+            $markdown = Markdown::parse($terms, true);
+
+            $terms = new HtmlString(Str::between($markdown, '<p>', '</p>'));
+        }
+
         return view('shop::cart.index', [
             'cart' => Cart::fromSession($request->session()),
-            'termsUrl' => setting('shop.terms'),
+            'terms' => new HtmlString(Str::between(Markdown::parse($terms, true), '<p>', '</p>')),
         ]);
     }
 

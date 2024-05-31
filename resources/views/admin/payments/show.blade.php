@@ -30,6 +30,16 @@
                             {{ trans('messages.fields.user') }}:
                             <a href="{{ route('admin.users.edit', $payment->user) }}">{{ $payment->user->name }}</a>
                         </li>
+
+                        @if($payment->subscription !== null)
+                            <li>
+                                {{ trans('shop::messages.fields.subscription') }}:
+                                <a href="{{ route('shop.admin.subscriptions.show', $payment->subscription) }}">
+                                    #{{ $payment->subscription->id }}
+                                </a>
+                            </li>
+                        @endif
+
                         <li>{{ trans('messages.fields.date') }}: {{ format_date_compact($payment->created_at) }}</li>
 
                         @if(!$payment->coupons->isEmpty())

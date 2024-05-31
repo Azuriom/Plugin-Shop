@@ -59,6 +59,67 @@
     </div>
 </div>
 
+@if(scheduler_running())
+    <div class="row gx-3" v-scope="{ ...parsePeriod('{{ old('billing_period', $package->billing_period ?? '') }}'), billing: '{{ old('billing_type', $package->billing_type ?? 'one-off') }}' }">
+        <div class="mb-3" :class="billing !== 'one-off' ? 'col-md-6' : 'col-md-12'">
+            <label class="form-label" for="billingSelect">{{ trans('shop::admin.packages.billing') }}</label>
+            <select class="form-select" id="billingSelect" name="billing_type" required v-model="billing">
+                <option value="one-off">{{ trans('shop::admin.packages.one_off') }}</option>
+                <option value="expiring">{{ trans('shop::admin.packages.expiring') }}</option>
+                <option value="subscription">{{ trans('shop::admin.packages.subscription') }}</option>
+            </select>
+        </div>
+
+        <div class="mb-3 col-md-6" v-if="billing !== 'one-off'">
+            <label class="form-label" for="billingValue">{{ trans('shop::admin.packages.billing_period') }}</label>
+
+            <div class="input-group @error('billing_period') has-validation @enderror">
+                <span v-if="billing === 'subscription'" class="input-group-text">
+                    {{ trans('shop::admin.packages.every') }}
+                </span>
+
+                <span v-else-if="billing === 'expiring'" class="input-group-text">
+                    {{ trans('shop::admin.packages.after') }}
+                </span>
+
+                <input type="number" min="0" class="form-control" id="billingValue" v-model="value" required>
+
+                <select class="form-select @error('billing_period') is-invalid @enderror" v-model="unit" aria-label="{{ trans('shop::admin.packages.billing_period') }}">
+                    @foreach(['days', 'weeks', 'months', 'years'] as $unit)
+                        <option value="{{ $unit }}">
+                            {{ trans('shop::messages.periods.'.$unit) }}
+                        </option>
+                    @endforeach
+                </select>
+
+                @error('billing_period')
+                <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                @enderror
+            </div>
+
+            <input type="hidden" name="billing_period" :value="value + ' ' + unit">
+        </div>
+
+        <div v-if="billing === 'subscription'" class="col-12">
+            <div class="alert alert-info" role="alert">
+                <i class="bi bi-info-circle"></i> @lang('shop::admin.packages.subscription_info')
+            </div>
+        </div>
+
+        <div v-else-if="billing === 'expiring'" class="col-12">
+            <div class="alert alert-info" role="alert">
+                <i class="bi bi-info-circle"></i> @lang('shop::admin.packages.expiring_info')
+            </div>
+        </div>
+    </div>
+@else
+    <input type="hidden" name="billing_type" value="one-off">
+
+    <p class="small text-info">
+        <i class="bi bi-info-circle"></i> @lang('shop::admin.packages.scheduler')
+    </p>
+@endif
+
 <div class="mb-3 form-check form-switch">
     <input type="checkbox" class="form-check-input" id="customPriceSwitch" name="custom_price" @checked($package->custom_price ?? false)>
     <label class="form-check-label" for="customPriceSwitch">{{ trans('shop::admin.packages.custom_price') }}</label>
@@ -197,6 +258,11 @@
     </div>
 </div>
 
+<div class="mb-3 form-check form-switch">
+    <input type="checkbox" class="form-check-input" id="noExpired" name="limits_no_expired" @checked($package->limits_no_expired ?? false)>
+    <label class="form-check-label" for="noExpired">{{ trans('shop::admin.packages.limits_no_expired') }}</label>
+</div>
+
 <div class="row gx-3">
     <div class="mb-3 col-md-6">
         <label class="form-label" for="roleSelect">{{ trans('shop::messages.fields.role') }}</label>
@@ -293,7 +359,7 @@
     <script>
         function parsePeriod(value) {
             if (!value) {
-                return { value: '', unit: '' }
+                return { value: '1', unit: 'months' }
             }
 
             const parsed = value.split(' ', 2)

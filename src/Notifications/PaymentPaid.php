@@ -41,7 +41,14 @@ class PaymentPaid extends Notification
             ]))
             ->line(trans('shop::mails.payment.date', [
                 'date' => format_date($this->payment->created_at, true),
-            ]));
+            ]))
+            ->when($this->payment->subscription, function (MailMessage $message) {
+                $subscription = $this->payment->subscription;
+
+                $message->line(trans('shop::mails.payment.subscription', [
+                    'date' => format_date($subscription->created_at, true),
+                ]))->action(trans('shop::mails.payment.subscription'), route('shop.profile'));
+            });
     }
 
     /**

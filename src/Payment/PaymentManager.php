@@ -7,11 +7,11 @@ use Azuriom\Plugin\Shop\Models\Gateway;
 use Azuriom\Plugin\Shop\Models\Giftcard;
 use Azuriom\Plugin\Shop\Models\Payment;
 use Azuriom\Plugin\Shop\Payment\Method\MollieMethod;
-use Azuriom\Plugin\Shop\Payment\Method\PayGolMethod;
 use Azuriom\Plugin\Shop\Payment\Method\PaymentWallMethod;
-use Azuriom\Plugin\Shop\Payment\Method\PayPalExpressCheckout;
+use Azuriom\Plugin\Shop\Payment\Method\PayPalCheckoutMethod;
 use Azuriom\Plugin\Shop\Payment\Method\PayPalMethod;
 use Azuriom\Plugin\Shop\Payment\Method\PaysafecardMethod;
+use Azuriom\Plugin\Shop\Payment\Method\SkrillMethod;
 use Azuriom\Plugin\Shop\Payment\Method\StripeMethod;
 use Azuriom\Plugin\Shop\Payment\Method\XsollaMethod;
 use Illuminate\Support\Collection;
@@ -30,13 +30,13 @@ class PaymentManager
     {
         $this->paymentMethods = collect([
             'paypal' => PayPalMethod::class,
-            'paypal-express-checkout' => PayPalExpressCheckout::class,
+            'paypal-checkout' => PayPalCheckoutMethod::class,
             'mollie' => MollieMethod::class,
             'paysafecard' => PaysafecardMethod::class,
-            'paygol' => PayGolMethod::class,
             'stripe' => StripeMethod::class,
             'paymentwall' => PaymentWallMethod::class,
             'xsolla' => XsollaMethod::class,
+            'skrill' => SkrillMethod::class,
         ]);
     }
 

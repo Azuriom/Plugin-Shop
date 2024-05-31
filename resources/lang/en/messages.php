@@ -25,6 +25,7 @@ return [
         'discount' => 'Discount',
         'expire_date' => 'Expire date',
         'gateways' => 'Gateways',
+        'global_limit' => 'Global purchase limit',
         'original_balance' => 'Original Balance',
         'package' => 'Package',
         'packages' => 'Packages',
@@ -32,21 +33,21 @@ return [
         'payments' => 'Payments',
         'price' => 'Price',
         'quantity' => 'Quantity',
+        'renewal_date' => 'Renewal date',
         'required_packages' => 'Required packages',
         'required_roles' => 'Required role',
         'role' => 'Role to set after purchase',
-        'server' => 'Server',
         'start_date' => 'Start date',
-        'status' => 'Status',
+        'subscription' => 'Subscription',
+        'subscription_id' => 'Subscription ID',
         'total' => 'Total',
         'user_id' => 'User ID',
         'user_limit' => 'User purchase limit',
-        'global_limit' => 'Global purchase limit',
     ],
 
     'actions' => [
-        'duplicate' => 'Duplicate',
-        'remove' => 'Remove',
+        'subscribe' => 'Subscribe',
+        'move' => 'Move',
     ],
 
     'goal' => [
@@ -69,7 +70,6 @@ return [
         'guest' => 'You must be logged in to make a purchase.',
         'empty' => 'Your cart is empty.',
         'checkout' => 'Checkout',
-        'remove' => 'Remove',
         'clear' => 'Clear the cart',
         'pay' => 'Pay',
         'back' => 'Back to shop',
@@ -86,9 +86,6 @@ return [
             'money' => 'You don\'t have enough money to make this purchase.',
             'execute' => 'An unexpected error occurred during payment, your purchase got refund.',
         ],
-
-        'terms' => 'I accept the :terms.',
-        'terms_link' => 'terms of service',
     ],
 
     'coupons' => [
@@ -105,9 +102,11 @@ return [
         'empty' => 'No payment methods currently available.',
 
         'info' => 'Purchase #:id on :website',
-        'error' => 'The payment could not be completed.',
+        'subscription' => ':package - Subscription (User #:user)',
+        'error' => 'The payment could not be completed, please try again later.',
 
         'success' => 'Payment completed, you\'ll receive your purchase in-game in less than a minute.',
+        'pending' => 'Payment pending, you\'ll receive your purchase in-game once the payment is confirmed.',
 
         'webhook' => 'New payment on the shop',
         'webhook_info' => 'Total: :total, ID: :id (:gateway)',
@@ -134,6 +133,7 @@ return [
 
     'profile' => [
         'payments' => 'Your payments',
+        'subscriptions' => 'Your subscriptions',
         'money' => 'Money: :balance',
     ],
 

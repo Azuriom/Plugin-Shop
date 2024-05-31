@@ -30,5 +30,10 @@
 </div>
 
 <div class="alert alert-info" role="alert">
-    <i class="bi bi-info-circle"></i> @lang('shop::admin.gateways.stripe_info', ['url' => route('shop.payments.notification', 'stripe')])
+    <i class="bi bi-info-circle"></i> @lang('shop::admin.gateways.stripe_info', [
+        'url' => route('shop.payments.notification', 'stripe'),
+        'events' => implode(', ', [
+            'checkout.session.completed', 'invoice.paid', 'customer.subscription.created', 'customer.subscription.updated', 'customer.subscription.deleted',
+        ])
+    ])
 </div>

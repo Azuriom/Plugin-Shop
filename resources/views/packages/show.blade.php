@@ -16,12 +16,20 @@
             </span>
 
             @auth
-                @if($package->isInCart())
+                @if($package->isSubscription())
+                    <form action="{{ route('shop.subscriptions.select', $package) }}" method="POST" class="form-inline">
+                        @csrf
+
+                        <button type="submit" class="btn btn-primary">
+                            {{ trans('shop::messages.actions.subscribe') }}
+                        </button>
+                    </form>
+                @elseif($package->isInCart())
                     <form action="{{ route('shop.cart.remove', $package) }}" method="POST" class="form-inline">
                         @csrf
 
                         <button type="submit" class="btn btn-primary">
-                            {{ trans('shop::messages.actions.remove') }}
+                            {{ trans('messages.actions.remove') }}
                         </button>
                     </form>
                 @elseif($package->getMaxQuantity() < 1)

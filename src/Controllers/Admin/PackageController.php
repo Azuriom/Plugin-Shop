@@ -155,6 +155,11 @@ class PackageController extends Controller
      */
     public function destroy(Package $package)
     {
+        if ($package->subscriptions()->scopes('active')->exists()) {
+            return to_route('shop.admin.packages.index')
+                ->with('error', trans('shop::admin.subscriptions.error'));
+        }
+
         $package->delete();
 
         return to_route('shop.admin.packages.index')

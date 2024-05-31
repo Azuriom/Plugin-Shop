@@ -25,6 +25,7 @@ return [
         'discount' => 'Promotion',
         'expire_date' => 'Date de fin',
         'gateways' => 'Moyens de paiements',
+        'global_limit' => 'Limite d\'achats globale',
         'original_balance' => 'Solde de départ',
         'package' => 'Produit',
         'packages' => 'Produits',
@@ -32,21 +33,21 @@ return [
         'payments' => 'Paiements',
         'price' => 'Prix',
         'quantity' => 'Quantité',
+        'renewal_date' => 'Renouvellement',
         'required_packages' => 'Articles pré-requis',
         'required_roles' => 'Role pré-requis',
         'role' => 'Grade à définir lors de l\'achat',
-        'server' => 'Serveur',
         'start_date' => 'Date de début',
-        'status' => 'Status',
+        'subscription' => 'Abonnement',
+        'subscription_id' => 'ID d\'abonnement',
         'total' => 'Total',
         'user_id' => 'ID de l\'utilisateur',
         'user_limit' => 'Limite d\'achats par utilisateur',
-        'global_limit' => 'Limite d\'achats globale',
     ],
 
     'actions' => [
-        'duplicate' => 'Dupliquer',
-        'remove' => 'Retirer',
+        'subscribe' => 'S\'abonner',
+        'move' => 'Déplacer',
     ],
 
     'goal' => [
@@ -69,7 +70,6 @@ return [
         'guest' => 'Vous devez être connecté pour effectuer un achat.',
         'empty' => 'Votre panier est vide.',
         'checkout' => 'Procéder au paiement',
-        'remove' => 'Supprimer',
         'clear' => 'Vider le panier',
         'pay' => 'Payer',
         'back' => 'Retour à la boutique',
@@ -86,9 +86,6 @@ return [
             'money' => 'Vous n\'avez pas assez d\'argent pour faire cet achat.',
             'execute' => 'Une erreur est survenue lors du paiement, votre achat a été remboursé.',
         ],
-
-        'terms' => 'J\'accepte les :terms.',
-        'terms_link' => 'conditions générales de vente',
     ],
 
     'coupons' => [
@@ -105,9 +102,11 @@ return [
         'empty' => 'Aucun moyen de paiement n\'est disponible actuellement.',
 
         'info' => 'Achat #:id sur :website',
-        'error' => 'Le paiement n\'a pas pu être effectué.',
+        'subscription' => ':package - Abonnement (Utilisateur #:user)',
+        'error' => 'Le paiement n\'a pas pu être effectué, veuillez réessayer.',
 
         'success' => 'Paiement effectué, vous recevrez votre achat dans le jeu en moins d\'une minute',
+        'pending' => 'Paiement en attente, vous recevrez votre achat dans le jeu une fois le paiement confirmé',
 
         'webhook' => 'Nouveau paiement effectué sur la boutique',
         'webhook_info' => 'Total : :total, ID : :id (:gateway)',
@@ -134,6 +133,7 @@ return [
 
     'profile' => [
         'payments' => 'Vos achats',
+        'subscriptions' => 'Vos abonnements',
         'money' => 'Argent : :balance',
     ],
 

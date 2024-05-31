@@ -11,12 +11,18 @@ return [
         'giftcards' => 'Gift Cards',
         'discounts' => 'Discounts',
         'payments' => 'Payments',
+        'subscriptions' => 'Subscriptions',
         'purchases' => 'Purchases',
         'statistics' => 'Statistics',
     ],
 
     'permissions' => [
-        'admin' => 'Manage shop plugin',
+        'settings' => 'Manage shop settings',
+        'packages' => 'Manage shop packages and categories',
+        'gateways' => 'Manage shop payment gateways',
+        'promotions' => 'Manage shop coupons and discounts',
+        'giftcards' => 'Manage shop gift cards',
+        'payments' => 'Create and view shop payments/purchases and subscriptions',
     ],
 
     'categories' => [
@@ -83,6 +89,7 @@ return [
         'create' => 'Create package',
 
         'every' => 'every',
+        'after' => 'after',
 
         'updated' => 'The packages have been updated.',
 
@@ -95,9 +102,19 @@ return [
         'has_user_limit' => 'Add an individual purchase limit per user for this package',
         'has_global_limit' => 'Add a global purchase limit for this package',
         'limit_period' => 'Limit period',
+        'limits_no_expired' => 'Exclude expired packages when calculating purchase limits',
         'no_period' => 'No period',
         'custom_price' => 'Allow the user to choose the price to pay (the package price will then be the minimum)',
         'enable_quantity' => 'Enable the quantity',
+
+        'billing' => 'Billing type',
+        'billing_period' => 'Billing period',
+        'one_off' => 'One-off payment',
+        'subscription' => 'Subscription with automatic renewal',
+        'subscription_info' => 'Make sure your payment gateway supports subscriptions. When a subscription is created, the user will be charged the same price until the subscription is canceled (any discount active during the first payment will be applied to the next payments).',
+        'expiring' => 'One-off payment with expiration',
+        'expiring_info' => 'The product will be automatically removed after the specified period.',
+        'scheduler' => 'You must set up CRON tasks to use subscriptions, see the <a href="https://azuriom.com/docs/faq" target="_blank" rel="noopener norefferer">FAQ</a> for more information.',
 
         'create_category' => 'Create category',
         'create_package' => 'Create package',
@@ -143,14 +160,22 @@ return [
         'client-id' => 'Client ID',
         'merchant-id' => 'Merchant ID',
         'project-id' => 'Project ID',
+        'webhook_id' => 'Webhook ID',
+        'website_id' => 'Website ID',
         'env' => 'Environment',
+
+        'subscription' => 'This payment gateway supports automatic subscription renewal.',
+        'no_subscription' => 'This payment gateway does not support automatic subscription renewal.',
 
         'paypal_email' => 'PayPal Email Address',
         'paypal_info' => 'Please make sure to input the <strong>primary</strong> email address of the PayPal account.',
-        'paysafecard_info' => 'In order to be able to accept payments by paysafecard, you must be a <a href="https://www.paysafecard.com/en/business/" target="_blank" rel="noopener noreferrer">paysafecard partner</a>. Other methods exist but only this one is allowed by paysafecard.',
-        'stripe_info' => 'On the Stripe dashboard you need to set the webhook URL to <code>:url</code> and select the event <code>checkout.session.completed</code>.',
+        'paypal_checkout' => 'On the PayPal dashboard, in your API application, create a webhook with URL <code>:url</code> and select the events <code>:events</code>.',
+        'stripe_info' => 'On the Stripe dashboard you need to set the webhook URL to <code>:url</code> and select the events: <code>:events</code>.',
         'paymentwall_info' => 'On the PaymentWall dashboard you need to set the pingback URL to <code>:url</code>.',
         'xsolla' => 'On the Xsolla dashboard you need to set the webhook URL to <code>:url</code>, enable \'Transaction external ID\' in the \'Pay station\' settings, test the webhooks and then enable \'Checkout\' in the \'Pay Station\' settings.',
+        'skrill_email' => 'Skrill Email Address',
+        'skrill_secret' => 'Secret Word',
+        'skrill_info' => 'The website ID and the Secret Word can be found in the Skrill dashboard under "Developer Settings".',
 
         'enable' => 'Enable the gateway',
     ],
@@ -178,6 +203,20 @@ return [
         'title' => 'Purchases',
     ],
 
+    'subscriptions' => [
+        'title' => 'Subscriptions',
+        'show' => 'Subscriptions #:subscription',
+
+        'info' => 'Subscription information',
+        'error' => 'To continue, you must cancel associated subscriptions and wait for their expiration.',
+
+        'status' => [
+            'active' => 'Active',
+            'canceled' => 'Canceled',
+            'expired' => 'Expired',
+        ],
+    ],
+
     'settings' => [
         'title' => 'Shop settings',
         'enable_home' => 'Enable the shop’s home page',
@@ -192,7 +231,8 @@ return [
         'top_customer' => 'Display top monthly customer in sidebar',
 
         'terms_required' => 'Require users to accept terms of service before purchase',
-        'terms_link' => 'Links to terms of service',
+        'terms' => 'Terms of service',
+        'terms_info' => 'Links in Markdown format, for example: <code>I accept the [terms of service](https://example.com/terms) of the shop.</code>',
     ],
 
     'logs' => [

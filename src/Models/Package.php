@@ -12,11 +12,12 @@ use Azuriom\Plugin\Shop\Events\PackageDelivered;
 use Azuriom\Plugin\Shop\Models\Concerns\Buyable;
 use Azuriom\Plugin\Shop\Models\Concerns\IsBuyable;
 use Azuriom\Plugin\Shop\Models\User as ShopUser;
-use Carbon\CarbonInterface;
+use DateTime;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 /**
  * @property int $id
@@ -27,6 +28,8 @@ use Illuminate\Support\Collection;
  * @property string|null $image
  * @property int $position
  * @property float $price
+ * @property string $billing_type
+ * @property string|null $billing_period
  * @property \Illuminate\Support\Collection|null $required_packages
  * @property \Illuminate\Support\Collection|null $required_roles
  * @property bool $has_quantity
@@ -39,12 +42,14 @@ use Illuminate\Support\Collection;
  * @property string|null $user_limit_period
  * @property int $global_limit
  * @property string|null $global_limit_period
+ * @property bool $limits_no_expired
  * @property bool $is_enabled
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
  * @property \Azuriom\Plugin\Shop\Models\Category $category
  * @property \Azuriom\Models\Role|null $role
  * @property \Illuminate\Support\Collection|\Azuriom\Plugin\Shop\Models\Discount[] $discounts
+ * @property \Illuminate\Support\Collection|\Azuriom\Plugin\Shop\Models\Subscription[] $subscriptions
  *
  * @method static \Illuminate\Database\Eloquent\Builder enabled()
  */
@@ -55,7 +60,7 @@ class Package extends Model implements Buyable
     use IsBuyable;
     use Loggable;
 
-    public const COMMAND_TRIGGERS = ['purchase', 'refund', 'chargeback'];
+    public const COMMAND_TRIGGERS = ['purchase', 'renewal', 'expiration', 'refund', 'chargeback'];
 
     /**
      * The table prefix associated with the model.
@@ -69,10 +74,10 @@ class Package extends Model implements Buyable
      */
     protected $fillable = [
         'category_id', 'name', 'short_description', 'description', 'image',
-        'position', 'price', 'required_packages', 'required_roles', 'has_quantity',
-        'commands', 'role_id', 'money', 'giftcard_balance', 'custom_price',
-        'user_limit', 'user_limit_period', 'global_limit', 'global_limit_period',
-        'is_enabled',
+        'position', 'price', 'billing_type', 'billing_period', 'required_packages',
+        'required_roles', 'has_quantity', 'commands', 'role_id', 'money',
+        'giftcard_balance', 'custom_price', 'user_limit', 'user_limit_period',
+        'global_limit', 'global_limit_period', 'limits_no_expired', 'is_enabled',
     ];
 
     /**
@@ -92,6 +97,13 @@ class Package extends Model implements Buyable
         'is_enabled' => 'boolean',
     ];
 
+    protected static function booted()
+    {
+        static::deleted(function (self $package) {
+            GatewayMetadata::whereMorphedTo('model', $package)->delete();
+        });
+    }
+
     /**
      * Get the category of this package.
      */
@@ -110,6 +122,11 @@ class Package extends Model implements Buyable
         return $this->belongsToMany(Discount::class, 'shop_discount_package');
     }
 
+    public function subscriptions()
+    {
+        return $this->hasMany(Subscription::class);
+    }
+
     public function getDescription(): string
     {
         return $this->short_description;
@@ -118,6 +135,25 @@ class Package extends Model implements Buyable
     public function hasGiftcard(): bool
     {
         return $this->giftcard_balance !== null;
+    }
+
+    public function isSubscription()
+    {
+        return $this->billing_type === 'subscription';
+    }
+
+    public function subscriptionPeriodCount(): int
+    {
+        if ($this->billing_period === null) {
+            return 0;
+        }
+
+        return (int) Str::before($this->billing_period, ' ');
+    }
+
+    public function subscriptionPeriodUnit(): string
+    {
+        return Str::after($this->billing_period ?? '', ' ');
     }
 
     public function getPrice(): float
@@ -137,7 +173,11 @@ class Package extends Model implements Buyable
             ->filter(fn (Discount $discount) => $discount->activeForRole($role))
             ->reduce(function ($result, Discount $discount) {
                 return $result - ($discount->discount / 100) * $result;
-            }, $this->price - $this->getCumulatedPurchasesTotal());
+            }, $this->price);
+
+        if (! $this->isSubscription()) {
+            $price -= $this->getCumulatedPurchasesTotal();
+        }
 
         return round(max($price, 0), 2);
     }
@@ -181,7 +221,7 @@ class Package extends Model implements Buyable
     /**
      * Get the total purchases for this package for the current user.
      */
-    public function countUserPurchases(CarbonInterface $startDate = null): int
+    public function countUserPurchases(DateTime $start = null, bool $noExpired = false): int
     {
         if (auth()->guest()) {
             return 0;
@@ -192,10 +232,15 @@ class Package extends Model implements Buyable
         if ($purchases === null) {
             $purchases = ShopUser::ofUser(auth()->user())
                 ->items()
-                ->where('shop_payments.status', 'completed')
-                ->where('shop_payment_items.buyable_type', 'shop.packages')
-                ->when($startDate, function (Builder $query) use ($startDate) {
-                    $query->where('shop_payments.created_at', '>', $startDate);
+                ->where('buyable_type', 'shop.packages')
+                ->whereHas('payment', function (Builder $query) use ($start) {
+                    $query->scopes('completed')
+                        ->when($start, function (Builder $query) use ($start) {
+                            $query->where('created_at', '>', $start);
+                        });
+                })
+                ->when($noExpired, function (Builder $query) {
+                    $query->scopes('excludeExpired');
                 })
                 ->get()
                 ->groupBy('buyable_id')
@@ -208,17 +253,20 @@ class Package extends Model implements Buyable
     /**
      * Get the total purchases for this package for the current user.
      */
-    public function countTotalPurchases(CarbonInterface $startDate = null): int
+    public function countTotalPurchases(DateTime $start = null, bool $noExpired = false): int
     {
         static $purchases = [];
 
-        return Arr::get($purchases, $this->id, function () use (&$purchases, $startDate) {
+        return Arr::get($purchases, $this->id, function () use (&$purchases, $start, $noExpired) {
             return $purchases[$this->id] = PaymentItem::where('buyable_id', $this->id)
                 ->where('buyable_type', 'shop.packages')
-                ->whereHas('payment', function (Builder $query) use ($startDate) {
+                ->when($noExpired, function (Builder $query) {
+                    $query->scopes('excludeExpired');
+                })
+                ->whereHas('payment', function (Builder $query) use ($start) {
                     $query->where('status', 'completed')
-                        ->when($startDate, function () use ($query, $startDate) {
-                            $query->where('created_at', '>', $startDate);
+                        ->when($start, function () use ($query, $start) {
+                            $query->where('created_at', '>', $start);
                         });
                 })
                 ->sum('quantity');
@@ -234,11 +282,14 @@ class Package extends Model implements Buyable
     {
         $userStart = optional($this->user_limit_period, fn ($period) => now()->sub($period));
         $globalStart = optional($this->global_limit_period, fn ($period) => now()->sub($period));
+        $noExpired = $this->limits_no_expired;
 
         $user = $this->user_limit > 0
-            ? $this->user_limit - $this->countUserPurchases($userStart) : 100;
+            ? $this->user_limit - $this->countUserPurchases($userStart, $noExpired)
+            : 100;
         $global = $this->global_limit > 0
-            ? $this->global_limit - $this->countTotalPurchases($globalStart) : 100;
+            ? $this->global_limit - $this->countTotalPurchases($globalStart, $noExpired)
+            : 100;
 
         return max(min($user, $global), 0);
     }
@@ -253,11 +304,11 @@ class Package extends Model implements Buyable
         return $this->getPrice() !== $this->getOriginalPrice();
     }
 
-    public function deliver(PaymentItem $item): void
+    public function deliver(PaymentItem $item, bool $renewal = false): void
     {
         $user = $item->payment->user;
 
-        $this->dispatchCommands('purchase', $item);
+        $this->dispatchCommands($renewal ? 'renewal' : 'purchase', $item);
 
         if ($this->role !== null && ! $this->role->is_admin && $user->role->power < $this->role->power) {
             $user->role()->associate($this->role)->save();

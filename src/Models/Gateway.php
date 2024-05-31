@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
  * @property \Illuminate\Support\Collection|\Azuriom\Plugin\Shop\Models\Offer[] $offers
+ * @property \Illuminate\Support\Collection|\Azuriom\Plugin\Shop\Models\GatewayMetadata[] $metadata
  *
  * @method static \Illuminate\Database\Eloquent\Builder enabled()
  */
@@ -57,6 +58,14 @@ class Gateway extends Model
     public function offers()
     {
         return $this->belongsToMany(Offer::class, 'shop_offer_gateways');
+    }
+
+    /**
+     * Get the metadata associated with this gateway.
+     */
+    public function metadata()
+    {
+        return $this->hasMany(GatewayMetadata::class);
     }
 
     /**

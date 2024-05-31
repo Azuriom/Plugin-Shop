@@ -199,7 +199,7 @@
             <form @if(! use_site_money()) action="{{ route('shop.payments.payment') }}" @endif>
                 @if(! use_site_money())
                     <div class="d-flex justify-content-end">
-                        @include('shop::cart._terms', ['termsUrl' => $termsUrl])
+                        @include('shop::cart._terms', ['terms' => $terms])
                     </div>
                 @endif
 
@@ -240,7 +240,7 @@
                     <form class="modal-footer" method="POST" action="{{ route('shop.cart.payment') }}">
                         @csrf
 
-                        @include('shop::cart._terms', ['termsUrl' => $termsUrl])
+                        @include('shop::cart._terms', ['terms' => $terms])
 
                         <div class="ms-auto">
                             <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">

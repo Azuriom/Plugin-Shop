@@ -32,7 +32,7 @@ class SettingController extends Controller
             'servers' => Server::executable()->get(),
             'enableHome' => setting('shop.home.enabled', true),
             'homeMessage' => setting('shop.home', ''),
-            'termsRequired' => old('terms_required', setting('shop.terms') !== null),
+            'termsRequired' => old('terms_required', setting('shop.required_terms') !== null),
         ]);
     }
 
@@ -65,7 +65,7 @@ class SettingController extends Controller
             'shop.home' => $request->input('home_message'),
             'shop.home.enabled' => $request->has('enable_home'),
             'shop.commands' => is_array($commands) ? json_encode($commands) : null,
-            'shop.terms' => $request->filled('terms_required') ? $request->input('terms') : null,
+            'shop.required_terms' => $request->filled('terms_required') ? $request->input('terms') : null,
         ]);
 
         return to_route('shop.admin.settings')

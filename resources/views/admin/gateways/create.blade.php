@@ -14,4 +14,18 @@
             </form>
         </div>
     </div>
+
+    @if($type->supportsSubscriptions())
+        <div class="alert alert-success">
+            <i class="bi bi-check-circle"></i> @lang('shop::admin.gateways.subscription')
+        </div>
+    @else
+        <div class="alert alert-warning">
+            <i class="bi bi-exclamation-triangle"></i> @lang('shop::admin.gateways.no_subscription')
+        </div>
+    @endif
+
+    <div class="alert alert-info">
+        <i class="bi bi-info-circle"></i> @lang('shop::admin.gateways.info')
+    </div>
 @endsection

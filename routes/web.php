@@ -8,6 +8,7 @@ use Azuriom\Plugin\Shop\Controllers\OfferController;
 use Azuriom\Plugin\Shop\Controllers\PackageController;
 use Azuriom\Plugin\Shop\Controllers\PaymentController;
 use Azuriom\Plugin\Shop\Controllers\ProfileController;
+use Azuriom\Plugin\Shop\Controllers\SubscriptionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -54,6 +55,15 @@ Route::prefix('cart')->name('cart.')->middleware('auth')->group(function () {
         Route::post('/add', [GiftcardController::class, 'add'])->name('add');
         Route::post('/remove/{giftcard}', [GiftcardController::class, 'remove'])->name('remove');
     });
+});
+
+Route::prefix('subscriptions')->name('subscriptions.')->group(function () {
+    Route::prefix('/{package}')->middleware(['auth', 'verified'])->group(function () {
+        Route::post('/', [SubscriptionController::class, 'selectGateway'])->name('select');
+        Route::post('/{gateway:type}', [SubscriptionController::class, 'subscribe'])->name('subscribe')->withoutScopedBindings();
+    });
+
+    Route::delete('/{subscription}', [SubscriptionController::class, 'cancel'])->middleware('auth')->name('destroy');
 });
 
 Route::prefix('payments')->name('payments.')->group(function () {

@@ -17,7 +17,7 @@ class PackageRequest extends FormRequest
      * @var array<int, string>
      */
     protected array $checkboxes = [
-        'custom_price', 'need_online', 'has_quantity', 'is_enabled',
+        'custom_price', 'need_online', 'has_quantity', 'limits_no_expired', 'is_enabled',
     ];
 
     /**
@@ -41,10 +41,13 @@ class PackageRequest extends FormRequest
             'short_description' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string'],
             'price' => ['required', 'numeric', 'min:0'],
+            'billing_type' => ['required', 'in:one-off,expiring,subscription'],
+            'billing_period' => ['required_if:billing_type,expiring,subscription', self::PERIOD_RULE],
             'user_limit' => ['nullable', 'integer', 'gt:0'],
             'user_limit_period' => ['nullable', self::PERIOD_RULE],
             'global_limit' => ['nullable', 'integer', 'gt:0'],
             'global_limit_period' => ['nullable', self::PERIOD_RULE],
+            'limits_no_expired' => ['filled', 'boolean'],
             'servers.*' => ['required', 'exists:servers,id'],
             'required_packages' => ['sometimes', 'nullable', 'array'],
             'required_roles' => ['sometimes', 'nullable', 'array'],

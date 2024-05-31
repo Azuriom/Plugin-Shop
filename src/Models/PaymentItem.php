@@ -3,6 +3,7 @@
 namespace Azuriom\Plugin\Shop\Models;
 
 use Azuriom\Models\Traits\HasTablePrefix;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -15,8 +16,11 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $buyable_id
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
+ * @property \Carbon\Carbon|null $expires_at
  * @property \Azuriom\Plugin\Shop\Models\Payment $payment
  * @property \Azuriom\Plugin\Shop\Models\Package|\Azuriom\Plugin\Shop\Models\Offer|null $buyable
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder excludeExpired()
  */
 class PaymentItem extends Model
 {
@@ -33,7 +37,7 @@ class PaymentItem extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'name', 'price', 'quantity',
+        'name', 'price', 'quantity', 'expires_at',
     ];
 
     /**
@@ -44,6 +48,15 @@ class PaymentItem extends Model
     protected $casts = [
         'price' => 'float',
     ];
+
+    protected static function booted(): void
+    {
+        static::creating(function (self $item) {
+            if ($item->buyable?->billing_period !== null) {
+                $item->expires_at = $item->freshTimestamp()->add($item->buyable->billing_period);
+            }
+        });
+    }
 
     /**
      * Get the payment associated to this payment item.
@@ -61,9 +74,16 @@ class PaymentItem extends Model
         return $this->morphTo('buyable');
     }
 
-    public function deliver(): void
+    public function deliver(bool $renewal = false): void
     {
-        $this->buyable?->deliver($this);
+        $this->buyable?->deliver($this, $renewal);
+    }
+
+    public function expire(): void
+    {
+        $this->dispatchCommands('expiration');
+
+        $this->update(['expires_at' => null]);
     }
 
     public function dispatchCommands(string $status): void
@@ -80,5 +100,12 @@ class PaymentItem extends Model
             : currency_display($this->payment->currency);
 
         return $this->price.' '.$currency;
+    }
+
+    public function scopeExcludeExpired(Builder $query): void
+    {
+        $query->where(function (Builder $query) {
+            $query->whereNull('expires_at')->orWhere('expires_at', '>', now());
+        });
     }
 }

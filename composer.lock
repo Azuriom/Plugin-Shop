@@ -4,32 +4,32 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "934584f747e5e480e4b114407f44b318",
+    "content-hash": "720cfe20659f949f0a2448acc76a8f8f",
     "packages": [
         {
             "name": "composer/ca-bundle",
-            "version": "1.3.4",
+            "version": "1.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/ca-bundle.git",
-                "reference": "69098eca243998b53eed7a48d82dedd28b447cd5"
+                "reference": "0c5ccfcfea312b5c5a190a21ac5cef93f74baf99"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/ca-bundle/zipball/69098eca243998b53eed7a48d82dedd28b447cd5",
-                "reference": "69098eca243998b53eed7a48d82dedd28b447cd5",
+                "url": "https://api.github.com/repos/composer/ca-bundle/zipball/0c5ccfcfea312b5c5a190a21ac5cef93f74baf99",
+                "reference": "0c5ccfcfea312b5c5a190a21ac5cef93f74baf99",
                 "shasum": ""
             },
             "require": {
                 "ext-openssl": "*",
                 "ext-pcre": "*",
-                "php": "^5.3.2 || ^7.0 || ^8.0"
+                "php": "^7.2 || ^8.0"
             },
             "require-dev": {
-                "phpstan/phpstan": "^0.12.55",
+                "phpstan/phpstan": "^1.10",
                 "psr/log": "^1.0",
                 "symfony/phpunit-bridge": "^4.2 || ^5",
-                "symfony/process": "^2.5 || ^3.0 || ^4.0 || ^5.0 || ^6.0"
+                "symfony/process": "^4.0 || ^5.0 || ^6.0 || ^7.0"
             },
             "type": "library",
             "extra": {
@@ -64,7 +64,7 @@
             "support": {
                 "irc": "irc://irc.freenode.org/composer",
                 "issues": "https://github.com/composer/ca-bundle/issues",
-                "source": "https://github.com/composer/ca-bundle/tree/1.3.4"
+                "source": "https://github.com/composer/ca-bundle/tree/1.5.0"
             },
             "funding": [
                 {
@@ -80,20 +80,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-10-12T12:08:29+00:00"
+            "time": "2024-03-15T14:00:32+00:00"
         },
         {
             "name": "mollie/mollie-api-php",
-            "version": "v2.49.1",
+            "version": "v2.67.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mollie/mollie-api-php.git",
-                "reference": "34ad0d291b9d394ce1199f166ca51d68f5e05ab3"
+                "reference": "ed5b2ba1dc8f30a4674f10ca78ad547c2df91008"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mollie/mollie-api-php/zipball/34ad0d291b9d394ce1199f166ca51d68f5e05ab3",
-                "reference": "34ad0d291b9d394ce1199f166ca51d68f5e05ab3",
+                "url": "https://api.github.com/repos/mollie/mollie-api-php/zipball/ed5b2ba1dc8f30a4674f10ca78ad547c2df91008",
+                "reference": "ed5b2ba1dc8f30a4674f10ca78ad547c2df91008",
                 "shasum": ""
             },
             "require": {
@@ -170,64 +170,22 @@
             ],
             "support": {
                 "issues": "https://github.com/mollie/mollie-api-php/issues",
-                "source": "https://github.com/mollie/mollie-api-php/tree/v2.49.1"
+                "source": "https://github.com/mollie/mollie-api-php/tree/v2.67.1"
             },
-            "time": "2022-12-20T19:12:29+00:00"
-        },
-        {
-            "name": "paygol/php-sdk",
-            "version": "v1.0.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/PaygolSPA/pg-php-sdk.git",
-                "reference": "f1c654c16e6dad31ee70d697e38a4220129115af"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/PaygolSPA/pg-php-sdk/zipball/f1c654c16e6dad31ee70d697e38a4220129115af",
-                "reference": "f1c654c16e6dad31ee70d697e38a4220129115af",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.6.4"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Paygol\\": "lib/php-apiv2"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Paygol SPA",
-                    "email": "info@paygol.com"
-                }
-            ],
-            "description": "PHP SDK for Paygol API and Webcheckout implementation",
-            "support": {
-                "docs": "https://devs.paygol.com",
-                "email": "tech@paygol.com",
-                "issues": "https://github.com/PaygolSPA/pg-php-sdk/issues",
-                "source": "https://github.com/PaygolSPA/php-sdk"
-            },
-            "time": "2019-07-02T15:09:00+00:00"
+            "time": "2024-05-07T07:59:20+00:00"
         },
         {
             "name": "paymentwall/paymentwall-php",
-            "version": "2.2.3",
+            "version": "2.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/paymentwall/paymentwall-php.git",
-                "reference": "040cbd3aecafe25af35568590f78b6cef4b72015"
+                "reference": "68064bfa12d00e856998b205c6b364ff8d7bc906"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/paymentwall/paymentwall-php/zipball/040cbd3aecafe25af35568590f78b6cef4b72015",
-                "reference": "040cbd3aecafe25af35568590f78b6cef4b72015",
+                "url": "https://api.github.com/repos/paymentwall/paymentwall-php/zipball/68064bfa12d00e856998b205c6b364ff8d7bc906",
+                "reference": "68064bfa12d00e856998b205c6b364ff8d7bc906",
                 "shasum": ""
             },
             "require": {
@@ -269,105 +227,9 @@
             ],
             "support": {
                 "issues": "https://github.com/paymentwall/paymentwall-php/issues",
-                "source": "https://github.com/paymentwall/paymentwall-php/tree/v2.2.3"
+                "source": "https://github.com/paymentwall/paymentwall-php/tree/v2.2.4"
             },
-            "time": "2019-04-24T04:28:11+00:00"
-        },
-        {
-            "name": "paypal/paypal-checkout-sdk",
-            "version": "1.0.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/paypal/Checkout-PHP-SDK.git",
-                "reference": "19992ce7051ff9e47e643f28abb8cc1b3e5f1812"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/paypal/Checkout-PHP-SDK/zipball/19992ce7051ff9e47e643f28abb8cc1b3e5f1812",
-                "reference": "19992ce7051ff9e47e643f28abb8cc1b3e5f1812",
-                "shasum": ""
-            },
-            "require": {
-                "paypal/paypalhttp": "1.0.1"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^5.7"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Sample\\": "samples/",
-                    "PayPalCheckoutSdk\\": "lib/PayPalCheckoutSdk"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "https://github.com/paypal/Checkout-PHP-SDK/blob/master/LICENSE"
-            ],
-            "authors": [
-                {
-                    "name": "PayPal",
-                    "homepage": "https://github.com/paypal/Checkout-PHP-SDK/contributors"
-                }
-            ],
-            "description": "PayPal's PHP SDK for Checkout REST APIs",
-            "homepage": "http://github.com/paypal/Checkout-PHP-SDK/",
-            "keywords": [
-                "checkout",
-                "orders",
-                "payments",
-                "paypal",
-                "rest",
-                "sdk"
-            ],
-            "support": {
-                "source": "https://github.com/paypal/Checkout-PHP-SDK/tree/1.0.2"
-            },
-            "abandoned": true,
-            "time": "2021-09-21T20:57:38+00:00"
-        },
-        {
-            "name": "paypal/paypalhttp",
-            "version": "1.0.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/paypal/paypalhttp_php.git",
-                "reference": "7b09c89c80828e842c79230e7f156b61fbb68d25"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/paypal/paypalhttp_php/zipball/7b09c89c80828e842c79230e7f156b61fbb68d25",
-                "reference": "7b09c89c80828e842c79230e7f156b61fbb68d25",
-                "shasum": ""
-            },
-            "require": {
-                "ext-curl": "*"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^5.7",
-                "wiremock-php/wiremock-php": "1.43.2"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "PayPalHttp\\": "lib/PayPalHttp"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "PayPal",
-                    "homepage": "https://github.com/paypal/paypalhttp_php/contributors"
-                }
-            ],
-            "support": {
-                "issues": "https://github.com/paypal/paypalhttp_php/issues",
-                "source": "https://github.com/paypal/paypalhttp_php/tree/1.0.1"
-            },
-            "time": "2021-09-14T21:35:26+00:00"
+            "time": "2023-10-18T08:04:20+00:00"
         },
         {
             "name": "stripe/stripe-php",
@@ -431,28 +293,29 @@
         },
         {
             "name": "xsolla/xsolla-sdk-php",
-            "version": "v4.2.0",
+            "version": "v4.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/xsolla/xsolla-sdk-php.git",
-                "reference": "07729c112547f84fe2d6f21e2fc5cc9f316f01ad"
+                "reference": "6bea126a37e7f1a419e61418a7b35cbb04475e33"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/xsolla/xsolla-sdk-php/zipball/07729c112547f84fe2d6f21e2fc5cc9f316f01ad",
-                "reference": "07729c112547f84fe2d6f21e2fc5cc9f316f01ad",
+                "url": "https://api.github.com/repos/xsolla/xsolla-sdk-php/zipball/6bea126a37e7f1a419e61418a7b35cbb04475e33",
+                "reference": "6bea126a37e7f1a419e61418a7b35cbb04475e33",
                 "shasum": ""
             },
             "require": {
                 "ext-curl": "*",
                 "ext-json": "*",
-                "guzzlehttp/guzzle": "~6.0",
-                "php": "^7.3|~8.0.0",
-                "symfony/http-foundation": "~2.3 || ~3.0 || ~4.0 || ~5.0"
+                "guzzlehttp/guzzle": "~6.0 || ~7.0",
+                "php": "^7.3|~8.0",
+                "symfony/http-foundation": "~2.3 || ~3.0 || ~4.0 || ~5.0 || ~6.0.0 || ~7.0"
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "~2.13",
                 "mtdowling/burgomaster": "^0.0.3",
+                "php": "^7.3|~8.0",
                 "phpunit/phpunit": "^9.0",
                 "symfony/process": "~4.1"
             },
@@ -482,7 +345,7 @@
                 "source": "https://github.com/xsolla/xsolla-sdk-php/releases"
             },
             "abandoned": true,
-            "time": "2021-05-12T07:56:37+00:00"
+            "time": "2024-05-23T11:07:08+00:00"
         }
     ],
     "packages-dev": [],
@@ -495,5 +358,5 @@
         "php": ">=8.0"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }

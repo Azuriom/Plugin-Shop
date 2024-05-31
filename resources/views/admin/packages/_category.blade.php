@@ -27,7 +27,7 @@
                             <a href="{{ route('shop.admin.packages.edit', $package) }}" class="mx-1" title="{{ trans('messages.actions.edit') }}" data-bs-toggle="tooltip"><i class="bi bi-pencil-square"></i></a>
                             <form class="d-inline-block" action="{{ route('shop.admin.packages.duplicate', $package) }}" method="POST">
                                 @csrf
-                                <button class="btn btn-link mx-1 p-0" title="{{ trans('shop::messages.actions.duplicate') }}" data-bs-toggle="tooltip"><i class="bi bi-layers"></i></button>
+                                <button class="btn btn-link mx-1 p-0" title="{{ trans('messages.actions.duplicate') }}" data-bs-toggle="tooltip"><i class="bi bi-layers"></i></button>
                             </form>
                             <a href="{{ route('shop.admin.packages.destroy', $package) }}" class="mx-1" title="{{ trans('messages.actions.delete') }}" data-bs-toggle="tooltip" data-confirm="delete"><i class="bi bi-trash"></i></a>
                         </div>

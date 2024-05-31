@@ -32,6 +32,11 @@ class PackageController extends Controller
             'price' => 'sometimes|nullable|numeric|min:'.$package->price,
         ]);
 
+        if ($package->isSubscription()) {
+            // TODO Remove legacy themes support...
+            return app(SubscriptionController::class)->selectGateway($request, $package);
+        }
+
         $user = $request->user();
         $cart = Cart::fromSession($request->session());
 

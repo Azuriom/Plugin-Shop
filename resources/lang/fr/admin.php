@@ -11,12 +11,18 @@ return [
         'giftcards' => 'Cartes cadeaux',
         'discounts' => 'Réductions',
         'payments' => 'Paiements',
+        'subscriptions' => 'Abonnements',
         'purchases' => 'Achats',
         'statistics' => 'Statistiques',
     ],
 
     'permissions' => [
-        'admin' => 'Gérer le plugin boutique',
+        'settings' => 'Gérer les paramètres de la boutique',
+        'packages' => 'Gérer les produits de la boutique',
+        'gateways' => 'Gérer les moyens de paiements de la boutique',
+        'promotions' => 'Gérer les offres et réductions de la boutique',
+        'giftcards' => 'Gérer les cartes cadeaux de la boutique',
+        'payments' => 'Ajouter et voir les paiements/achats et abonnements de la boutique',
     ],
 
     'categories' => [
@@ -83,6 +89,7 @@ return [
         'create' => 'Création d\'un produit',
 
         'every' => 'tous les',
+        'after' => 'après',
 
         'updated' => 'Les produits ont été mis à jour.',
 
@@ -95,9 +102,19 @@ return [
         'has_user_limit' => 'Activer une limite d\'achat par utilisateur pour ce produit',
         'has_global_limit' => 'Activer une limite d\'achat globale à tous les utilisateurs pour ce produit',
         'limit_period' => 'Période de la limite d\'achat',
+        'limits_no_expired' => 'Ne pas compter les produits expirés lors du calcul des limites d\'achats',
         'no_period' => 'Aucune période',
         'custom_price' => 'Permettre à l\'utilisateur de choisir le prix à payer (le prix du produit sera alors le minimum)',
         'enable_quantity' => 'Activer la quantité',
+
+        'billing' => 'Type de facturation',
+        'billing_period' => 'Période de facturation',
+        'one_off' => 'Paiement unique',
+        'subscription' => 'Abonnement (renouvellement automatique)',
+        'subscription_info' => 'Assurez vous que votre moyen de paiement supporte les abonnements. Une fois un abonnement créé, l\'utilisateur sera débité du même montant tant que l\'abonnement n\'est pas annulé (toute promotion active pour le premier paiement sera appliquée aux paiements suivants).',
+        'expiring' => 'Paiement unique avec expiration',
+        'expiring_info' => 'Le produit sera automatiquement supprimé après la période définie.',
+        'scheduler' => 'Vous devez configurer les tâches CRON pour configurer des abonnements, voir la <a href="https://azuriom.com/docs/faq" target="_blank" rel="noopener norefferer">FAQ</a> pour plus d\'informations.',
 
         'create_category' => 'Créer une catégorie',
         'create_package' => 'Créer un produit',
@@ -143,14 +160,22 @@ return [
         'client-id' => 'ID du Client',
         'merchant-id' => 'ID du vendeur',
         'project-id' => 'ID du projet',
+        'webhook_id' => 'ID du webhook',
+        'website_id' => 'ID du site',
         'env' => 'Environnement',
 
+        'subscription' => 'Ce moyen de paiement supporte les abonnements avec renouvellement automatique.',
+        'no_subscription' => 'Ce moyen de paiement ne supporte pas les abonnements avec renouvellement automatique.',
+
         'paypal_email' => 'Adresse Email PayPal',
-        'paypal_info' => 'Assurez vous d\'indiquer l\'adresse e-mail <strong>principale</strong> du compte PayPal.',
-        'paysafecard_info' => 'Pour pouvoir accepter les paiements par paysafecard, vous devez être un <a href="https://www.paysafecard.com/fr/entreprises/" target="_blank" rel="noopener noreferrer">partenaire paysafecard</a>. D\'autres méthodes existent, mais celle-ci est la seule autorisée par paysafecard.',
-        'stripe_info' => 'Sur le tableau de bord Stripe, vous devez définir l\'URL du webhook sur <code>:url</code> et séléctionner l\'événement <code>checkout.session.completed</code>.',
+        'paypal_info' => 'Assurez-vous d\'indiquer l\'adresse e-mail <strong>principale</strong> du compte PayPal.',
+        'paypal_checkout' => 'Sur le tableau de bord PayPal, dans l\'application pour l\'API, créez un webhook avec l\'URL <code>:url</code> et les événements <code>:events</code>.',
+        'stripe_info' => 'Sur le tableau de bord Stripe, vous devez définir l\'URL du webhook sur <code>:url</code> et sélectionner les événements : <code>:events</code>.',
         'paymentwall_info' => 'Dans le tableau de bord PaymentWall, vous devez définir l\'URL de pingback sur <code>:url</code>.',
-        'xsolla' => 'Dans le tableau de bord Xsolla vous devez définir l\'URL de webhook URL sur <code>:url</code>, activer \'Transaction external ID\' dans les paramètres de la \'Pay station\', tester les webhooks et ensuite activer \'Checkout\' dans les paramètres de la \'Pay Station\'.',
+        'xsolla' => 'Dans le tableau de bord Xsolla, vous devez définir l\'URL de webhook URL sur <code>:url</code>, activer \'Transaction external ID\' dans les paramètres de la \'Pay station\', tester les webhooks et ensuite activer \'Checkout\' dans les paramètres de la \'Pay Station\'.',
+        'skrill_email' => 'Adresse Email Skrill',
+        'skrill_secret' => 'Mot Secret',
+        'skill_info' => 'L\'ID du site et le mot secret sont disponibles sur le tableau de bord Skrill, dans l\'onglet "Developer Settings".',
 
         'enable' => 'Activer ce moyen de paiement',
     ],
@@ -178,6 +203,18 @@ return [
         'title' => 'Achats',
     ],
 
+    'subscriptions' => [
+        'title' => 'Abonnements',
+
+        'error' => 'Vous devez annuler les abonnements associés pour continuer, et attendre que ceux-ci soient expirés.',
+
+        'status' => [
+            'active' => 'Actif',
+            'canceled' => 'Annulé',
+            'expired' => 'Expiré',
+        ],
+    ],
+
     'settings' => [
         'title' => 'Paramètres de la boutique',
         'enable_home' => 'Activer la page d\'accueil de la boutique',
@@ -192,7 +229,8 @@ return [
         'top_customer' => 'Afficher le meilleur acheteur du mois dans la barre latérale',
 
         'terms_required' => 'Demander aux utilisateurs d\'accepter les conditions avant un achat',
-        'terms_link' => 'Liens vers les conditions générales de vente',
+        'terms' => 'Conditions générales de vente',
+        'terms_info' => 'Liens au format Markdown, par exemple : <code>Je certifie avoir lu et accepte les [CGV](/links/cgv) de la boutique</code>.',
     ],
 
     'logs' => [

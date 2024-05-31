@@ -54,7 +54,7 @@
                 </div>
 
                 <div class="mb-3 col-md-4">
-                    <label class="form-label" :for="'serverSelect' + i">{{ trans('shop::messages.fields.server') }}</label>
+                    <label class="form-label" :for="'serverSelect' + i">{{ trans('messages.fields.server') }}</label>
 
                     <select class="form-select" :id="'serverSelect' + i" :name="`commands[${i}][server]`" v-model="command.server" required>
                         @foreach($servers as $server)

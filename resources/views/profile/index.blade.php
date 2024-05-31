@@ -32,7 +32,7 @@
                                 </span>
                             </td>
                             <td>{{ $payment->transaction_id ?? trans('messages.unknown') }}</td>
-                            <td>{{ format_date_compact($payment->created_at) }}</td>
+                            <td>{{ format_date($payment->created_at) }}</td>
                         </tr>
                     @endforeach
 
@@ -41,6 +41,68 @@
             </div>
         </div>
     </div>
+
+    @if(! $subscriptions->isEmpty())
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title">{{ trans('shop::messages.profile.subscriptions') }}</h2>
+
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead class="table-dark">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">{{ trans('shop::messages.fields.price') }}</th>
+                            @if(! use_site_money())
+                                <th scope="col">{{ trans('messages.fields.type') }}</th>
+                            @endif
+                            <th scope="col">{{ trans('shop::messages.fields.package') }}</th>
+                            <th scope="col">{{ trans('messages.fields.status') }}</th>
+                            <th scope="col">{{ trans('shop::messages.fields.subscription_id') }}</th>
+                            <th scope="col">{{ trans('messages.fields.date') }}</th>
+                            <th scope="col">{{ trans('shop::messages.fields.renewal_date') }}</th>
+                            <th scope="col">{{ trans('messages.fields.action') }}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        @foreach($subscriptions as $subscription)
+                            <tr>
+                                <th scope="row">{{ $subscription->id }}</th>
+                                <td>{{ $subscription->formatPrice() }}</td>
+                                @if(! use_site_money())
+                                    <td>{{ $subscription->getTypeName() }}</td>
+                                @endif
+                                <td>{{ $subscription->package?->name ?? trans('messages.unknown') }}</td>
+                                <td>
+                                    <span class="badge bg-{{ $subscription->statusColor() }}">
+                                        {{ trans('shop::admin.subscriptions.status.'.$subscription->status) }}
+                                    </span>
+                                </td>
+                                <td>{{ $subscription->subscription_id ?? trans('messages.unknown') }}</td>
+                                <td>{{ format_date($subscription->created_at) }}</td>
+                                <td>{{ format_date($subscription->ends_at) }}</td>
+                                <td>
+                                    @if($subscription->isActive() && ! $subscription->isCanceled())
+                                        <form action="{{ route('shop.subscriptions.destroy', $subscription) }}" method="POST">
+                                            @method('DELETE')
+                                            @csrf
+
+                                            <button type="submit" class="btn btn-danger btn-sm">
+                                                <i class="bi bi-x-circle"></i> {{ trans('messages.actions.cancel') }}
+                                            </button>
+                                        </form>
+                                    @endif
+                                </td>
+                            </tr>
+                        @endforeach
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    @endif
 
     @if(use_site_money())
         <div class="card">

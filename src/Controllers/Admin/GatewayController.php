@@ -4,6 +4,7 @@ namespace Azuriom\Plugin\Shop\Controllers\Admin;
 
 use Azuriom\Http\Controllers\Controller;
 use Azuriom\Plugin\Shop\Models\Gateway;
+use Azuriom\Plugin\Shop\Models\Subscription;
 use Azuriom\Plugin\Shop\Payment\PaymentManager;
 use Azuriom\Plugin\Shop\Requests\GatewayRequest;
 use Illuminate\Http\Request;
@@ -126,6 +127,11 @@ class GatewayController extends Controller
      */
     public function destroy(Gateway $gateway)
     {
+        if (Subscription::active()->where('gateway_type', $gateway->type)->exists()) {
+            return to_route('shop.admin.packages.index')
+                ->with('error', trans('shop::admin.subscriptions.error'));
+        }
+
         $gateway->delete();
 
         return to_route('shop.admin.gateways.index')

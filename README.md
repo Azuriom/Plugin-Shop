@@ -8,15 +8,18 @@ A shop plugin to sell in-game items on your website.
 ## Supported payment gateways
 
 * [PayPal](https://www.paypal.com/)
-* [PayPal Express Checkout](https://www.paypal.com/)
-* [Mollie](https://www.mollie.com/)
+* [PayPal Checkout](https://www.paypal.com/) (supports subscriptions)
+* [Mollie](https://www.mollie.com/) (supports subscriptions)
 * [Xsolla](https://xsolla.com/)
-* [Paysafecard](https://www.paysafecard.com/)
-* [Stripe](https://stripe.com/)
+* [Skrill](https://www.skrill.com/fr/) (ex paysafecard)
+* [Stripe](https://stripe.com/) (supports subscriptions)
 * [PaymentWall](https://www.paymentwall.com/)
-* [PayGol](https://www.paygol.com/)
 
 ## Custom payment gateway
+
+> [!NOTE]
+> Due to the large number of different payment methods available, we won't be adding any directly to the shop plugin.
+> However, new payment methods can be added via a plugin, as explained below.
 
 You can create your own payment gateway by creating a new class that extends the `Azuriom\Plugin\Shop\Payment\PaymentMethod\PaymentMethod` class.
 
