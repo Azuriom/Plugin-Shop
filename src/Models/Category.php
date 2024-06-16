@@ -3,6 +3,8 @@
 namespace Azuriom\Plugin\Shop\Models;
 
 use Azuriom\Models\Traits\HasTablePrefix;
+use Azuriom\Models\User;
+use Azuriom\Plugin\Shop\Models\User as ShopUser;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\HtmlString;
@@ -15,6 +17,7 @@ use Illuminate\Support\HtmlString;
  * @property int $position
  * @property int $parent_id
  * @property bool $cumulate_purchases
+ * @property bool $single_purchase
  * @property bool $is_enabled
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
@@ -40,7 +43,8 @@ class Category extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'name', 'slug', 'description', 'position', 'parent_id', 'cumulate_purchases', 'is_enabled',
+        'name', 'slug', 'description', 'position', 'parent_id',
+        'cumulate_purchases', 'single_purchase', 'is_enabled',
     ];
 
     /**
@@ -74,6 +78,21 @@ class Category extends Model
     public function packages()
     {
         return $this->hasMany(Package::class)->orderBy('position');
+    }
+
+    public function hasReachLimit(User $user): bool
+    {
+        if (! $this->single_purchase) {
+            return false;
+        }
+
+        return ShopUser::ofUser($user)
+            ->items()
+            ->scopes('excludeExpired')
+            ->whereHas('buyable', function (Builder $query) {
+                $query->where('category_id', $this->id);
+            })
+            ->count() > 0;
     }
 
     public function getNameAttribute(string $value)

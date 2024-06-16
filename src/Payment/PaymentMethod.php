@@ -149,7 +149,7 @@ abstract class PaymentMethod
     /**
      * Create a new pending payment for the given cart, associated with this payment method.
      */
-    protected function createPayment(Cart $cart, float $price, string $currency, string $paymentId = null): Payment
+    protected function createPayment(Cart $cart, float $price, string $currency, ?string $paymentId = null): Payment
     {
         // Clear expired pending payments before creating a new one
         Payment::purgePendingPayments();
@@ -160,7 +160,7 @@ abstract class PaymentMethod
     /**
      * Create a new active subscription for the given user and package.
      */
-    protected function createSubscription(User $user, Package $package, string $subscriptionId, float $price = null, string $currency = null)
+    protected function createSubscription(User $user, Package $package, string $subscriptionId, ?float $price = null, ?string $currency = null)
     {
         return $package->subscriptions()->create([
             'user_id' => $user->id,
@@ -192,7 +192,7 @@ abstract class PaymentMethod
      * Try to process the given payment, and return a response with the result.
      * If a payment ID is provided, it will be used to update the payment transaction ID.
      */
-    protected function processPayment(?Payment $payment, string $paymentId = null)
+    protected function processPayment(?Payment $payment, ?string $paymentId = null)
     {
         if ($payment === null) {
             logger()->warning('[Shop] Invalid payment for #'.$paymentId);

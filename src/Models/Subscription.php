@@ -139,7 +139,7 @@ class Subscription extends Model
         $this->update(['status' => 'canceled']);
     }
 
-    public function addRenewalPayment(string $transactionId = null): Payment
+    public function addRenewalPayment(?string $transactionId = null): Payment
     {
         $payment = $this->payments()->create([
             'user_id' => $this->user_id,

@@ -51,14 +51,14 @@ class PaymentManager
     /**
      * Get the payment method with the given type.
      */
-    public function getPaymentMethod(string $type, Gateway $gateway = null): ?PaymentMethod
+    public function getPaymentMethod(string $type, ?Gateway $gateway = null): ?PaymentMethod
     {
         $class = $this->paymentMethods->get($type);
 
         return $class ? app($class, $gateway ? ['gateway' => $gateway] : []) : null;
     }
 
-    public function getPaymentMethodOrFail(string $type, Gateway $gateway = null): PaymentMethod
+    public function getPaymentMethodOrFail(string $type, ?Gateway $gateway = null): PaymentMethod
     {
         abort_if(! $this->paymentMethods->has($type), 404);
 
@@ -100,7 +100,7 @@ class PaymentManager
         $payment->deliver();
     }
 
-    public static function createPayment(Cart $cart, float $price, string $currency, string $gatewayId, string $paymentId = null): Payment
+    public static function createPayment(Cart $cart, float $price, string $currency, string $gatewayId, ?string $paymentId = null): Payment
     {
         $payment = Payment::create([
             'price' => $price,

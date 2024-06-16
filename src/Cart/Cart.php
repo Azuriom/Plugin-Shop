@@ -40,7 +40,7 @@ class Cart implements Arrayable
     /**
      * Create a new cart instance.
      */
-    private function __construct(Session $session = null)
+    private function __construct(?Session $session = null)
     {
         $this->session = $session;
 
@@ -58,7 +58,7 @@ class Cart implements Arrayable
     /**
      * Add an item to the cart.
      */
-    public function add(Buyable $buyable, int $quantity = 1, float $userPrice = null): void
+    public function add(Buyable $buyable, int $quantity = 1, ?float $userPrice = null): void
     {
         if ($quantity <= 0) {
             return;
@@ -81,7 +81,7 @@ class Cart implements Arrayable
     /**
      * Set the quantity of an item in the cart.
      */
-    public function set(Buyable $buyable, int $quantity = 1, float $userPrice = null): void
+    public function set(Buyable $buyable, int $quantity = 1, ?float $userPrice = null): void
     {
         if ($quantity <= 0) {
             $this->remove($buyable);

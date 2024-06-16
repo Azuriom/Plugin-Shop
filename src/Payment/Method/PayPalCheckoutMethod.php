@@ -9,6 +9,7 @@ use Azuriom\Plugin\Shop\Models\Payment;
 use Azuriom\Plugin\Shop\Models\Subscription;
 use Azuriom\Plugin\Shop\Payment\PaymentMethod;
 use Illuminate\Http\Client\PendingRequest;
+use Illuminate\Http\Client\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
@@ -92,7 +93,9 @@ class PayPalCheckoutMethod extends PaymentMethod
         return view('shop::gateways.paypal-checkout', [
             'clientId' => $this->gateway->data['client-id'],
             'paypalId' => $id,
-            'total' => $amount.' '.$currency,
+            'payment' => $payment,
+            'description' => $this->getPurchaseDescription($payment->id),
+            'currency' => $currency,
             'successUrl' => route('shop.payments.success', $this->id),
             'captureUrl' => route('shop.payments.notification', $this->id),
         ]);
@@ -221,11 +224,11 @@ class PayPalCheckoutMethod extends PaymentMethod
      */
     protected function findOrCreatePlan(Package $package): string
     {
-        $ids = $this->gateway->metadata()
+        $metadata = $this->gateway->metadata()
             ->whereMorphedTo('model', $package)
-            ->value('value');
+            ->first();
 
-        if ($ids === null) {
+        if ($metadata->value === null) {
             $productId = $this->syncProduct($package);
             $planId = $this->syncPlan($package, $productId);
 
@@ -237,17 +240,20 @@ class PayPalCheckoutMethod extends PaymentMethod
             return $planId;
         }
 
-        [$productId, $planId] = explode('|', $ids);
+        [$productId, $planId] = explode('|', $metadata->value);
 
-        $this->syncProduct($package, $productId);
+        $productId = $this->syncProduct($package, $productId);
+        $planId = $this->syncPlan($package, $productId, $planId);
 
-        return $this->syncPlan($package, $productId, $planId);
+        $metadata->update(['value' => $productId.'|'.$planId]);
+
+        return $planId;
     }
 
     /**
      * Synchronize the plan with the PayPal API for the given productId, or create it if it does not exist.
      */
-    protected function syncPlan(Package $package, string $productId, string $planId = null): string
+    protected function syncPlan(Package $package, string $productId, ?string $planId = null): string
     {
         $frequency = [
             // PayPal expects the interval unit to be singular in uppercase
@@ -285,9 +291,13 @@ class PayPalCheckoutMethod extends PaymentMethod
             return $response->json('id');
         }
 
-        $response = $this->getClient()->get('/v1/billing/plans/'.$planId);
+        $response = $this->getClient(false)->get('/v1/billing/plans/'.$planId);
 
-        $planFrequency = $response->json('billing_cycles.0.frequency');
+        if ($response->status() === 404) {
+            return $this->syncPlan($package, $productId);
+        }
+
+        $planFrequency = $response->throw()->json('billing_cycles.0.frequency');
         $planCurrency = $response->json('billing_cycles.0.pricing_scheme.fixed_price.currency_code');
         $planPrice = (float) $response->json('billing_cycles.0.pricing_scheme.fixed_price.value');
 
@@ -314,7 +324,7 @@ class PayPalCheckoutMethod extends PaymentMethod
     /**
      * Synchronize the product with the PayPal API, or create it if it does not exist.
      */
-    protected function syncProduct(Package $package, string $productId = null): string
+    protected function syncProduct(Package $package, ?string $productId = null): string
     {
         if ($productId === null) {
             $response = $this->getClient()->post('/v1/catalogs/products', [
@@ -326,15 +336,15 @@ class PayPalCheckoutMethod extends PaymentMethod
             return $response->json('id');
         }
 
-        $this->getClient()->patch('/v1/catalogs/products/'.$productId, [
+        $res = $this->getClient(false)->patch('/v1/catalogs/products/'.$productId, [
             [
                 'op' => 'replace',
                 'path' => '/description',
                 'value' => $package->short_description,
             ],
-        ]);
+        ])->throwIf(fn (Response $res) => ! $res->successful() && $res->status() !== 404);
 
-        return $productId;
+        return $res->successful() ? $productId : $this->syncProduct($package);
     }
 
     public function supportsSubscriptions()
@@ -399,7 +409,7 @@ class PayPalCheckoutMethod extends PaymentMethod
         return $response->json('access_token');
     }
 
-    private function getClient(): PendingRequest
+    private function getClient(bool $throw = true): PendingRequest
     {
         $token = Cache::remember(
             'shop.paypal.token',
@@ -407,15 +417,15 @@ class PayPalCheckoutMethod extends PaymentMethod
             fn () => $this->generateAccessToken()
         );
 
-        return $this->getBaseClient()->withToken($token);
+        return $this->getBaseClient($throw)->withToken($token);
     }
 
-    private function getBaseClient(): PendingRequest
+    private function getBaseClient(bool $throw = false): PendingRequest
     {
         $url = $this->gateway->data['environment'] === 'live'
             ? 'https://api-m.paypal.com'
             : 'https://api-m.sandbox.paypal.com';
 
-        return Http::baseUrl($url)->throw();
+        return Http::baseUrl($url)->throwIf($throw);
     }
 }

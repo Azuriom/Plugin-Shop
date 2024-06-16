@@ -35,6 +35,7 @@ return [
 
         'cumulate' => 'Cumuler les achats dans cette catégorie',
         'cumulate_info' => 'Les utilisateurs ayant déjà acheté un produit dans cette catégorie auront une réduction et ne paieront que la différence lors de l\'achat d\'un produit plus cher.',
+        'single_purchase' => 'Limiter un utilisateur à acheter un seul produit de cette catégorie',
         'enable' => 'Activer cette catégorie',
     ],
 
@@ -93,6 +94,7 @@ return [
 
         'updated' => 'Les produits ont été mis à jour.',
 
+        'role' => 'Grade à mettre après l\'expiration du produit',
         'money' => 'Argent à donner à l\'utilisateur lors de l\'achat',
         'has_giftcard' => 'Créer une carte cadeau lors de l\'achat et la donner à l\'utilisateur',
         'giftcard_balance' => 'Valeur de la carte cadeau',
@@ -175,7 +177,7 @@ return [
         'xsolla' => 'Dans le tableau de bord Xsolla, vous devez définir l\'URL de webhook URL sur <code>:url</code>, activer \'Transaction external ID\' dans les paramètres de la \'Pay station\', tester les webhooks et ensuite activer \'Checkout\' dans les paramètres de la \'Pay Station\'.',
         'skrill_email' => 'Adresse Email Skrill',
         'skrill_secret' => 'Mot Secret',
-        'skill_info' => 'L\'ID du site et le mot secret sont disponibles sur le tableau de bord Skrill, dans l\'onglet "Developer Settings".',
+        'skrill_info' => 'L\'ID du site et le mot secret sont disponibles sur le tableau de bord Skrill, dans l\'onglet "Developer Settings".',
 
         'enable' => 'Activer ce moyen de paiement',
     ],
@@ -205,7 +207,9 @@ return [
 
     'subscriptions' => [
         'title' => 'Abonnements',
+        'show' => 'Abonnement #:subscription',
 
+        'info' => 'Informations de l\'abonnement',
         'error' => 'Vous devez annuler les abonnements associés pour continuer, et attendre que ceux-ci soient expirés.',
 
         'status' => [

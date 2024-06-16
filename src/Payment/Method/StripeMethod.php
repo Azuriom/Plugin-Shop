@@ -206,8 +206,6 @@ class StripeMethod extends PaymentMethod
      */
     protected function convertAmount(float $amount, string $currency): int
     {
-        $currency = strtoupper($currency);
-
         if (in_array($currency, self::ZERO_DECIMAL_CURRENCIES, true)) {
             return $amount;
         }
@@ -224,8 +222,6 @@ class StripeMethod extends PaymentMethod
      */
     protected function retrieveDecimalAmount(int $amount, string $currency): float
     {
-        $currency = strtoupper($currency);
-
         if (in_array($currency, self::ZERO_DECIMAL_CURRENCIES, true)) {
             return $amount;
         }

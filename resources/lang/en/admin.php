@@ -35,6 +35,7 @@ return [
 
         'cumulate' => 'Cumulate purchases in this category',
         'cumulate_info' => 'Users who have already purchased a package in this category will get a discount and will only pay the difference when purchasing a more expensive package.',
+        'single_purchase' => 'Limit the user to purchasing a single package from this category',
         'enable' => 'Enable the category',
     ],
 
@@ -93,6 +94,7 @@ return [
 
         'updated' => 'The packages have been updated.',
 
+        'role' => 'Role to set when the package expires',
         'money' => 'Money to give to the user after purchase',
         'has_giftcard' => 'Create a giftcard after the purchase and give it to the user',
         'giftcard_balance' => 'Giftcard balance',
@@ -205,7 +207,7 @@ return [
 
     'subscriptions' => [
         'title' => 'Subscriptions',
-        'show' => 'Subscriptions #:subscription',
+        'show' => 'Subscription #:subscription',
 
         'info' => 'Subscription information',
         'error' => 'To continue, you must cancel associated subscriptions and wait for their expiration.',

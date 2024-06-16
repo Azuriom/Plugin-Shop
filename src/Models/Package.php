@@ -35,6 +35,7 @@ use Illuminate\Support\Str;
  * @property bool $has_quantity
  * @property array $commands
  * @property int|null $role_id
+ * @property int|null $expired_role_id
  * @property float|null $money
  * @property float|null $giftcard_balance
  * @property bool $custom_price
@@ -48,6 +49,7 @@ use Illuminate\Support\Str;
  * @property \Carbon\Carbon $updated_at
  * @property \Azuriom\Plugin\Shop\Models\Category $category
  * @property \Azuriom\Models\Role|null $role
+ * @property \Azuriom\Models\Role|null $expiredRole
  * @property \Illuminate\Support\Collection|\Azuriom\Plugin\Shop\Models\Discount[] $discounts
  * @property \Illuminate\Support\Collection|\Azuriom\Plugin\Shop\Models\Subscription[] $subscriptions
  *
@@ -75,8 +77,8 @@ class Package extends Model implements Buyable
     protected $fillable = [
         'category_id', 'name', 'short_description', 'description', 'image',
         'position', 'price', 'billing_type', 'billing_period', 'required_packages',
-        'required_roles', 'has_quantity', 'commands', 'role_id', 'money',
-        'giftcard_balance', 'custom_price', 'user_limit', 'user_limit_period',
+        'required_roles', 'has_quantity', 'commands', 'role_id', 'expired_role_id',
+        'money', 'giftcard_balance', 'custom_price', 'user_limit', 'user_limit_period',
         'global_limit', 'global_limit_period', 'limits_no_expired', 'is_enabled',
     ];
 
@@ -115,6 +117,11 @@ class Package extends Model implements Buyable
     public function role()
     {
         return $this->belongsTo(Role::class);
+    }
+
+    public function expiredRole()
+    {
+        return $this->belongsTo(Role::class, 'expired_role_id');
     }
 
     public function discounts()
@@ -221,7 +228,7 @@ class Package extends Model implements Buyable
     /**
      * Get the total purchases for this package for the current user.
      */
-    public function countUserPurchases(DateTime $start = null, bool $noExpired = false): int
+    public function countUserPurchases(?DateTime $start = null, bool $noExpired = false): int
     {
         if (auth()->guest()) {
             return 0;
@@ -253,7 +260,7 @@ class Package extends Model implements Buyable
     /**
      * Get the total purchases for this package for the current user.
      */
-    public function countTotalPurchases(DateTime $start = null, bool $noExpired = false): int
+    public function countTotalPurchases(?DateTime $start = null, bool $noExpired = false): int
     {
         static $purchases = [];
 
@@ -335,6 +342,19 @@ class Package extends Model implements Buyable
         }
 
         event(new PackageDelivered($user, $this, $item->quantity));
+    }
+
+    public function expire(PaymentItem $item): void
+    {
+        if ($this->expiredRole === null || $this->expiredRole->is_admin) {
+            return;
+        }
+
+        $user = $item->payment->user;
+
+        if (! $user->isAdmin()) {
+            $user->role()->associate($this->expiredRole)->save();
+        }
     }
 
     /**

@@ -20,7 +20,7 @@ class CartController extends Controller
     {
         $terms = setting('shop.required_terms');
 
-        if ($terms === null) {
+        if ($terms !== null) {
             $markdown = Markdown::parse($terms, true);
 
             $terms = new HtmlString(Str::between($markdown, '<p>', '</p>'));
@@ -28,7 +28,7 @@ class CartController extends Controller
 
         return view('shop::cart.index', [
             'cart' => Cart::fromSession($request->session()),
-            'terms' => new HtmlString(Str::between(Markdown::parse($terms, true), '<p>', '</p>')),
+            'terms' => $terms,
         ]);
     }
 

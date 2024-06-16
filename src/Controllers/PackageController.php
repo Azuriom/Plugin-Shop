@@ -40,7 +40,7 @@ class PackageController extends Controller
         $user = $request->user();
         $cart = Cart::fromSession($request->session());
 
-        if ($package->getMaxQuantity() < 1) {
+        if ($package->getMaxQuantity() < 1 || $package->category->hasReachLimit($user)) {
             return redirect()->back()->with('error', trans('shop::messages.packages.limit'));
         }
 

@@ -10,7 +10,7 @@ class PaymentController
     /**
      * Handle a payment notification.
      */
-    public function notification(Request $request, Gateway $gateway, string $id = null)
+    public function notification(Request $request, Gateway $gateway, ?string $id = null)
     {
         return $gateway->paymentMethod()->notification($request, $id);
     }

@@ -83,6 +83,10 @@ class PaymentItem extends Model
     {
         $this->dispatchCommands('expiration');
 
+        if ($this->buyable instanceof Package) {
+            $this->buyable->expire($this);
+        }
+
         $this->update(['expires_at' => null]);
     }
 

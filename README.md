@@ -11,7 +11,7 @@ A shop plugin to sell in-game items on your website.
 * [PayPal Checkout](https://www.paypal.com/) (supports subscriptions)
 * [Mollie](https://www.mollie.com/) (supports subscriptions)
 * [Xsolla](https://xsolla.com/)
-* [Skrill](https://www.skrill.com/fr/) (ex paysafecard)
+* [Skrill](https://www.skrill.com/) (ex paysafecard)
 * [Stripe](https://stripe.com/) (supports subscriptions)
 * [PaymentWall](https://www.paymentwall.com/)
 

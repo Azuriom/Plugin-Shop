@@ -53,6 +53,7 @@ class PackageRequest extends FormRequest
             'required_roles' => ['sometimes', 'nullable', 'array'],
             'commands' => ['sometimes', 'nullable', 'array'],
             'role_id' => ['nullable', 'integer', 'exists:roles,id'],
+            'expired_role_id' => ['nullable', 'integer', 'exists:roles,id'],
             'money' => ['nullable', 'numeric', 'min:0'],
             'giftcard_balance' => $giftcardRules,
             'custom_price' => ['filled', 'boolean'],

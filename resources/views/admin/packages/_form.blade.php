@@ -264,7 +264,7 @@
 </div>
 
 <div class="row gx-3">
-    <div class="mb-3 col-md-6">
+    <div class="mb-3 @if(scheduler_running()) col-md-6 @else col-12 @endif">
         <label class="form-label" for="roleSelect">{{ trans('shop::messages.fields.role') }}</label>
         <select class="form-select @error('role_id') is-invalid @enderror" id="roleSelect" name="role_id">
             <option value="">{{ trans('messages.none') }}</option>
@@ -280,6 +280,37 @@
         @enderror
     </div>
 
+    @if(scheduler_running())
+        <div class="mb-3 col-md-6">
+            <label class="form-label" for="expireRoleSelect">{{ trans('shop::admin.packages.role') }}</label>
+            <select class="form-select @error('expired_role_id') is-invalid @enderror" id="expireRoleSelect" name="expired_role_id">
+                <option value="">{{ trans('messages.none') }}</option>
+                @foreach($roles as $role)
+                    <option value="{{ $role->id }}" @selected((int) ($package->expired_role_id ?? 0) === $role->id)>
+                        {{ $role->name }}
+                    </option>
+                @endforeach
+            </select>
+
+            @error('expired_role_id')
+            <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+            @enderror
+        </div>
+    @endif
+</div>
+
+<div class="row gx-3">
+    <div class="mb-3 col-md-6">
+        <label class="form-label" for="imageInput">{{ trans('messages.fields.image') }}</label>
+        <input type="file" class="form-control @error('image') is-invalid @enderror" id="imageInput" name="image" accept=".jpg,.jpeg,.jpe,.png,.gif,.bmp,.svg,.webp" data-image-preview="imagePreview">
+
+        @error('image')
+        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+        @enderror
+
+        <img src="{{ ($package->image ?? false) ? $package->imageUrl() : '#' }}" class="mt-2 img-fluid rounded img-preview {{ ($package->image ?? false) ? '' : 'd-none' }}" alt="Image" id="imagePreview">
+    </div>
+
     <div class="mb-3 col-md-6">
         <label class="form-label" for="moneyInput">{{ trans('shop::admin.packages.money') }}</label>
 
@@ -292,17 +323,6 @@
             @enderror
         </div>
     </div>
-</div>
-
-<div class="mb-3">
-    <label class="form-label" for="imageInput">{{ trans('messages.fields.image') }}</label>
-    <input type="file" class="form-control @error('image') is-invalid @enderror" id="imageInput" name="image" accept=".jpg,.jpeg,.jpe,.png,.gif,.bmp,.svg,.webp" data-image-preview="imagePreview">
-
-    @error('image')
-    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
-    @enderror
-
-    <img src="{{ ($package->image ?? false) ? $package->imageUrl() : '#' }}" class="mt-2 img-fluid rounded img-preview {{ ($package->image ?? false) ? '' : 'd-none' }}" alt="Image" id="imagePreview">
 </div>
 
 <h2 class="h4">{{ trans('shop::messages.fields.commands') }}</h2>

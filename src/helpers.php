@@ -43,7 +43,7 @@ if (! function_exists('currency')) {
      */
     function currency(): string
     {
-        return setting('currency', 'USD');
+        return strtoupper(setting('currency', 'USD'));
     }
 }
 
@@ -51,7 +51,7 @@ if (! function_exists('currency_display')) {
     /**
      * Return the display of the given currency.
      */
-    function currency_display(string $currency = null): string
+    function currency_display(?string $currency = null): string
     {
         return Currencies::symbol($currency ?? currency());
     }

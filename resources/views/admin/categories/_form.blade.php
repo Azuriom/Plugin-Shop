@@ -89,6 +89,11 @@
 </div>
 
 <div class="mb-3 form-check form-switch">
+    <input type="checkbox" class="form-check-input" id="singleSwitch" name="single_purchase" @checked(old('single_purchase', $category->single_purchase ?? false))>
+    <label class="form-check-label" for="singleSwitch">{{ trans('shop::admin.categories.single_purchase') }}</label>
+</div>
+
+<div class="mb-3 form-check form-switch">
     <input type="checkbox" class="form-check-input" id="enableSwitch" name="is_enabled" @checked(old('is_enabled', $category->is_enabled ?? true))>
     <label class="form-check-label" for="enableSwitch">{{ trans('shop::admin.categories.enable') }}</label>
 </div>
