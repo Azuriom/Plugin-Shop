@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('shop_payments', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('user_id');
-            $table->unsignedDecimal('price');
+            $table->decimal('price');
             $table->char('currency', 3);
             $table->string('gateway_type');
             $table->string('status'); // pending, expired, completed, error, chargeback, refunded

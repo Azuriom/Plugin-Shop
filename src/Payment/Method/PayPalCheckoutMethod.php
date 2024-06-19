@@ -91,6 +91,7 @@ class PayPalCheckoutMethod extends PaymentMethod
         $payment->update(['transaction_id' => $id]);
 
         return view('shop::gateways.paypal-checkout', [
+            'sandbox' => $this->gateway->data['environment'] === 'sandbox',
             'clientId' => $this->gateway->data['client-id'],
             'paypalId' => $id,
             'payment' => $payment,

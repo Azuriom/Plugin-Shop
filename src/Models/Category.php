@@ -89,6 +89,7 @@ class Category extends Model
         return ShopUser::ofUser($user)
             ->items()
             ->scopes('excludeExpired')
+            ->whereHas('payment', fn (Builder $q) => $q->scopes('completed'))
             ->whereHas('buyable', function (Builder $query) {
                 $query->where('category_id', $this->id);
             })

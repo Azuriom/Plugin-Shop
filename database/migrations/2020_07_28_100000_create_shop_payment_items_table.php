@@ -17,7 +17,7 @@ return new class extends Migration
             $table->increments('id');
             $table->unsignedInteger('payment_id');
             $table->string('name');
-            $table->unsignedDecimal('price');
+            $table->decimal('price');
             $table->unsignedInteger('quantity');
             $table->morphs('buyable'); // offer or package
             $table->timestamps();

@@ -94,7 +94,9 @@
                 @foreach($categories as $category)
                     <optgroup label="{{ $category->name }}">
                         @foreach($category->packages as $package)
-                            <option value="{{ $package->id }}" @selected(isset($coupon) && $coupon->packages->contains($package))>{{ $package->name }}</option>
+                            <option value="{{ $package->id }}" @selected(isset($coupon) && $coupon->packages->contains($package))>
+                                {{ $package->name }}
+                            </option>
                         @endforeach
                     </optgroup>
                 @endforeach

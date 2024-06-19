@@ -12,6 +12,7 @@ return [
         'discounts' => 'Réductions',
         'payments' => 'Paiements',
         'subscriptions' => 'Abonnements',
+        'variables' => 'Variables',
         'purchases' => 'Achats',
         'statistics' => 'Statistiques',
     ],
@@ -94,6 +95,7 @@ return [
 
         'updated' => 'Les produits ont été mis à jour.',
 
+        'variables' => 'Variables personnalisées',
         'role' => 'Grade à mettre après l\'expiration du produit',
         'money' => 'Argent à donner à l\'utilisateur lors de l\'achat',
         'has_giftcard' => 'Créer une carte cadeau lors de l\'achat et la donner à l\'utilisateur',
@@ -235,6 +237,24 @@ return [
         'terms_required' => 'Demander aux utilisateurs d\'accepter les conditions avant un achat',
         'terms' => 'Conditions générales de vente',
         'terms_info' => 'Liens au format Markdown, par exemple : <code>Je certifie avoir lu et accepte les [CGV](/links/cgv) de la boutique</code>.',
+    ],
+
+    'variables' => [
+        'title' => 'Variables',
+        'edit' => 'Édition de la variable :variable',
+        'create' => 'Création d\'une variable',
+
+        'info' => 'Les variables personnalisées permettent de demander des informations supplémentaires à l\'utilisateur lors de l\'achat d\'un produit.',
+
+        'name' => 'Le nom interne de la variable, ne peut pas être modifié après la création.',
+        'required' => 'Est-ce que cette variable doit être remplie par l\'utilisateur ?',
+        'options' => 'Options',
+
+        'text' => 'Texte',
+        'number' => 'Nombre',
+        'email' => 'E-Mail',
+        'checkbox' => 'Case à cocher',
+        'dropdown' => 'Menu déroulant',
     ],
 
     'logs' => [

@@ -51,6 +51,7 @@ use Illuminate\Support\Str;
  * @property \Azuriom\Models\Role|null $role
  * @property \Azuriom\Models\Role|null $expiredRole
  * @property \Illuminate\Support\Collection|\Azuriom\Plugin\Shop\Models\Discount[] $discounts
+ * @property \Illuminate\Support\Collection|\Azuriom\Plugin\Shop\Models\Variable[] $variables
  * @property \Illuminate\Support\Collection|\Azuriom\Plugin\Shop\Models\Subscription[] $subscriptions
  *
  * @method static \Illuminate\Database\Eloquent\Builder enabled()
@@ -127,6 +128,11 @@ class Package extends Model implements Buyable
     public function discounts()
     {
         return $this->belongsToMany(Discount::class, 'shop_discount_package');
+    }
+
+    public function variables()
+    {
+        return $this->belongsToMany(Variable::class, 'shop_package_variable');
     }
 
     public function subscriptions()
@@ -404,6 +410,7 @@ class Package extends Model implements Buyable
             ], [
                 $item->quantity, $this->id, $this->name, $item->price, $item->payment->transaction_id,
             ], $command))
+            ->map(fn (string $command) => $item->replaceVariables($command))
             ->flatMap(fn (string $command) => array_fill(0, $item->quantity, $command))
             ->all();
     }

@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property float $price
  * @property int $quantity
  * @property string $buyable_type
+ * @property array $variables
  * @property int $buyable_id
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
@@ -37,7 +38,7 @@ class PaymentItem extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'name', 'price', 'quantity', 'expires_at',
+        'name', 'price', 'quantity', 'variables', 'expires_at',
     ];
 
     /**
@@ -47,6 +48,7 @@ class PaymentItem extends Model
      */
     protected $casts = [
         'price' => 'float',
+        'variables' => 'array',
     ];
 
     protected static function booted(): void
@@ -104,6 +106,17 @@ class PaymentItem extends Model
             : currency_display($this->payment->currency);
 
         return $this->price.' '.$currency;
+    }
+
+    public function replaceVariables(string $content): string
+    {
+        if ($this->variables === null) {
+            return $content;
+        }
+
+        $search = array_map(fn (string $key) => '{'.$key.'}', array_keys($this->variables));
+
+        return str_replace($search, $this->variables, $content);
     }
 
     public function scopeExcludeExpired(Builder $query): void

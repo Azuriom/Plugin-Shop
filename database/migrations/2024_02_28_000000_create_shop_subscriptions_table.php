@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('subscription_id')->nullable();
             $table->string('gateway_type');
             $table->string('status'); // active, canceled, expired
-            $table->unsignedDecimal('price');
+            $table->decimal('price');
             $table->string('currency');
             $table->timestamp('ends_at')->nullable();
             $table->timestamps();

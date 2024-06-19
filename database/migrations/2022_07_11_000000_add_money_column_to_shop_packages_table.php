@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('shop_packages', function (Blueprint $table) {
-            $table->unsignedDecimal('money')->nullable()->after('role_id');
+            $table->decimal('money')->nullable()->after('role_id');
         });
     }
 

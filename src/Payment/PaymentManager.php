@@ -84,14 +84,16 @@ class PaymentManager
             'currency' => 'XXX',
         ]);
 
-        foreach ($cart->content() as $cartItem) {
+        foreach ($cart->content() as $item) {
             $payment->items()
                 ->make([
-                    'name' => $cartItem->name(),
-                    'price' => $cartItem->price(),
-                    'quantity' => $cartItem->quantity,
+                    'name' => $item->name(),
+                    'price' => $item->price(),
+                    'quantity' => $item->quantity,
+                    'variables' => $item->variables,
                 ])
-                ->buyable()->associate($cartItem->buyable())
+                ->buyable()
+                ->associate($item->buyable())
                 ->save();
         }
 
@@ -116,6 +118,7 @@ class PaymentManager
                     'name' => $item->name(),
                     'price' => $item->price(),
                     'quantity' => $item->quantity,
+                    'variables' => $item->variables,
                 ])
                 ->buyable()->associate($item->buyable())
                 ->save();

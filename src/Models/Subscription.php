@@ -156,7 +156,8 @@ class Subscription extends Model
                 'price' => $this->price,
                 'quantity' => 1,
             ])
-            ->buyable()->associate($this->package)
+            ->buyable()
+            ->associate($this->package)
             ->save();
 
         $expiration = $this->ends_at ?? now();

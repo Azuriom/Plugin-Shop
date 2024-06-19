@@ -34,6 +34,7 @@ return [
         'price' => 'Prix',
         'quantity' => 'Quantité',
         'renewal_date' => 'Renouvellement',
+        'required' => 'Obligatoire',
         'required_packages' => 'Articles pré-requis',
         'required_roles' => 'Role pré-requis',
         'role' => 'Grade à définir lors de l\'achat',

@@ -58,35 +58,35 @@ class Cart implements Arrayable
     /**
      * Add an item to the cart.
      */
-    public function add(Buyable $buyable, int $quantity = 1, ?float $userPrice = null): void
+    public function add(Buyable $buyable, int $quantity = 1, ?float $userPrice = null): CartItem
     {
         if ($quantity <= 0) {
-            return;
+            return $this->set($buyable, $quantity, $userPrice);
         }
 
         $cartItem = $this->get($buyable);
 
         if ($cartItem === null) {
-            $this->set($buyable, $quantity, $userPrice);
-
-            return;
+            return $this->set($buyable, $quantity, $userPrice);
         }
 
         $cartItem->setQuantity($cartItem->quantity + $quantity);
         $cartItem->userPrice = $userPrice ?? $cartItem->userPrice;
 
         $this->save();
+
+        return $cartItem;
     }
 
     /**
      * Set the quantity of an item in the cart.
      */
-    public function set(Buyable $buyable, int $quantity = 1, ?float $userPrice = null): void
+    public function set(Buyable $buyable, int $quantity = 1, ?float $userPrice = null): CartItem
     {
         if ($quantity <= 0) {
             $this->remove($buyable);
 
-            return;
+            return new CartItem($this, $buyable, $this->getItemId($buyable), 0);
         }
 
         $item = $this->get($buyable);
@@ -95,7 +95,7 @@ class Cart implements Arrayable
             $item->setQuantity($quantity);
             $item->userPrice = $userPrice ?? $item->userPrice;
 
-            return;
+            return $item;
         }
 
         $id = $this->getItemId($buyable);
@@ -107,6 +107,8 @@ class Cart implements Arrayable
         }
 
         $this->save();
+
+        return $item;
     }
 
     /**
@@ -383,7 +385,12 @@ class Cart implements Arrayable
                     return;
                 }
 
-                $cartItem = new CartItem($this, $models->get($item['id']), $item['itemId'], $item['quantity']);
+                $buyable = $models->get($item['id']);
+                $itemId = $item['itemId'];
+                $quantity = $item['quantity'];
+                $variables = $item['variables'] ?? [];
+
+                $cartItem = new CartItem($this, $buyable, $itemId, $quantity, $variables);
 
                 if (($userPrice = ($item['userPrice'] ?? null)) !== null) {
                     $cartItem->userPrice = $userPrice;

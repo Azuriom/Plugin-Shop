@@ -12,6 +12,7 @@ return [
         'discounts' => 'Discounts',
         'payments' => 'Payments',
         'subscriptions' => 'Subscriptions',
+        'variables' => 'Variables',
         'purchases' => 'Purchases',
         'statistics' => 'Statistics',
     ],
@@ -94,6 +95,7 @@ return [
 
         'updated' => 'The packages have been updated.',
 
+        'variables' => 'Custom variables',
         'role' => 'Role to set when the package expires',
         'money' => 'Money to give to the user after purchase',
         'has_giftcard' => 'Create a giftcard after the purchase and give it to the user',
@@ -235,6 +237,24 @@ return [
         'terms_required' => 'Require users to accept terms of service before purchase',
         'terms' => 'Terms of service',
         'terms_info' => 'Links in Markdown format, for example: <code>I accept the [terms of service](https://example.com/terms) of the shop.</code>',
+    ],
+
+    'variables' => [
+        'title' => 'Variables',
+        'edit' => 'Edit variable :variable',
+        'create' => 'Create variable',
+
+        'info' => 'Variables are custom fields that can be added to packages. They can be used to ask for additional information from the user when purchasing a package.',
+
+        'name' => 'The internal name of the variable, cannot be changed after creation.',
+        'required' => 'Should this variable be required?',
+        'options' => 'Options',
+
+        'text' => 'Text',
+        'number' => 'Number',
+        'email' => 'E-Mail',
+        'checkbox' => 'Checkbox',
+        'dropdown' => 'Dropdown',
     ],
 
     'logs' => [

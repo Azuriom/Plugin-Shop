@@ -17,8 +17,8 @@ return new class extends Migration
         Schema::create('shop_giftcards', function (Blueprint $table) {
             $table->increments('id');
             $table->string('code')->unique();
-            $table->unsignedDecimal('original_balance');
-            $table->unsignedDecimal('balance');
+            $table->decimal('original_balance');
+            $table->decimal('balance');
             $table->timestamp('start_at')->nullable();
             $table->timestamp('expire_at')->nullable();
             $table->timestamps();
@@ -27,7 +27,7 @@ return new class extends Migration
         Schema::create('shop_giftcard_payment', function (Blueprint $table) {
             $table->unsignedInteger('payment_id');
             $table->unsignedInteger('giftcard_id');
-            $table->unsignedDecimal('amount');
+            $table->decimal('amount');
 
             $table->foreign('payment_id')->references('id')->on('shop_payments')->cascadeOnDelete();
             $table->foreign('giftcard_id')->references('id')->on('shop_giftcards')->cascadeOnDelete();

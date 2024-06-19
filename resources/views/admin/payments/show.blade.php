@@ -117,5 +117,41 @@
                 </div>
             </div>
         </div>
+
+        @if(! $payment->items->pluck('variables')->flatten()->filter()->isEmpty())
+            <div class="col-md-6">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h5 class="card-title mb-0">
+                            {{ trans('shop::admin.packages.variables') }}
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th scope="col">{{ trans('shop::messages.fields.package') }}</th>
+                                <th scope="col">{{ trans('messages.fields.name') }}</th>
+                                <th scope="col">{{ trans('messages.fields.value') }}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            @foreach($payment->items as $item)
+                                @foreach($item->variables ?? [] as $key => $value)
+                                    <tr>
+                                        <th scope="row">{{ $item->name }}</th>
+                                        <td>{{ $key }}</td>
+                                        <td>{{ $value }}</td>
+                                    </tr>
+                                @endforeach
+                            @endforeach
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        @endif
     </div>
 @endsection

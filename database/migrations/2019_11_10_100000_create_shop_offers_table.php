@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('shop_offers', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->unsignedDecimal('price');
+            $table->decimal('price');
             $table->unsignedInteger('money');
             $table->boolean('is_enabled')->default(true);
             $table->timestamps();

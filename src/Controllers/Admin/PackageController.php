@@ -7,6 +7,7 @@ use Azuriom\Models\Role;
 use Azuriom\Models\Server;
 use Azuriom\Plugin\Shop\Models\Category;
 use Azuriom\Plugin\Shop\Models\Package;
+use Azuriom\Plugin\Shop\Models\Variable;
 use Azuriom\Plugin\Shop\Requests\PackageRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -100,6 +101,7 @@ class PackageController extends Controller
             'categories' => Category::with('packages')->get(),
             'roles' => Role::where('is_admin', false)->get(),
             'servers' => Server::executable()->get(),
+            'variables' => Variable::all(),
             'commandTriggers' => Package::COMMAND_TRIGGERS,
         ]);
     }
@@ -115,6 +117,8 @@ class PackageController extends Controller
             $package->storeImage($request->file('image'), true);
         }
 
+        $package->variables()->sync($request->input('variables', []));
+
         return to_route('shop.admin.packages.index')
             ->with('success', trans('messages.status.success'));
     }
@@ -129,6 +133,7 @@ class PackageController extends Controller
             'categories' => Category::with('packages')->get(),
             'roles' => Role::where('is_admin', false)->get(),
             'servers' => Server::executable()->get(),
+            'variables' => Variable::all(),
             'commandTriggers' => Package::COMMAND_TRIGGERS,
         ]);
     }
@@ -141,6 +146,8 @@ class PackageController extends Controller
         if ($request->hasFile('image')) {
             $package->storeImage($request->file('image'));
         }
+
+        $package->variables()->sync($request->input('variables', []));
 
         $package->update(Arr::except($request->validated(), 'image'));
 

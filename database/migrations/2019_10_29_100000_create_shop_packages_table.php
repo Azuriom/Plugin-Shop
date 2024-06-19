@@ -19,7 +19,7 @@ return new class extends Migration
             $table->text('description');
             $table->unsignedInteger('position')->default(0);
             $table->string('image')->nullable();
-            $table->unsignedDecimal('price');
+            $table->decimal('price');
             $table->text('commands');
             $table->unsignedInteger('role_id')->nullable();
             $table->text('required_roles')->nullable();

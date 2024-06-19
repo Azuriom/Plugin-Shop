@@ -36,6 +36,11 @@ class CartItem implements Arrayable
     public int $quantity;
 
     /**
+     * The variables for this cart item.
+     */
+    public array $variables;
+
+    /**
      * The model class.
      */
     public string $type;
@@ -53,7 +58,7 @@ class CartItem implements Arrayable
     /**
      * Create a new cart item instance.
      */
-    public function __construct(Cart $cart, Buyable $buyable, string $itemId, int $quantity = 1)
+    public function __construct(Cart $cart, Buyable $buyable, string $itemId, int $quantity = 1, array $variables = [])
     {
         $this->cart = $cart;
         $this->id = $buyable->id;
@@ -61,6 +66,7 @@ class CartItem implements Arrayable
         $this->type = get_class($buyable);
         $this->buyable = $buyable;
         $this->setQuantity($quantity);
+        $this->variables = $variables;
     }
 
     /**
@@ -144,6 +150,7 @@ class CartItem implements Arrayable
             'type' => $this->type,
             'quantity' => $this->quantity,
             'userPrice' => $this->userPrice,
+            'variables' => $this->variables,
         ];
     }
 }

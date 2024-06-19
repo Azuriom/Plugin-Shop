@@ -34,6 +34,7 @@ return [
         'price' => 'Price',
         'quantity' => 'Quantity',
         'renewal_date' => 'Renewal date',
+        'required' => 'Required',
         'required_packages' => 'Required packages',
         'required_roles' => 'Required role',
         'role' => 'Role to set after purchase',

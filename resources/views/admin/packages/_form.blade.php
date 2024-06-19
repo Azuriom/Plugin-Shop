@@ -301,14 +301,18 @@
 
 <div class="row gx-3">
     <div class="mb-3 col-md-6">
-        <label class="form-label" for="imageInput">{{ trans('messages.fields.image') }}</label>
-        <input type="file" class="form-control @error('image') is-invalid @enderror" id="imageInput" name="image" accept=".jpg,.jpeg,.jpe,.png,.gif,.bmp,.svg,.webp" data-image-preview="imagePreview">
+        <label class="form-label" for="variablesSelect">{{ trans('shop::admin.packages.variables') }}</label>
+        <select class="form-select @error('variables') is-invalid @enderror" id="variablesSelect" name="variables[]" multiple>
+            @foreach($variables as $variable)
+                <option value="{{ $variable->id }}" @selected(isset($package) && $package->variables->contains($variable))>
+                    {{ $variable->name }}
+                </option>
+            @endforeach
+        </select>
 
-        @error('image')
+        @error('variables')
         <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
         @enderror
-
-        <img src="{{ ($package->image ?? false) ? $package->imageUrl() : '#' }}" class="mt-2 img-fluid rounded img-preview {{ ($package->image ?? false) ? '' : 'd-none' }}" alt="Image" id="imagePreview">
     </div>
 
     <div class="mb-3 col-md-6">
@@ -323,6 +327,17 @@
             @enderror
         </div>
     </div>
+</div>
+
+<div class="mb-3">
+    <label class="form-label" for="imageInput">{{ trans('messages.fields.image') }}</label>
+    <input type="file" class="form-control @error('image') is-invalid @enderror" id="imageInput" name="image" accept=".jpg,.jpeg,.jpe,.png,.gif,.bmp,.svg,.webp" data-image-preview="imagePreview">
+
+    @error('image')
+    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+    @enderror
+
+    <img src="{{ ($package->image ?? false) ? $package->imageUrl() : '#' }}" class="mt-2 img-fluid rounded img-preview {{ ($package->image ?? false) ? '' : 'd-none' }}" alt="Image" id="imagePreview">
 </div>
 
 <h2 class="h4">{{ trans('shop::messages.fields.commands') }}</h2>

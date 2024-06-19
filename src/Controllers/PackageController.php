@@ -6,6 +6,7 @@ use Azuriom\Http\Controllers\Controller;
 use Azuriom\Plugin\Shop\Cart\Cart;
 use Azuriom\Plugin\Shop\Cart\CartItem;
 use Azuriom\Plugin\Shop\Models\Package;
+use Azuriom\Plugin\Shop\Models\Variable;
 use Illuminate\Http\Request;
 
 class PackageController extends Controller
@@ -18,6 +19,17 @@ class PackageController extends Controller
         $package->load(['category.packages', 'discounts']);
 
         return view('shop::packages.show', ['package' => $package]);
+    }
+
+    public function showVariables(Request $request, Package $package)
+    {
+        abort_if($package->variables->isEmpty(), 404);
+
+        return view('shop::packages.variables', [
+            'package' => $package,
+            'price' => old('price', $request->input('price')),
+            'quantity' => old('quantity', $request->input('quantity')),
+        ]);
     }
 
     /**
@@ -54,7 +66,45 @@ class PackageController extends Controller
 
         $price = $package->custom_price ? $request->input('price') : null;
 
-        $cart->add($package, $request->input('quantity') ?? 1, $price);
+        if ($package->variables->isEmpty()) {
+            $cart->add($package, $request->input('quantity') ?? 1, $price);
+
+            return to_route('shop.cart.index');
+        }
+
+        if ($request->routeIs('shop.packages.variables')) {
+            return $this->buyWithVariables($request, $cart, $package, $price);
+        }
+
+        return redirect()->route('shop.packages.variables', [
+            'package' => $package,
+            'quantity' => $request->input('quantity'),
+            'price' => $price,
+        ]);
+    }
+
+    private function buyWithVariables(Request $request, Cart $cart, Package $package, ?float $price)
+    {
+        $rules = $package->variables->mapWithKeys(fn (Variable $variable) => [
+            $variable->name => $variable->getValidationRule(),
+        ]);
+
+        $this->validate($request, array_merge([
+            'quantity' => 'nullable|integer',
+            'price' => 'sometimes|nullable|numeric|min:'.$package->price,
+        ], $rules->all()));
+
+        $checkboxes = $package->variables
+            ->where('type', 'checkbox')
+            ->mapWithKeys(fn (Variable $variable) => [
+                $variable->name => $request->has($variable->name) ? 'true' : 'false',
+            ]);
+
+        $request->merge($checkboxes->all());
+
+        $item = $cart->add($package, $request->input('quantity') ?? 1, $price);
+        $item->variables = $request->only($package->variables->pluck('name')->toArray());
+        $cart->save();
 
         return to_route('shop.cart.index');
     }

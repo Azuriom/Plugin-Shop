@@ -12,6 +12,7 @@ use Azuriom\Plugin\Shop\Controllers\Admin\PurchaseController;
 use Azuriom\Plugin\Shop\Controllers\Admin\SettingController;
 use Azuriom\Plugin\Shop\Controllers\Admin\StatisticsController;
 use Azuriom\Plugin\Shop\Controllers\Admin\SubscriptionController;
+use Azuriom\Plugin\Shop\Controllers\Admin\VariableController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -32,6 +33,7 @@ Route::middleware('can:shop.settings')->prefix('settings')->group(function () {
 Route::middleware('can:shop.packages')->group(function () {
     Route::resource('packages', PackageController::class)->except('show');
     Route::resource('categories', CategoryController::class)->except(['index', 'show']);
+    Route::resource('variables', VariableController::class)->except('show');
 
     Route::post('/packages/update-order', [PackageController::class, 'updateOrder'])->name('packages.update-order');
     Route::post('/packages/{package}/duplicate',
