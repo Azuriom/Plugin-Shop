@@ -83,9 +83,9 @@
         <label class="form-check-label" for="cumulatePurchasesSwitch">{{ trans('shop::admin.categories.cumulate') }}</label>
     </div>
 
-    <small class="form-text" id="cumulateInfo">
+    <div class="form-text" id="cumulateInfo">
         {{ trans('shop::admin.categories.cumulate_info') }}
-    </small>
+    </div>
 </div>
 
 <div class="mb-3 form-check form-switch">

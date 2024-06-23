@@ -37,7 +37,7 @@
                     <label class="form-label" :for="'commandInput' + i">{{ trans('shop::admin.commands.command') }}</label>
 
                     <div class="input-group mb-3" v-for="(cmd, j) in command.commands">
-                        <input type="text" class="form-control" :id="'commandInput' + i" :name="`commands[${i}][commands][${j}]`" v-model="command.commands[j]" required>
+                        <input type="text" class="form-control" :id="'commandInput' + i" :name="`commands[${i}][commands][${j}]`" v-model.trim="command.commands[j]" required>
 
                         <button type="button" v-if="j == command.commands.length - 1" class="btn btn-success" @click="command.commands.push('')" title="{{ trans('messages.actions.add') }}">
                             <i class="bi bi-plus-lg"></i>
@@ -70,11 +70,13 @@
                 </div>
             </div>
 
-            <small class="form-text mb-3">@lang('shop::admin.packages.command', [
-                'placeholders' => '<code>'.implode('</code>, <code>', [
-                    '{quantity}', '{package_id}', '{package_name}', '{price}', '{transaction_id}',
-                ]).'</code>',
-            ])</small>
+            <div class="form-text mb-3">
+                @lang('shop::admin.packages.command', [
+                    'placeholders' => '<code>'.implode('</code>, <code>', [
+                        '{quantity}', '{package_id}', '{package_name}', '{price}', '{transaction_id}',
+                    ]).'</code>',
+                ])
+            </div>
         </div>
     </div>
 

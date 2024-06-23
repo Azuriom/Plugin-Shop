@@ -117,6 +117,10 @@ class PackageController extends Controller
             $package->storeImage($request->file('image'), true);
         }
 
+        if ($request->hasFile('file')) {
+            $package->storeFile($request->file('file'), true);
+        }
+
         $package->variables()->sync($request->input('variables', []));
 
         return to_route('shop.admin.packages.index')
@@ -147,9 +151,13 @@ class PackageController extends Controller
             $package->storeImage($request->file('image'));
         }
 
-        $package->variables()->sync($request->input('variables', []));
-
         $package->update(Arr::except($request->validated(), 'image'));
+
+        if ($request->hasFile('file')) {
+            $package->storeFile($request->file('file'), true);
+        }
+
+        $package->variables()->sync($request->input('variables', []));
 
         return to_route('shop.admin.packages.index')
             ->with('success', trans('messages.status.success'));

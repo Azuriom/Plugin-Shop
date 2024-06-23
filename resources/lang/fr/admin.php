@@ -96,6 +96,7 @@ return [
         'updated' => 'Les produits ont été mis à jour.',
 
         'variables' => 'Variables personnalisées',
+        'files' => 'Fichiers téléchargeables',
         'role' => 'Grade à mettre après l\'expiration du produit',
         'money' => 'Argent à donner à l\'utilisateur lors de l\'achat',
         'has_giftcard' => 'Créer une carte cadeau lors de l\'achat et la donner à l\'utilisateur',

@@ -29,9 +29,13 @@ Route::resource('categories', CategoryController::class)->only('show')->scoped([
 ]);
 
 Route::resource('packages', PackageController::class)->only('show');
-Route::post('/packages/{package}/buy', [PackageController::class, 'buy'])->name('packages.buy')->middleware('auth');
-Route::get('/packages/{package}/options', [PackageController::class, 'showVariables'])->middleware('auth');
-Route::post('/packages/{package}/options', [PackageController::class, 'buy'])->name('packages.variables')->middleware('auth');
+
+Route::prefix('packages/{package}')->name('packages.')->middleware('auth')->group(function () {
+    Route::post('/buy', [PackageController::class, 'buy'])->name('buy');
+    Route::get('/options', [PackageController::class, 'showVariables']);
+    Route::post('/options', [PackageController::class, 'buy'])->name('variables');
+    Route::get('/files/{file}', [PackageController::class, 'downloadFile'])->name('file');
+});
 
 Route::prefix('offers')->name('offers.')->middleware('verified')->group(function () {
     Route::get('/', [OfferController::class, 'selectPayment'])->name('select');

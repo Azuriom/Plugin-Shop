@@ -96,6 +96,7 @@ return [
         'updated' => 'The packages have been updated.',
 
         'variables' => 'Custom variables',
+        'files' => 'Downloadable files',
         'role' => 'Role to set when the package expires',
         'money' => 'Money to give to the user after purchase',
         'has_giftcard' => 'Create a giftcard after the purchase and give it to the user',

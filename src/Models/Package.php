@@ -8,10 +8,13 @@ use Azuriom\Models\Traits\HasImage;
 use Azuriom\Models\Traits\HasTablePrefix;
 use Azuriom\Models\Traits\Loggable;
 use Azuriom\Models\User;
+use Azuriom\Notifications\AlertNotification;
 use Azuriom\Plugin\Shop\Events\PackageDelivered;
 use Azuriom\Plugin\Shop\Models\Concerns\Buyable;
 use Azuriom\Plugin\Shop\Models\Concerns\IsBuyable;
+use Azuriom\Plugin\Shop\Models\Concerns\ManageFiles;
 use Azuriom\Plugin\Shop\Models\User as ShopUser;
+use Azuriom\Plugin\Shop\Notifications\FileDownload;
 use DateTime;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -34,6 +37,7 @@ use Illuminate\Support\Str;
  * @property \Illuminate\Support\Collection|null $required_roles
  * @property bool $has_quantity
  * @property array $commands
+ * @property array $files
  * @property int|null $role_id
  * @property int|null $expired_role_id
  * @property float|null $money
@@ -62,6 +66,7 @@ class Package extends Model implements Buyable
     use HasTablePrefix;
     use IsBuyable;
     use Loggable;
+    use ManageFiles;
 
     public const COMMAND_TRIGGERS = ['purchase', 'renewal', 'expiration', 'refund', 'chargeback'];
 
@@ -78,7 +83,7 @@ class Package extends Model implements Buyable
     protected $fillable = [
         'category_id', 'name', 'short_description', 'description', 'image',
         'position', 'price', 'billing_type', 'billing_period', 'required_packages',
-        'required_roles', 'has_quantity', 'commands', 'role_id', 'expired_role_id',
+        'required_roles', 'has_quantity', 'commands', 'files', 'role_id', 'expired_role_id',
         'money', 'giftcard_balance', 'custom_price', 'user_limit', 'user_limit_period',
         'global_limit', 'global_limit_period', 'limits_no_expired', 'is_enabled',
     ];
@@ -91,6 +96,7 @@ class Package extends Model implements Buyable
     protected $casts = [
         'price' => 'float',
         'commands' => 'array',
+        'files' => 'array',
         'money' => 'float',
         'giftcard_balance' => 'float',
         'required_packages' => 'collection',
@@ -347,7 +353,24 @@ class Package extends Model implements Buyable
             $giftcard->notifyUser($user);
         }
 
+        $this->sendFiles($user);
+
         event(new PackageDelivered($user, $this, $item->quantity));
+    }
+
+    public function sendFiles(User $user): void
+    {
+        foreach ($this->files ?? [] as $file => $fileName) {
+            $url = route('shop.packages.file', [$this, $file]);
+
+            (new AlertNotification(trans('shop::messages.packages.file', [
+                'file' => $fileName,
+            ])))
+                ->link(route('shop.packages.file', [$this, $file], false))
+                ->send($user);
+
+            $user->notify(new FileDownload($user, $url));
+        }
     }
 
     public function expire(PaymentItem $item): void

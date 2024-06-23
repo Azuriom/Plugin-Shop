@@ -123,6 +123,7 @@ return [
         'limit' => 'You have purchased the maximum possible for this packages.',
         'requirements' => 'You don\'t have the requirements to purchase this package.',
         'cumulate' => 'You cannot buy this package with an other from the same category in the same purchase.',
+        'file' => 'Click here to download the file :file',
     ],
 
     'offers' => [

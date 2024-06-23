@@ -26,7 +26,7 @@
                         <input type="checkbox" class="form-check-input" id="useSiteMoneyCheckbox" name="use_site_money" aria-describedby="moneyLabel" @checked(use_site_money())>
                         <label class="form-check-label" for="useSiteMoneyCheckbox">{{ trans('shop::admin.settings.use_site_money') }}</label>
                     </div>
-                    <small id="moneyLabel" class="form-text">{{ trans('shop::admin.settings.use_site_money_info') }}</small>
+                    <div id="moneyLabel" class="form-text">{{ trans('shop::admin.settings.use_site_money_info') }}</div>
                 </div>
 
                 <div class="mb-3 form-check form-switch">
@@ -100,7 +100,7 @@
                     <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                     @enderror
 
-                    <small id="webhookInfo" class="form-text">{{ trans('shop::admin.settings.webhook_info') }}</small>
+                    <div id="webhookInfo" class="form-text">{{ trans('shop::admin.settings.webhook_info') }}</div>
                 </div>
 
                 <div class="mb-3 form-check form-switch">
@@ -117,7 +117,7 @@
                         <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                         @enderror
 
-                        <small id="termsLabel" class="form-text">@lang('shop::admin.settings.terms_info')</small>
+                        <div id="termsLabel" class="form-text">@lang('shop::admin.settings.terms_info')</div>
                     </div>
                 </div>
 

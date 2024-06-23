@@ -31,6 +31,9 @@
 
                             <label class="form-check-label" for="{{ $variable->name }}">
                                 {{ $variable->description }}
+                                @if($variable->is_required)
+                                    <span class="text-danger">*</span>
+                                @endif
                             </label>
 
                             @error($variable->name)
@@ -43,6 +46,9 @@
                         <div class="mb-3">
                             <label for="{{ $variable->name }}" class="form-label">
                                 {{ $variable->description }}
+                                @if($variable->is_required)
+                                    <span class="text-danger">*</span>
+                                @endif
                             </label>
 
                             <select class="form-select @error($variable->name) is-invalid @enderror"
@@ -65,6 +71,9 @@
                         <div class="mb-3">
                             <label for="{{ $variable->name }}" class="form-label">
                                 {{ $variable->description }}
+                                @if($variable->is_required)
+                                    <span class="text-danger">*</span>
+                                @endif
                             </label>
 
                             <input type="{{ $variable->type }}"

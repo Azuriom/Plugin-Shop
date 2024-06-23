@@ -17,4 +17,9 @@ return [
         'code' => 'Code: :code',
         'balance' => 'Balance: :balance',
     ],
+
+    'file' => [
+        'subject' => 'Your download link',
+        'intro' => 'Thank you :user for your purchase! The download link for your purchase is available below.',
+    ],
 ];

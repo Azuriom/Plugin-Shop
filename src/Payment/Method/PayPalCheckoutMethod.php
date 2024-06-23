@@ -400,14 +400,13 @@ class PayPalCheckoutMethod extends PaymentMethod
         $username = $this->gateway->data['client-id'];
         $password = $this->gateway->data['secret'];
 
-        $response = $this->getBaseClient()
+        return $this->getBaseClient()
             ->asForm()
             ->withBasicAuth($username, $password)
             ->post('/v1/oauth2/token', [
                 'grant_type' => 'client_credentials',
-            ]);
-
-        return $response->json('access_token');
+            ])
+            ->json('access_token');
     }
 
     private function getClient(bool $throw = true): PendingRequest
@@ -421,7 +420,7 @@ class PayPalCheckoutMethod extends PaymentMethod
         return $this->getBaseClient($throw)->withToken($token);
     }
 
-    private function getBaseClient(bool $throw = false): PendingRequest
+    private function getBaseClient(bool $throw = true): PendingRequest
     {
         $url = $this->gateway->data['environment'] === 'live'
             ? 'https://api-m.paypal.com'

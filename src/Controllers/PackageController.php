@@ -8,6 +8,7 @@ use Azuriom\Plugin\Shop\Cart\CartItem;
 use Azuriom\Plugin\Shop\Models\Package;
 use Azuriom\Plugin\Shop\Models\Variable;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
 class PackageController extends Controller
 {
@@ -124,5 +125,15 @@ class PackageController extends Controller
 
             return $other->category_id === $package->category_id;
         });
+    }
+
+    public function downloadFile(Package $package, string $file)
+    {
+        $fileName = Arr::get($package->files ?? [], $file);
+
+        abort_if($fileName === null, 404);
+        abort_if($package->countUserPurchases() === 0, 403);
+
+        return $package->downloadFile($file, $fileName);
     }
 }

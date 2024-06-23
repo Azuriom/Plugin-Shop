@@ -18,7 +18,7 @@
             @enderror
         </div>
 
-        <small id="nameLabel" class="form-text">{{ trans('shop::admin.variables.name') }}</small>
+        <div id="nameLabel" class="form-text">{{ trans('shop::admin.variables.name') }}</div>
     </div>
 
     <div class="mb-3 col-md-6">
@@ -50,14 +50,14 @@
         <div class="mb-3 col-md-6">
             <label class="form-label" :for="'optionNameInput' + i">{{ trans('messages.fields.name') }}</label>
 
-            <input type="text" class="form-control" :id="'optionNameInput' + i" :name="`options[${i}][name]`" v-model="option.name" required>
+            <input type="text" class="form-control" :id="'optionNameInput' + i" :name="`options[${i}][name]`" v-model.trim="option.name" required>
         </div>
 
         <div class="mb-3 col-md-6">
             <label class="form-label" :for="'optionValueInput' + i">{{ trans('messages.fields.value') }}</label>
 
             <div class="input-group">
-                <input type="text" class="form-control" :id="'optionValueInput' + i" :name="`options[${i}][value]`" v-model="option.value" required>
+                <input type="text" class="form-control" :id="'optionValueInput' + i" :name="`options[${i}][value]`" v-model.trim="option.value" required>
 
                 <button type="button" v-if="options.length > 1" class="btn btn-danger" @click="options.splice(i, 1)" title="{{ trans('messages.actions.delete') }}">
                     <i class="bi bi-x-lg"></i>

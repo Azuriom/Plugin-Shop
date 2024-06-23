@@ -329,15 +329,21 @@
     </div>
 </div>
 
-<div class="mb-3">
-    <label class="form-label" for="imageInput">{{ trans('messages.fields.image') }}</label>
-    <input type="file" class="form-control @error('image') is-invalid @enderror" id="imageInput" name="image" accept=".jpg,.jpeg,.jpe,.png,.gif,.bmp,.svg,.webp" data-image-preview="imagePreview">
+<div class="row gx-3">
+    <div class="col-md-6">
+        @include('shop::admin.packages._files')
+    </div>
 
-    @error('image')
-    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
-    @enderror
+    <div class="mb-3 col-md-6">
+        <label class="form-label" for="imageInput">{{ trans('messages.fields.image') }}</label>
+        <input type="file" class="form-control @error('image') is-invalid @enderror" id="imageInput" name="image" accept=".jpg,.jpeg,.jpe,.png,.gif,.bmp,.svg,.webp" data-image-preview="imagePreview">
 
-    <img src="{{ ($package->image ?? false) ? $package->imageUrl() : '#' }}" class="mt-2 img-fluid rounded img-preview {{ ($package->image ?? false) ? '' : 'd-none' }}" alt="Image" id="imagePreview">
+        @error('image')
+        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+        @enderror
+
+        <img src="{{ ($package->image ?? false) ? $package->imageUrl() : '#' }}" class="mt-2 img-fluid rounded img-preview {{ ($package->image ?? false) ? '' : 'd-none' }}" alt="Image" id="imagePreview">
+    </div>
 </div>
 
 <h2 class="h4">{{ trans('shop::messages.fields.commands') }}</h2>

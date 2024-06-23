@@ -52,6 +52,8 @@ class PackageRequest extends FormRequest
             'required_packages' => ['sometimes', 'nullable', 'array'],
             'required_roles' => ['sometimes', 'nullable', 'array'],
             'commands' => ['sometimes', 'nullable', 'array'],
+            'files' => ['sometimes', 'nullable', 'array'],
+            'file' => ['nullable', 'file'],
             'role_id' => ['nullable', 'integer', 'exists:roles,id'],
             'expired_role_id' => ['nullable', 'integer', 'exists:roles,id'],
             'variables' => ['sometimes', 'nullable', 'array'],
@@ -88,6 +90,7 @@ class PackageRequest extends FormRequest
 
         $this->merge([
             'commands' => $this->input('commands', []),
+            'files' => $this->input('files', []),
             'required_packages' => $this->input('required_packages', []),
         ]);
     }
