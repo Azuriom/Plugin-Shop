@@ -20,7 +20,7 @@ class PackageController extends Controller
     public function index()
     {
         $categories = Category::parents()
-            ->with(['categories', 'packages'])
+            ->with(['categories.packages', 'categories.categories', 'packages'])
             ->get();
 
         return view('shop::admin.packages.index', ['categories' => $categories]);
@@ -111,7 +111,9 @@ class PackageController extends Controller
      */
     public function store(PackageRequest $request)
     {
-        $package = Package::create(Arr::except($request->validated(), 'image'));
+        $package = Package::create(Arr::except($request->validated(), [
+            'image', 'file', 'variables',
+        ]));
 
         if ($request->hasFile('image')) {
             $package->storeImage($request->file('image'), true);
@@ -151,7 +153,9 @@ class PackageController extends Controller
             $package->storeImage($request->file('image'));
         }
 
-        $package->update(Arr::except($request->validated(), 'image'));
+        $package->update(Arr::except($request->validated(), [
+            'image', 'file', 'variables',
+        ]));
 
         if ($request->hasFile('file')) {
             $package->storeFile($request->file('file'), true);

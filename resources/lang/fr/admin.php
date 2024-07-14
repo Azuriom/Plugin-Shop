@@ -214,6 +214,7 @@ return [
 
         'info' => 'Informations de l\'abonnement',
         'error' => 'Vous devez annuler les abonnements associés pour continuer, et attendre que ceux-ci soient expirés.',
+        'setup' => 'La configuration d\'un abonnement pour un produit se fait dans les paramètres du produit, juste en dessous de la configuration du prix.',
 
         'status' => [
             'active' => 'Actif',

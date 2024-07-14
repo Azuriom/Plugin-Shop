@@ -16,7 +16,7 @@ class SubscriptionController extends Controller
     {
         $search = $request->input('search');
 
-        $subscriptions = Subscription::with('user')
+        $subscriptions = Subscription::with(['user', 'package'])
             ->when($search, fn (Builder $query) => $query->search($search))
             ->latest()
             ->paginate();

@@ -115,9 +115,9 @@
 @else
     <input type="hidden" name="billing_type" value="one-off">
 
-    <p class="small text-info">
+    <div class="alert alert-info" role="alert">
         <i class="bi bi-info-circle"></i> @lang('shop::admin.packages.scheduler')
-    </p>
+    </div>
 @endif
 
 <div class="mb-3 form-check form-switch">

@@ -22,6 +22,7 @@ class ProfileController extends Controller
 
         $subscriptions = Subscription::notPending()
             ->whereBelongsTo($user)
+            ->with('package')
             ->latest()
             ->get();
 

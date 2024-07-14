@@ -43,7 +43,7 @@
     </div>
 
     @if(! $subscriptions->isEmpty())
-        <div class="card">
+        <div class="card mb-4">
             <div class="card-body">
                 <h2 class="card-title">{{ trans('shop::messages.profile.subscriptions') }}</h2>
 

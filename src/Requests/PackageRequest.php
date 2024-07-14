@@ -17,7 +17,7 @@ class PackageRequest extends FormRequest
      * @var array<int, string>
      */
     protected array $checkboxes = [
-        'custom_price', 'need_online', 'has_quantity', 'limits_no_expired', 'is_enabled',
+        'custom_price', 'has_quantity', 'limits_no_expired', 'is_enabled',
     ];
 
     /**
@@ -60,7 +60,6 @@ class PackageRequest extends FormRequest
             'money' => ['nullable', 'numeric', 'min:0'],
             'giftcard_balance' => $giftcardRules,
             'custom_price' => ['filled', 'boolean'],
-            'need_online' => ['filled', 'boolean'],
             'is_enabled' => ['filled', 'boolean'],
             'has_quantity' => ['filled', 'boolean'],
             'image' => ['nullable', 'image'],

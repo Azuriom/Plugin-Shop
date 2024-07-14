@@ -88,4 +88,14 @@
             {{ $subscriptions->withQueryString()->links() }}
         </div>
     </div>
+
+    @if(scheduler_running())
+        <div class="alert alert-info" role="alert">
+            <i class="bi bi-info-circle"></i> @lang('shop::admin.subscriptions.setup')
+        </div>
+    @else
+        <div class="alert alert-info" role="alert">
+            <i class="bi bi-info-circle"></i> @lang('shop::admin.packages.scheduler')
+        </div>
+    @endif
 @endsection

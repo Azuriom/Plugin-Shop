@@ -39,6 +39,10 @@ class PaymentController extends Controller
     {
         $payment->load(['user', 'items', 'coupons']);
 
+        foreach ($payment->items as $item) {
+            $item->setRelation('payment', $payment);
+        }
+
         return view('shop::admin.payments.show', ['payment' => $payment]);
     }
 

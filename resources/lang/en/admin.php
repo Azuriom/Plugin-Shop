@@ -214,6 +214,7 @@ return [
 
         'info' => 'Subscription information',
         'error' => 'To continue, you must cancel associated subscriptions and wait for their expiration.',
+        'setup' => 'Subscription package can be set up in a package settings, just under the price field.',
 
         'status' => [
             'active' => 'Active',

@@ -26,12 +26,16 @@
             </p>
 
             <a href="{{ route('shop.offers.select') }}" class="btn btn-primary btn-block">
-                {{ trans('shop::messages.cart.credit') }}
+                <i class="bi bi-credit-card"></i> {{ trans('shop::messages.cart.credit') }}
             </a>
         @endif
 
         <a href="{{ route('shop.cart.index') }}" class="btn btn-primary btn-block">
             <i class="bi bi-cart"></i> {{ trans('shop::messages.cart.title') }}
+        </a>
+
+        <a href="{{ route('shop.profile') }}" class="btn btn-primary btn-block">
+            <i class="bi bi-cash-coin"></i> {{ trans('shop::messages.profile.payments') }}
         </a>
     </div>
 @endauth

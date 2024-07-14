@@ -17,13 +17,19 @@
 
             @auth
                 @if($package->isSubscription())
-                    <form action="{{ route('shop.subscriptions.select', $package) }}" method="POST" class="form-inline">
-                        @csrf
+                    @if($package->isUserSubscribed())
+                        <a href="{{ route('shop.profile') }}" class="btn btn-primary">
+                            {{ trans('shop::messages.actions.manage') }}
+                        </a>
+                    @else
+                        <form action="{{ route('shop.subscriptions.select', $package) }}" method="POST" class="form-inline">
+                            @csrf
 
-                        <button type="submit" class="btn btn-primary">
-                            {{ trans('shop::messages.actions.subscribe') }}
-                        </button>
-                    </form>
+                            <button type="submit" class="btn btn-primary">
+                                {{ trans('shop::messages.actions.subscribe') }}
+                            </button>
+                        </form>
+                    @endif
                 @elseif($package->isInCart())
                     <form action="{{ route('shop.cart.remove', $package) }}" method="POST" class="form-inline">
                         @csrf

@@ -45,7 +45,7 @@
     </div>
 </div>
 
-<div class="alert alert-info">
+<div class="alert alert-info" role="alert">
     <i class="bi bi-info-circle"></i> @lang('shop::admin.gateways.paypal_checkout', [
         'url' => route('shop.payments.notification', 'paypal-checkout'),
         'events' => 'BILLING.SUBSCRIPTION.ACTIVATED, CUSTOMER.DISPUTE.CREATED, PAYMENT.CAPTURE.REFUNDED, PAYMENT.CAPTURE.REVERSED, PAYMENT.SALE.COMPLETED',

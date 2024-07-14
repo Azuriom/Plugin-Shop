@@ -48,6 +48,7 @@ return [
 
     'actions' => [
         'subscribe' => 'Subscribe',
+        'manage' => 'Manage subscription',
         'move' => 'Move',
     ],
 

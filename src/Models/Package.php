@@ -175,6 +175,18 @@ class Package extends Model implements Buyable
         return Str::after($this->billing_period ?? '', ' ');
     }
 
+    public function isUserSubscribed(?User $user = null)
+    {
+        if (! $this->isSubscription()) {
+            return false;
+        }
+
+        return $this->subscriptions()
+            ->whereBelongsTo($user ?? auth()->user())
+            ->scopes('active')
+            ->exists();
+    }
+
     public function getPrice(): float
     {
         static $globalDiscounts = null;

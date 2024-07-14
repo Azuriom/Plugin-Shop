@@ -31,7 +31,7 @@
         </div>
     @endif
 
-    <div class="alert alert-info">
+    <div class="alert alert-info" role="alert">
         <i class="bi bi-info-circle"></i> @lang('shop::admin.gateways.info')
     </div>
 @endsection

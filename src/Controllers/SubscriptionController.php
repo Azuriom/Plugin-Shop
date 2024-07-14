@@ -17,10 +17,12 @@ class SubscriptionController extends Controller
 
         $user = $request->user();
 
-        if (use_site_money()) {
-            $this->createInternalSubscription($user, $package);
+        if ($package->isUserSubscribed($user)) {
+            return redirect()->route('shop.profile');
+        }
 
-            return to_route('shop.home')->with('success', trans('shop::messages.cart.success'));
+        if (use_site_money()) {
+            return $this->createInternalSubscription($user, $package);
         }
 
         $gateways = Gateway::enabled()
@@ -62,17 +64,26 @@ class SubscriptionController extends Controller
         return redirect()->route('shop.profile');
     }
 
-    protected function createInternalSubscription(User $user, Package $package): void
+    protected function createInternalSubscription(User $user, Package $package)
     {
+        $price = $package->getPrice();
+
+        if (! $user->hasMoney($price)) {
+            return redirect()->back()->with('error', trans('shop::messages.cart.errors.money'));
+        }
+
         $subscription = $package->subscriptions()->create([
             'user_id' => $user->id,
-            'package_id' => $package->id,
             'gateway_type' => 'azuriom',
             'status' => 'active',
-            'price' => $package->getPrice(),
+            'price' => $price,
             'currency' => 'XXX',
         ]);
 
+        $user->removeMoney($subscription->price);
+
         $subscription->addRenewalPayment();
+
+        return to_route('shop.profile')->with('success', trans('shop::messages.cart.success'));
     }
 }

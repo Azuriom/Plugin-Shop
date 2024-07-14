@@ -164,7 +164,6 @@ abstract class PaymentMethod
     {
         return $package->subscriptions()->create([
             'user_id' => $user->id,
-            'package_id' => $package->id,
             'subscription_id' => $subscriptionId,
             'gateway_type' => $this->id,
             'status' => 'active',

@@ -112,7 +112,7 @@ class PackageController extends Controller
 
     private function categoryCumulateError(Cart $cart, Package $package)
     {
-        if (! $package->category->cumulate_purchases) {
+        if (! $package->category->cumulate_purchases && ! $package->category->single_purchase) {
             return false;
         }
 

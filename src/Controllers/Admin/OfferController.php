@@ -32,7 +32,7 @@ class OfferController extends Controller
      */
     public function store(OfferRequest $request)
     {
-        $offer = Offer::create(Arr::except($request->validated(), 'image'));
+        $offer = Offer::create(Arr::except($request->validated(), ['image', 'gateways']));
 
         $offer->gateways()->sync($request->input('gateways', []));
 
@@ -60,7 +60,7 @@ class OfferController extends Controller
      */
     public function update(OfferRequest $request, Offer $offer)
     {
-        $offer->update(Arr::except($request->validated(), 'image'));
+        $offer->update(Arr::except($request->validated(), ['image', 'gateways']));
 
         if ($request->hasFile('image')) {
             $offer->storeImage($request->file('image'), true);

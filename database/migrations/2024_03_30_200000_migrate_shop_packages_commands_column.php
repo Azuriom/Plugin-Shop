@@ -20,7 +20,7 @@ return new class extends Migration
 
                 if (! is_array($commands) || empty($commands = array_filter($commands))) {
                     DB::table('shop_packages')->where('id', $package->id)->update([
-                        'commands' => null,
+                        'commands' => '[]',
                     ]);
 
                     continue;
