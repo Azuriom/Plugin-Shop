@@ -82,7 +82,7 @@ class SubscriptionController extends Controller
 
         $user->removeMoney($subscription->price);
 
-        $subscription->addRenewalPayment();
+        $subscription->addRenewalPayment()->deliver();
 
         return to_route('shop.profile')->with('success', trans('shop::messages.cart.success'));
     }

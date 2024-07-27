@@ -119,7 +119,7 @@ return [
         'subscription_info' => 'Assurez vous que votre moyen de paiement supporte les abonnements. Une fois un abonnement créé, l\'utilisateur sera débité du même montant tant que l\'abonnement n\'est pas annulé (toute promotion active pour le premier paiement sera appliquée aux paiements suivants).',
         'expiring' => 'Paiement unique avec expiration',
         'expiring_info' => 'Le produit sera automatiquement supprimé après la période définie.',
-        'scheduler' => 'Vous devez configurer les tâches CRON pour configurer des abonnements, voir la <a href="https://azuriom.com/docs/faq" target="_blank" rel="noopener norefferer">FAQ</a> pour plus d\'informations.',
+        'scheduler' => 'Les tâches CRON ne sont pas activées, vous devez les configurer pour utiliser les abonnements et les expirations, voir la <a href="https://azuriom.com/docs/faq" target="_blank" rel="noopener norefferer">FAQ</a> pour plus d\'informations.',
 
         'create_category' => 'Créer une catégorie',
         'create_package' => 'Créer un produit',

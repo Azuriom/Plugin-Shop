@@ -119,7 +119,7 @@ return [
         'subscription_info' => 'Make sure your payment gateway supports subscriptions. When a subscription is created, the user will be charged the same price until the subscription is canceled (any discount active during the first payment will be applied to the next payments).',
         'expiring' => 'One-off payment with expiration',
         'expiring_info' => 'The product will be automatically removed after the specified period.',
-        'scheduler' => 'You must set up CRON tasks to use subscriptions, see the <a href="https://azuriom.com/docs/faq" target="_blank" rel="noopener norefferer">FAQ</a> for more information.',
+        'scheduler' => 'CRON tasks are not enabled, you must set them up to use subscriptions and expiring packages, see the <a href="https://azuriom.com/docs/faq" target="_blank" rel="noopener norefferer">FAQ</a> for more information.',
 
         'create_category' => 'Create category',
         'create_package' => 'Create package',
