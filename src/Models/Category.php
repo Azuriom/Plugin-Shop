@@ -7,11 +7,11 @@ use Azuriom\Models\User;
 use Azuriom\Plugin\Shop\Models\User as ShopUser;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\HtmlString;
 
 /**
  * @property int $id
  * @property string $name
+ * @property string|null $icon
  * @property string $slug
  * @property string|null $description
  * @property int $position
@@ -43,7 +43,7 @@ class Category extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'name', 'slug', 'description', 'position', 'parent_id',
+        'name', 'icon', 'slug', 'description', 'position', 'parent_id',
         'cumulate_purchases', 'single_purchase', 'is_enabled',
     ];
 
@@ -94,11 +94,6 @@ class Category extends Model
                 $query->where('category_id', $this->id);
             })
             ->count() > 0;
-    }
-
-    public function getNameAttribute(string $value)
-    {
-        return new HtmlString($value);
     }
 
     /**

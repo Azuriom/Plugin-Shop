@@ -7,11 +7,17 @@
 
     @foreach($categories as $subCategory)
         <a href="{{ route('shop.categories.show', $subCategory) }}" class="list-group-item @if($subCategory->is($category)) active @endif">
+            @if($subCategory->icon)
+                <i class="{{ $subCategory->icon }}"></i>
+            @endif
             {{ $subCategory->name }}
         </a>
 
         @foreach($subCategory->categories as $cat)
             <a href="{{ route('shop.categories.show', $cat) }}" class="list-group-item ps-5 @if($cat->is($category)) active @endif">
+                @if($cat->icon)
+                    <i class="{{ $cat->icon }}"></i>
+                @endif
                 {{ $cat->name }}
             </a>
         @endforeach

@@ -37,7 +37,7 @@ return [
         'required' => 'Obligatoire',
         'required_packages' => 'Articles pré-requis',
         'required_roles' => 'Role pré-requis',
-        'role' => 'Grade à définir lors de l\'achat',
+        'role' => 'Rôle à définir lors de l\'achat',
         'start_date' => 'Date de début',
         'subscription' => 'Abonnement',
         'subscription_id' => 'ID d\'abonnement',
@@ -106,6 +106,7 @@ return [
         'info' => 'Achat #:id sur :website',
         'subscription' => ':package - Abonnement (Utilisateur #:user)',
         'error' => 'Le paiement n\'a pas pu être effectué, veuillez réessayer.',
+        'giftcards' => 'Cartes cadeaux',
 
         'success' => 'Paiement effectué, vous recevrez votre achat dans le jeu en moins d\'une minute',
         'pending' => 'Paiement en attente, vous recevrez votre achat dans le jeu une fois le paiement confirmé',

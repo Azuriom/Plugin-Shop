@@ -20,6 +20,7 @@ A shop plugin to sell in-game items on your website.
 > [!NOTE]
 > Due to the large number of different payment methods available, we won't be adding any directly to the shop plugin.
 > However, new payment methods can be added via a plugin, as explained below.
+> It is also possible to post the plugin on the [market](https://market.azuriom.com/) to make the payment method easily accessible for users.
 
 You can create your own payment gateway by creating a new class that extends the `Azuriom\Plugin\Shop\Payment\PaymentMethod\PaymentMethod` class.
 

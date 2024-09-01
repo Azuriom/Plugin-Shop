@@ -97,7 +97,7 @@ return [
 
         'variables' => 'Variables personnalisées',
         'files' => 'Fichiers téléchargeables',
-        'role' => 'Grade à mettre après l\'expiration du produit',
+        'role' => 'Rôle à définir après l\'expiration du produit',
         'money' => 'Argent à donner à l\'utilisateur lors de l\'achat',
         'has_giftcard' => 'Créer une carte cadeau lors de l\'achat et la donner à l\'utilisateur',
         'giftcard_balance' => 'Valeur de la carte cadeau',
@@ -281,6 +281,8 @@ return [
         'shop-giftcards' => [
             'used' => 'Utilisation de la carte cadeau #:id (:amount)',
         ],
+
+        'settings' => 'Mise à jour des paramètres de la boutique',
     ],
 
     'statistics' => [

@@ -106,6 +106,7 @@ return [
         'info' => 'Purchase #:id on :website',
         'subscription' => ':package - Subscription (User #:user)',
         'error' => 'The payment could not be completed, please try again later.',
+        'giftcards' => 'Giftcards',
 
         'success' => 'Payment completed, you\'ll receive your purchase in-game in less than a minute.',
         'pending' => 'Payment pending, you\'ll receive your purchase in-game once the payment is confirmed.',

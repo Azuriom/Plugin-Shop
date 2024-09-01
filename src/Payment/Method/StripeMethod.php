@@ -12,6 +12,7 @@ use Azuriom\Plugin\Shop\Payment\PaymentMethod;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Stripe\Checkout\Session;
+use Stripe\Coupon;
 use Stripe\Event;
 use Stripe\Exception\SignatureVerificationException;
 use Stripe\Invoice;
@@ -62,7 +63,7 @@ class StripeMethod extends PaymentMethod
         ]);
 
         $payment = $this->createPayment($cart, $amount, $currency);
-
+        $coupon = $this->applyGiftcards($payment, $currency);
         $successUrl = route('shop.payments.success', [$this->id, '%id%']);
 
         $session = Session::create([
@@ -72,6 +73,7 @@ class StripeMethod extends PaymentMethod
             'success_url' => str_replace('%id%', '{CHECKOUT_SESSION_ID}', $successUrl),
             'cancel_url' => route('shop.cart.index'),
             'client_reference_id' => $payment->id,
+            'discounts' => $coupon ? [['coupon' => $coupon->id]] : [],
         ]);
 
         $payment->update(['transaction_id' => $session->payment_intent]);
@@ -199,6 +201,23 @@ class StripeMethod extends PaymentMethod
         $payment = Payment::find($event->data->object->client_reference_id);
 
         return $this->processPayment($payment);
+    }
+
+    protected function applyGiftcards(Payment $payment, string $currency): ?Coupon
+    {
+        $amount = $payment->giftcards()->sum('amount');
+
+        if ($amount <= 0) {
+            return null;
+        }
+
+        return Coupon::create([
+            'amount_off' => $this->convertAmount($amount, $currency),
+            'currency' => $currency,
+            'duration' => 'once',
+            'max_redemptions' => 1,
+            'name' => trans('shop::messages.payment.giftcards'),
+        ]);
     }
 
     /*

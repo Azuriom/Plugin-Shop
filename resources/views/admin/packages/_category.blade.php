@@ -3,7 +3,12 @@
         <div class="card-body d-flex justify-content-between">
             <span>
                 <i class="bi bi-arrows-move sortable-handle"></i>
-                <a href="{{ route('shop.categories.show', $category) }}">{{ $category->name }}</a>
+                <a href="{{ route('shop.categories.show', $category) }}">
+                    @if($category->icon)
+                        <i class="{{ $category->icon }}"></i>
+                    @endif
+                    {{ $category->name }}
+                </a>
                 <i class="bi bi-collection"></i>
             </span>
             <span>

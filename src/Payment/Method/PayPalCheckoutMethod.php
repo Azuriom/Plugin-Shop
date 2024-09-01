@@ -229,7 +229,7 @@ class PayPalCheckoutMethod extends PaymentMethod
             ->whereMorphedTo('model', $package)
             ->first();
 
-        if ($metadata->value === null) {
+        if ($metadata?->value === null) {
             $productId = $this->syncProduct($package);
             $planId = $this->syncPlan($package, $productId);
 
@@ -306,7 +306,7 @@ class PayPalCheckoutMethod extends PaymentMethod
             return $this->syncPlan($package, $productId);
         }
 
-        $this->getClient()->patch('/v1/catalogs/products/'.$planId, [
+        $this->getClient()->patch('/v1/billing/plans/'.$planId, [
             [
                 'op' => 'replace',
                 'path' => '/name',
@@ -411,8 +411,11 @@ class PayPalCheckoutMethod extends PaymentMethod
 
     private function getClient(bool $throw = true): PendingRequest
     {
+        $clientId = $this->gateway->data['client-id'];
+        $secret = $this->gateway->data['secret'];
+
         $token = Cache::remember(
-            'shop.paypal.token',
+            'shop.paypal.token.'.substr($clientId, 0, 5).substr($secret, 0, 5),
             now()->addHour(),
             fn () => $this->generateAccessToken()
         );

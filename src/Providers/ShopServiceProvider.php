@@ -85,11 +85,18 @@ class ShopServiceProvider extends BasePluginServiceProvider
             Gateway::class,
         ], 'shop::admin.logs');
 
-        ActionLog::registerLogs('shop-giftcards.used', [
-            'icon' => 'credit-card',
-            'color' => 'info',
-            'message' => 'shop::admin.logs.shop-giftcards.used',
-            'model' => Giftcard::class,
+        ActionLog::registerLogs([
+            'shop-giftcards.used' => [
+                'icon' => 'credit-card',
+                'color' => 'info',
+                'message' => 'shop::admin.logs.shop-giftcards.used',
+                'model' => Giftcard::class,
+            ],
+            'shop.settings.updated' => [
+                'icon' => 'cart',
+                'color' => 'info',
+                'message' => 'shop::admin.logs.settings',
+            ],
         ]);
 
         User::observe(UserObserver::class);

@@ -3,6 +3,7 @@
 namespace Azuriom\Plugin\Shop\Controllers\Admin;
 
 use Azuriom\Http\Controllers\Controller;
+use Azuriom\Models\ActionLog;
 use Azuriom\Models\Server;
 use Azuriom\Models\Setting;
 use Azuriom\Plugin\Shop\Models\Package;
@@ -67,6 +68,8 @@ class SettingController extends Controller
             'shop.commands' => is_array($commands) ? json_encode($commands) : null,
             'shop.required_terms' => $request->filled('terms_required') ? $request->input('terms') : null,
         ]);
+
+        ActionLog::log('shop.settings.updated');
 
         return to_route('shop.admin.settings')
             ->with('success', trans('admin.settings.updated'));

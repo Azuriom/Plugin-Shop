@@ -31,6 +31,7 @@ class CategoryRequest extends FormRequest
 
         return [
             'name' => ['required', 'string', 'max:50'],
+            'icon' => ['nullable', 'string', 'max:50'],
             'slug' => [
                 'required', 'max:100', new Slug(), Rule::unique('shop_categories')->ignore($current, 'slug'),
             ],

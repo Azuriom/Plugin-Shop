@@ -83,7 +83,7 @@ class SkrillMethod extends PaymentMethod
         $amount = $request->float('amount');
         $currency = $request->input('currency');
 
-        if ($payment->amount !== $amount || $payment->currency !== $currency) {
+        if ($currency !== $payment->currency || $amount < $payment->price) {
             Log::warning("[Shop] Skrill - Invalid amount or currency for payment {$payment->id}");
 
             return $this->invalidPayment($payment, $transactionId, 'Invalid amount or currency');

@@ -281,6 +281,8 @@ return [
         'shop-giftcards' => [
             'used' => 'Used giftcard #:id (:amount)',
         ],
+
+        'settings' => 'Updated shop settings',
     ],
 
     'statistics' => [
