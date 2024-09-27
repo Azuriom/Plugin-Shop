@@ -227,6 +227,17 @@ class Package extends Model implements Buyable
         return $purchasedPackage->price ?? 0;
     }
 
+    protected function cumulativePurchasesBlocked(): bool
+    {
+        if (! $this->category->cumulate_strict) {
+            return false;
+        }
+
+        return $this->category->packages
+            ->filter(fn (self $package) => $package->price >= $this->price)
+            ->first(fn (self $package) => $package->countUserPurchases() > 0) !== null;
+    }
+
     public function hasRequiredRole(Role $role): bool
     {
         if ($this->required_roles === null || $this->required_roles->isEmpty()) {
@@ -258,27 +269,28 @@ class Package extends Model implements Buyable
             return 0;
         }
 
+        // Cache all purchases to prevent duplicated queries
+        // Filter after if needed based on the parameters
         static $purchases = null;
 
         if ($purchases === null) {
             $purchases = ShopUser::ofUser(auth()->user())
                 ->items()
                 ->where('buyable_type', 'shop.packages')
-                ->whereHas('payment', function (Builder $query) use ($start) {
-                    $query->scopes('completed')
-                        ->when($start, function (Builder $query) use ($start) {
-                            $query->where('created_at', '>', $start);
-                        });
-                })
-                ->when($noExpired, function (Builder $query) {
-                    $query->scopes('excludeExpired');
-                })
-                ->get()
-                ->groupBy('buyable_id')
-                ->map(fn (Collection $items) => $items->sum('quantity'));
+                ->whereHas('payment', fn (Builder $q) => $q->scopes('completed'))
+                ->get();
         }
 
-        return $purchases->get($this->id, 0);
+        return $purchases
+            ->when($start, function (Collection $items) use ($start) {
+                return $items->filter(fn (PaymentItem $item) => $item->created_at->isAfter($start));
+            })
+            ->when($noExpired, function (Collection $items) {
+                return $items->reject(fn (PaymentItem $item) => $item->isExpired());
+            })
+            ->groupBy('buyable_id')
+            ->map(fn (Collection $items) => $items->sum('quantity'))
+            ->get($this->id, 0);
     }
 
     /**
@@ -286,14 +298,14 @@ class Package extends Model implements Buyable
      */
     public function countTotalPurchases(?DateTime $start = null, bool $noExpired = false): int
     {
-        static $purchases = [];
+        static $purchasesByPackage = [];
 
-        return Arr::get($purchases, $this->id, function () use (&$purchases, $start, $noExpired) {
-            return $purchases[$this->id] = PaymentItem::where('buyable_id', $this->id)
+        $cacheKey = $this->id.$start?->format('Y-m-d').$noExpired;
+
+        return Arr::get($purchasesByPackage, $cacheKey, function () use (&$purchasesByPackage, $start, $noExpired) {
+            return $purchasesByPackage[$this->id] = PaymentItem::where('buyable_id', $this->id)
                 ->where('buyable_type', 'shop.packages')
-                ->when($noExpired, function (Builder $query) {
-                    $query->scopes('excludeExpired');
-                })
+                ->when($noExpired, fn (Builder $q) => $q->scopes('excludeExpired'))
                 ->whereHas('payment', function (Builder $query) use ($start) {
                     $query->where('status', 'completed')
                         ->when($start, function () use ($query, $start) {
@@ -311,6 +323,10 @@ class Package extends Model implements Buyable
 
     public function getMaxQuantity(): int
     {
+        if ($this->cumulativePurchasesBlocked()) {
+            return 0;
+        }
+
         $userStart = optional($this->user_limit_period, fn ($period) => now()->sub($period));
         $globalStart = optional($this->global_limit_period, fn ($period) => now()->sub($period));
         $noExpired = $this->limits_no_expired;

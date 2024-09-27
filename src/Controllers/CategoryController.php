@@ -50,6 +50,10 @@ class CategoryController extends Controller
             $query->with('discounts')->scopes(['enabled']);
         }]);
 
+        if ($category->packages->isEmpty() && ! $category->categories->isEmpty()) {
+            return to_route('shop.categories.show', $category->categories->first());
+        }
+
         foreach ($category->packages as $package) {
             $package->setRelation('category', $category);
         }

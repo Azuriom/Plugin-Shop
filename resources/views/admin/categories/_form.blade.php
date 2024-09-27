@@ -105,6 +105,11 @@
 </div>
 
 <div class="mb-3 form-check form-switch">
+    <input type="checkbox" class="form-check-input" id="strictSwitch" name="cumulate_strict" @checked(old('cumulate_strict', $category->cumulate_strict ?? false))>
+    <label class="form-check-label" for="strictSwitch">{{ trans('shop::admin.categories.cumulate_strict') }}</label>
+</div>
+
+<div class="mb-3 form-check form-switch">
     <input type="checkbox" class="form-check-input" id="singleSwitch" name="single_purchase" @checked(old('single_purchase', $category->single_purchase ?? false))>
     <label class="form-check-label" for="singleSwitch">{{ trans('shop::admin.categories.single_purchase') }}</label>
 </div>

@@ -17,7 +17,7 @@ class CategoryRequest extends FormRequest
      * @var array<int, string>
      */
     protected array $checkboxes = [
-        'cumulate_purchases', 'single_purchase', 'is_enabled',
+        'cumulate_purchases', 'cumulate_strict', 'single_purchase', 'is_enabled',
     ];
 
     /**
@@ -38,6 +38,7 @@ class CategoryRequest extends FormRequest
             'parent_id' => ['nullable', 'exists:shop_categories,id'],
             'description' => ['nullable', 'string'],
             'cumulate_purchases' => ['filled', 'boolean'],
+            'cumulate_strict' => ['filled', 'boolean'],
             'single_purchase' => ['filled', 'boolean'],
             'is_enabled' => ['filled', 'boolean'],
         ];

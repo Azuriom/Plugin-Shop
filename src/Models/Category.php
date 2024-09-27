@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $position
  * @property int $parent_id
  * @property bool $cumulate_purchases
+ * @property bool $cumulate_strict
  * @property bool $single_purchase
  * @property bool $is_enabled
  * @property \Carbon\Carbon $created_at
@@ -44,7 +45,7 @@ class Category extends Model
      */
     protected $fillable = [
         'name', 'icon', 'slug', 'description', 'position', 'parent_id',
-        'cumulate_purchases', 'single_purchase', 'is_enabled',
+        'cumulate_purchases', 'cumulate_strict', 'single_purchase', 'is_enabled',
     ];
 
     /**
@@ -53,6 +54,8 @@ class Category extends Model
      * @var array<string, string>
      */
     protected $casts = [
+        'cumulate_strict' => 'boolean',
+        'single_purchase' => 'boolean',
         'is_enabled' => 'boolean',
     ];
 
@@ -93,7 +96,7 @@ class Category extends Model
             ->whereHas('buyable', function (Builder $query) {
                 $query->where('category_id', $this->id);
             })
-            ->count() > 0;
+            ->exists();
     }
 
     /**

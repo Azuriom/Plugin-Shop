@@ -36,6 +36,7 @@ return [
 
         'cumulate' => 'Cumuler les achats dans cette catégorie',
         'cumulate_info' => 'Les utilisateurs ayant déjà acheté un produit dans cette catégorie auront une réduction et ne paieront que la différence lors de l\'achat d\'un produit plus cher.',
+        'cumulate_strict' => 'Empêcher les utilisateurs d’acheter un produit moins cher que ceux déjà achetés dans cette catégorie',
         'single_purchase' => 'Limiter un utilisateur à acheter un seul produit de cette catégorie',
         'enable' => 'Activer cette catégorie',
     ],

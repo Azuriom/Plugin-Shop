@@ -36,6 +36,7 @@ return [
 
         'cumulate' => 'Cumulate purchases in this category',
         'cumulate_info' => 'Users who have already purchased a package in this category will get a discount and will only pay the difference when purchasing a more expensive package.',
+        'cumulate_strict' => 'Prevent users from buying a cheaper package than those already purchased in this category',
         'single_purchase' => 'Limit the user to purchasing a single package from this category',
         'enable' => 'Enable the category',
     ],

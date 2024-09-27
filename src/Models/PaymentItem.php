@@ -49,6 +49,7 @@ class PaymentItem extends Model
     protected $casts = [
         'price' => 'float',
         'variables' => 'array',
+        'expires_at' => 'datetime',
     ];
 
     protected static function booted(): void
@@ -117,6 +118,11 @@ class PaymentItem extends Model
         $search = array_map(fn (string $key) => '{'.$key.'}', array_keys($this->variables));
 
         return str_replace($search, $this->variables, $content);
+    }
+
+    public function isExpired(): bool
+    {
+        return $this->expires_at !== null && $this->expires_at->isPast();
     }
 
     public function scopeExcludeExpired(Builder $query): void
