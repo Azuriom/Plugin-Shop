@@ -208,7 +208,7 @@ class PayPalCheckoutMethod extends PaymentMethod
         // Seems like the PayPal API does not accept an empty body for the capture request
         $response = $this->getClient()->post('/v2/checkout/orders/'.$paymentId.'/capture', ['' => 0]);
 
-        if ($response->json('status') === 'COMPLETED') {
+        if ($response->json('status') === 'COMPLETED' && $response->json('purchase_units.0.payments.captures.0.status') === 'COMPLETED') {
             $payment = Payment::firstWhere('transaction_id', $paymentId);
             $transactionId = $response->json('purchase_units.0.payments.captures.0.id');
 
