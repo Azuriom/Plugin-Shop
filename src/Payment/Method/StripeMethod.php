@@ -76,8 +76,6 @@ class StripeMethod extends PaymentMethod
             'discounts' => $coupon ? [['coupon' => $coupon->id]] : [],
         ]);
 
-        $payment->update(['transaction_id' => $session->payment_intent]);
-
         return redirect()->away($session->url);
     }
 
@@ -141,7 +139,7 @@ class StripeMethod extends PaymentMethod
         }
 
         if ($event->type === 'checkout.session.completed') {
-            return $this->processCompletedCheckout($event);
+            return $this->processCompletedCheckout($event->data->object);
         }
 
         if ($event->type === 'invoice.paid') {
@@ -182,11 +180,9 @@ class StripeMethod extends PaymentMethod
         return response()->json(['status' => 'unknown_event']);
     }
 
-    protected function processCompletedCheckout(Event $event)
+    protected function processCompletedCheckout(Session $session)
     {
-        if ($event->data->object->mode === 'subscription') {
-            /** @var \Stripe\Checkout\Session $session */
-            $session = $event->data->object;
+        if ($session->mode === 'subscription') {
             $user = User::find($session->metadata['user']);
             $package = Package::find($session->metadata['package']);
             $invoice = Invoice::retrieve($session->invoice);
@@ -198,7 +194,9 @@ class StripeMethod extends PaymentMethod
             return $this->renewSubscription($sub, $invoice->payment_intent, true);
         }
 
-        $payment = Payment::find($event->data->object->client_reference_id);
+        $payment = Payment::find($session->client_reference_id);
+
+        $payment?->update(['transaction_id' => $session->payment_intent]);
 
         return $this->processPayment($payment);
     }

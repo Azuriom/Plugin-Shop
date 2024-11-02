@@ -14,7 +14,7 @@
 
     <div class="mb-3 @if($row) col-md-6 @endif">
         <label class="form-label" for="expireInput">{{ trans('shop::messages.fields.expire_date') }}</label>
-        <input type="text" class="form-control date-picker @error('expire_at') is-invalid @enderror" id="expireInput" name="expire_at" value="{{ old('expire_at', $giftcard->expire_at ?? now()->addYear()) }}" required>
+        <input type="text" class="form-control date-picker @error('expire_at') is-invalid @enderror" id="expireInput" name="expire_at" value="{{ old('expire_at', $giftcard->expire_at ?? now()->addYear()) }}">
 
         @error('expire_at')
         <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>

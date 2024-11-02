@@ -17,7 +17,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property bool $is_enabled
  * @property bool $is_global
  * @property bool $is_fixed
- * @property \Carbon\Carbon|null $start_at
+ * @property \Carbon\Carbon $start_at
  * @property \Carbon\Carbon|null $expire_at
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
@@ -112,7 +112,7 @@ class Coupon extends Model
      */
     public function isActive(): bool
     {
-        return $this->is_enabled && $this->start_at->isPast() && $this->expire_at->isFuture();
+        return $this->is_enabled && $this->start_at->isPast() && ! $this->expire_at?->isPast();
     }
 
     /**

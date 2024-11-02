@@ -125,7 +125,7 @@ class CategoryController extends Controller
     protected function getCategories(): Collection
     {
         return Category::scopes(['parents', 'enabled'])
-            ->with('categories')
+            ->with(['categories' => fn (Builder $q) => $q->scopes('enabled')])
             ->withCount('packages')
             ->get();
     }

@@ -45,7 +45,7 @@ class CouponRequest extends FormRequest
             'user_limit' => ['nullable', 'integer', 'min:0'],
             'global_limit' => ['nullable', 'integer', 'min:0'],
             'start_at' => ['required', 'date'],
-            'expire_at' => ['required', 'date', 'after:start_at'],
+            'expire_at' => ['nullable', 'date', 'after:start_at'],
             'can_cumulate' => ['filled', 'boolean'],
             'is_enabled' => ['filled', 'boolean'],
             'is_global' => ['filled', 'boolean'],

@@ -206,9 +206,21 @@ class PayPalCheckoutMethod extends PaymentMethod
     protected function capturePayPalOrder(string $paymentId)
     {
         // Seems like the PayPal API does not accept an empty body for the capture request
-        $response = $this->getClient()->post('/v2/checkout/orders/'.$paymentId.'/capture', ['' => 0]);
+        $response = $this->getClient(false)->post('/v2/checkout/orders/'.$paymentId.'/capture', ['' => 0]);
 
-        if ($response->json('status') === 'COMPLETED' && $response->json('purchase_units.0.payments.captures.0.status') === 'COMPLETED') {
+        if ($response->status() === 422) {
+            $payment = Payment::firstWhere('transaction_id', $paymentId);
+
+            logger()->warning('[Shop] Unexpected response from PayPal API: '.$response->body());
+
+            return $payment !== null
+                ? $this->invalidPayment($payment, $paymentId, 'Invalid PayPal order')
+                : response()->json(['message' => 'Invalid PayPal order']);
+        }
+
+        $status = $response->throw()->json('status');
+
+        if ($status === 'COMPLETED' && $response->json('purchase_units.0.payments.captures.0.status') === 'COMPLETED') {
             $payment = Payment::firstWhere('transaction_id', $paymentId);
             $transactionId = $response->json('purchase_units.0.payments.captures.0.id');
 

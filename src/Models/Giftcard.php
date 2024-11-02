@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Cache;
  * @property string $code
  * @property float $balance
  * @property float $original_balance
- * @property \Carbon\Carbon|null $start_at
+ * @property \Carbon\Carbon $start_at
  * @property \Carbon\Carbon|null $expire_at
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
@@ -63,7 +63,7 @@ class Giftcard extends Model
      */
     public function isActive(): bool
     {
-        return $this->balance > 0 && $this->start_at->isPast() && $this->expire_at->isFuture();
+        return $this->balance > 0 && $this->start_at->isPast() && ! $this->expire_at?->isPast();
     }
 
     public function isPending()

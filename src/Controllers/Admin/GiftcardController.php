@@ -59,7 +59,7 @@ class GiftcardController extends Controller
     {
         $validated = $this->validate($request, [
             'start_at' => ['required', 'date'],
-            'expire_at' => ['required', 'date', 'after:start_at'],
+            'expire_at' => ['nullable', 'date', 'after:start_at'],
         ]);
 
         $giftcard->update($validated);

@@ -19,7 +19,7 @@ class GiftcardRequest extends FormRequest
             'code' => ['required', 'string', 'max:50', Rule::unique(Giftcard::class)->ignore($this->giftcard, 'code')],
             'balance' => ['required', 'numeric', 'min:0'],
             'start_at' => ['required', 'date'],
-            'expire_at' => ['required', 'date', 'after:start_at'],
+            'expire_at' => ['nullable', 'date', 'after:start_at'],
         ];
     }
 }
