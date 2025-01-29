@@ -466,7 +466,7 @@ class Package extends Model implements Buyable
                 $applyQuantity = $commands->firstWhere('commands', [$command])['apply_quantity'] ?? false;
 
                 return $applyQuantity ? [$command] : array_fill(0, $item->quantity, $command);
-			})
+            })
             ->all();
     }
 }
