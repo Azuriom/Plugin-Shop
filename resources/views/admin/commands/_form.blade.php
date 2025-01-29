@@ -70,6 +70,12 @@
                 </div>
             </div>
 
+			<div class="mb-3 form-check form-switch">
+                <input type="hidden" :name="`commands[${i}][apply_quantity]`" :value="0">
+                <input type="checkbox" class="form-check-input" :id="'applyQuantitySwitch' + i" :name="`commands[${i}][apply_quantity]`" :value="1" @change="command.apply_quantity = command.apply_quantity ? 0 : 1" :checked="command.apply_quantity == 1">
+                <label class="form-check-label" :for="'applyQuantitySwitch' + i">{{ trans('shop::admin.packages.apply_quantity') }}</label>
+            </div>
+
             <div class="form-text mb-3">
                 @lang('shop::admin.packages.command', [
                     'placeholders' => '<code>'.implode('</code>, <code>', [
@@ -80,7 +86,7 @@
         </div>
     </div>
 
-    <button type="button" @click="shopCommands.push({ commands: [''], trigger: 'purchase', require_online: 0, server: 0 })" class="btn btn-sm btn-success">
+    <button type="button" @click="shopCommands.push({ commands: [''], trigger: 'purchase', require_online: 0, server: 0, applyQuantity: 0 })" class="btn btn-sm btn-success">
         <i class="bi bi-plus-lg"></i> {{ trans('messages.actions.add') }}
     </button>
 </div>
