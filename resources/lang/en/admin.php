@@ -126,7 +126,7 @@ return [
         'create_package' => 'Create package',
 
         'enable' => 'Enable this package',
-		'apply_quantity' => 'Should the command be executed only once when a purchase includes a specified quantity in the cart? (Requires adding the {quantity} variable to your command)',
+        'apply_quantity' => 'Should the command be executed only once when a purchase includes a specified quantity in the cart? (Requires adding the {quantity} variable to your command)',
     ],
 
     'commands' => [
