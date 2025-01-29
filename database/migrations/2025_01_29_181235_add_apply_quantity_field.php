@@ -1,8 +1,6 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
@@ -16,7 +14,7 @@ return new class extends Migration
             $commands = json_decode($command->commands, true);
 
             foreach ($commands as $key => &$commandItem) {
-                if (!isset($commandItem['apply_quantity'])) {
+                if (! isset($commandItem['apply_quantity'])) {
                     $commandItem['apply_quantity'] = 0;
                 }
             }
