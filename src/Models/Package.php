@@ -462,7 +462,10 @@ class Package extends Model implements Buyable
                 $item->quantity, $this->id, $this->name, $item->price, $item->payment->transaction_id,
             ], $command))
             ->map(fn (string $command) => $item->replaceVariables($command))
-            ->flatMap(fn (string $command) => array_fill(0, $item->quantity, $command))
+            ->flatMap(function (string $command) use ($commands, $item) {
+				$applyQuantity = $commands->firstWhere('commands', [$command])['apply_quantity'] ?? false;
+				return $applyQuantity ? [$command] : array_fill(0, $item->quantity, $command);
+			})
             ->all();
     }
 }
