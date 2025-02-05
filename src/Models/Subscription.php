@@ -5,6 +5,7 @@ namespace Azuriom\Plugin\Shop\Models;
 use Azuriom\Models\Traits\HasTablePrefix;
 use Azuriom\Models\Traits\Searchable;
 use Azuriom\Models\User;
+use Azuriom\Plugin\Shop\Payment\Currencies;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
@@ -111,11 +112,9 @@ class Subscription extends Model
 
     public function formatPrice(): string
     {
-        $currency = $this->isWithSiteMoney()
-            ? money_name($this->price)
-            : currency_display($this->currency);
-
-        return $this->price.' '.$currency;
+        return $this->isWithSiteMoney()
+            ? shop_format_amount($this->price, true)
+            : Currencies::formatAmount($this->price, $this->currency);
     }
 
     public function getTypeName(): string

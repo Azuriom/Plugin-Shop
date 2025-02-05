@@ -39,7 +39,7 @@ if (! function_exists('use_site_money')) {
 
 if (! function_exists('currency')) {
     /**
-     * Return the active currency.
+     * Return the active currency on the shop.
      */
     function currency(): string
     {
@@ -71,9 +71,11 @@ if (! function_exists('shop_format_amount')) {
     /**
      * Format the given amount with the active currency or the site money.
      */
-    function shop_format_amount(float $amount): string
+    function shop_format_amount(float $amount, bool $forceSiteCurrency = false): string
     {
-        return $amount.' '.shop_active_currency($amount);
+        return $forceSiteCurrency || use_site_money()
+            ? $amount.' '.money_name($amount)
+            : Currencies::formatAmount($amount, currency());
     }
 }
 

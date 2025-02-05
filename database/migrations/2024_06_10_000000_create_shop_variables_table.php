@@ -27,6 +27,8 @@ return new class extends Migration
 
             $table->foreign('package_id')->references('id')->on('shop_packages')->cascadeOnDelete();
             $table->foreign('variable_id')->references('id')->on('shop_variables')->cascadeOnDelete();
+
+            $table->unique(['package_id', 'variable_id']);
         });
 
         Schema::table('shop_payment_items', function (Blueprint $table) {

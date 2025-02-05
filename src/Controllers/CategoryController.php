@@ -72,7 +72,7 @@ class CategoryController extends Controller
     protected function getMonthGoal(): float
     {
         if (! setting('shop.month_goal')) {
-            return false;
+            return -1;
         }
 
         $total = Payment::scopes(['completed', 'withRealMoney'])
@@ -105,21 +105,13 @@ class CategoryController extends Controller
 
         $column = Payment::query()->getGrammar()->wrap('price');
 
-        $payment = Payment::scopes(['completed', 'withRealMoney'])
-            ->select(['user_id', DB::raw("sum({$column}) as aggregate")])
+        return Payment::scopes(['completed', 'withRealMoney'])
+            ->select(['user_id', 'currency', 'gateway_type', DB::raw("sum({$column}) as price")])
             ->where('created_at', '>', now()->startOfMonth())
+            ->where('price', '>', 0)
             ->groupBy('user_id')
-            ->orderByDesc('aggregate')
+            ->orderByDesc('price')
             ->first();
-
-        if ($payment === null || $payment->user === null) {
-            return null;
-        }
-
-        return (object) [
-            'user' => $payment->user,
-            'total' => $payment->aggregate,
-        ];
     }
 
     protected function getCategories(): Collection

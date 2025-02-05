@@ -3,36 +3,38 @@
 @section('title', trans('shop::admin.gateways.title'))
 
 @push('footer-scripts')
-    <script src="{{ asset('vendor/sortablejs/Sortable.min.js') }}"></script>
-    <script>
-        const sortable = Sortable.create(document.getElementById('gateways'), {
-            animation: 150,
-            group: 'gateways',
-            handle: '.sortable-btn',
-        });
-
-        function serialize(sortable) {
-            return [].slice.call(sortable.children).map(function (child) {
-                return child.dataset['id'];
+    @if($gateways->count() > 1)
+        <script src="{{ asset('vendor/sortablejs/Sortable.min.js') }}"></script>
+        <script>
+            const sortable = Sortable.create(document.getElementById('gateways'), {
+                animation: 150,
+                group: 'gateways',
+                handle: '.sortable-btn',
             });
-        }
 
-        const saveButton = document.getElementById('save');
+            function serialize(sortable) {
+                return [].slice.call(sortable.children).map(function (child) {
+                    return child.dataset['id'];
+                });
+            }
 
-        saveButton.addEventListener('click', function () {
-            saveButton.setAttribute('disabled', '');
+            const saveButton = document.getElementById('save');
 
-            axios.post('{{ route('shop.admin.gateways.positions') }}', {
-                'gateways': serialize(sortable.el)
-            }).then(function (json) {
-                createAlert('success', json.data.message, true);
-            }).catch(function (error) {
-                createAlert('danger', error.response.data.message ? error.response.data.message : error, true)
-            }).finally(function () {
-                saveButton.removeAttribute('disabled');
+            saveButton.addEventListener('click', function () {
+                saveButton.setAttribute('disabled', '');
+
+                axios.post('{{ route('shop.admin.gateways.positions') }}', {
+                    'gateways': serialize(sortable.el)
+                }).then(function (json) {
+                    createAlert('success', json.data.message, true);
+                }).catch(function (error) {
+                    createAlert('danger', error.response.data.message ? error.response.data.message : error, true)
+                }).finally(function () {
+                    saveButton.removeAttribute('disabled');
+                });
             });
-        });
-    </script>
+        </script>
+    @endif
 @endpush
 
 @section('content')

@@ -9,6 +9,7 @@ use Azuriom\Models\Traits\Searchable;
 use Azuriom\Models\User;
 use Azuriom\Plugin\Shop\Events\PaymentPaid;
 use Azuriom\Plugin\Shop\Notifications\PaymentPaid as PaymentPaidNotification;
+use Azuriom\Plugin\Shop\Payment\Currencies;
 use Azuriom\Support\Discord\DiscordWebhook;
 use Azuriom\Support\Discord\Embed;
 use Illuminate\Database\Eloquent\Builder;
@@ -190,40 +191,26 @@ class Payment extends Model
 
     public function createDiscordWebhook(): DiscordWebhook
     {
-        $transactionId = $this->isWithSiteMoney() ? '#'.$this->id : $this->transaction_id;
-
-        $embed = Embed::create()
-            ->title(trans('shop::messages.payment.webhook'))
-            ->description(trans('shop::messages.payment.webhook_info', [
-                'total' => $this->formatPrice(),
-                'gateway' => $this->getTypeName(),
-                'id' => $transactionId ?? trans('messages.none'),
-            ]))
-            ->author($this->user->name, null, $this->user->getAvatar())
-            ->url(route('shop.admin.payments.show', $this))
-            ->color('#004de6')
-            ->footer('Azuriom v'.Azuriom::version())
-            ->timestamp(now());
-
-        foreach ($this->items as $item) {
-            $name = $item->name;
-
-            if ($item->quantity > 1) {
-                $name .= ' (x'.$item->quantity.')';
-            }
-
-            $embed->addField($name, $item->formatPrice());
-        }
+        $title = trans('shop::messages.payment.webhook');
+        $embed = $this->getDiscordEmbed($title, '#004de6');
 
         return DiscordWebhook::create()->addEmbed($embed);
     }
 
     public function createRefundDiscordWebhook(bool $isChargeback = false): DiscordWebhook
     {
-        $transactionId = $this->isWithSiteMoney() ? '#'.$this->id : $this->transaction_id;
         $title = $isChargeback
             ? trans('shop::messages.payment.webhook_chargeback')
             : trans('shop::messages.payment.webhook_refund');
+        $color = $isChargeback ? '#dc3545' : '#ffc107';
+        $embed = $this->getDiscordEmbed($title, $color);
+
+        return DiscordWebhook::create()->addEmbed($embed);
+    }
+
+    private function getDiscordEmbed(string $title, string $color): Embed
+    {
+        $transactionId = $this->isWithSiteMoney() ? '#'.$this->id : $this->transaction_id;
 
         $embed = Embed::create()
             ->title($title)
@@ -234,11 +221,22 @@ class Payment extends Model
             ]))
             ->author($this->user->name, null, $this->user->getAvatar())
             ->url(route('shop.admin.payments.show', $this))
-            ->color($isChargeback ? '#dc3545' : '#ffc107')
+            ->color($color)
             ->footer('Azuriom v'.Azuriom::version())
             ->timestamp(now());
 
-        return DiscordWebhook::create()->addEmbed($embed);
+        foreach ($this->items as $item) {
+            $name = $item->name;
+            $quantity = $item->quantity > 1 ? "x{$item->quantity} - " : '';
+
+            if ($item->buyable !== null) {
+                $name .= ' - '.$item->buyable->category->name;
+            }
+
+            $embed->addField($name, $quantity.$item->formatPrice());
+        }
+
+        return $embed;
     }
 
     public function statusColor(): string
@@ -253,11 +251,9 @@ class Payment extends Model
 
     public function formatPrice(): string
     {
-        $currency = $this->isWithSiteMoney()
-            ? money_name($this->price)
-            : currency_display($this->currency);
-
-        return $this->price.' '.$currency;
+        return $this->isWithSiteMoney()
+            ? shop_format_amount($this->price, true)
+            : Currencies::formatAmount($this->price, $this->currency);
     }
 
     public function isPending(): bool

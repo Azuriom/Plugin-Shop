@@ -30,6 +30,8 @@ return new class extends Migration
 
             $table->foreign('coupon_id')->references('id')->on('shop_coupons')->cascadeOnDelete();
             $table->foreign('package_id')->references('id')->on('shop_packages')->cascadeOnDelete();
+
+            $table->unique(['coupon_id', 'package_id']);
         });
     }
 

@@ -3,6 +3,7 @@
 namespace Azuriom\Plugin\Shop\Models;
 
 use Azuriom\Models\Traits\HasTablePrefix;
+use Azuriom\Plugin\Shop\Payment\Currencies;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
@@ -102,11 +103,9 @@ class PaymentItem extends Model
 
     public function formatPrice(): string
     {
-        $currency = $this->payment->isWithSiteMoney()
-            ? money_name($this->price)
-            : currency_display($this->payment->currency);
-
-        return $this->price.' '.$currency;
+        return $this->payment->isWithSiteMoney()
+            ? shop_format_amount($this->price, true)
+            : Currencies::formatAmount($this->price, $this->payment->currency);
     }
 
     public function replaceVariables(string $content): string

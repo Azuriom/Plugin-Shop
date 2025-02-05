@@ -21,6 +21,10 @@ class SubscriptionController extends Controller
             return redirect()->route('shop.profile');
         }
 
+        if (! $package->hasBoughtRequirements() || ! $package->hasRequiredRole($user->role)) {
+            return redirect()->back()->with('error', trans('shop::messages.packages.requirements'));
+        }
+
         if (use_site_money()) {
             return $this->createInternalSubscription($user, $package);
         }

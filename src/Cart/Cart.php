@@ -396,7 +396,9 @@ class Cart implements Arrayable
                     $cartItem->userPrice = $userPrice;
                 }
 
-                $this->items->put($item['itemId'], $cartItem);
+                if ($cartItem->quantity > 0) {
+                    $this->items->put($item['itemId'], $cartItem);
+                }
             });
         });
     }

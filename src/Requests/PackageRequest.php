@@ -91,6 +91,7 @@ class PackageRequest extends FormRequest
             'commands' => $this->input('commands', []),
             'files' => $this->input('files', []),
             'required_packages' => $this->input('required_packages', []),
+            'required_roles' => $this->input('required_roles', []),
         ]);
     }
 }

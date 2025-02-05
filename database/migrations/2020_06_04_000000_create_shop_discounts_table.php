@@ -28,6 +28,8 @@ return new class extends Migration
 
             $table->foreign('discount_id')->references('id')->on('shop_discounts')->cascadeOnDelete();
             $table->foreign('package_id')->references('id')->on('shop_packages')->cascadeOnDelete();
+
+            $table->unique(['discount_id', 'package_id']);
         });
     }
 

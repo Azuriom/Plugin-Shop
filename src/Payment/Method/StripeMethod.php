@@ -13,7 +13,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Stripe\Checkout\Session;
 use Stripe\Coupon;
-use Stripe\Event;
 use Stripe\Exception\SignatureVerificationException;
 use Stripe\Invoice;
 use Stripe\Stripe;

@@ -46,7 +46,7 @@
     </div>
 @endauth
 
-@if($goal > 0)
+@if($goal >= 0)
     <div class="card mb-4">
         <div class="card-header">
             <i class="bi bi-graph-up"></i> {{ trans('shop::messages.goal.title') }}
@@ -75,7 +75,7 @@
             <div class="flex-grow-1">
                 <p class="h4 mb-1">{{ $topCustomer->user->name }}</p>
                 @if($displaySidebarAmount)
-                    {{ $topCustomer->total.' '.currency_display() }}
+                    {{ $topCustomer->formatPrice() }}
                 @endif
             </div>
         </div>
@@ -97,7 +97,7 @@
                         <p class="mb-1">{{ $payment->user->name }}</p>
                         <small>
                             @if($displaySidebarAmount)
-                                {{ $payment->price.' '.currency_display() }} -
+                                {{ $payment->formatPrice() }}
                             @endif
                             {{ format_date($payment->created_at) }}
                         </small>

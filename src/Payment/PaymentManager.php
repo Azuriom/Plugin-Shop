@@ -6,6 +6,7 @@ use Azuriom\Plugin\Shop\Cart\Cart;
 use Azuriom\Plugin\Shop\Models\Gateway;
 use Azuriom\Plugin\Shop\Models\Giftcard;
 use Azuriom\Plugin\Shop\Models\Payment;
+use Azuriom\Plugin\Shop\Payment\Method\MercadoPagoMethod;
 use Azuriom\Plugin\Shop\Payment\Method\MollieMethod;
 use Azuriom\Plugin\Shop\Payment\Method\PaymentWallMethod;
 use Azuriom\Plugin\Shop\Payment\Method\PayPalCheckoutMethod;
@@ -37,6 +38,7 @@ class PaymentManager
             'paymentwall' => PaymentWallMethod::class,
             'xsolla' => XsollaMethod::class,
             'skrill' => SkrillMethod::class,
+            'mercadopago' => MercadoPagoMethod::class,
         ]);
     }
 

@@ -158,6 +158,7 @@ return [
         'country' => 'Country',
         'sandbox' => 'Sandbox',
         'api-key' => 'API key',
+        'token' => 'Access Token',
         'public-key' => 'Public key',
         'private-key' => 'Private key',
         'secret-key' => 'Secret key',
@@ -182,6 +183,7 @@ return [
         'skrill_email' => 'Skrill Email Address',
         'skrill_secret' => 'Secret Word',
         'skrill_info' => 'The website ID and the Secret Word can be found in the Skrill dashboard under "Developer Settings".',
+        'mercadopago' => 'The Mercado Pago credentials must be for the <strong>Checkout Pro</strong> integration.',
 
         'enable' => 'Enable the gateway',
     ],

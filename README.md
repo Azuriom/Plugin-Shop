@@ -14,6 +14,7 @@ A shop plugin to sell in-game items on your website.
 * [Skrill](https://www.skrill.com/) (ex paysafecard)
 * [Stripe](https://stripe.com/) (supports subscriptions)
 * [PaymentWall](https://www.paymentwall.com/)
+* [MercadoPago](https://www.mercadopago.com/)
 
 ## Custom payment gateway
 

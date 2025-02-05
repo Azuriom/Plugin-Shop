@@ -88,4 +88,16 @@ class Currencies
     {
         return self::SYMBOLS[strtoupper($currencyCode)] ?? $currencyCode;
     }
+
+    public static function formatAmount(float $amount, string $currencyCode): string
+    {
+        $symbol = self::symbol($currencyCode);
+
+        return match (strtoupper($currencyCode)) {
+            'USD', 'GBP', 'JPY', 'BRL', 'DKK', 'HKD', 'IDR', 'INR', 'KRW',
+            'MYR','PHP', 'THB', 'TRY', 'TWD', 'UAH', 'ZAR' => $symbol.$amount,
+            'EUR' => $amount.$symbol,
+            default => $amount.' '.$symbol,
+        };
+    }
 }
