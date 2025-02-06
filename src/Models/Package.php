@@ -462,7 +462,7 @@ class Package extends Model implements Buyable
                 $item->quantity, $this->id, $this->name, $item->price, $item->payment->transaction_id,
             ], $command))
             ->map(fn (string $command) => $item->replaceVariables($command))
-            ->flatMap(function (string $command) use ($commands, $item) {
+            ->flatMap(function (string $command) use ($item) {
                 $ignore_quantity = $command['ignore_quantity'] ?? false;
 
                 return $ignore_quantity ? [$command] : array_fill(0, $item->quantity, $command);
