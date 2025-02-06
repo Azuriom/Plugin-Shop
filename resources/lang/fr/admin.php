@@ -126,7 +126,7 @@ return [
         'create_package' => 'Créer un produit',
 
         'enable' => 'Activer ce produit',
-        'apply_quantity' => 'La commande doit-elle être exécutée une seule fois lorsqu\'un achat inclut une quantité spécifiée dans le panier ? (necéssite d\'ajouter la variable {quantity} dans votre commande)',
+        'ignore_quantity' => 'Exécuter la commande une seule fois par achat, indépendamment de la quantité (nécessite la variable <code>{quantity}</code> dans la commande).',
     ],
 
     'commands' => [

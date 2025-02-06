@@ -70,18 +70,18 @@
                 </div>
             </div>
 
-			<div class="mb-3 form-check form-switch">
-                <input type="hidden" :name="`commands[${i}][apply_quantity]`" :value="0">
-                <input type="checkbox" class="form-check-input" :id="'applyQuantitySwitch' + i" :name="`commands[${i}][apply_quantity]`" :value="1" @change="command.apply_quantity = command.apply_quantity ? 0 : 1" :checked="command.apply_quantity == 1">
-                <label class="form-check-label" :for="'applyQuantitySwitch' + i">{{ trans('shop::admin.packages.apply_quantity') }}</label>
-            </div>
-
             <div class="form-text mb-3">
                 @lang('shop::admin.packages.command', [
                     'placeholders' => '<code>'.implode('</code>, <code>', [
                         '{quantity}', '{package_id}', '{package_name}', '{price}', '{transaction_id}',
                     ]).'</code>',
                 ])
+            </div>
+
+            <div class="mb-3 form-check form-switch">
+                <input type="checkbox" class="form-check-input" :id="'applyQuantitySwitch' + i"
+                       :name="`commands[${i}][ignore_quantity]`" v-model.lazy="command.ignore_quantity" :checked="command.ignore_quantity" :value="1">
+                <label class="form-check-label" :for="'applyQuantitySwitch' + i">@lang('shop::admin.packages.ignore_quantity')</label>
             </div>
         </div>
     </div>
