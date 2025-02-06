@@ -126,6 +126,7 @@ return [
         'create_package' => 'Créer un produit',
 
         'enable' => 'Activer ce produit',
+        'ignore_quantity' => 'Exécuter la commande une seule fois par achat, indépendamment de la quantité (nécessite la variable <code>{quantity}</code> dans la commande).',
     ],
 
     'commands' => [

@@ -126,6 +126,7 @@ return [
         'create_package' => 'Create package',
 
         'enable' => 'Enable this package',
+        'ignore_quantity' => 'Execute command only once per purchase, regardless of quantity (requires <code>{quantity}</code> variable in the command).',
     ],
 
     'commands' => [

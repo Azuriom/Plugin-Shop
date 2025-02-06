@@ -77,10 +77,16 @@
                     ]).'</code>',
                 ])
             </div>
+
+            <div class="mb-3 form-check form-switch">
+                <input type="checkbox" class="form-check-input" :id="'applyQuantitySwitch' + i"
+                       :name="`commands[${i}][ignore_quantity]`" v-model.lazy="command.ignore_quantity" :checked="command.ignore_quantity" :value="1">
+                <label class="form-check-label" :for="'applyQuantitySwitch' + i">@lang('shop::admin.packages.ignore_quantity')</label>
+            </div>
         </div>
     </div>
 
-    <button type="button" @click="shopCommands.push({ commands: [''], trigger: 'purchase', require_online: 0, server: 0 })" class="btn btn-sm btn-success">
+    <button type="button" @click="shopCommands.push({ commands: [''], trigger: 'purchase', require_online: 0, server: 0, ignore_quantity: 0 })" class="btn btn-sm btn-success">
         <i class="bi bi-plus-lg"></i> {{ trans('messages.actions.add') }}
     </button>
 </div>

@@ -452,9 +452,13 @@ class Package extends Model implements Buyable
 
     protected function mapCommands(Collection $commands, bool $onlineOnly, PaymentItem $item): array
     {
-        $commands = $commands->filter(fn (array $command) => ((bool) $command['require_online']) === $onlineOnly);
+        return $commands->filter(fn (array $command) => ((bool) $command['require_online']) === $onlineOnly)
+            ->flatMap(function (array $command) use ($item) {
+                $ignoreQuantity = $command['ignore_quantity'] ?? false;
 
-        return $commands->pluck('commands')
+                return $ignoreQuantity ? [$command] : array_fill(0, $item->quantity, $command);
+            })
+            ->pluck('commands')
             ->flatten()
             ->map(fn (string $command) => str_replace([
                 '{quantity}', '{package_id}', '{package_name}', '{price}', '{transaction_id}',
@@ -462,7 +466,6 @@ class Package extends Model implements Buyable
                 $item->quantity, $this->id, $this->name, $item->price, $item->payment->transaction_id,
             ], $command))
             ->map(fn (string $command) => $item->replaceVariables($command))
-            ->flatMap(fn (string $command) => array_fill(0, $item->quantity, $command))
             ->all();
     }
 }
