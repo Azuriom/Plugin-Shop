@@ -86,7 +86,7 @@
         </div>
     </div>
 
-    <button type="button" @click="shopCommands.push({ commands: [''], trigger: 'purchase', require_online: 0, server: 0, applyQuantity: 0 })" class="btn btn-sm btn-success">
+    <button type="button" @click="shopCommands.push({ commands: [''], trigger: 'purchase', require_online: 0, server: 0, ignore_quantity: 0 })" class="btn btn-sm btn-success">
         <i class="bi bi-plus-lg"></i> {{ trans('messages.actions.add') }}
     </button>
 </div>
