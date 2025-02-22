@@ -5,13 +5,9 @@
         <label class="form-label" for="nameInput">{{ trans('messages.fields.name') }}</label>
 
         <div class="input-group @error('name') has-validation @enderror">
-            <span class="input-group-text">
-                {
-            </span>
+            <span class="input-group-text">{</span>
             <input type="text" class="form-control @error('name') is-invalid @enderror" id="nameInput" name="name" value="{{ old('name', $variable->name ?? '') }}" required @readonly(isset($variable))>
-            <span class="input-group-text">
-                }
-            </span>
+            <span class="input-group-text">}</span>
 
             @error('name')
             <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
@@ -71,7 +67,29 @@
     </button>
 </div>
 
-<div class="mb-3 form-check form-switch">
+<div class="mb-3" v-if="type === 'server'">
+    <label class="form-label" for="serversSelect">{{ trans('shop::admin.variables.options') }}</label>
+
+    <div class="row g-3">
+        @foreach($servers as $server)
+            <div class="col-lg-3 col-md-4 col-sm-6">
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input @error('options') is-invalid @enderror" id="server{{ $server->id }}"
+                           name="options[]" value="{{ $server->id }}" @checked(in_array($server->id, $variable->options ?? []))>
+                    <label class="form-check-label" for="server{{ $server->id }}">
+                        {{ $server->name }}
+                    </label>
+                </div>
+            </div>
+        @endforeach
+    </div>
+
+    @error('options')
+    <span class="invalid-feedback d-block" role="alert"><strong>{{ $message }}</strong></span>
+    @enderror
+</div>
+
+<div v-show="type !== 'server'" class="mb-3 form-check form-switch">
     <input type="checkbox" class="form-check-input" id="requiredSwitch" name="is_required" @checked(old('is_required', $variable->is_required ?? false))>
     <label class="form-check-label" for="requiredSwitch">{{ trans('shop::admin.variables.required') }}</label>
 </div>

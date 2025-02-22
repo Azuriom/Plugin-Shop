@@ -60,7 +60,7 @@ class PayPalCheckoutMethod extends PaymentMethod
             'purchase_units' => [
                 [
                     'reference_id' => $payment->id,
-                    'description' => $this->getPurchaseDescription($payment->id),
+                    'description' => $this->getPurchaseDescription($payment),
                     'amount' => [
                         'currency_code' => $currency,
                         'value' => number_format($amount, 2),
@@ -95,7 +95,7 @@ class PayPalCheckoutMethod extends PaymentMethod
             'clientId' => $this->gateway->data['client-id'],
             'paypalId' => $id,
             'payment' => $payment,
-            'description' => $this->getPurchaseDescription($payment->id),
+            'description' => $this->getPurchaseDescription($payment),
             'currency' => $currency,
             'successUrl' => route('shop.payments.success', $this->id),
             'captureUrl' => route('shop.payments.notification', $this->id),

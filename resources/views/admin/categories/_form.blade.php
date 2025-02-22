@@ -56,7 +56,7 @@
     <label class="form-label" for="iconInput">{{ trans('messages.fields.icon') }}</label>
 
     <div class="input-group @error('icon') has-validation @enderror">
-        <span class="input-group-text"><i class="{{ $category->icon ?? 'bi bi-book' }} fa-fw"></i></span>
+        <span class="input-group-text"><i class="{{ $category->icon ?? 'bi bi-book' }}"></i></span>
 
         <input type="text" class="form-control @error('icon') is-invalid @enderror" id="iconInput" name="icon" value="{{ old('icon', $category->icon ?? '') }}" placeholder="bi bi-book" aria-labelledby="iconLabel">
 

@@ -101,7 +101,10 @@ class Giftcard extends Model
     {
         $query->where('balance', '>', 0)
             ->where('start_at', '<', now())
-            ->where('expire_at', '>', now());
+            ->where(function (Builder $query) {
+                $query->where('expire_at', '>', now())
+                    ->orWhereNull('expire_at');
+            });
     }
 
     public static function randomCode(): string

@@ -426,16 +426,25 @@ class Package extends Model implements Buyable
     {
         $user = $item->payment->user;
 
-        $commandsByServer = collect($this->commands)
+        $serverCommands = collect($this->commands)
             ->merge(($json = setting('shop.commands')) ? json_decode($json, true) : [])
             ->filter(fn (mixed $command) => is_array($command))
             ->filter(fn (array $command) => $command['trigger'] === $trigger)
-            ->groupBy('server');
+            ->map(function (array $command) use ($item) {
+                $server = $command['server'];
 
-        $servers = Server::findMany($commandsByServer->keys());
+                if (! is_numeric($server)) {
+                    $command['server'] = Arr::get($item->variables ?? [], $server);
+                }
+
+                return $command;
+            })
+            ->filter(fn (array $command) => $command['server'] !== null);
+
+        $servers = Server::findMany($serverCommands->pluck('server')->unique());
 
         foreach ($servers as $server) {
-            $commands = $commandsByServer[$server->id];
+            $commands = $serverCommands->where('server', $server->id);
 
             $onlineCommands = $this->mapCommands($commands, true, $item);
             $offlineCommands = $this->mapCommands($commands, false, $item);

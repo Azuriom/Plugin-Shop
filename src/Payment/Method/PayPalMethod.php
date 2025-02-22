@@ -36,7 +36,7 @@ class PayPalMethod extends PaymentMethod
             'business' => $this->gateway->data['email'],
             'amount' => $amount,
             'currency_code' => $currency,
-            'item_name' => $this->getPurchaseDescription($payment->id),
+            'item_name' => $this->getPurchaseDescription($payment),
             'quantity' => 1,
             'no_shipping' => 1,
             'no_note' => 1,

@@ -97,11 +97,17 @@ class PackageController extends Controller
      */
     public function create()
     {
+        $variables = Variable::all();
+        $servers = $variables->where('type', 'server')
+            ->pluck('name')
+            ->mapWithKeys(fn (string $name) => [$name => '{'.$name.'}'])
+            ->replace(Server::executable()->get()->pluck('name', 'id'));
+
         return view('shop::admin.packages.create', [
             'categories' => Category::with('packages')->get(),
             'roles' => Role::where('is_admin', false)->get(),
-            'servers' => Server::executable()->get(),
-            'variables' => Variable::all(),
+            'servers' => $servers,
+            'variables' => $variables,
             'commandTriggers' => Package::COMMAND_TRIGGERS,
         ]);
     }
@@ -134,12 +140,18 @@ class PackageController extends Controller
      */
     public function edit(Package $package)
     {
+        $variables = Variable::all();
+        $servers = $variables->where('type', 'server')
+            ->pluck('name')
+            ->mapWithKeys(fn (string $name) => [$name => '{'.$name.'}'])
+            ->replace(Server::executable()->get()->pluck('name', 'id'));
+
         return view('shop::admin.packages.edit', [
             'package' => $package,
             'categories' => Category::with('packages')->get(),
             'roles' => Role::where('is_admin', false)->get(),
-            'servers' => Server::executable()->get(),
-            'variables' => Variable::all(),
+            'servers' => $servers,
+            'variables' => $variables,
             'commandTriggers' => Package::COMMAND_TRIGGERS,
         ]);
     }

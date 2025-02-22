@@ -30,7 +30,7 @@ class SettingController extends Controller
             'displayAmount' => setting('shop.display_amount', true),
             'commands' => $commands ? json_decode($commands) : [],
             'commandTriggers' => Package::COMMAND_TRIGGERS,
-            'servers' => Server::executable()->get(),
+            'servers' => Server::executable()->get()->pluck('name', 'id'),
             'enableHome' => setting('shop.home.enabled', true),
             'homeMessage' => setting('shop.home', ''),
             'termsRequired' => old('terms_required', setting('shop.required_terms') !== null),

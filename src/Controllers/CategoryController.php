@@ -54,10 +54,6 @@ class CategoryController extends Controller
             return to_route('shop.categories.show', $category->categories->first());
         }
 
-        foreach ($category->packages as $package) {
-            $package->setRelation('category', $category);
-        }
-
         return view('shop::categories.show', [
             'category' => $category,
             'categories' => $categories,
@@ -106,12 +102,16 @@ class CategoryController extends Controller
         $column = Payment::query()->getGrammar()->wrap('price');
 
         return Payment::scopes(['completed', 'withRealMoney'])
-            ->select(['user_id', 'currency', 'gateway_type', DB::raw("sum({$column}) as price")])
+            ->select(['user_id', DB::raw("sum({$column}) as price")])
             ->where('created_at', '>', now()->startOfMonth())
             ->where('price', '>', 0)
             ->groupBy('user_id')
             ->orderByDesc('price')
-            ->first();
+            ->first()
+            ?->forceFill([
+                'currency' => currency(),
+                'gateway_type' => 'none',
+            ]);
     }
 
     protected function getCategories(): Collection

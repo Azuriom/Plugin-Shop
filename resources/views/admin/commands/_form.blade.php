@@ -57,9 +57,9 @@
                     <label class="form-label" :for="'serverSelect' + i">{{ trans('messages.fields.server') }}</label>
 
                     <select class="form-select" :id="'serverSelect' + i" :name="`commands[${i}][server]`" v-model="command.server" required>
-                        @foreach($servers as $server)
-                            <option value="{{ $server->id }}">
-                                {{ $server->name }}
+                        @foreach($servers as $serverId => $name)
+                            <option value="{{ $serverId }}">
+                                {{ $name }}
                             </option>
                         @endforeach
                     </select>

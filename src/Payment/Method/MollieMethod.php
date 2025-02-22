@@ -51,7 +51,7 @@ class MollieMethod extends PaymentMethod
                 'currency' => $currency,
                 'value' => number_format($amount, 2),
             ],
-            'description' => $this->getPurchaseDescription($payment->id),
+            'description' => $this->getPurchaseDescription($payment),
             'redirectUrl' => route('shop.payments.success', [
                 'gateway' => $this->id,
                 'id' => $payment->id,

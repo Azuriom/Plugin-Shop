@@ -120,7 +120,7 @@ return [
         'subscription_info' => 'Make sure your payment gateway supports subscriptions. When a subscription is created, the user will be charged the same price until the subscription is canceled (any discount active during the first payment will be applied to the next payments).',
         'expiring' => 'One-off payment with expiration',
         'expiring_info' => 'The product will be automatically removed after the specified period.',
-        'scheduler' => 'CRON tasks are not enabled, you must set them up to use subscriptions and expiring packages, see the <a href="https://azuriom.com/docs/faq" target="_blank" rel="noopener norefferer">FAQ</a> for more information.',
+        'scheduler' => 'CRON tasks are not enabled, you must set them up to use subscriptions and expiring packages, see the <a href="https://azuriom.com/docs/installation" target="_blank" rel="noopener norefferer">documentation</a> for more information.',
 
         'create_category' => 'Create category',
         'create_package' => 'Create package',
@@ -234,7 +234,7 @@ return [
         'use_site_money' => 'Enable purchases with the site currency.',
         'use_site_money_info' => 'When enabled, the packages in the shop can only be purchased with website money. In order for users to credit their account, you can set up offers in the shop.',
         'webhook' => 'Discord Webhook URL',
-        'webhook_info' => 'When an user make a payment (except for purchases with website money!), it will create a notification on this webhook. Leave empty to disable.',
+        'webhook_info' => 'When an user make a payment, it will create a notification on this webhook. Leave empty to disable.',
         'commands' => 'Global commands',
         'recent_payments' => 'Recent payments limit to display in sidebar (set to 0 to disable)',
         'display_amount' => 'Display amount spend in recent payments and top customer',
@@ -261,6 +261,7 @@ return [
         'email' => 'E-Mail',
         'checkbox' => 'Checkbox',
         'dropdown' => 'Dropdown',
+        'server' => 'Server',
     ],
 
     'logs' => [

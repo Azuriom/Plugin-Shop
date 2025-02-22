@@ -5,6 +5,7 @@ namespace Azuriom\Plugin\Shop\View\Composers;
 use Azuriom\Extensions\Plugin\AdminUserEditComposer;
 use Azuriom\Models\User;
 use Azuriom\Plugin\Shop\Models\Payment;
+use Azuriom\Plugin\Shop\Payment\Currencies;
 use Illuminate\View\View;
 
 class ShopAdminUserComposer extends AdminUserEditComposer
@@ -20,6 +21,7 @@ class ShopAdminUserComposer extends AdminUserEditComposer
         }
 
         $view->with('payments', $payments);
+        $view->with('total', Currencies::formatAmount($payments->sum('price'), currency()));
 
         return [
             'shop' => [

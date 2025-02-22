@@ -42,7 +42,7 @@ class PaymentWallMethod extends PaymentMethod
                     'payment_'.$payment->id,
                     $amount,
                     $currency,
-                    $this->getPurchaseDescription($payment->id),
+                    $this->getPurchaseDescription($payment),
                     Product::TYPE_FIXED
                 ),
             ],

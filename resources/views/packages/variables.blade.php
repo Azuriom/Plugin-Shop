@@ -42,7 +42,7 @@
                                 </span>
                             @enderror
                         </div>
-                    @elseif($variable->type === 'dropdown')
+                    @elseif($variable->type === 'dropdown' || $variable->type === 'server')
                         <div class="mb-3">
                             <label for="{{ $variable->name }}" class="form-label">
                                 {{ $variable->description }}
@@ -54,7 +54,7 @@
                             <select class="form-select @error($variable->name) is-invalid @enderror"
                                     name="{{ $variable->name }}" id="{{ $variable->name }}"
                                     @required($variable->is_required)>
-                                @foreach($variable->options as $option)
+                                @foreach($variable->dropdownOptions() as $option)
                                     <option value="{{ $option['value'] }}" @selected(old($variable->name) === $option['value'])>
                                         {{ $option['name'] }}
                                     </option>
@@ -93,7 +93,7 @@
                 @endforeach
 
                 <button type="submit" class="btn btn-primary">
-                    <i class="bi bi-cart-plus"></i>{{ trans('shop::messages.buy') }}
+                    <i class="bi bi-cart-plus"></i> {{ trans('shop::messages.buy') }}
                 </button>
             </form>
         </div>

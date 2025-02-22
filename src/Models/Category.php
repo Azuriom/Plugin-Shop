@@ -80,7 +80,7 @@ class Category extends Model
      */
     public function packages()
     {
-        return $this->hasMany(Package::class)->orderBy('position');
+        return $this->hasMany(Package::class)->inverse('category')->orderBy('position');
     }
 
     public function hasReachLimit(User $user): bool

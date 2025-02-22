@@ -103,7 +103,7 @@ return [
 
         'empty' => 'No payment methods currently available.',
 
-        'info' => 'Purchase #:id on :website',
+        'info' => 'Purchase #:id on :website: :items',
         'subscription' => ':package - Subscription (User #:user)',
         'error' => 'The payment could not be completed, please try again later.',
         'giftcards' => 'Giftcards',

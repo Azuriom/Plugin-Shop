@@ -34,8 +34,21 @@ class VariableRequest extends FormRequest
             ],
             'description' => ['required', 'string', 'max:200'],
             'type' => ['required', 'string', Rule::in(Variable::TYPES)],
-            'options' => ['nullable', 'required_if:type,dropdown', 'array'],
+            'options' => ['nullable', 'required_if:type,dropdown,server', 'array'],
             'is_required' => ['boolean'],
         ];
+    }
+
+    /**
+     * Prepare the data for validation.
+     */
+    protected function prepareForValidation(): void
+    {
+        $this->mergeCheckboxes();
+
+        // A command cannot be dispatched to a null server
+        if ($this->input('type') === 'server') {
+            $this->merge(['is_required' => true]);
+        }
     }
 }

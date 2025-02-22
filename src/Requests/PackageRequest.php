@@ -3,6 +3,7 @@
 namespace Azuriom\Plugin\Shop\Requests;
 
 use Azuriom\Http\Requests\Traits\ConvertCheckbox;
+use Azuriom\Plugin\Shop\Models\Variable;
 use Illuminate\Foundation\Http\FormRequest;
 
 class PackageRequest extends FormRequest
@@ -92,6 +93,27 @@ class PackageRequest extends FormRequest
             'files' => $this->input('files', []),
             'required_packages' => $this->input('required_packages', []),
             'required_roles' => $this->input('required_roles', []),
+        ]);
+    }
+
+    /**
+     * Handle a passed validation attempt.
+     */
+    protected function passedValidation(): void
+    {
+        // Add variables used for servers, as a command cannot be executed without a server.
+        $variables = collect($this->input('commands', []))->pluck('server')
+            ->filter(fn ($server) => ! is_numeric($server))
+            ->unique();
+
+        if ($variables->isEmpty()) {
+            return; // No variables used as a server.
+        }
+
+        $variables = Variable::whereIn('name', $variables)->get()->modelKeys();
+
+        $this->merge([
+            'variables' => array_merge($this->input('variables', []), $variables),
         ]);
     }
 }

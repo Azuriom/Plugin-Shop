@@ -3,6 +3,7 @@
 namespace Azuriom\Plugin\Shop\Controllers\Admin;
 
 use Azuriom\Http\Controllers\Controller;
+use Azuriom\Models\Server;
 use Azuriom\Plugin\Shop\Models\Variable;
 use Azuriom\Plugin\Shop\Requests\VariableRequest;
 
@@ -23,7 +24,10 @@ class VariableController extends Controller
      */
     public function create()
     {
-        return view('shop::admin.variables.create', ['types' => Variable::TYPES]);
+        return view('shop::admin.variables.create', [
+            'servers' => Server::executable()->get(),
+            'types' => Variable::TYPES,
+        ]);
     }
 
     /**
@@ -44,6 +48,7 @@ class VariableController extends Controller
     {
         return view('shop::admin.variables.edit', [
             'variable' => $variable,
+            'servers' => Server::executable()->get(),
             'types' => Variable::TYPES,
         ]);
     }

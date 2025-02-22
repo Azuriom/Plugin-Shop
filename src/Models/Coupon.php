@@ -148,7 +148,10 @@ class Coupon extends Model
     {
         $query->where('is_enabled', true)
             ->where('start_at', '<', now())
-            ->where('expire_at', '>', now());
+            ->where(function (Builder $query) {
+                $query->where('expire_at', '>', now())
+                    ->orWhereNull('expire_at');
+            });
     }
 
     /**

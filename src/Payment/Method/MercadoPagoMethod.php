@@ -42,7 +42,7 @@ class MercadoPagoMethod extends PaymentMethod
             $preference = $client->create([
                 'items' => [
                     [
-                        'title' => $this->getPurchaseDescription($payment->id),
+                        'title' => $this->getPurchaseDescription($payment),
                         'quantity' => 1,
                         'unit_price' => $amount,
                         'currency_id' => $currency,

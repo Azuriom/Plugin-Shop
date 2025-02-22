@@ -120,7 +120,7 @@ return [
         'subscription_info' => 'Assurez vous que votre moyen de paiement supporte les abonnements. Une fois un abonnement créé, l\'utilisateur sera débité du même montant tant que l\'abonnement n\'est pas annulé (toute promotion active pour le premier paiement sera appliquée aux paiements suivants).',
         'expiring' => 'Paiement unique avec expiration',
         'expiring_info' => 'Le produit sera automatiquement supprimé après la période définie.',
-        'scheduler' => 'Les tâches CRON ne sont pas activées, vous devez les configurer pour utiliser les abonnements et les expirations, voir la <a href="https://azuriom.com/docs/faq" target="_blank" rel="noopener norefferer">FAQ</a> pour plus d\'informations.',
+        'scheduler' => 'Les tâches CRON ne sont pas activées, vous devez les configurer pour utiliser les abonnements et les expirations, voir la <a href="https://azuriom.com/fr/docs/installation" target="_blank" rel="noopener norefferer">documentation</a> pour plus d\'informations.',
 
         'create_category' => 'Créer une catégorie',
         'create_package' => 'Créer un produit',
@@ -234,7 +234,7 @@ return [
         'use_site_money' => 'Activer les achats avec l\'argent du site.',
         'use_site_money_info' => 'Une fois activé, les produits de la boutique ne pourront être achetés qu\'avec l\'argent du site. Afin que les utilisateurs puissent créditer leur compte, vous pouvez configurer des offres dans la boutique.',
         'webhook' => 'URL de webhook Discord',
-        'webhook_info' => 'Lorsqu\'un utilisateur fait un paiement sur la boutique (hors achats avec l\'argent du site!), cela va créer une notification sur ce webhook. Laissez vide pour ne pas utiliser de webhook.',
+        'webhook_info' => 'Lorsqu\'un utilisateur fait un paiement sur la boutique, cela va créer une notification sur ce webhook. Laissez vide pour ne pas utiliser de webhook.',
         'commands' => 'Commandes globales',
         'recent_payments' => 'Limite de paiements récents à afficher dans la barre latérale',
         'display_amount' => 'Afficher le montant dans les paiements récents et meilleur acheteur',
@@ -261,6 +261,7 @@ return [
         'email' => 'E-Mail',
         'checkbox' => 'Case à cocher',
         'dropdown' => 'Menu déroulant',
+        'server' => 'Serveur',
     ],
 
     'logs' => [

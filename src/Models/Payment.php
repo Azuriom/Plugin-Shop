@@ -91,7 +91,7 @@ class Payment extends Model
      */
     public function items()
     {
-        return $this->hasMany(PaymentItem::class);
+        return $this->hasMany(PaymentItem::class)->inverse('payment');
     }
 
     /**
@@ -229,7 +229,7 @@ class Payment extends Model
             $name = $item->name;
             $quantity = $item->quantity > 1 ? "x{$item->quantity} - " : '';
 
-            if ($item->buyable !== null) {
+            if ($item->buyable?->category !== null) {
                 $name .= ' - '.$item->buyable->category->name;
             }
 

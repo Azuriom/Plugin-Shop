@@ -1,3 +1,5 @@
+<p>{{ trans('shop::messages.cart.total', ['total' => $total]) }}</p>
+
 <div class="table-responsive">
     <table class="table">
         <thead>

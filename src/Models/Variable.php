@@ -2,6 +2,7 @@
 
 namespace Azuriom\Plugin\Shop\Models;
 
+use Azuriom\Models\Server;
 use Azuriom\Models\Traits\HasTablePrefix;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
@@ -22,7 +23,7 @@ class Variable extends Model
 {
     use HasTablePrefix;
 
-    public const TYPES = ['text', 'number', 'email', 'checkbox', 'dropdown'];
+    public const TYPES = ['text', 'number', 'email', 'checkbox', 'dropdown', 'server'];
 
     /**
      * The table prefix associated with the model.
@@ -63,11 +64,26 @@ class Variable extends Model
             'number' => ['numeric'],
             'email' => ['email', 'max:100'],
             'dropdown' => ['string', Rule::in(Arr::pluck($this->options ?? [], 'value'))],
+            'server' => [Rule::in($this->options ?? [])],
             default => [],
         };
 
         return array_merge([
             $this->is_required ? 'required' : 'nullable',
         ], $rules);
+    }
+
+    public function dropdownOptions(): array
+    {
+        if ($this->type === 'server') {
+            return Server::findMany($this->options ?? [])
+                ->map(fn (Server $server) => [
+                    'name' => $server->name,
+                    'value' => $server->id,
+                ])
+                ->all();
+        }
+
+        return $this->options ?? [];
     }
 }
