@@ -259,7 +259,7 @@ abstract class PaymentMethod
 
         $payment->update(['status' => $isChargeback ? 'chargeback' : 'refunded']);
 
-        $payment->dispatchCommands($isChargeback ? 'chargeback' : 'refund');
+        $payment->revoke($isChargeback ? 'chargeback' : 'refund');
 
         if (($webhook = setting('shop.webhook')) !== null) {
             rescue(fn () => $payment->createRefundDiscordWebhook($isChargeback)->send($webhook));

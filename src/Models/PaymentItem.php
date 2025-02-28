@@ -83,22 +83,13 @@ class PaymentItem extends Model
         $this->buyable?->deliver($this, $renewal);
     }
 
-    public function expire(): void
+    public function revoke(string $trigger = 'expiration'): void
     {
-        $this->dispatchCommands('expiration');
-
         if ($this->buyable instanceof Package) {
-            $this->buyable->expire($this);
+            $this->buyable->expire($this, $trigger);
         }
 
         $this->update(['expires_at' => null]);
-    }
-
-    public function dispatchCommands(string $status): void
-    {
-        if ($this->buyable instanceof Package) {
-            $this->buyable->dispatchCommands($status, $this);
-        }
     }
 
     public function formatPrice(): string

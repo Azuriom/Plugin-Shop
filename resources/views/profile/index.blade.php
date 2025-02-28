@@ -32,7 +32,7 @@
                                 </span>
                             </td>
                             <td>{{ $payment->transaction_id ?? trans('messages.unknown') }}</td>
-                            <td>{{ format_date($payment->created_at) }}</td>
+                            <td>{{ format_date($payment->created_at, true) }}</td>
                         </tr>
                     @endforeach
 

@@ -80,8 +80,6 @@ class MercadoPagoMethod extends PaymentMethod
         $id = $request->input('data.id');
 
         try {
-            logger()->info('[Shop] Mercado Pago notification: '.$request->getContent());
-
             if (! $request->hasHeader('X-Request-ID') || ! $request->hasHeader('X-Signature')) {
                 return response()->json(['error' => 'Invalid webhook signature.'], 400);
             }

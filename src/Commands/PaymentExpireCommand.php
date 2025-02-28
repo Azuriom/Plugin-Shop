@@ -36,8 +36,8 @@ class PaymentExpireCommand extends Command
             ->where('expires_at', '<', now())
             ->get();
 
-        foreach ($expired as $payment) {
-            $payment->expire();
+        foreach ($expired as $paymentItem) {
+            $paymentItem->revoke();
         }
 
         $this->info('Removed '.$expired->count().' expired payments.');

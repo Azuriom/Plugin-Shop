@@ -151,10 +151,10 @@ class Payment extends Model
         rescue(fn () => $this->user->notify(new PaymentPaidNotification($this)));
     }
 
-    public function dispatchCommands(string $status): void
+    public function revoke(string $trigger)
     {
         foreach ($this->items as $item) {
-            $item->dispatchCommands($status);
+            $item->revoke($trigger);
         }
     }
 

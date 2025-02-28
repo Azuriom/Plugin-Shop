@@ -174,7 +174,7 @@ class Subscription extends Model
         $payment = $this->payments()->first();
         $item = $payment->items()->first();
 
-        $this->package?->dispatchCommands('expiration', $item);
+        $this->package?->expire($item);
 
         $this->update(['status' => 'expired']);
     }

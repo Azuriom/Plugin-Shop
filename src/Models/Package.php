@@ -401,8 +401,10 @@ class Package extends Model implements Buyable
         }
     }
 
-    public function expire(PaymentItem $item): void
+    public function expire(PaymentItem $item, string $trigger = 'expiration'): void
     {
+        $this->dispatchCommands($trigger, $item);
+
         if ($this->expiredRole === null || $this->expiredRole->is_admin) {
             return;
         }
