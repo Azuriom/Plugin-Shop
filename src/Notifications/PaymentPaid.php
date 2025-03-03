@@ -47,7 +47,7 @@ class PaymentPaid extends Notification
 
                 $message->line(trans('shop::mails.payment.subscription', [
                     'date' => format_date($subscription->created_at, true),
-                ]))->action(trans('shop::mails.payment.subscription'), route('shop.profile'));
+                ]))->action(trans('shop::mails.payment.profile'), route('shop.profile'));
             });
     }
 
