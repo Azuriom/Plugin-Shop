@@ -66,11 +66,12 @@ class PaymentController extends Controller
     public function store(PaymentRequest $request)
     {
         $packageIds = Arr::pluck($request->input('packages', []), 'quantity', 'id');
-        $attributes = array_merge($request->validated(), [
+        $attributes = [
+            ...$request->validated(),
             'currency' => currency(),
             'status' => 'completed',
             'gateway_type' => 'manual',
-        ]);
+        ];
 
         $payment = Payment::create(Arr::except($attributes, 'packages'));
         $packages = Package::findMany(array_keys($packageIds));

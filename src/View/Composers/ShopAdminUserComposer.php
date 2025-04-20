@@ -13,7 +13,7 @@ class ShopAdminUserComposer extends AdminUserEditComposer
     public function getCards(User $user, View $view)
     {
         $payments = Payment::whereBelongsTo($user)
-            ->scopes(['notPending', 'withRealMoney'])
+            ->scopes(['completed', 'withRealMoney'])
             ->get();
 
         if ($payments->isEmpty()) {

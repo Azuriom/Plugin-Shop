@@ -35,6 +35,10 @@ class VariableRequest extends FormRequest
             'description' => ['required', 'string', 'max:200'],
             'type' => ['required', 'string', Rule::in(Variable::TYPES)],
             'options' => ['nullable', 'required_if:type,dropdown,server', 'array'],
+            'min' => ['sometimes', 'nullable', 'integer', 'min:0', 'max:100'],
+            'max' => ['sometimes', 'nullable', 'integer', 'min:0', 'max:100'],
+            'filter' => ['sometimes', 'nullable', 'in:alpha,alpha_num,regex'],
+            'regex' => ['sometimes', 'nullable', 'required_if:filter,regex'],
             'is_required' => ['boolean'],
         ];
     }
@@ -50,5 +54,26 @@ class VariableRequest extends FormRequest
         if ($this->input('type') === 'server') {
             $this->merge(['is_required' => true]);
         }
+    }
+
+    /**
+     * Handle a passed validation attempt.
+     */
+    protected function passedValidation(): void
+    {
+        if ($this->input('type') !== 'text') {
+            $this->merge(['validation' => null]);
+
+            return;
+        }
+
+        $this->merge([
+            'validation' => array_filter([
+                'min' => $this->integer('min'),
+                'max' => $this->integer('max'),
+                'filter' => $this->input('filter'),
+                'regex' => $this->input('regex'),
+            ]),
+        ]);
     }
 }

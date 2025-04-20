@@ -67,6 +67,57 @@
     </button>
 </div>
 
+<div v-else-if="type === 'text'">
+    <div class="row gx-3">
+        <div class="mb-3 col-md-3">
+            <label class="form-label" for="minInput">{{ trans('shop::admin.variables.min') }}</label>
+            <input type="number" min="0" max="100" class="form-control @error('min') is-invalid @enderror" id="minInput" name="min"
+                   placeholder="0" value="{{ old('min', Arr::get($variable->validation ?? [], 'min')) }}">
+
+            @error('min')
+            <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+            @enderror
+        </div>
+
+        <div class="mb-3 col-md-3">
+            <label class="form-label" for="maxInput">{{ trans('shop::admin.variables.max') }}</label>
+            <input type="number" min="0" max="100" class="form-control @error('max') is-invalid @enderror" id="maxInput" name="max"
+                   placeholder="100" value="{{ old('max', Arr::get($variable->validation ?? [], 'max')) }}">
+
+            @error('max')
+            <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+            @enderror
+        </div>
+
+        <div class="mb-3 col-md-6">
+            <label class="form-label" for="filterSelect">{{ trans('shop::admin.variables.filter') }}</label>
+
+            <select class="form-select @error('filter') is-invalid @enderror" id="filterSelect" name="filter" v-model="filter">
+                <option value="">{{ trans('messages.none') }}</option>
+                @foreach(['alpha', 'alpha_num', 'regex'] as $filter)
+                    <option value="{{ $filter }}">
+                        {{ trans('shop::admin.variables.'.$filter) }}
+                    </option>
+                @endforeach
+            </select>
+
+            @error('filter')
+            <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+            @enderror
+        </div>
+    </div>
+
+    <div v-if="filter === 'regex'" class="mb-3">
+        <label class="form-label" for="regexInput">{{ trans('shop::admin.variables.regex') }}</label>
+        <input type="text" max="" class="form-control @error('regex') is-invalid @enderror" id="regexInput" name="regex"
+               placeholder="/^[A-Za-z\s]+$/" value="{{ old('regex', Arr::get($variable->validation ?? [], 'regex')) }}" required>
+
+        @error('regex')
+        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+        @enderror
+    </div>
+</div>
+
 <div class="mb-3" v-if="type === 'server'">
     <label class="form-label" for="serversSelect">{{ trans('shop::admin.variables.options') }}</label>
 
@@ -97,5 +148,6 @@
 @push('footer-scripts')
     <script>
         const shopVariableOptions = @json(old('options', $variable->options ?? [['name' => '', 'value' => '']]));
+        const variableFilter = '{{ old('filter', Arr::get($variable->validation ?? [], 'filter')) }}';
     </script>
 @endpush

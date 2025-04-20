@@ -63,7 +63,7 @@ class PackageRequest extends FormRequest
             'custom_price' => ['filled', 'boolean'],
             'is_enabled' => ['filled', 'boolean'],
             'has_quantity' => ['filled', 'boolean'],
-            'image' => ['nullable', 'image'],
+            'image' => ['nullable', 'image:allow_svg'],
         ];
     }
 
@@ -88,11 +88,11 @@ class PackageRequest extends FormRequest
             $this->merge(['giftcard_balance' => 0]);
         }
 
-        $this->merge([
-            'commands' => $this->input('commands', []),
-            'files' => $this->input('files', []),
-            'required_packages' => $this->input('required_packages', []),
-            'required_roles' => $this->input('required_roles', []),
+        $this->mergeIfMissing([
+            'commands' => [],
+            'files' => [],
+            'required_packages' => [],
+            'required_roles' => [],
         ]);
     }
 

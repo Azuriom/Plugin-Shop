@@ -163,7 +163,7 @@ class Subscription extends Model
 
         $this->update([
             'status' => 'active',
-            'ends_at' => $expiration->add($this->package->billing_period)->endOfDay(),
+            'ends_at' => $expiration->add($this->package->billing_period),
         ]);
 
         return $payment;

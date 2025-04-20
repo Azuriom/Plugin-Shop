@@ -256,6 +256,13 @@ return [
         'required' => 'Should this variable be required?',
         'options' => 'Options',
 
+        'min' => 'Minimum Length',
+        'max' => 'Maximum Length',
+        'filter' => 'Filter',
+        'alpha' => 'Only Letters',
+        'alpha_num' => 'Only Letters & Numbers',
+        'regex' => 'Regex',
+
         'text' => 'Text',
         'number' => 'Number',
         'email' => 'E-Mail',

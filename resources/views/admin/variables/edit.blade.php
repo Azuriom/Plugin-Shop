@@ -5,7 +5,7 @@
 @section('content')
     <div class="card shadow mb-4">
         <div class="card-body">
-            <form action="{{ route('shop.admin.variables.update', $variable) }}" method="POST" v-scope="{ type: '{{ old('type', $variable->type) }}', options: shopVariableOptions }">
+            <form action="{{ route('shop.admin.variables.update', $variable) }}" method="POST" v-scope="{ type: '{{ old('type', $variable->type) }}', options: shopVariableOptions, filter: variableFilter }">
                 @method('PUT')
 
                 @include('shop::admin.variables._form')

@@ -90,10 +90,11 @@ class PackageController extends Controller
             $variable->name => $variable->getValidationRule(),
         ]);
 
-        $this->validate($request, array_merge([
+        $this->validate($request, [
+            ...$rules->all(),
             'quantity' => 'nullable|integer',
             'price' => 'sometimes|nullable|numeric|min:'.$package->price,
-        ], $rules->all()));
+        ]);
 
         $checkboxes = $package->variables
             ->where('type', 'checkbox')

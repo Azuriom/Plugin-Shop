@@ -31,6 +31,7 @@ class OfferRequest extends FormRequest
             'name' => ['required', 'string', 'max:50', Rule::unique(Offer::class)->ignore($this->offer, 'name')],
             'price' => ['required', 'numeric', 'min:0'],
             'money' => ['required', 'integer', 'min:0'],
+            'image' => ['nullable', 'image:allow_svg'],
             'gateways' => ['required', 'array'],
             'is_enabled' => ['filled', 'boolean'],
         ];

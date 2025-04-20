@@ -256,6 +256,13 @@ return [
         'required' => 'Est-ce que cette variable doit être remplie par l\'utilisateur ?',
         'options' => 'Options',
 
+        'min' => 'Longueur Minimale',
+        'max' => 'Longueur Maximale',
+        'filter' => 'Filtre',
+        'alpha' => 'Uniquement Lettres',
+        'alpha_num' => 'Uniquement Lettres & Nombres',
+        'regex' => 'Expression Régulière',
+
         'text' => 'Texte',
         'number' => 'Nombre',
         'email' => 'E-Mail',

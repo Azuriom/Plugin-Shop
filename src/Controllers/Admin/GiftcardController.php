@@ -34,9 +34,10 @@ class GiftcardController extends Controller
      */
     public function store(GiftcardRequest $request)
     {
-        Giftcard::create(array_merge($request->validated(), [
+        Giftcard::create([
+            ...$request->validated(),
             'original_balance' => $request->input('balance'),
-        ]));
+        ]);
 
         return to_route('shop.admin.giftcards.index')
             ->with('success', trans('messages.status.success'));

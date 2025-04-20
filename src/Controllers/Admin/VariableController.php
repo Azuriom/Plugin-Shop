@@ -35,7 +35,7 @@ class VariableController extends Controller
      */
     public function store(VariableRequest $request)
     {
-        Variable::create($request->validated());
+        Variable::create(array_merge($request->validated(), $request->only('validation')));
 
         return to_route('shop.admin.variables.index')
             ->with('success', trans('messages.status.success'));
@@ -58,7 +58,7 @@ class VariableController extends Controller
      */
     public function update(VariableRequest $request, Variable $variable)
     {
-        $variable->update($request->validated());
+        $variable->update(array_merge($request->validated(), $request->only('validation')));
 
         return to_route('shop.admin.variables.index')
             ->with('success', trans('messages.status.success'));

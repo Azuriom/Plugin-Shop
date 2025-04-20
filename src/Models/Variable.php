@@ -15,6 +15,7 @@ use Illuminate\Validation\Rule;
  * @property string $type
  * @property bool $is_required
  * @property ?array $options
+ * @property ?array $validation
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
  * @property \Illuminate\Support\Collection|\Azuriom\Plugin\Shop\Models\Package[] $packages
@@ -36,7 +37,7 @@ class Variable extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'name', 'description', 'type', 'options', 'is_required',
+        'name', 'description', 'type', 'options', 'validation', 'is_required',
     ];
 
     /**
@@ -47,6 +48,7 @@ class Variable extends Model
     protected $casts = [
         'is_required' => 'boolean',
         'options' => 'array',
+        'validation' => 'array',
     ];
 
     /**
@@ -59,14 +61,23 @@ class Variable extends Model
 
     public function getValidationRule(): array
     {
+        $validation = $this->validation ?? [];
+        $min = $validation['min'] ?? 0;
+        $max = $validation['max'] ?? 100;
+        $filter = $validation['filter'] ?? null;
+
         $rules = match ($this->type) {
-            'text' => ['string', 'max:100'],
+            'text' => ['string', 'min:'.$min, 'max:'.$max],
             'number' => ['numeric'],
             'email' => ['email', 'max:100'],
             'dropdown' => ['string', Rule::in(Arr::pluck($this->options ?? [], 'value'))],
             'server' => [Rule::in($this->options ?? [])],
             default => [],
         };
+
+        if ($filter !== null && $this->type === 'text') {
+            $rules[] = $filter === 'regex' ? 'regex:'.$validation['regex'] : $filter;
+        }
 
         return array_merge([
             $this->is_required ? 'required' : 'nullable',

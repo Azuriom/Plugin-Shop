@@ -400,7 +400,7 @@
     <script>
         function parsePeriod(value) {
             if (!value) {
-                return { value: '1', unit: '' }
+                return { value: '1', unit: 'months' }
             }
 
             const parsed = value.split(' ', 2)
