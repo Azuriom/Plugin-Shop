@@ -71,7 +71,7 @@
 <div class="mb-3">
     <label class="form-label" for="slugInput">{{ trans('messages.fields.slug') }}</label>
     <div class="input-group @error('slug') has-validation @enderror">
-        <div class="input-group-text">{{ route('shop.categories.show', '') }}/</div>
+        <div class="input-group-text">{{ route('shop.categories.show', '/') }}/</div>
         <input type="text" class="form-control @error('slug') is-invalid @enderror" id="slugInput" name="slug" value="{{ old('slug', $category->slug ?? '') }}" required>
 
         <button type="button" class="btn btn-outline-secondary" onclick="generateSlug()">

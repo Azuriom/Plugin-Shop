@@ -3,6 +3,7 @@
 namespace Azuriom\Plugin\Shop\Notifications;
 
 use Azuriom\Plugin\Shop\Models\Payment;
+use Azuriom\Plugin\Shop\Models\PaymentItem;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
@@ -27,6 +28,12 @@ class PaymentPaid extends Notification
             ? '#'.$this->payment->id
             : $this->payment->transaction_id;
 
+        $markdownItems = $this->payment->items->map(function (PaymentItem $item) {
+            $name = '- '.$item->name;
+
+            return $item->quantity > 1 ? $name.' (x'.$item->quantity.')' : $name;
+        })->prepend(trans('shop::mails.payment.packages'))->join("\n");
+
         return (new MailMessage())
             ->subject(trans('shop::mails.payment.subject'))
             ->line(trans('shop::mails.payment.intro', [
@@ -39,6 +46,7 @@ class PaymentPaid extends Notification
                 'transaction' => $transactionId,
                 'gateway' => $this->payment->getTypeName(),
             ]))
+            ->line([$markdownItems]) // Use array to preserve line breaks
             ->line(trans('shop::mails.payment.date', [
                 'date' => format_date($this->payment->created_at, true),
             ]))

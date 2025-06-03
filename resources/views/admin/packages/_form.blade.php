@@ -60,7 +60,7 @@
 </div>
 
 @if(scheduler_running())
-    <div class="row gx-3" v-scope="{ ...parsePeriod('{{ old('billing_period', $package->billing_period ?? '') }}'), billing: '{{ old('billing_type', $package->billing_type ?? 'one-off') }}' }">
+    <div class="row gx-3" v-scope="{ ...parsePeriod('{{ old('billing_period', $package->billing_period ?? '') }}', true), billing: '{{ old('billing_type', $package->billing_type ?? 'one-off') }}' }">
         <div class="mb-3" :class="billing !== 'one-off' ? 'col-md-6' : 'col-md-12'">
             <label class="form-label" for="billingSelect">{{ trans('shop::admin.packages.billing') }}</label>
             <select class="form-select" id="billingSelect" name="billing_type" required v-model="billing">
@@ -398,9 +398,9 @@
 
 @push('scripts')
     <script>
-        function parsePeriod(value) {
+        function parsePeriod(value, defaultUnit = false) {
             if (!value) {
-                return { value: '1', unit: 'months' }
+                return { value: '1', unit: defaultUnit ? 'months' : '' }
             }
 
             const parsed = value.split(' ', 2)

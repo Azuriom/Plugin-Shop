@@ -17,13 +17,13 @@ class GiftcardController extends Controller
      */
     public function add(Request $request)
     {
-        $validated = $this->validate($request, ['code' => 'required']);
+        $validated = $this->validate($request, ['giftcard' => 'required']);
 
-        $giftcard = Giftcard::firstWhere($validated);
+        $giftcard = Giftcard::firstWhere('code', $validated['giftcard']);
 
         if ($giftcard !== null && $giftcard->isPending()) {
             throw ValidationException::withMessages([
-                'code' => trans('shop::messages.giftcards.pending'),
+                'giftcard' => trans('shop::messages.giftcards.pending'),
             ]);
         }
 
@@ -31,7 +31,7 @@ class GiftcardController extends Controller
 
         if ($giftcard === null || ! $giftcard->isActive()) {
             throw ValidationException::withMessages([
-                'code' => trans('shop::messages.giftcards.error'),
+                'giftcard' => trans('shop::messages.giftcards.error'),
             ]);
         }
 

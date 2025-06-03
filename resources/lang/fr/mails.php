@@ -6,6 +6,7 @@ return [
         'intro' => 'Merci :user pour votre achat ! Votre paiement a été confirmé et vous recevrez votre achat dans quelques minutes.',
         'total' => 'Total : :total',
         'transaction' => 'ID de la transaction : :transaction (:gateway)',
+        'packages' => 'Contenu :',
         'date' => 'Date : :date',
         'subscription' => 'Ce paiement est pour un abonnement commencé le :date, vous pouvez le gérer dans votre profil.',
         'profile' => 'Aller au profil',

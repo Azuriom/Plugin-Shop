@@ -41,7 +41,9 @@
                                 <td>{{ shop_format_amount($cartItem->price()) }}</td>
                                 <td>{{ shop_format_amount($cartItem->total()) }}</td>
                                 <td>
-                                    <input type="number" min="0" max="{{ $cartItem->maxQuantity() }}" size="5" class="form-control form-control-sm d-inline-block" name="quantities[{{ $cartItem->itemId }}]" value="{{ $cartItem->quantity }}" aria-label="{{ trans('shop::messages.fields.quantity') }}" required @if(!$cartItem->hasQuantity()) readonly @endif>
+                                    <input type="number" min="0" max="{{ $cartItem->maxQuantity() }}" size="5" class="form-control form-control-sm d-inline-block"
+                                           name="quantities[{{ $cartItem->itemId }}]" value="{{ $cartItem->quantity }}" aria-label="{{ trans('shop::messages.fields.quantity') }}"
+                                           required @if(!$cartItem->hasQuantity()) readonly @endif>
                                 </td>
                                 <td>
                                     <a href="{{ route('shop.cart.remove', $cartItem->id) }}" class="btn btn-sm btn-danger" title="{{ trans('messages.actions.delete') }}">
@@ -81,14 +83,15 @@
                     <form action="{{ route('shop.cart.coupons.add') }}" method="POST" >
                         @csrf
 
-                        <div class="input-group mb-3 @error('code') has-validation @enderror">
-                            <input type="text" class="form-control @error('code') is-invalid @enderror" placeholder="{{ trans('shop::messages.fields.code') }}" id="code" name="code" value="{{ old('code') }}">
+                        <div class="input-group mb-3 @error('coupon') has-validation @enderror">
+                            <input type="text" class="form-control @error('coupon') is-invalid @enderror" id="coupon" name="coupon"
+                                   value="{{ old('coupon') }}" placeholder="{{ trans('shop::messages.fields.code') }}" required>
 
                             <button type="submit" class="btn btn-primary">
                                 <i class="bi bi-plus-lg"></i> {{ trans('messages.actions.add') }}
                             </button>
 
-                            @error('code')
+                            @error('coupon')
                             <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
                         </div>
@@ -142,14 +145,15 @@
                     <form action="{{ route('shop.cart.giftcards.add') }}" method="POST" >
                         @csrf
 
-                        <div class="input-group mb-3 @error('code') has-validation @enderror">
-                            <input type="text" class="form-control @error('code') is-invalid @enderror" placeholder="{{ trans('shop::messages.fields.code') }}" id="code" name="code" value="{{ old('code') }}">
+                        <div class="input-group mb-3 @error('giftcard') has-validation @enderror">
+                            <input type="text" class="form-control @error('giftcard') is-invalid @enderror" id="giftcard" name="giftcard"
+                                   value="{{ old('giftcard') }}" placeholder="{{ trans('shop::messages.fields.code') }}" required>
 
                             <button type="submit" class="btn btn-primary">
                                 <i class="bi bi-plus-lg"></i> {{ trans('messages.actions.add') }}
                             </button>
 
-                            @error('code')
+                            @error('giftcard')
                             <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
                         </div>

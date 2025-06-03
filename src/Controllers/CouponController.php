@@ -17,13 +17,13 @@ class CouponController extends Controller
      */
     public function add(Request $request)
     {
-        $validated = $this->validate($request, ['code' => 'required']);
+        $validated = $this->validate($request, ['coupon' => 'required']);
 
-        $coupon = Coupon::active()->firstWhere($validated);
+        $coupon = Coupon::active()->firstWhere('code', $validated['coupon']);
 
         if ($coupon === null || $coupon->hasReachLimit($request->user())) {
             throw ValidationException::withMessages([
-                'code' => trans('shop::messages.coupons.error'),
+                'coupon' => trans('shop::messages.coupons.error'),
             ]);
         }
 
@@ -32,7 +32,7 @@ class CouponController extends Controller
         if ((! $coupon->can_cumulate && ! $cart->coupons()->isEmpty())
             || $cart->coupons()->contains('can_cumulate', false)) {
             throw ValidationException::withMessages([
-                'code' => trans('shop::messages.coupons.cumulate'),
+                'coupon' => trans('shop::messages.coupons.cumulate'),
             ]);
         }
 
