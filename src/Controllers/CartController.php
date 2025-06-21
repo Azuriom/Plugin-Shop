@@ -18,6 +18,16 @@ class CartController extends Controller
      */
     public function index(Request $request)
     {
+        // Если отключена гостевая корзина, перенаправляем на страницу входа
+        if (!setting('shop.cart_auth', false) && auth()->guest()) {
+            return redirect()->route('login');
+        }
+
+        // Запоминаем корзину как запрошенную страницу для перенаправления после входа
+        if (auth()->guest()) {
+            $request->session()->put('url.intended', route('shop.cart.index'));
+        }
+
         $terms = setting('shop.required_terms');
 
         if ($terms !== null) {
@@ -29,6 +39,9 @@ class CartController extends Controller
         return view('shop::cart.index', [
             'cart' => Cart::fromSession($request->session()),
             'terms' => $terms,
+            // Передаем настройки капчи для форм авторизации и регистрации
+            'captchaLogin' => (bool) setting('captcha.login'),
+            'captchaRegister' => setting('captcha.type') !== null,
         ]);
     }
 
@@ -37,6 +50,10 @@ class CartController extends Controller
      */
     public function remove(Request $request, Package $package)
     {
+        if (!setting('shop.cart_auth', false) && auth()->guest()) {
+            return redirect()->route('login');
+        }
+
         $cart = Cart::fromSession($request->session());
 
         $cart->remove($package);
@@ -49,6 +66,10 @@ class CartController extends Controller
      */
     public function update(Request $request)
     {
+        if (!setting('shop.cart_auth', false) && auth()->guest()) {
+            return redirect()->route('login');
+        }
+
         $cart = Cart::fromSession($request->session());
 
         foreach ($request->input('quantities', []) as $id => $quantity) {
@@ -69,6 +90,10 @@ class CartController extends Controller
      */
     public function clear(Request $request)
     {
+        if (!setting('shop.cart_auth', false) && auth()->guest()) {
+            return redirect()->route('login');
+        }
+
         Cart::fromSession($request->session())->clear();
 
         return to_route('shop.cart.index');
