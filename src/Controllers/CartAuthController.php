@@ -42,11 +42,18 @@ class CartAuthController extends Controller
      */
     protected function validator(array $data)
     {
-        return Validator::make($data, [
-            'name' => ['required', 'string', 'max:25', 'unique:users', new Username(), new GameAuth()],
+        $rules = [
+            'name' => ['required', 'string', 'max:25', 'unique:users', new Username()],
             'email' => ['required', 'string', 'email', 'max:50', 'unique:users'],
             'password' => ['required', 'confirmed', Password::default()],
-        ]);
+        ];
+
+        // Проверяем имя пользователя через игру, если она установлена
+        if (game()->id() !== 'none') {
+            $rules['name'][] = new GameAuth();
+        }
+
+        return Validator::make($data, $rules);
     }
 
     /**
