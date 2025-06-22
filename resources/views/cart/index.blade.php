@@ -19,6 +19,9 @@
 
     <div class="card">
         <div class="card-body">
+            @if(auth()->guest() && setting('shop.cart_auth'))
+                @include('shop::cart._auth')
+            @endif
             @if(! $cart->isEmpty())
                 <form action="{{ route('shop.cart.update') }}" method="POST">
                     @csrf
@@ -212,15 +215,19 @@
                         <i class="bi bi-arrow-left"></i> {{ trans('shop::messages.cart.back') }}
                     </a>
 
-                    @if(use_site_money())
-                        <button type="button" class="btn btn-primary ms-auto" data-bs-toggle="modal" data-bs-target="#confirmBuyModal">
-                            {{ trans('shop::messages.buy') }}
-                        </button>
+                    @auth
+                        @if(use_site_money())
+                            <button type="button" class="btn btn-primary ms-auto" data-bs-toggle="modal" data-bs-target="#confirmBuyModal">
+                                {{ trans('shop::messages.buy') }}
+                            </button>
+                        @else
+                            <button type="submit" class="btn btn-primary ms-auto">
+                                <i class="bi bi-cart-check"></i> {{ trans('shop::messages.cart.checkout') }}
+                            </button>
+                        @endif
                     @else
-                        <button type="submit" class="btn btn-primary ms-auto">
-                            <i class="bi bi-cart-check"></i> {{ trans('shop::messages.cart.checkout') }}
-                        </button>
-                    @endif
+                        <span class="ms-auto align-self-center text-muted">Войдите, чтобы оплатить</span>
+                    @endauth
                 </div>
             </form>
         </div>
