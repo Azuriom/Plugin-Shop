@@ -30,7 +30,7 @@ class ProfileController extends Controller
             'user' => $user,
             'payments' => $payments,
             'subscriptions' => $subscriptions,
-            'giftCardCode' => $request->query('giftcard'),
+            'giftCardCode' => null, // TODO remove unused variable, kept for compatibility
         ]);
     }
 }

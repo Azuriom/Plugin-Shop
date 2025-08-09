@@ -103,28 +103,4 @@
             </div>
         </div>
     @endif
-
-    @if(use_site_money())
-        <div class="card">
-            <div class="card-body">
-                <h2 class="card-title">{{ trans('shop::messages.giftcards.add') }}</h2>
-
-                <form action="{{ route('shop.giftcards.add') }}" method="POST">
-                    @csrf
-
-                    <div class="mb-3">
-                        <input type="text" class="form-control @error('code') is-invalid @enderror" placeholder="{{ trans('shop::messages.fields.code') }}" id="code" name="code" value="{{ old('code', $giftCardCode) }}">
-
-                        @error('code')
-                        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
-                        @enderror
-                    </div>
-
-                    <button type="submit" class="btn btn-primary">
-                        {{ trans('messages.actions.send') }}
-                    </button>
-                </form>
-            </div>
-        </div>
-    @endif
 @endsection

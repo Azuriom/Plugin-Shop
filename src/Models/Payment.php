@@ -191,8 +191,8 @@ class Payment extends Model
 
     public function createDiscordWebhook(): DiscordWebhook
     {
-        $title = trans('shop::messages.payment.webhook');
-        $embed = $this->getDiscordEmbed($title, '#004de6');
+        $title = trans('shop::messages.payment.webhook', ['id' => $this->id]);
+        $embed = $this->getDiscordEmbed($title, '#004de6', true);
 
         return DiscordWebhook::create()->addEmbed($embed);
     }
@@ -200,25 +200,32 @@ class Payment extends Model
     public function createRefundDiscordWebhook(bool $isChargeback = false): DiscordWebhook
     {
         $title = $isChargeback
-            ? trans('shop::messages.payment.webhook_chargeback')
-            : trans('shop::messages.payment.webhook_refund');
+            ? trans('shop::messages.payment.webhook_chargeback', ['id' => $this->id])
+            : trans('shop::messages.payment.webhook_refund', ['id' => $this->id]);
         $color = $isChargeback ? '#dc3545' : '#ffc107';
-        $embed = $this->getDiscordEmbed($title, $color);
+        $embed = $this->getDiscordEmbed($title, $color, false);
 
         return DiscordWebhook::create()->addEmbed($embed);
     }
 
-    private function getDiscordEmbed(string $title, string $color): Embed
+    private function getDiscordEmbed(string $title, string $color, bool $full): Embed
     {
-        $transactionId = $this->isWithSiteMoney() ? '#'.$this->id : $this->transaction_id;
+        $lines = [
+            trans('shop::mails.payment.total', [
+                'total' => $this->formatPrice(),
+            ]),
+        ];
+
+        if ($this->transaction_id !== null) {
+            $lines[] = trans('shop::mails.payment.transaction', [
+                'transaction' => $this->transaction_id,
+                'gateway' => $this->getTypeName(),
+            ]);
+        }
 
         $embed = Embed::create()
             ->title($title)
-            ->description(trans('shop::messages.payment.webhook_info', [
-                'total' => $this->formatPrice(),
-                'gateway' => $this->getTypeName(),
-                'id' => $transactionId ?? trans('messages.none'),
-            ]))
+            ->description(implode("\n", array_map(fn (string $s) => '- '.$s, $lines)))
             ->author($this->user->name, null, $this->user->getAvatar())
             ->url(route('shop.admin.payments.show', $this))
             ->color($color)
@@ -227,13 +234,23 @@ class Payment extends Model
 
         foreach ($this->items as $item) {
             $name = $item->name;
-            $quantity = $item->quantity > 1 ? "x{$item->quantity} - " : '';
+            $quantity = $item->quantity > 1 ? " (x{$item->quantity})" : '';
 
-            if ($item->buyable?->category !== null) {
-                $name .= ' - '.$item->buyable->category->name;
+            $lines = [
+                trans('shop::messages.payment.price', ['price' => $item->formatPrice()]),
+            ];
+
+            if (! empty($item->variables)) {
+                $lines[] = trans('shop::messages.payment.variables');
+
+                foreach ($item->variables as $key => $value) {
+                    $lines[] = "- **`{{$key}}`** {$value}";
+                }
             }
 
-            $embed->addField($name, $quantity.$item->formatPrice());
+            if ($full) {
+                $embed->addField($name.$quantity, implode("\n", $lines), true);
+            }
         }
 
         return $embed;

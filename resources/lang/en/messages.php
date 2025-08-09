@@ -111,10 +111,12 @@ return [
         'success' => 'Payment completed, you\'ll receive your purchase in-game in less than a minute.',
         'pending' => 'Payment pending, you\'ll receive your purchase in-game once the payment is confirmed.',
 
-        'webhook' => 'New payment on the shop',
-        'webhook_info' => 'Total: :total, ID: :id (:gateway)',
-        'webhook_chargeback' => 'Payment chargeback on the shop',
-        'webhook_refund' => 'Payment refund on the shop',
+        'price' => 'Price: :price',
+        'variables' => 'Variables:',
+
+        'webhook' => 'Shop Payment #:id',
+        'webhook_chargeback' => 'Shop Payment #:id - Chargeback',
+        'webhook_refund' => 'Shop Payment #:id - Refunded',
     ],
 
     'categories' => [

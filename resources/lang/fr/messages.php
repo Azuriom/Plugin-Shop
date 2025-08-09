@@ -111,10 +111,12 @@ return [
         'success' => 'Paiement effectué, vous recevrez votre achat dans le jeu en moins d\'une minute',
         'pending' => 'Paiement en attente, vous recevrez votre achat dans le jeu une fois le paiement confirmé',
 
-        'webhook' => 'Nouveau paiement effectué sur la boutique',
-        'webhook_info' => 'Total : :total, ID : :id (:gateway)',
-        'webhook_chargeback' => 'Litige effectué sur la boutique',
-        'webhook_refund' => 'Remboursement effectué sur la boutique',
+        'price' => 'Prix : :price',
+        'variables' => 'Variables :',
+
+        'webhook' => 'Paiement Boutique #:id',
+        'webhook_chargeback' => 'Paiement Boutique #:id - Litige',
+        'webhook_refund' => 'Paiement Boutique #:id - Remboursé',
     ],
 
     'categories' => [

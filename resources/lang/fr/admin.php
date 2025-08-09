@@ -71,7 +71,6 @@ return [
         'global_limit' => 'Limite d\'utilisations globale',
         'active' => 'Actif',
         'enable' => 'Activer cette carte cadeau',
-        'link' => 'Lien à partager',
         'pending' => 'Un paiement est en cours, le solde peut ne pas être à jour.',
     ],
 
