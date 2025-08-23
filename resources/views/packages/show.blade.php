@@ -50,7 +50,7 @@
                             <label for="price">{{ trans('shop::messages.fields.price') }}</label>
 
                             <div class="mx-3">
-                                <input type="number" min="{{ $package->getPrice() }}" size="5" class="form-control" name="price" id="price" value="{{ $package->price }}">
+                                <input type="number" step="0.01" min="{{ $package->getPrice() }}" size="5" class="form-control" name="price" id="price" value="{{ $package->price }}">
                             </div>
                         @endif
 

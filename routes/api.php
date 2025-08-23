@@ -1,6 +1,7 @@
 <?php
 
 use Azuriom\Plugin\Shop\Controllers\Api\PaymentController;
+use Azuriom\Plugin\Shop\Controllers\Api\ShopController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,4 +15,5 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/azlink', [ShopController::class, 'index'])->middleware('server.token');
 Route::any('/payments/{gateway:type}/notification/{id?}', [PaymentController::class, 'notification'])->name('payments.notification');

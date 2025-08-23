@@ -116,4 +116,9 @@ class Discount extends Model
             return Json::encode(array_map(fn ($val) => (int) $val, $roles));
         });
     }
+
+    public static function getGlobalDiscounts(): array
+    {
+        return once(fn () => self::scopes(['active', 'global'])->get()->all());
+    }
 }

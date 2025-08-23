@@ -9,11 +9,15 @@ use Azuriom\Plugin\Shop\Models\Payment;
 use Azuriom\Plugin\Shop\Models\PaymentItem;
 use Azuriom\Support\Charts;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
 
 class StatisticsController extends Controller
 {
     public function index()
     {
+        $price = Payment::query()->getGrammar()->wrap('price');
+        $quantity = Payment::query()->getGrammar()->wrap('quantity');
+
         $gatewaysPayments = Gateway::all()->map(function (Gateway $gateway) {
             $query = $this->getCompletedPayments()
                 ->where('gateway_type', $gateway->type);
@@ -25,7 +29,10 @@ class StatisticsController extends Controller
             ];
         });
         $packagesCounts = Charts::count($this->getDeliveredPackages(), 'buyable_id');
-        $packagesTotals = Charts::sum($this->getDeliveredPackages(), 'price', 'buyable_id');
+        // TODO remove support for previous Azuriom versions
+        $column = version_compare(\Azuriom\Azuriom::version(), '1.2.5', '>')
+            ? DB::raw($price.'*'.$quantity) : 'price';
+        $packagesTotals = Charts::sum($this->getDeliveredPackages(), $column, 'buyable_id');
 
         $packages = Package::all()->map(fn (Package $package) => $package->forceFill([
             'count' => $packagesCounts->get($package->id, 0),

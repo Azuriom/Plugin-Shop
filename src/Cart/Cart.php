@@ -377,7 +377,7 @@ class Cart implements Arrayable
             $models = $type::findMany($items->pluck('id'))->keyBy('id');
 
             if ($type === Package::class) {
-                $models->load('discounts');
+                $models->load(['category', 'discounts']);
             }
 
             $items->each(function ($item) use ($models) {

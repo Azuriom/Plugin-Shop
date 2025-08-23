@@ -189,17 +189,11 @@ class Package extends Model implements Buyable
 
     public function getPrice(): float
     {
-        static $globalDiscounts = null;
-
-        if ($globalDiscounts === null) {
-            $globalDiscounts = Discount::scopes(['active', 'global'])->get();
-        }
-
         $role = auth()->user()?->role;
 
         $price = $this->discounts
             ->where('is_global', false)
-            ->merge($globalDiscounts)
+            ->merge(Discount::getGlobalDiscounts())
             ->filter(fn (Discount $discount) => $discount->isActive())
             ->filter(fn (Discount $discount) => $discount->activeForRole($role))
             ->reduce(function ($result, Discount $discount) {
@@ -265,20 +259,10 @@ class Package extends Model implements Buyable
      */
     public function countUserPurchases(?DateTime $start = null, bool $noExpired = false): int
     {
-        if (auth()->guest()) {
+        $purchases = ShopUser::currentUserPurchases();
+
+        if ($purchases->isEmpty()) {
             return 0;
-        }
-
-        // Cache all purchases to prevent duplicated queries
-        // Filter after if needed based on the parameters
-        static $purchases = null;
-
-        if ($purchases === null) {
-            $purchases = ShopUser::ofUser(auth()->user())
-                ->items()
-                ->where('buyable_type', 'shop.packages')
-                ->whereHas('payment', fn (Builder $q) => $q->scopes('completed'))
-                ->get();
         }
 
         return $purchases
@@ -298,22 +282,27 @@ class Package extends Model implements Buyable
      */
     public function countTotalPurchases(?DateTime $start = null, bool $noExpired = false): int
     {
-        static $purchasesByPackage = [];
+        $cached = once(fn () => collect([]));
+        $cacheKey = $start?->format('Y-m-d').$noExpired;
 
-        $cacheKey = $this->id.$start?->format('Y-m-d').$noExpired;
+        if ($cached->has($cacheKey)) {
+            return $cached->get($cacheKey);
+        }
 
-        return Arr::get($purchasesByPackage, $cacheKey, function () use (&$purchasesByPackage, $start, $noExpired) {
-            return $purchasesByPackage[$this->id] = PaymentItem::where('buyable_id', $this->id)
-                ->where('buyable_type', 'shop.packages')
-                ->when($noExpired, fn (Builder $q) => $q->scopes('excludeExpired'))
-                ->whereHas('payment', function (Builder $query) use ($start) {
-                    $query->where('status', 'completed')
-                        ->when($start, function () use ($query, $start) {
-                            $query->where('created_at', '>', $start);
-                        });
-                })
-                ->sum('quantity');
-        });
+        $totalPurchases = PaymentItem::where('buyable_id', $this->id)
+            ->where('buyable_type', 'shop.packages')
+            ->when($noExpired, fn (Builder $q) => $q->scopes('excludeExpired'))
+            ->whereHas('payment', function (Builder $query) use ($start) {
+                $query->where('status', 'completed')
+                    ->when($start, function () use ($query, $start) {
+                        $query->where('created_at', '>', $start);
+                    });
+            })
+            ->sum('quantity');
+
+        $cached->put($cacheKey, $totalPurchases);
+
+        return $totalPurchases;
     }
 
     public function getOriginalPrice(): float
