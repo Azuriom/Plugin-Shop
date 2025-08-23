@@ -30,6 +30,16 @@
                 </div>
 
                 <div class="mb-3 form-check form-switch">
+                    <input type="checkbox" class="form-check-input" id="cartAuthSwitch" name="cart_auth" @checked($cartAuth)>
+                    <label class="form-check-label" for="cartAuthSwitch">Разрешить регистрацию в корзине</label>
+                </div>
+
+                <div class="mb-3 form-check form-switch">
+                    <input type="checkbox" class="form-check-input" id="emailVerificationSwitch" name="email_verification" @checked($emailVerification)>
+                    <label class="form-check-label" for="emailVerificationSwitch">Требовать подтверждение почты</label>
+                </div>
+
+                <div class="mb-3 form-check form-switch">
                     <input type="checkbox" class="form-check-input" id="homeSwitch" name="enable_home" data-bs-toggle="collapse" data-bs-target="#homeMessage" @checked($enableHome)>
                     <label class="form-check-label" for="homeSwitch">{{ trans('shop::admin.settings.enable_home') }}</label>
                 </div>

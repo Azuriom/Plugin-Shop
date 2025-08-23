@@ -40,6 +40,15 @@ class PackageController extends Controller
      */
     public function buy(Request $request, Package $package)
     {
+        // Если гостевая корзина отключена, требуем авторизацию
+        if (!setting('shop.cart_auth', false) && auth()->guest()) {
+            return redirect()->route('login');
+        }
+
+        if (auth()->guest()) {
+            $request->session()->put('url.intended', route('shop.cart.index'));
+        }
+
         $this->validate($request, [
             'quantity' => 'nullable|integer',
             'price' => 'sometimes|nullable|numeric|min:'.$package->price,
@@ -53,11 +62,11 @@ class PackageController extends Controller
         $user = $request->user();
         $cart = Cart::fromSession($request->session());
 
-        if ($package->getMaxQuantity() < 1 || $package->category->hasReachLimit($user)) {
+        if ($package->getMaxQuantity() < 1 || ($user !== null && $package->category->hasReachLimit($user))) {
             return redirect()->back()->with('error', trans('shop::messages.packages.limit'));
         }
 
-        if (! $package->hasBoughtRequirements() || ! $package->hasRequiredRole($user->role)) {
+        if ($user !== null && (! $package->hasBoughtRequirements() || ! $package->hasRequiredRole($user->role))) {
             return redirect()->back()->with('error', trans('shop::messages.packages.requirements'));
         }
 

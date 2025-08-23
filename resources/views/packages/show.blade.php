@@ -68,9 +68,29 @@
                     </form>
                 @endif
             @else
-                <div class="alert alert-info" role="alert">
-                    {{ trans('shop::messages.cart.guest') }}
-                </div>
+                <form action="{{ route('shop.packages.buy', $package) }}" method="POST" class="row row-cols-lg-auto g-0 gy-2 align-items-center">
+                    @csrf
+
+                    @if($package->custom_price)
+                        <label for="price">{{ trans('shop::messages.fields.price') }}</label>
+
+                        <div class="mx-3">
+                            <input type="number" min="{{ $package->getPrice() }}" size="5" class="form-control" name="price" id="price" value="{{ $package->price }}">
+                        </div>
+                    @endif
+
+                    @if($package->has_quantity)
+                        <label for="quantity">{{ trans('shop::messages.fields.quantity') }}</label>
+
+                        <div class="mx-3">
+                            <input type="number" min="1" max="{{ $package->getMaxQuantity() }}" size="5" class="form-control" name="quantity" id="quantity" value="1" required>
+                        </div>
+                    @endif
+
+                    <button type="submit" class="btn btn-primary">
+                        {{ trans('shop::messages.buy') }}
+                    </button>
+                </form>
             @endauth
         </div>
     </div>
