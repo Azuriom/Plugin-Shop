@@ -8,7 +8,6 @@ use Azuriom\Plugin\Shop\Payment\PaymentMethod;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Response;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
@@ -52,7 +51,7 @@ class PaysafecardMethod extends PaymentMethod
             ],
             'notification_url' => str_replace('%id%', '{payment_id}', $notificationUrl),
             'customer' => [
-                'id' => Auth::id(),
+                'id' => shop_user()?->id(),
             ],
         ]);
 

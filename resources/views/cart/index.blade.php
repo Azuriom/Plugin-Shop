@@ -217,6 +217,11 @@
                             {{ trans('shop::messages.buy') }}
                         </button>
                     @else
+                        @if($emailRequired)
+                            <input type="email" class="form-group @error('email') is-invalid @enderror" id="email" name="email"
+                                   value="{{ old('email') }}" placeholder="{{ trans('auth.email') }}" required>
+                        @endif
+
                         <button type="submit" class="btn btn-primary ms-auto">
                             <i class="bi bi-cart-check"></i> {{ trans('shop::messages.cart.checkout') }}
                         </button>

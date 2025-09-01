@@ -1,5 +1,6 @@
 <?php
 
+use Azuriom\Models\User;
 use Azuriom\Plugin\Shop\Cart\Cart;
 use Azuriom\Plugin\Shop\Payment\Currencies;
 use Azuriom\Plugin\Shop\Payment\PaymentManager;
@@ -86,5 +87,30 @@ if (! function_exists('shop_cart')) {
     function shop_cart(): Cart
     {
         return Cart::fromSession(Request::session());
+    }
+}
+
+if (! function_exists('shop_user')) {
+    /**
+     * Get the current user logged in the shop.
+     * This might be a "guest" user and should only be used for non-critical actions.
+     */
+    function shop_user(): ?User
+    {
+        if (auth()->check()) {
+            return auth()->user();
+        }
+
+        if (use_site_money() || ! setting('shop.guest_purchases', false)) {
+            return null;
+        }
+
+        $userId = session()->get('shop.user');
+
+        if ($userId === null) {
+            return null;
+        }
+
+        return once(fn () => User::find($userId));
     }
 }

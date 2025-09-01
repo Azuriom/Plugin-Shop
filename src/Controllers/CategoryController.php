@@ -6,6 +6,7 @@ use Azuriom\Http\Controllers\Controller;
 use Azuriom\Plugin\Shop\Models\Category;
 use Azuriom\Plugin\Shop\Models\Payment;
 use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\HtmlString;
@@ -36,6 +37,27 @@ class CategoryController extends Controller
             'recentPayments' => $this->getRecentPayments(),
             'displaySidebarAmount' => setting('shop.display_amount', true),
             'welcome' => new HtmlString($message),
+        ]);
+    }
+
+    public function loginForm(Request $request)
+    {
+        if (use_site_money() || ! setting('shop.guest_purchases', false)) {
+            return redirect()->route('login');
+        }
+
+        if ($request->session()->previousUrl() !== $request->url()) {
+            $request->session()->put('shop.url.intended', $request->session()->previousUrl());
+        }
+
+        return view('shop::user.login', [
+            'category' => null,
+            'categories' => $this->getCategories(),
+            'displayHome' => setting('shop.home.enabled', true),
+            'goal' => $this->getMonthGoal(),
+            'topCustomer' => $this->getTopCustomer(),
+            'recentPayments' => $this->getRecentPayments(),
+            'displaySidebarAmount' => setting('shop.display_amount', true),
         ]);
     }
 

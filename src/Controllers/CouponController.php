@@ -21,7 +21,7 @@ class CouponController extends Controller
 
         $coupon = Coupon::active()->firstWhere('code', $validated['coupon']);
 
-        if ($coupon === null || $coupon->hasReachLimit($request->user())) {
+        if ($coupon === null || $coupon->hasReachLimit(shop_user())) {
             throw ValidationException::withMessages([
                 'coupon' => trans('shop::messages.coupons.error'),
             ]);

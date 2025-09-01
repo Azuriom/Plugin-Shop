@@ -48,7 +48,7 @@ class SkrillMethod extends PaymentMethod
 
     public function startPayment(Cart $cart, float $amount, string $currency)
     {
-        $user = auth()->user();
+        $user = shop_user();
         $payment = $this->createPayment($cart, $amount, $currency);
         $locale = strtoupper(Str::before(app()->getLocale(), '_'));
 
@@ -62,7 +62,7 @@ class SkrillMethod extends PaymentMethod
             'language' => in_array($locale, self::LANGUAGES, true) ? $locale : 'EN',
             'prepare_only' => 1,
             'website_id' => $this->gateway->data['website_id'],
-            'merchant_client_id' => $user->id,
+            'merchant_client_id' => $user?->id,
             'merchant_client_registration_date' => $user->created_at->toDateString(),
             'amount' => $amount,
             'currency' => $currency,

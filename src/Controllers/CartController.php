@@ -29,6 +29,7 @@ class CartController extends Controller
         return view('shop::cart.index', [
             'cart' => Cart::fromSession($request->session()),
             'terms' => $terms,
+            'emailRequired' => auth()->check() && auth()->user()->email === null,
         ]);
     }
 

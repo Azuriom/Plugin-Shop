@@ -4,7 +4,6 @@ namespace Azuriom\Plugin\Shop\Models;
 
 use Azuriom\Azuriom;
 use Azuriom\Models\Traits\HasTablePrefix;
-use Azuriom\Models\Traits\HasUser;
 use Azuriom\Models\Traits\Searchable;
 use Azuriom\Models\User;
 use Azuriom\Plugin\Shop\Events\PaymentPaid;
@@ -43,7 +42,6 @@ use Illuminate\Support\Facades\Cache;
 class Payment extends Model
 {
     use HasTablePrefix;
-    use HasUser;
     use Searchable;
 
     /**
@@ -77,6 +75,15 @@ class Payment extends Model
     protected array $searchable = [
         'status', 'gateway_type', 'transaction_id', 'subscription_id', 'user.*',
     ];
+
+    protected static function booted(): void
+    {
+        static::creating(function (self $model) {
+            if ($model->user_id === null) {
+                $model->user_id = shop_user()?->id;
+            }
+        });
+    }
 
     /**
      * Get the category of this package.
@@ -300,7 +307,7 @@ class Payment extends Model
 
     public function scopeNotPending(Builder $query): void
     {
-        $query->where('status', '!=', 'pending');
+        $query->whereNot('status', 'pending');
     }
 
     public function scopeWithSiteMoney(Builder $query): void
@@ -310,7 +317,7 @@ class Payment extends Model
 
     public function scopeWithRealMoney(Builder $query): void
     {
-        $query->where('gateway_type', '!=', 'azuriom');
+        $query->whereNot('gateway_type', 'azuriom');
     }
 
     public static function purgePendingPayments(): void

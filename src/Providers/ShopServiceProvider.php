@@ -9,6 +9,7 @@ use Azuriom\Models\Permission;
 use Azuriom\Models\User;
 use Azuriom\Plugin\Shop\Commands\PaymentExpireCommand;
 use Azuriom\Plugin\Shop\Commands\SubscriptionRenewCommand;
+use Azuriom\Plugin\Shop\Middleware\ShopAuthentification;
 use Azuriom\Plugin\Shop\Models\Gateway;
 use Azuriom\Plugin\Shop\Models\Giftcard;
 use Azuriom\Plugin\Shop\Models\Offer;
@@ -17,6 +18,7 @@ use Azuriom\Plugin\Shop\Observers\UserObserver;
 use Azuriom\Plugin\Shop\Payment\PaymentManager;
 use Azuriom\Plugin\Shop\View\Composers\ShopAdminDashboardComposer;
 use Azuriom\Plugin\Shop\View\Composers\ShopAdminUserComposer;
+use Azuriom\Plugin\Shop\View\Composers\ShopViewComposer;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\View;
@@ -24,10 +26,19 @@ use Illuminate\Support\Facades\View;
 class ShopServiceProvider extends BasePluginServiceProvider
 {
     /**
+     * The plugin's route middleware.
+     */
+    protected array $routeMiddleware = [
+        'shop.auth' => ShopAuthentification::class,
+    ];
+
+    /**
      * Register any plugin services.
      */
     public function register(): void
     {
+        $this->registerMiddleware();
+
         require_once __DIR__.'/../../vendor/autoload.php';
 
         $this->app->singleton(PaymentManager::class);
@@ -65,6 +76,7 @@ class ShopServiceProvider extends BasePluginServiceProvider
         ]);
 
         View::composer('admin.dashboard', ShopAdminDashboardComposer::class);
+        View::composer('*', ShopViewComposer::class);
 
         if (class_exists(AdminUserEditComposer::class)) {
             View::composer('admin.users.edit', ShopAdminUserComposer::class);

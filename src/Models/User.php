@@ -22,11 +22,13 @@ class User extends BaseUser
 
     public static function currentUserPurchases(): Collection
     {
-        if (auth()->guest()) {
+        $user = shop_user();
+
+        if ($user === null) {
             return collect();
         }
 
-        return once(fn () => ShopUser::ofUser(auth()->user())
+        return once(fn () => ShopUser::ofUser($user)
             ->items()
             ->where('buyable_type', 'shop.packages')
             ->whereHas('payment', fn (Builder $q) => $q->scopes('completed'))
