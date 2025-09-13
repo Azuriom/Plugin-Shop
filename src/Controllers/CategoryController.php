@@ -64,7 +64,7 @@ class CategoryController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Category $category)
+    public function show(Category $category, Request $request)
     {
         $categories = $this->getCategories();
 
@@ -73,7 +73,15 @@ class CategoryController extends Controller
         }]);
 
         if ($category->packages->isEmpty() && ! $category->categories->isEmpty()) {
-            return to_route('shop.categories.show', $category->categories->first());
+            $redirect = to_route('shop.categories.show', $category->categories->first());
+            
+            foreach (['success', 'error', 'warning', 'info'] as $type) {
+                if ($request->session()->has($type)) {
+                    $redirect = $redirect->with($type, $request->session()->get($type));
+                }
+            }
+            
+            return $redirect;
         }
 
         return view('shop::categories.show', [
