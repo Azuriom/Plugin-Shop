@@ -64,7 +64,7 @@ class CategoryController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Category $category, Request $request)
+    public function show(Request $request, Category $category)
     {
         $categories = $this->getCategories();
 
@@ -73,7 +73,8 @@ class CategoryController extends Controller
         }]);
 
         if ($category->packages->isEmpty() && ! $category->categories->isEmpty()) {
-            $request->session()->reflash();
+            $request->session()->reflash(); // Keep status messages after redirection
+
             return to_route('shop.categories.show', $category->categories->first());
         }
 
