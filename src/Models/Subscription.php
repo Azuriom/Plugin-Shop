@@ -191,7 +191,7 @@ class Subscription extends Model
 
     public function scopeNotPending(Builder $query): void
     {
-        $query->where('status', '!=', 'pending');
+        $query->whereNot('status', 'pending');
     }
 
     public function scopeWaitingForRenewal(Builder $query): void

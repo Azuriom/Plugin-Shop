@@ -238,6 +238,8 @@ return [
         'recent_payments' => 'Recent payments limit to display in sidebar (set to 0 to disable)',
         'display_amount' => 'Display amount spend in recent payments and top customer',
         'top_customer' => 'Display top monthly customer in sidebar',
+        'guest_purchases' => 'Allow users to make a purchase without being logged in',
+        'guest_purchases_info' => 'When enabled, users can make purchases by logging in with their username. Not compatible with site currency.',
 
         'terms_required' => 'Require users to accept terms of service before purchase',
         'terms' => 'Terms of service',

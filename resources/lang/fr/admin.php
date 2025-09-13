@@ -238,6 +238,8 @@ return [
         'recent_payments' => 'Limite de paiements récents à afficher dans la barre latérale',
         'display_amount' => 'Afficher le montant dans les paiements récents et meilleur acheteur',
         'top_customer' => 'Afficher le meilleur acheteur du mois dans la barre latérale',
+        'guest_purchases' => 'Autoriser les utilisateurs à faire des achats sans se connecter.',
+        'guest_purchases_info' => 'Les utilisateurs peuvent alors faire des achats en indiquant leur nom d\'utilisateur. N\'est pas compatible avec l\'argent du site.',
 
         'terms_required' => 'Demander aux utilisateurs d\'accepter les conditions avant un achat',
         'terms' => 'Conditions générales de vente',

@@ -23,10 +23,23 @@
 
                 <div class="mb-3">
                     <div class="form-check form-switch">
-                        <input type="checkbox" class="form-check-input" id="useSiteMoneyCheckbox" name="use_site_money" aria-describedby="moneyLabel" @checked(use_site_money())>
+                        <input type="checkbox" class="form-check-input" id="useSiteMoneyCheckbox" name="use_site_money"
+                               data-bs-toggle="collapse" data-bs-target="#siteMoneyCollapse" aria-describedby="moneyLabel" @checked(use_site_money())>
                         <label class="form-check-label" for="useSiteMoneyCheckbox">{{ trans('shop::admin.settings.use_site_money') }}</label>
                     </div>
                     <div id="moneyLabel" class="form-text">{{ trans('shop::admin.settings.use_site_money_info') }}</div>
+                </div>
+
+                <div id="siteMoneyCollapse" class="{{ use_site_money() ? 'collapse' : 'show' }}">
+                    @if($supportsGuestPurchases)
+                        <div class="mb-3">
+                            <div class="form-check form-switch">
+                                <input type="checkbox" class="form-check-input" id="guestPurchasesCheckbox" name="guest_purchases" aria-describedby="guestLabel" @checked($guestPurchases)>
+                                <label class="form-check-label" for="guestPurchasesCheckbox">{{ trans('shop::admin.settings.guest_purchases') }}</label>
+                            </div>
+                            <div id="guestLabel" class="form-text">{{ trans('shop::admin.settings.guest_purchases_info') }}</div>
+                        </div>
+                    @endif
                 </div>
 
                 <div class="mb-3 form-check form-switch">

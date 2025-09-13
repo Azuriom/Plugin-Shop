@@ -33,6 +33,8 @@ class SettingController extends Controller
             'servers' => Server::executable()->get()->pluck('name', 'id'),
             'enableHome' => setting('shop.home.enabled', true),
             'homeMessage' => setting('shop.home', ''),
+            'guestPurchases' => setting('shop.guest_purchases', false),
+            'supportsGuestPurchases' => game()->userPrimaryAttributeName() === trans('auth.name'),
             'termsRequired' => old('terms_required', setting('shop.required_terms') !== null),
         ]);
     }
@@ -58,6 +60,7 @@ class SettingController extends Controller
 
         Setting::updateSettings([
             'shop.use_site_money' => $request->has('use_site_money'),
+            'shop.guest_purchases' => $request->has('guest_purchases'),
             'shop.month_goal' => $request->input('goal'),
             'shop.recent_payments' => $request->input('recent_payments'),
             'shop.top_customer' => $request->filled('top_customer'),

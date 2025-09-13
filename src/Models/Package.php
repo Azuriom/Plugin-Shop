@@ -182,14 +182,14 @@ class Package extends Model implements Buyable
         }
 
         return $this->subscriptions()
-            ->whereBelongsTo($user ?? auth()->user())
+            ->whereBelongsTo($user ?? shop_user())
             ->scopes('active')
             ->exists();
     }
 
     public function getPrice(): float
     {
-        $role = auth()->user()?->role;
+        $role = shop_user()?->role;
 
         $price = $this->discounts
             ->where('is_global', false)

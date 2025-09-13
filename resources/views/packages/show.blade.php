@@ -15,9 +15,9 @@
                 {{ shop_format_amount($package->getPrice()) }}
             </span>
 
-            @auth
+            @if($shopUser !== null)
                 @if($package->isSubscription())
-                    @if($package->isUserSubscribed())
+                    @if($package->isUserSubscribed($shopUser))
                         <a href="{{ route('shop.profile') }}" class="btn btn-primary">
                             {{ trans('shop::messages.actions.manage') }}
                         </a>
@@ -35,7 +35,7 @@
                         @csrf
 
                         <button type="submit" class="btn btn-primary">
-                            {{ trans('messages.actions.remove') }}
+                            <i class="bi bi-cart-x"></i> {{ trans('messages.actions.remove') }}
                         </button>
                     </form>
                 @elseif($package->getMaxQuantity() < 1)
@@ -63,15 +63,15 @@
                         @endif
 
                         <button type="submit" class="btn btn-primary">
-                            {{ trans('shop::messages.buy') }}
+                            <i class="bi bi-cart-plus"></i> {{ trans('shop::messages.buy') }}
                         </button>
                     </form>
                 @endif
             @else
-                <div class="alert alert-info" role="alert">
-                    {{ trans('shop::messages.cart.guest') }}
-                </div>
-            @endauth
+                <a href="{{ route('shop.login') }}" class="btn btn-primary">
+                    <i class="bi bi-cart-plus"></i> {{ trans('shop::messages.buy') }}
+                </a>
+            @endif
         </div>
     </div>
 </div>

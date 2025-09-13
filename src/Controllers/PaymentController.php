@@ -12,6 +12,12 @@ class PaymentController extends Controller
 {
     public function payment(Request $request)
     {
+        if ($request->user() !== null && $request->user()->email === null && $request->filled('email')) {
+            $this->validate($request, ['email' => 'required|email|max:50|unique:users']);
+
+            $request->user()->update(['email' => $request->input('email')]);
+        }
+
         $cart = Cart::fromSession($request->session());
 
         // If the cart isn't empty and the total is 0, just complete

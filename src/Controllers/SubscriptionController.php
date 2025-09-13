@@ -15,7 +15,7 @@ class SubscriptionController extends Controller
     {
         abort_if(! $package->isSubscription(), 403);
 
-        $user = $request->user();
+        $user = shop_user();
 
         if ($package->isUserSubscribed($user)) {
             return redirect()->route('shop.profile');
@@ -50,18 +50,16 @@ class SubscriptionController extends Controller
         ]);
     }
 
-    public function subscribe(Request $request, Package $package, Gateway $gateway)
+    public function subscribe(Package $package, Gateway $gateway)
     {
         abort_if(! $gateway->is_enabled || ! $package->isSubscription(), 403);
 
-        $user = $request->user();
-
-        return $gateway->paymentMethod()->startSubscription($user, $package);
+        return $gateway->paymentMethod()->startSubscription(shop_user(), $package);
     }
 
-    public function cancel(Request $request, Subscription $subscription)
+    public function cancel(Subscription $subscription)
     {
-        abort_if(! $subscription->user->is($request->user()), 403);
+        abort_if(! $subscription->user->is(shop_user()), 403);
 
         $subscription->cancel();
 

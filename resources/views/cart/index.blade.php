@@ -80,7 +80,7 @@
                 <div class="col-md-4">
                     <h5>{{ trans('shop::messages.coupons.add') }}</h5>
 
-                    <form action="{{ route('shop.cart.coupons.add') }}" method="POST" >
+                    <form action="{{ route('shop.cart.coupons.add') }}" method="POST">
                         @csrf
 
                         <div class="input-group mb-3 @error('coupon') has-validation @enderror">
@@ -142,7 +142,7 @@
                 <div class="col-md-4">
                     <h5>{{ trans('shop::messages.giftcards.add') }}</h5>
 
-                    <form action="{{ route('shop.cart.giftcards.add') }}" method="POST" >
+                    <form action="{{ route('shop.cart.giftcards.add') }}" method="POST">
                         @csrf
 
                         <div class="input-group mb-3 @error('giftcard') has-validation @enderror">
@@ -217,6 +217,11 @@
                             {{ trans('shop::messages.buy') }}
                         </button>
                     @else
+                        @if($emailRequired)
+                            <input type="email" class="form-group @error('email') is-invalid @enderror" id="email" name="email"
+                                   value="{{ old('email') }}" placeholder="{{ trans('auth.email') }}" required>
+                        @endif
+
                         <button type="submit" class="btn btn-primary ms-auto">
                             <i class="bi bi-cart-check"></i> {{ trans('shop::messages.cart.checkout') }}
                         </button>

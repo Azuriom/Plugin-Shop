@@ -1,4 +1,4 @@
-<div class="list-group mb-3">
+<div class="list-group mb-4">
     @if($displayHome)
         <a href="{{ route('shop.home') }}" class="list-group-item @if($category === null) active @endif">
             {{ trans('messages.home') }}
@@ -24,27 +24,52 @@
     @endforeach
 </div>
 
-@auth
+@if($shopUser !== null)
     <div class="d-grid gap-2 mb-4">
-        @if(use_site_money())
-            <p class="text-center mb-0">
-                {{ trans('shop::messages.profile.money', ['balance' => format_money(auth()->user()->money)]) }}
-            </p>
+        <div class="d-flex justify-content-center mb-3">
+            <div class="flex-shrink-0 d-flex align-items-center">
+                <img src="{{ $shopUser->getAvatar(48) }}" class="me-3 rounded" alt="{{ $shopUser->name }}" width="48">
+            </div>
+            <div class="align-self-center">
+                <h3 class="mb-0">{{ $shopUser->name }}</h3>
+                @if(use_site_money())
+                    <p class="mb-0">
+                        {{ trans('shop::messages.profile.money', ['balance' => format_money($shopUser->money)]) }}
+                    </p>
+                @endif
+            </div>
+        </div>
 
-            <a href="{{ route('shop.offers.select') }}" class="btn btn-primary btn-block">
+        @if(use_site_money())
+            <a href="{{ route('shop.offers.select') }}" class="btn btn-primary">
                 <i class="bi bi-credit-card"></i> {{ trans('shop::messages.cart.credit') }}
             </a>
         @endif
 
-        <a href="{{ route('shop.cart.index') }}" class="btn btn-primary btn-block">
+        <a href="{{ route('shop.cart.index') }}" class="btn btn-primary">
             <i class="bi bi-cart"></i> {{ trans('shop::messages.cart.title') }}
         </a>
 
-        <a href="{{ route('shop.profile') }}" class="btn btn-primary btn-block">
-            <i class="bi bi-cash-coin"></i> {{ trans('shop::messages.profile.payments') }}
-        </a>
+        @if($userHasPayments)
+            <a href="{{ route('shop.profile') }}" class="btn btn-primary">
+                <i class="bi bi-cash-coin"></i> {{ trans('shop::messages.profile.payments') }}
+            </a>
+        @endif
+
+        @guest
+            <form action="{{ route('shop.logout') }}" method="POST" class="text-center">
+                @csrf
+                <button type="submit" class="btn btn-secondary w-100">
+                    <i class="bi bi-box-arrow-right"></i> {{ trans('auth.logout') }}
+                </button>
+            </form>
+        @endguest
     </div>
-@endauth
+@else
+    <a href="{{ route('shop.login') }}" class="btn btn-primary d-block mb-4">
+        <i class="bi bi-box-arrow-in-right"></i> {{ trans('auth.login') }}
+    </a>
+@endif
 
 @if($goal >= 0)
     <div class="card mb-4">

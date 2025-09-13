@@ -50,7 +50,7 @@ class PackageController extends Controller
             return app(SubscriptionController::class)->selectGateway($request, $package);
         }
 
-        $user = $request->user();
+        $user = shop_user();
         $cart = Cart::fromSession($request->session());
 
         if ($package->getMaxQuantity() < 1 || $package->category->hasReachLimit($user)) {
