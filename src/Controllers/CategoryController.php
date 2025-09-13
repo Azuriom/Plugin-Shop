@@ -73,15 +73,8 @@ class CategoryController extends Controller
         }]);
 
         if ($category->packages->isEmpty() && ! $category->categories->isEmpty()) {
-            $redirect = to_route('shop.categories.show', $category->categories->first());
-            
-            foreach (['success', 'error', 'warning', 'info'] as $type) {
-                if ($request->session()->has($type)) {
-                    $redirect = $redirect->with($type, $request->session()->get($type));
-                }
-            }
-            
-            return $redirect;
+            $request->session()->reflash();
+            return to_route('shop.categories.show', $category->categories->first());
         }
 
         return view('shop::categories.show', [
