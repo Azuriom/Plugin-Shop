@@ -73,6 +73,7 @@ class StripeMethod extends PaymentMethod
             'cancel_url' => route('shop.cart.index'),
             'client_reference_id' => $payment->id,
             'discounts' => $coupon ? [['coupon' => $coupon->id]] : [],
+            'invoice_creation' => ['enabled' => true],
         ]);
 
         return redirect()->away($session->url);
