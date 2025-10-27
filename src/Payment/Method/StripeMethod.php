@@ -73,7 +73,7 @@ class StripeMethod extends PaymentMethod
             'cancel_url' => route('shop.cart.index'),
             'client_reference_id' => $payment->id,
             'discounts' => $coupon ? [['coupon' => $coupon->id]] : [],
-            'invoice_creation' => ['enabled' => true],
+            'invoice_creation' => ['enabled' => $this->gateway->data['invoice-creation-enabled'] ?? true],
         ]);
 
         return redirect()->away($session->url);
@@ -266,6 +266,7 @@ class StripeMethod extends PaymentMethod
             'secret-key' => ['required', 'string'],
             'public-key' => ['required', 'string'],
             'endpoint-secret' => ['nullable', 'string'],
+            'invoice-creation-enabled' => ['nullable', 'boolean'],
         ];
     }
 

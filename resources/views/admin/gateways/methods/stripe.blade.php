@@ -29,6 +29,11 @@
     @enderror
 </div>
 
+<div class="mb-3 form-check form-switch">
+    <input type="checkbox" class="form-check-input" id="invoiceCreationSwitch" name="invoice-creation-enabled" @checked(old('invoice-creation-enabled', $gateway->data['invoice-creation-enabled'] ?? true))>
+    <label class="form-check-label" for="invoiceCreationSwitch">{{ trans('shop::admin.gateways.invoice-creation-enabled') }}</label>
+</div>
+
 <div class="alert alert-info" role="alert">
     <i class="bi bi-info-circle"></i> @lang('shop::admin.gateways.stripe_info', [
         'url' => route('shop.payments.notification', 'stripe'),
