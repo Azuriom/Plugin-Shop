@@ -185,6 +185,8 @@ return [
         'skrill_info' => 'The website ID and the Secret Word can be found in the Skrill dashboard under "Developer Settings".',
         'mercadopago' => 'The Mercado Pago credentials must be for the <strong>Checkout Pro</strong> integration.',
 
+        'stripe_invoice' => 'Enable automatic invoice creation on Stripe',
+
         'enable' => 'Enable the gateway',
     ],
 
