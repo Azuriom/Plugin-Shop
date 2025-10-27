@@ -185,8 +185,7 @@ return [
         'skrill_info' => 'L\'ID du site et le mot secret sont disponibles sur le tableau de bord Skrill, dans l\'onglet "Developer Settings".',
         'mercadopago' => 'Les identifiants Mercado Pago doivent être pour l\'intégration <strong>Checkout Pro</strong>.',
 
-        'invoice-creation-enabled' => 'Activer la création de factures',
-        'invoice-creation-info' => 'Désactivez cette option si vous ne souhaitez pas que Stripe crée automatiquement des factures pour les paiements.',
+        'stripe_invoice' => 'Activer la création automatique de facture sur Stripe',
 
         'enable' => 'Activer ce moyen de paiement',
     ],
