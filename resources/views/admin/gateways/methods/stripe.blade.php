@@ -30,7 +30,7 @@
 </div>
 
 <div class="mb-3 form-check form-switch">
-    <input type="checkbox" class="form-check-input" id="invoiceCreationSwitch" name="invoice" @checked(old('invoice', $gateway->data['invoice'] ?? false))>
+    <input type="checkbox" class="form-check-input" id="invoiceCreationSwitch" name="invoice" value="1" @checked(old('invoice', $gateway->data['invoice'] ?? false))>
     <label class="form-check-label" for="invoiceCreationSwitch">{{ trans('shop::admin.gateways.stripe_invoice') }}</label>
 </div>
 
