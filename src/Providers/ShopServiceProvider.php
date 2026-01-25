@@ -76,7 +76,7 @@ class ShopServiceProvider extends BasePluginServiceProvider
         ]);
 
         View::composer('admin.dashboard', ShopAdminDashboardComposer::class);
-        View::composer('*', ShopViewComposer::class);
+        View::composer('shop::*', ShopViewComposer::class);
 
         if (class_exists(AdminUserEditComposer::class)) {
             View::composer('admin.users.edit', ShopAdminUserComposer::class);

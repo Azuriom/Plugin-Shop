@@ -52,7 +52,8 @@ class SubscriptionController extends Controller
 
     public function subscribe(Package $package, Gateway $gateway)
     {
-        abort_if(! $gateway->is_enabled || ! $package->isSubscription(), 403);
+        abort_if(! $package->is_enabled || ! $gateway->is_enabled, 404);
+        abort_if(! $package->isSubscription(), 400);
 
         return $gateway->paymentMethod()->startSubscription(shop_user(), $package);
     }

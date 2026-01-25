@@ -233,7 +233,7 @@ return [
         'enable_home' => 'Enable the shop’s home page',
         'home_message' => 'Home message',
         'use_site_money' => 'Enable purchases with the site currency.',
-        'use_site_money_info' => 'When enabled, the packages in the shop can only be purchased with website money. In order for users to credit their account, you can set up offers in the shop.',
+        'use_site_money_info' => 'When enabled, the packages in the shop can only be purchased with website money. In order for users to credit their account, you can set up offers in the shop. Not compatible with guest purchases.',
         'webhook' => 'Discord Webhook URL',
         'webhook_info' => 'When an user make a payment, it will create a notification on this webhook. Leave empty to disable.',
         'commands' => 'Global commands',
@@ -241,7 +241,7 @@ return [
         'display_amount' => 'Display amount spend in recent payments and top customer',
         'top_customer' => 'Display top monthly customer in sidebar',
         'guest_purchases' => 'Allow users to make a purchase without being logged in',
-        'guest_purchases_info' => 'When enabled, users can make purchases by logging in with their username. Not compatible with site currency.',
+        'guest_purchases_info' => 'When enabled, users can make guest purchases by logging in with their username.',
 
         'terms_required' => 'Require users to accept terms of service before purchase',
         'terms' => 'Terms of service',

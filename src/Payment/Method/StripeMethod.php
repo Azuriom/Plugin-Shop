@@ -111,6 +111,9 @@ class StripeMethod extends PaymentMethod
             'success_url' => str_replace('%id%', '{CHECKOUT_SESSION_ID}', $successUrl),
             'cancel_url' => route('shop.categories.show', $package->category),
             'metadata' => ['user' => $user->id, 'package' => $package->id],
+            'invoice_creation' => [
+                'enabled' => $this->gateway->data['invoice'] ?? false,
+            ],
         ]);
 
         return redirect()->away($session->url);
@@ -147,7 +150,7 @@ class StripeMethod extends PaymentMethod
         if ($event->type === 'invoice.paid') {
             /** @var Invoice $invoice */
             $invoice = $event->data->object;
-            $subscriptionId = $invoice->subscription;
+            $subscriptionId = $invoice->subscription ?? null;
 
             if ($subscriptionId === null) {
                 return response()->json(['status' => 'no_subscription'], 400);

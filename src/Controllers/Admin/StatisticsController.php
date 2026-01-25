@@ -37,7 +37,7 @@ class StatisticsController extends Controller
         $packages = Package::all()->map(fn (Package $package) => $package->forceFill([
             'count' => $packagesCounts->get($package->id, 0),
             'total' => $packagesTotals->get($package->id, 0),
-        ]))->sortByDesc('count');
+        ]))->sortByDesc('total');
 
         return view('shop::admin.statistics.index', [
             'gatewaysPayments' => $gatewaysPayments,

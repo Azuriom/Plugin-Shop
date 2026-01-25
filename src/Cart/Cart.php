@@ -374,7 +374,7 @@ class Cart implements Arrayable
 
         collect($content['items'])->groupBy('type')->each(function (Collection $items, string $type) {
             /** @var \Illuminate\Database\Eloquent\Collection $models */
-            $models = $type::findMany($items->pluck('id'))->keyBy('id');
+            $models = $type::enabled()->findMany($items->pluck('id'))->keyBy('id');
 
             if ($type === Package::class) {
                 $models->load(['category', 'discounts']);

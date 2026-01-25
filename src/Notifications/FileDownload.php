@@ -28,7 +28,10 @@ class FileDownload extends Notification
     {
         return (new MailMessage())
             ->subject(trans('shop::mails.file.subject'))
-            ->line(trans('shop::mails.file.intro', ['user' => $this->user->name]))
+            ->line(trans('shop::mails.file.intro', [
+                // TODO use Markdown::escape function from Azuriom
+                'user' => addcslashes($this->user->name, '\\`*_[]()'),
+            ]))
             ->action(trans('messages.actions.download'), $this->url);
     }
 

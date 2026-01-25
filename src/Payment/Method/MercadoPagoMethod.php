@@ -65,7 +65,7 @@ class MercadoPagoMethod extends PaymentMethod
         } catch (MPApiException $e) {
             logger()->error('[Shop] Unable to start Mercado Pago payment', $e->getApiResponse()->getContent());
 
-            return redirect()->route('shop.cart.index')->with('error', trans('shop::messages.payment.error'));
+            return to_route('shop.cart.index')->with('error', trans('shop::messages.payment.error'));
         }
     }
 

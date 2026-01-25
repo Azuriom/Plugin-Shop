@@ -37,7 +37,8 @@ class PaymentPaid extends Notification
         return (new MailMessage())
             ->subject(trans('shop::mails.payment.subject'))
             ->line(trans('shop::mails.payment.intro', [
-                'user' => $this->payment->user->name,
+                // TODO use Markdown::escape function from Azuriom
+                'user' => addcslashes($this->payment->user->name, '\\`*_[]()'),
             ]))
             ->line(trans('shop::mails.payment.total', [
                 'total' => $this->payment->formatPrice(),
