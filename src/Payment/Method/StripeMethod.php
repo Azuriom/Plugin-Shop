@@ -111,9 +111,6 @@ class StripeMethod extends PaymentMethod
             'success_url' => str_replace('%id%', '{CHECKOUT_SESSION_ID}', $successUrl),
             'cancel_url' => route('shop.categories.show', $package->category),
             'metadata' => ['user' => $user->id, 'package' => $package->id],
-            'invoice_creation' => [
-                'enabled' => $this->gateway->data['invoice'] ?? false,
-            ],
         ]);
 
         return redirect()->away($session->url);
