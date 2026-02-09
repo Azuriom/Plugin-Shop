@@ -74,7 +74,7 @@ class StripeMethod extends PaymentMethod
             'client_reference_id' => $payment->id,
             'discounts' => $coupon ? [['coupon' => $coupon->id]] : [],
             'invoice_creation' => [
-                'enabled' => $this->gateway->data['invoice'] ?? false,
+                'enabled' => (bool) ($this->gateway->data['invoice'] ?? false),
             ],
         ]);
 
