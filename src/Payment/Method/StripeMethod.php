@@ -155,11 +155,7 @@ class StripeMethod extends PaymentMethod
 
             $subscription = Subscription::where('subscription_id', $subscriptionId)->firstOrFail();
 
-            if ($invoice->payment_intent !== null) {
-                $this->renewSubscription($subscription, $invoice->payment_intent);
-            }
-
-            return response()->noContent();
+            return $this->renewSubscription($subscription, $invoice->id);
         }
 
         if ($event->type === 'customer.subscription.deleted') {
@@ -185,15 +181,22 @@ class StripeMethod extends PaymentMethod
     protected function processCompletedCheckout(Session $session)
     {
         if ($session->mode === 'subscription') {
-            $user = User::find($session->metadata['user']);
-            $package = Package::find($session->metadata['package']);
+            // Stripe may re-deliver checkout.session.completed on retry — look up an
+            // existing subscription before creating one to keep this handler idempotent.
+            $sub = Subscription::firstWhere('subscription_id', $session->subscription);
+
+            if ($sub === null) {
+                $user = User::find($session->metadata['user']);
+                $package = Package::find($session->metadata['package']);
+                $currency = $session->currency;
+                $total = $this->retrieveDecimalAmount($session->amount_total, $currency);
+
+                $sub = $this->createSubscription($user, $package, $session->subscription, $total, $currency);
+            }
+
             $invoice = Invoice::retrieve($session->invoice);
-            $currency = $session->currency;
-            $total = $this->retrieveDecimalAmount($session->amount_total, $currency);
 
-            $sub = $this->createSubscription($user, $package, $session->subscription, $total, $currency);
-
-            return $this->renewSubscription($sub, $invoice->payment_intent, true);
+            return $this->renewSubscription($sub, $invoice->id, true);
         }
 
         $payment = Payment::find($session->client_reference_id);
