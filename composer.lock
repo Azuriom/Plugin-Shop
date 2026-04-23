@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8aa4abe375066a42d83a4995d3f5de9c",
+    "content-hash": "a4cb8cc439ebf17092eba9f49bfb9c9c",
     "packages": [
         {
             "name": "composer/ca-bundle",
@@ -510,26 +510,26 @@
         },
         {
             "name": "stripe/stripe-php",
-            "version": "v19.2.0",
+            "version": "v20.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stripe/stripe-php.git",
-                "reference": "e444fbc524cd3d6583dde2c5b375d26174c54d96"
+                "reference": "7338bd140e641b1f9c7cb602e2de971e14db6b3b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/e444fbc524cd3d6583dde2c5b375d26174c54d96",
-                "reference": "e444fbc524cd3d6583dde2c5b375d26174c54d96",
+                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/7338bd140e641b1f9c7cb602e2de971e14db6b3b",
+                "reference": "7338bd140e641b1f9c7cb602e2de971e14db6b3b",
                 "shasum": ""
             },
             "require": {
                 "ext-curl": "*",
                 "ext-json": "*",
                 "ext-mbstring": "*",
-                "php": ">=5.6.0"
+                "php": ">=7.2.0"
             },
             "require-dev": {
-                "friendsofphp/php-cs-fixer": "3.72.0",
+                "friendsofphp/php-cs-fixer": "3.94.0",
                 "phpstan/phpstan": "^1.2",
                 "phpunit/phpunit": "^5.7 || ^9.0"
             },
@@ -540,6 +540,9 @@
                 }
             },
             "autoload": {
+                "files": [
+                    "lib/version_check.php"
+                ],
                 "psr-4": {
                     "Stripe\\": "lib/"
                 }
@@ -563,9 +566,9 @@
             ],
             "support": {
                 "issues": "https://github.com/stripe/stripe-php/issues",
-                "source": "https://github.com/stripe/stripe-php/tree/v19.2.0"
+                "source": "https://github.com/stripe/stripe-php/tree/v20.0.0"
             },
-            "time": "2026-01-16T21:28:14+00:00"
+            "time": "2026-03-26T01:57:48+00:00"
         },
         {
             "name": "xsolla/xsolla-sdk-php",
@@ -634,5 +637,5 @@
         "php": ">=8.0"
     },
     "platform-dev": {},
-    "plugin-api-version": "2.9.0"
+    "plugin-api-version": "2.6.0"
 }

@@ -11,6 +11,7 @@ use Azuriom\Plugin\Shop\Models\Subscription;
 use Azuriom\Plugin\Shop\Payment\PaymentMethod;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use RuntimeException;
 use Stripe\Checkout\Session;
 use Stripe\Coupon;
 use Stripe\Exception\SignatureVerificationException;
@@ -155,7 +156,7 @@ class StripeMethod extends PaymentMethod
 
             $subscription = Subscription::where('subscription_id', $subscriptionId)->firstOrFail();
 
-            return $this->renewSubscription($subscription, $invoice->id);
+            return $this->renewSubscription($subscription, $this->getInvoiceTransactionId($invoice));
         }
 
         if ($event->type === 'customer.subscription.deleted') {
@@ -194,9 +195,12 @@ class StripeMethod extends PaymentMethod
                 $sub = $this->createSubscription($user, $package, $session->subscription, $total, $currency);
             }
 
-            $invoice = Invoice::retrieve($session->invoice);
+            $invoice = Invoice::retrieve([
+                'id' => $session->invoice,
+                'expand' => ['payments'],
+            ]);
 
-            return $this->renewSubscription($sub, $invoice->id, true);
+            return $this->renewSubscription($sub, $this->getInvoiceTransactionId($invoice), true);
         }
 
         $payment = Payment::find($session->client_reference_id);
@@ -221,6 +225,22 @@ class StripeMethod extends PaymentMethod
             'max_redemptions' => 1,
             'name' => trans('shop::messages.payment.giftcards'),
         ]);
+    }
+
+    /*
+     * Get the PaymentIntent ID attached to a Stripe invoice. See https://docs.stripe.com/api/invoice-payment/object
+     */
+    protected function getInvoiceTransactionId(Invoice $invoice): string
+    {
+        $paymentIntent = $invoice->payments?->data[0]?->payment?->payment_intent;
+
+        if (! is_string($paymentIntent)) {
+            throw new RuntimeException(
+                "Stripe invoice {$invoice->id} has no PaymentIntent attached"
+            );
+        }
+
+        return $paymentIntent;
     }
 
     /*

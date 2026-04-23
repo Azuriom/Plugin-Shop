@@ -16,7 +16,7 @@
         "mercadopago/dx-php": "^3.0",
         "mollie/mollie-api-php": "^v3.7.0",
         "paymentwall/paymentwall-php": "^2.2",
-        "stripe/stripe-php": "^v19.0.0",
+        "stripe/stripe-php": "^v20.0.0",
         "xsolla/xsolla-sdk-php": "^4.1"
     },
     "replace": {
