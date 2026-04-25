@@ -11,7 +11,6 @@ use Azuriom\Plugin\Shop\Models\Subscription;
 use Azuriom\Plugin\Shop\Payment\PaymentMethod;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use RuntimeException;
 use Stripe\Checkout\Session;
 use Stripe\Coupon;
 use Stripe\Exception\SignatureVerificationException;
@@ -157,7 +156,17 @@ class StripeMethod extends PaymentMethod
 
             $subscription = Subscription::where('subscription_id', $subscriptionId)->firstOrFail();
 
-            return $this->renewSubscription($subscription, $this->getInvoiceTransactionId($invoice->id));
+            $paymentIntentId = $this->paymentIntentForInvoice($invoice);
+
+            if ($paymentIntentId === null) {
+                Log::warning("Stripe invoice {$invoice->id} has no payment intent attached.");
+
+                return response()->json(['status' => 'no_payment_intent'], 400);
+            }
+
+            $this->renewSubscription($subscription, $paymentIntentId);
+
+            return response()->noContent();
         }
 
         if ($event->type === 'customer.subscription.deleted') {
@@ -183,8 +192,7 @@ class StripeMethod extends PaymentMethod
     protected function processCompletedCheckout(Session $session)
     {
         if ($session->mode === 'subscription') {
-            // Stripe may re-deliver checkout.session.completed on retry — look up an
-            // existing subscription before creating one to keep this handler idempotent.
+            // Avoid duplicated subscriptions due to Stripe re-delivering events on error
             $sub = Subscription::firstWhere('subscription_id', $session->subscription);
 
             if ($sub === null) {
@@ -196,7 +204,15 @@ class StripeMethod extends PaymentMethod
                 $sub = $this->createSubscription($user, $package, $session->subscription, $total, $currency);
             }
 
-            return $this->renewSubscription($sub, $this->getInvoiceTransactionId($session->invoice), true);
+            $paymentIntentId = $this->paymentIntentForInvoice($session->invoice);
+
+            if ($paymentIntentId === null) {
+                Log::warning("Stripe invoice {$session->invoice} has no payment intent attached.");
+
+                return response()->json(['status' => 'no_payment_intent'], 400);
+            }
+
+            return $this->renewSubscription($sub, $paymentIntentId, true);
         }
 
         $payment = Payment::find($session->client_reference_id);
@@ -223,21 +239,21 @@ class StripeMethod extends PaymentMethod
         ]);
     }
 
-    /*
-     * Get the PaymentIntent ID attached to a Stripe invoice. See https://docs.stripe.com/api/invoice-payment/object
+    /**
+     * Get the payment intent ID associated with the given Stripe invoice, if any.
      */
-    protected function getInvoiceTransactionId(string $invoiceId): string
+    protected function paymentIntentForInvoice(Invoice|string $invoice): ?string
     {
-        $payments = InvoicePayment::all(['invoice' => $invoiceId, 'limit' => 1]);
-        $paymentIntent = $payments->data[0]?->payment?->payment_intent ?? null;
+        $invoicePayments = InvoicePayment::all([
+            'invoice' => $invoice instanceof Invoice ? $invoice->id : $invoice,
+            'status' => 'paid',
+            'payment' => ['type' => 'payment_intent'],
+            'limit' => 1,
+        ]);
 
-        if (! is_string($paymentIntent)) {
-            throw new RuntimeException(
-                "Stripe invoice {$invoiceId} has no PaymentIntent attached"
-            );
-        }
+        $invoicePayment = $invoicePayments->data[0] ?? null;
 
-        return $paymentIntent;
+        return $invoicePayment?->payment?->payment_intent;
     }
 
     /*
