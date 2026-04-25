@@ -16,6 +16,7 @@ use Stripe\Checkout\Session;
 use Stripe\Coupon;
 use Stripe\Exception\SignatureVerificationException;
 use Stripe\Invoice;
+use Stripe\InvoicePayment;
 use Stripe\Stripe;
 use Stripe\Subscription as StripeSubscription;
 use Stripe\Webhook;
@@ -156,7 +157,7 @@ class StripeMethod extends PaymentMethod
 
             $subscription = Subscription::where('subscription_id', $subscriptionId)->firstOrFail();
 
-            return $this->renewSubscription($subscription, $this->getInvoiceTransactionId($invoice));
+            return $this->renewSubscription($subscription, $this->getInvoiceTransactionId($invoice->id));
         }
 
         if ($event->type === 'customer.subscription.deleted') {
@@ -195,12 +196,7 @@ class StripeMethod extends PaymentMethod
                 $sub = $this->createSubscription($user, $package, $session->subscription, $total, $currency);
             }
 
-            $invoice = Invoice::retrieve([
-                'id' => $session->invoice,
-                'expand' => ['payments'],
-            ]);
-
-            return $this->renewSubscription($sub, $this->getInvoiceTransactionId($invoice), true);
+            return $this->renewSubscription($sub, $this->getInvoiceTransactionId($session->invoice), true);
         }
 
         $payment = Payment::find($session->client_reference_id);
@@ -230,13 +226,14 @@ class StripeMethod extends PaymentMethod
     /*
      * Get the PaymentIntent ID attached to a Stripe invoice. See https://docs.stripe.com/api/invoice-payment/object
      */
-    protected function getInvoiceTransactionId(Invoice $invoice): string
+    protected function getInvoiceTransactionId(string $invoiceId): string
     {
-        $paymentIntent = $invoice->payments?->data[0]?->payment?->payment_intent;
+        $payments = InvoicePayment::all(['invoice' => $invoiceId, 'limit' => 1]);
+        $paymentIntent = $payments->data[0]?->payment?->payment_intent ?? null;
 
         if (! is_string($paymentIntent)) {
             throw new RuntimeException(
-                "Stripe invoice {$invoice->id} has no PaymentIntent attached"
+                "Stripe invoice {$invoiceId} has no PaymentIntent attached"
             );
         }
 
