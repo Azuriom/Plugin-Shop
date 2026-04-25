@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8aa4abe375066a42d83a4995d3f5de9c",
+    "content-hash": "a4cb8cc439ebf17092eba9f49bfb9c9c",
     "packages": [
         {
             "name": "composer/ca-bundle",
-            "version": "1.5.10",
+            "version": "1.5.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/ca-bundle.git",
-                "reference": "961a5e4056dd2e4a2eedcac7576075947c28bf63"
+                "reference": "68ff39175e8e94a4bb1d259407ce51a6a60f09e6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/ca-bundle/zipball/961a5e4056dd2e4a2eedcac7576075947c28bf63",
-                "reference": "961a5e4056dd2e4a2eedcac7576075947c28bf63",
+                "url": "https://api.github.com/repos/composer/ca-bundle/zipball/68ff39175e8e94a4bb1d259407ce51a6a60f09e6",
+                "reference": "68ff39175e8e94a4bb1d259407ce51a6a60f09e6",
                 "shasum": ""
             },
             "require": {
@@ -64,7 +64,7 @@
             "support": {
                 "irc": "irc://irc.freenode.org/composer",
                 "issues": "https://github.com/composer/ca-bundle/issues",
-                "source": "https://github.com/composer/ca-bundle/tree/1.5.10"
+                "source": "https://github.com/composer/ca-bundle/tree/1.5.11"
             },
             "funding": [
                 {
@@ -76,20 +76,20 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-12-08T15:06:51+00:00"
+            "time": "2026-03-30T09:16:10+00:00"
         },
         {
             "name": "mercadopago/dx-php",
-            "version": "3.8.0",
+            "version": "v3.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mercadopago/sdk-php.git",
-                "reference": "98a3f7da2f13d1e85b309441b2e45c07fa312bf4"
+                "reference": "7eeafc66b90ffda3d49dba6d81aeacc43e8621b4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mercadopago/sdk-php/zipball/98a3f7da2f13d1e85b309441b2e45c07fa312bf4",
-                "reference": "98a3f7da2f13d1e85b309441b2e45c07fa312bf4",
+                "url": "https://api.github.com/repos/mercadopago/sdk-php/zipball/7eeafc66b90ffda3d49dba6d81aeacc43e8621b4",
+                "reference": "7eeafc66b90ffda3d49dba6d81aeacc43e8621b4",
                 "shasum": ""
             },
             "require": {
@@ -113,22 +113,22 @@
             "description": "Mercado Pago PHP SDK",
             "homepage": "https://github.com/mercadopago/sdk-php",
             "support": {
-                "source": "https://github.com/mercadopago/sdk-php/tree/3.8.0"
+                "source": "https://github.com/mercadopago/sdk-php/tree/v3.9.0"
             },
-            "time": "2025-11-28T14:17:27+00:00"
+            "time": "2026-04-17T17:41:52+00:00"
         },
         {
             "name": "mollie/mollie-api-php",
-            "version": "v3.8.0",
+            "version": "v3.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mollie/mollie-api-php.git",
-                "reference": "4a319d1c779fd9a1108402950482b009e681bb9e"
+                "reference": "ef526b9e4eb0c87e294f275e4f11d07b33e08a34"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mollie/mollie-api-php/zipball/4a319d1c779fd9a1108402950482b009e681bb9e",
-                "reference": "4a319d1c779fd9a1108402950482b009e681bb9e",
+                "url": "https://api.github.com/repos/mollie/mollie-api-php/zipball/ef526b9e4eb0c87e294f275e4f11d07b33e08a34",
+                "reference": "ef526b9e4eb0c87e294f275e4f11d07b33e08a34",
                 "shasum": ""
             },
             "require": {
@@ -209,9 +209,9 @@
             ],
             "support": {
                 "issues": "https://github.com/mollie/mollie-api-php/issues",
-                "source": "https://github.com/mollie/mollie-api-php/tree/v3.8.0"
+                "source": "https://github.com/mollie/mollie-api-php/tree/v3.10.0"
             },
-            "time": "2026-01-06T18:53:26+00:00"
+            "time": "2026-04-15T10:56:54+00:00"
         },
         {
             "name": "nyholm/psr7",
@@ -510,26 +510,26 @@
         },
         {
             "name": "stripe/stripe-php",
-            "version": "v19.2.0",
+            "version": "v20.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stripe/stripe-php.git",
-                "reference": "e444fbc524cd3d6583dde2c5b375d26174c54d96"
+                "reference": "6d0ec5ffa0678a408d63163ace1453b35a85fb24"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/e444fbc524cd3d6583dde2c5b375d26174c54d96",
-                "reference": "e444fbc524cd3d6583dde2c5b375d26174c54d96",
+                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/6d0ec5ffa0678a408d63163ace1453b35a85fb24",
+                "reference": "6d0ec5ffa0678a408d63163ace1453b35a85fb24",
                 "shasum": ""
             },
             "require": {
                 "ext-curl": "*",
                 "ext-json": "*",
                 "ext-mbstring": "*",
-                "php": ">=5.6.0"
+                "php": ">=7.2.0"
             },
             "require-dev": {
-                "friendsofphp/php-cs-fixer": "3.72.0",
+                "friendsofphp/php-cs-fixer": "3.94.0",
                 "phpstan/phpstan": "^1.2",
                 "phpunit/phpunit": "^5.7 || ^9.0"
             },
@@ -540,6 +540,9 @@
                 }
             },
             "autoload": {
+                "files": [
+                    "lib/version_check.php"
+                ],
                 "psr-4": {
                     "Stripe\\": "lib/"
                 }
@@ -563,22 +566,22 @@
             ],
             "support": {
                 "issues": "https://github.com/stripe/stripe-php/issues",
-                "source": "https://github.com/stripe/stripe-php/tree/v19.2.0"
+                "source": "https://github.com/stripe/stripe-php/tree/v20.1.0"
             },
-            "time": "2026-01-16T21:28:14+00:00"
+            "time": "2026-04-24T00:12:56+00:00"
         },
         {
             "name": "xsolla/xsolla-sdk-php",
-            "version": "v4.3.2",
+            "version": "v4.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/xsolla/xsolla-sdk-php.git",
-                "reference": "6bea126a37e7f1a419e61418a7b35cbb04475e33"
+                "reference": "5f8642f7830f4ef3554cf01830cd752b57536da7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/xsolla/xsolla-sdk-php/zipball/6bea126a37e7f1a419e61418a7b35cbb04475e33",
-                "reference": "6bea126a37e7f1a419e61418a7b35cbb04475e33",
+                "url": "https://api.github.com/repos/xsolla/xsolla-sdk-php/zipball/5f8642f7830f4ef3554cf01830cd752b57536da7",
+                "reference": "5f8642f7830f4ef3554cf01830cd752b57536da7",
                 "shasum": ""
             },
             "require": {
@@ -621,7 +624,7 @@
                 "source": "https://github.com/xsolla/xsolla-sdk-php/releases"
             },
             "abandoned": true,
-            "time": "2024-05-23T11:07:08+00:00"
+            "time": "2026-04-02T03:43:47+00:00"
         }
     ],
     "packages-dev": [],

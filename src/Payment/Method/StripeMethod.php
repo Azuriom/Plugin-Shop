@@ -15,6 +15,7 @@ use Stripe\Checkout\Session;
 use Stripe\Coupon;
 use Stripe\Exception\SignatureVerificationException;
 use Stripe\Invoice;
+use Stripe\InvoicePayment;
 use Stripe\Stripe;
 use Stripe\Subscription as StripeSubscription;
 use Stripe\Webhook;
@@ -155,9 +156,15 @@ class StripeMethod extends PaymentMethod
 
             $subscription = Subscription::where('subscription_id', $subscriptionId)->firstOrFail();
 
-            if ($invoice->payment_intent !== null) {
-                $this->renewSubscription($subscription, $invoice->payment_intent);
+            $paymentIntentId = $this->paymentIntentForInvoice($invoice);
+
+            if ($paymentIntentId === null) {
+                Log::warning("Stripe invoice {$invoice->id} has no payment intent attached.");
+
+                return response()->json(['status' => 'no_payment_intent'], 400);
             }
+
+            $this->renewSubscription($subscription, $paymentIntentId);
 
             return response()->noContent();
         }
@@ -185,15 +192,27 @@ class StripeMethod extends PaymentMethod
     protected function processCompletedCheckout(Session $session)
     {
         if ($session->mode === 'subscription') {
-            $user = User::find($session->metadata['user']);
-            $package = Package::find($session->metadata['package']);
-            $invoice = Invoice::retrieve($session->invoice);
-            $currency = $session->currency;
-            $total = $this->retrieveDecimalAmount($session->amount_total, $currency);
+            // Avoid duplicated subscriptions due to Stripe re-delivering events on error
+            $sub = Subscription::firstWhere('subscription_id', $session->subscription);
 
-            $sub = $this->createSubscription($user, $package, $session->subscription, $total, $currency);
+            if ($sub === null) {
+                $user = User::find($session->metadata['user']);
+                $package = Package::find($session->metadata['package']);
+                $currency = $session->currency;
+                $total = $this->retrieveDecimalAmount($session->amount_total, $currency);
 
-            return $this->renewSubscription($sub, $invoice->payment_intent, true);
+                $sub = $this->createSubscription($user, $package, $session->subscription, $total, $currency);
+            }
+
+            $paymentIntentId = $this->paymentIntentForInvoice($session->invoice);
+
+            if ($paymentIntentId === null) {
+                Log::warning("Stripe invoice {$session->invoice} has no payment intent attached.");
+
+                return response()->json(['status' => 'no_payment_intent'], 400);
+            }
+
+            return $this->renewSubscription($sub, $paymentIntentId, true);
         }
 
         $payment = Payment::find($session->client_reference_id);
@@ -218,6 +237,23 @@ class StripeMethod extends PaymentMethod
             'max_redemptions' => 1,
             'name' => trans('shop::messages.payment.giftcards'),
         ]);
+    }
+
+    /**
+     * Get the payment intent ID associated with the given Stripe invoice, if any.
+     */
+    protected function paymentIntentForInvoice(Invoice|string $invoice): ?string
+    {
+        $invoicePayments = InvoicePayment::all([
+            'invoice' => $invoice instanceof Invoice ? $invoice->id : $invoice,
+            'status' => 'paid',
+            'payment' => ['type' => 'payment_intent'],
+            'limit' => 1,
+        ]);
+
+        $invoicePayment = $invoicePayments->data[0] ?? null;
+
+        return $invoicePayment?->payment?->payment_intent;
     }
 
     /*
