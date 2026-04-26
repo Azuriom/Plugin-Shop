@@ -81,7 +81,13 @@
                                 </td>
                                 <td>{{ $subscription->subscription_id ?? trans('messages.unknown') }}</td>
                                 <td>{{ format_date($subscription->created_at) }}</td>
-                                <td>{{ format_date($subscription->ends_at) }}</td>
+                                <td>
+                                    @if($subscription->ends_at !== null)
+                                        {{ format_date($subscription->ends_at) }}
+                                    @else
+                                        -
+                                    @endif
+                                </td>
                                 <td>
                                     @if($subscription->isActive() && ! $subscription->isCanceled())
                                         <form action="{{ route('shop.subscriptions.destroy', $subscription) }}" method="POST">
