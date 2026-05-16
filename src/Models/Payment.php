@@ -250,7 +250,7 @@ class Payment extends Model
             if (! empty($item->variables)) {
                 $lines[] = trans('shop::messages.payment.variables');
 
-                foreach ($item->variables as $key => $value) {
+                foreach ($item->getFormattedVariables() as $key => $value) {
                     $lines[] = "- **`{{$key}}`** {$value}";
                 }
             }

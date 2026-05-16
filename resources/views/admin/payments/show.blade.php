@@ -138,7 +138,7 @@
                             <tbody>
 
                             @foreach($payment->items as $item)
-                                @foreach($item->variables ?? [] as $key => $value)
+                                @foreach($item->getFormattedVariables() as $key => $value)
                                     <tr>
                                         <th scope="row">{{ $item->name }}</th>
                                         <td>{{ $key }}</td>

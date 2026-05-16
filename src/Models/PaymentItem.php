@@ -2,10 +2,12 @@
 
 namespace Azuriom\Plugin\Shop\Models;
 
+use Azuriom\Models\Server;
 use Azuriom\Models\Traits\HasTablePrefix;
 use Azuriom\Plugin\Shop\Payment\Currencies;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 
 /**
  * @property int $id
@@ -108,6 +110,33 @@ class PaymentItem extends Model
         $search = array_map(fn (string $key) => '{'.$key.'}', array_keys($this->variables));
 
         return str_replace($search, $this->variables, $content);
+    }
+
+    public function getFormattedVariables(): array
+    {
+        if (empty($this->variables)) {
+            return [];
+        }
+
+        $serverNames = ($this->buyable instanceof Package)
+            ? $this->buyable->variables->where('type', 'server')->pluck('name')->all()
+            : [];
+
+        if (empty($serverNames)) {
+            return $this->variables
+        }
+
+        $servers = Server::findMany(Arr::only($this->variables, $serverNames))->keyBy('id');
+
+        return collect($this->variables)
+            ->map(function ($value, $key) use ($serverNames, $servers) {
+                if (in_array($key, $serverNames, true) && ($server = $servers->get($value)) !== null) {
+                    return $server->name.' (#'.$value.')';
+                }
+
+                return $value;
+            })
+            ->all();
     }
 
     public function isExpired(): bool
