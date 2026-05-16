@@ -114,29 +114,25 @@ class PaymentItem extends Model
 
     public function getFormattedVariables(): array
     {
-        if (empty($this->variables)) {
+        if (empty($this->variables) || ! ($this->buyable instanceof Package)) {
             return [];
         }
 
-        $serverNames = ($this->buyable instanceof Package)
-            ? $this->buyable->variables->where('type', 'server')->pluck('name')->all()
-            : [];
+        $serverVar = $this->buyable->variables->where('type', 'server')->pluck('name');
 
-        if (empty($serverNames)) {
+        if ($serverVar->isEmpty()) {
             return $this->variables;
         }
 
-        $servers = Server::findMany(Arr::only($this->variables, $serverNames))->keyBy('id');
-
-        return collect($this->variables)
-            ->map(function ($value, $key) use ($serverNames, $servers) {
-                if (in_array($key, $serverNames, true) && ($server = $servers->get($value)) !== null) {
-                    return $server->name.' (#'.$value.')';
-                }
-
-                return $value;
-            })
+        $servers = Server::whereKey(Arr::only($this->variables, $serverVar->all()))
+            ->pluck('name', 'id')
+            ->map(fn (string $name, int $id) => $name.' (#'.$id.')')
             ->all();
+
+        return Arr::map(
+            $this->variables,
+            fn (string $val, $name) => $serverVar->contains($name) ? ($servers[$val] ?? $val) : $val
+        );
     }
 
     public function isExpired(): bool
