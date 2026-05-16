@@ -123,7 +123,7 @@ class PaymentItem extends Model
             : [];
 
         if (empty($serverNames)) {
-            return $this->variables
+            return $this->variables;
         }
 
         $servers = Server::findMany(Arr::only($this->variables, $serverNames))->keyBy('id');
