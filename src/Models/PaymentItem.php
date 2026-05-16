@@ -115,7 +115,7 @@ class PaymentItem extends Model
     public function getFormattedVariables(): array
     {
         if (empty($this->variables) || ! ($this->buyable instanceof Package)) {
-            return [];
+            return $this->variables;
         }
 
         $serverVar = $this->buyable->variables->where('type', 'server')->pluck('name');
