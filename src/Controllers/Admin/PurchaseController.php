@@ -18,17 +18,7 @@ class PurchaseController extends Controller
 
         $purchases = Payment::withSiteMoney()
             ->with('user')
-            ->when($search, function (Builder $query, string $search) {
-                $query->where(function (Builder $query) use ($search) {
-                    $query->whereHas('user', function (Builder $query) use ($search) {
-                        $query->scopes(['search' => $search]);
-                    })->orWhere('transaction_id', 'like', "%{$search}%");
-
-                    if (is_numeric($search)) {
-                        $query->orWhere('id', $search);
-                    }
-                });
-            })
+            ->when($search, fn (Builder $query) => $query->search($search))
             ->latest()
             ->paginate();
 

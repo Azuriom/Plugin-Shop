@@ -161,10 +161,12 @@ class ShopServiceProvider extends BasePluginServiceProvider
                         'name' => trans('shop::admin.nav.gateways'),
                         'permission' => 'shop.gateways',
                     ],
-                    'shop.admin.offers.index' => [
-                        'name' => trans('shop::admin.nav.offers'),
-                        'permission' => 'shop.gateways',
-                    ],
+                    ...(use_site_money() ? [
+                        'shop.admin.offers.index' => [
+                            'name' => trans('shop::admin.nav.offers'),
+                            'permission' => 'shop.gateways',
+                        ],
+                    ] : []),
                     'shop.admin.discounts.index' => [
                         'name' => trans('shop::admin.nav.discounts'),
                         'permission' => 'shop.promotions',
@@ -189,10 +191,12 @@ class ShopServiceProvider extends BasePluginServiceProvider
                         'name' => trans('shop::admin.nav.subscriptions'),
                         'permission' => 'shop.payments',
                     ],
-                    'shop.admin.purchases.index' => [
-                        'name' => trans('shop::admin.nav.purchases'),
-                        'permission' => 'shop.payments',
-                    ],
+                    ...(use_site_money() ? [
+                        'shop.admin.purchases.index' => [
+                            'name' => trans('shop::admin.nav.purchases'),
+                            'permission' => 'shop.payments',
+                        ],
+                    ] : []),
                     'shop.admin.statistics' => [
                         'name' => trans('shop::admin.nav.statistics'),
                         'permission' => 'shop.payments',

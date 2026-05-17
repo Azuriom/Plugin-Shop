@@ -4,7 +4,6 @@ namespace Azuriom\Plugin\Shop\Payment\Method;
 
 use Azuriom\Models\User;
 use Azuriom\Plugin\Shop\Cart\Cart;
-use Azuriom\Plugin\Shop\Models\Gateway;
 use Azuriom\Plugin\Shop\Models\Package;
 use Azuriom\Plugin\Shop\Models\Payment;
 use Azuriom\Plugin\Shop\Models\Subscription;
@@ -31,22 +30,13 @@ class MollieMethod extends PaymentMethod
      */
     protected $name = 'Mollie';
 
-    protected MollieApiClient $mollie;
-
-    public function __construct(?Gateway $gateway)
-    {
-        parent::__construct($gateway);
-
-        if ($gateway?->data !== null) {
-            $this->mollie = $this->createMollieClient();
-        }
-    }
+    private ?MollieApiClient $mollie = null;
 
     public function startPayment(Cart $cart, float $amount, string $currency)
     {
         $payment = $this->createPayment($cart, $amount, $currency);
 
-        $molliePayment = $this->mollie->payments->create([
+        $molliePayment = $this->mollieClient()->payments->create([
             'amount' => [
                 'currency' => $currency,
                 'value' => number_format($amount, 2),
@@ -72,7 +62,7 @@ class MollieMethod extends PaymentMethod
     {
         $customer = $this->findOrCreateCustomer($user);
 
-        $molliePayment = $this->mollie->payments->create([
+        $molliePayment = $this->mollieClient()->payments->create([
             'amount' => [
                 'currency' => currency(),
                 'value' => number_format($package->price, 2),
@@ -99,7 +89,7 @@ class MollieMethod extends PaymentMethod
         $customer = $this->findCustomer($subscription->user);
 
         if ($customer !== null) {
-            $this->mollie->subscriptions->cancelFor($customer, $subscriptionId);
+            $this->mollieClient()->subscriptions->cancelFor($customer, $subscriptionId);
         }
     }
 
@@ -114,7 +104,7 @@ class MollieMethod extends PaymentMethod
         $payment = Payment::findOrFail($paymentId);
 
         try {
-            $molliePayment = $this->mollie->payments->get($payment->transaction_id);
+            $molliePayment = $this->mollieClient()->payments->get($payment->transaction_id);
 
             if ($molliePayment === null) {
                 return to_route('shop.home')->with('error', trans('shop::messages.payment.error'));
@@ -136,7 +126,7 @@ class MollieMethod extends PaymentMethod
     public function notification(Request $request, ?string $paymentId)
     {
         $id = $request->input('id');
-        $molliePayment = $this->mollie->payments->get($id);
+        $molliePayment = $this->mollieClient()->payments->get($id);
 
         if ($molliePayment->metadata?->mode ?? '' === 'subscription_first') {
             $package = Package::findOrFail($molliePayment->metadata->package);
@@ -168,7 +158,7 @@ class MollieMethod extends PaymentMethod
 
     protected function startMollieSubscription(MolliePayment $payment, User $user, Package $package)
     {
-        $subscription = $this->mollie->subscriptions->createForId($payment->customerId, [
+        $subscription = $this->mollieClient()->subscriptions->createForId($payment->customerId, [
             'amount' => [
                 'currency' => currency(),
                 'value' => number_format($package->price, 2),
@@ -214,7 +204,7 @@ class MollieMethod extends PaymentMethod
             ->whereMorphedTo('model', $user)
             ->value('value');
 
-        return $customerId !== null ? $this->mollie->customers->get($customerId) : null;
+        return $customerId !== null ? $this->mollieClient()->customers->get($customerId) : null;
     }
 
     protected function findOrCreateCustomer(User $user): Customer
@@ -227,12 +217,12 @@ class MollieMethod extends PaymentMethod
         ];
 
         if ($customer !== null) {
-            $this->mollie->customers->update($customer->id, $data);
+            $this->mollieClient()->customers->update($customer->id, $data);
 
             return $customer;
         }
 
-        $customer = $this->mollie->customers->create($data);
+        $customer = $this->mollieClient()->customers->create($data);
 
         $this->gateway->metadata()
             ->make(['value' => $customer->id])
@@ -242,8 +232,12 @@ class MollieMethod extends PaymentMethod
         return $customer;
     }
 
-    protected function createMollieClient(): MollieApiClient
+    protected function mollieClient(): MollieApiClient
     {
-        return (new MollieApiClient())->setApiKey($this->gateway->data['key']);
+        if ($this->mollie === null) {
+            $this->mollie = (new MollieApiClient())->setApiKey($this->gateway->data['key']);
+        }
+
+        return $this->mollie;
     }
 }

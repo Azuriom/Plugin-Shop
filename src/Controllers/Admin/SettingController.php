@@ -30,7 +30,7 @@ class SettingController extends Controller
             'displayAmount' => setting('shop.display_amount', true),
             'commands' => $commands ? json_decode($commands) : [],
             'commandTriggers' => Package::COMMAND_TRIGGERS,
-            'servers' => Server::executable()->get()->pluck('name', 'id'),
+            'servers' => Server::executable()->pluck('name', 'id'),
             'enableHome' => setting('shop.home.enabled', true),
             'homeMessage' => setting('shop.home', ''),
             'guestPurchases' => setting('shop.guest_purchases', false),
@@ -56,18 +56,17 @@ class SettingController extends Controller
 
         $commands = $request->input('commands');
 
-        Setting::updateSettings(Arr::only($data, 'currency'));
-
         Setting::updateSettings([
-            'shop.use_site_money' => $request->has('use_site_money'),
-            'shop.guest_purchases' => $request->has('guest_purchases'),
+            ...Arr::only($data, 'currency'),
+            'shop.use_site_money' => $request->filled('use_site_money'),
+            'shop.guest_purchases' => $request->filled('guest_purchases'),
             'shop.month_goal' => $request->input('goal'),
             'shop.recent_payments' => $request->input('recent_payments'),
             'shop.top_customer' => $request->filled('top_customer'),
             'shop.display_amount' => $request->filled('display_amount'),
             'shop.webhook' => $request->input('webhook'),
             'shop.home' => $request->input('home_message'),
-            'shop.home.enabled' => $request->has('enable_home'),
+            'shop.home.enabled' => $request->filled('enable_home'),
             'shop.commands' => is_array($commands) ? json_encode($commands) : null,
             'shop.required_terms' => $request->filled('terms_required') ? $request->input('terms') : null,
         ]);

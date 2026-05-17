@@ -101,7 +101,7 @@ class PackageController extends Controller
         $servers = $variables->where('type', 'server')
             ->pluck('name')
             ->mapWithKeys(fn (string $name) => [$name => '{'.$name.'}'])
-            ->replace(Server::executable()->get()->pluck('name', 'id'));
+            ->replace(Server::executable()->pluck('name', 'id'));
 
         return view('shop::admin.packages.create', [
             'categories' => Category::with('packages')->get(),
@@ -144,7 +144,7 @@ class PackageController extends Controller
         $servers = $variables->where('type', 'server')
             ->pluck('name')
             ->mapWithKeys(fn (string $name) => [$name => '{'.$name.'}'])
-            ->replace(Server::executable()->get()->pluck('name', 'id'));
+            ->replace(Server::executable()->pluck('name', 'id'));
 
         return view('shop::admin.packages.edit', [
             'package' => $package,

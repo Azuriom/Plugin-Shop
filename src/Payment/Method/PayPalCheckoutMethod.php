@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use JsonException;
 
 class PayPalCheckoutMethod extends PaymentMethod
 {
@@ -385,6 +386,16 @@ class PayPalCheckoutMethod extends PaymentMethod
      */
     protected function verifyPayPalWebhook(Request $request): string
     {
+        try {
+            // Avoid using $request->json() as it might change slightly encoding
+            // resulting in a failed verification.
+            $webhookEvent = json_decode($request->getContent(), false, flags: JSON_THROW_ON_ERROR);
+        } catch (JsonException $e) {
+            Log::warning('Invalid PayPal webhook JSON.', ['error' => $e->getMessage()]);
+
+            return response()->json(['error' => 'Invalid PayPal webhook JSON.'], 400);
+        }
+
         $response = $this->getClient()->post('/v1/notifications/verify-webhook-signature', [
             'transmission_id' => $request->header('PayPal-Transmission-ID'),
             'transmission_time' => $request->header('PayPal-Transmission-Time'),
@@ -392,13 +403,13 @@ class PayPalCheckoutMethod extends PaymentMethod
             'auth_algo' => $request->header('PayPal-Auth-Algo'),
             'transmission_sig' => $request->header('PayPal-Transmission-Sig'),
             'webhook_id' => $this->gateway->data['webhook_id'],
-            'webhook_event' => $request->json()->all(),
+            'webhook_event' => $webhookEvent,
         ]);
 
         if ($response->json('verification_status') !== 'SUCCESS') {
             Log::warning('Invalid PayPal webhook signature.');
 
-            abort(400, 'Invalid PayPal webhook signature.');
+            return response()->json(['error' => 'Invalid PayPal webhook signature.'], 401);
         }
 
         return $request->json('event_type');
