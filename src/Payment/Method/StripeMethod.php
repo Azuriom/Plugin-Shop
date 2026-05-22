@@ -148,7 +148,7 @@ class StripeMethod extends PaymentMethod
         if ($event->type === 'invoice.paid') {
             /** @var Invoice $invoice */
             $invoice = $event->data->object;
-            $subscriptionId = $invoice->subscription ?? null;
+            $subscriptionId = $invoice->parent?->subscription_details?->subscription;
 
             if ($subscriptionId === null) {
                 return response()->json(['status' => 'no_subscription'], 400);
