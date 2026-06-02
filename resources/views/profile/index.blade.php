@@ -20,21 +20,39 @@
                     </tr>
                     </thead>
                     <tbody>
+                    @if(! $payments->isEmpty())
+                        @foreach($payments as $payment)
+                            <tr>
+                                <th scope="row">{{ $payment->id }}</th>
+                                <td>{{ $payment->formatPrice() }}</td>
+                                <td>{{ $payment->getTypeName() }}</td>
+                                <td>
+                                    <span class="badge bg-{{ $payment->statusColor() }}">
+                                        {{ trans('shop::admin.payments.status.'.$payment->status) }}
+                                    </span>
+                                </td>
+                                <td>{{ $payment->transaction_id ?? trans('messages.unknown') }}</td>
+                                <td>{{ format_date($payment->created_at, true) }}</td>
+                            </tr>
+                        @endforeach
+                    @endif
 
-                    @foreach($payments as $payment)
-                        <tr>
-                            <th scope="row">{{ $payment->id }}</th>
-                            <td>{{ $payment->formatPrice() }}</td>
-                            <td>{{ $payment->getTypeName() }}</td>
-                            <td>
-                                <span class="badge bg-{{ $payment->statusColor() }}">
-                                    {{ trans('shop::admin.payments.status.'.$payment->status) }}
-                                </span>
-                            </td>
-                            <td>{{ $payment->transaction_id ?? trans('messages.unknown') }}</td>
-                            <td>{{ format_date($payment->created_at, true) }}</td>
-                        </tr>
-                    @endforeach
+                    @if(! $paymentsWithSiteMoney->isEmpty())
+                        @foreach($paymentsWithSiteMoney as $paymentWithSiteMoney)
+                            <tr>
+                                <th scope="row">{{ $paymentWithSiteMoney->id }}</th>
+                                <td>{{ $paymentWithSiteMoney->formatPrice() }}</td>
+                                <td>{{ $paymentWithSiteMoney->getTypeName() }}</td>
+                                <td>
+                                    <span class="badge bg-{{ $paymentWithSiteMoney->statusColor() }}">
+                                        {{ trans('shop::admin.payments.status.'.$paymentWithSiteMoney->status) }}
+                                    </span>
+                                </td>
+                                <td>{{ $paymentWithSiteMoney->transaction_id ?? trans('messages.unknown') }}</td>
+                                <td>{{ format_date($paymentWithSiteMoney->created_at, true) }}</td>
+                            </tr>
+                        @endforeach
+                    @endif
 
                     </tbody>
                 </table>
