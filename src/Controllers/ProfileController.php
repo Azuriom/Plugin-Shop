@@ -19,6 +19,10 @@ class ProfileController extends Controller
             ->scopes(['notPending', 'withRealMoney'])
             ->latest()
             ->get();
+        $purchases = Payment::whereBelongsTo($user)
+            ->withSiteMoney()
+            ->latest()
+            ->get();
 
         $subscriptions = Subscription::notPending()
             ->whereBelongsTo($user)
@@ -29,6 +33,7 @@ class ProfileController extends Controller
         return view('shop::profile.index', [
             'user' => $user,
             'payments' => $payments,
+            'purchases' => $purchases,
             'subscriptions' => $subscriptions,
             'giftCardCode' => null, // TODO remove unused variable, kept for compatibility
         ]);

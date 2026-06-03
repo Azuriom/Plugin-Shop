@@ -139,6 +139,7 @@ return [
 
     'profile' => [
         'payments' => 'Your payments',
+        'purchases' => 'Your purchases',
         'subscriptions' => 'Your subscriptions',
         'money' => 'Money: :balance',
     ],
