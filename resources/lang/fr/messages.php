@@ -138,7 +138,8 @@ return [
     ],
 
     'profile' => [
-        'payments' => 'Vos achats',
+        'payments' => 'Vos paiements',
+        'purchases' => 'Vos achats',
         'subscriptions' => 'Vos abonnements',
         'money' => 'Argent : :balance',
     ],

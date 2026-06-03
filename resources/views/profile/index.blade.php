@@ -20,45 +20,58 @@
                     </tr>
                     </thead>
                     <tbody>
-                    @if(! $payments->isEmpty())
-                        @foreach($payments as $payment)
-                            <tr>
-                                <th scope="row">{{ $payment->id }}</th>
-                                <td>{{ $payment->formatPrice() }}</td>
-                                <td>{{ $payment->getTypeName() }}</td>
-                                <td>
-                                    <span class="badge bg-{{ $payment->statusColor() }}">
-                                        {{ trans('shop::admin.payments.status.'.$payment->status) }}
-                                    </span>
-                                </td>
-                                <td>{{ $payment->transaction_id ?? trans('messages.unknown') }}</td>
-                                <td>{{ format_date($payment->created_at, true) }}</td>
-                            </tr>
-                        @endforeach
-                    @endif
 
-                    @if(! $paymentsWithSiteMoney->isEmpty())
-                        @foreach($paymentsWithSiteMoney as $paymentWithSiteMoney)
-                            <tr>
-                                <th scope="row">{{ $paymentWithSiteMoney->id }}</th>
-                                <td>{{ $paymentWithSiteMoney->formatPrice() }}</td>
-                                <td>{{ $paymentWithSiteMoney->getTypeName() }}</td>
-                                <td>
-                                    <span class="badge bg-{{ $paymentWithSiteMoney->statusColor() }}">
-                                        {{ trans('shop::admin.payments.status.'.$paymentWithSiteMoney->status) }}
-                                    </span>
-                                </td>
-                                <td>{{ $paymentWithSiteMoney->transaction_id ?? trans('messages.unknown') }}</td>
-                                <td>{{ format_date($paymentWithSiteMoney->created_at, true) }}</td>
-                            </tr>
-                        @endforeach
-                    @endif
+                    @foreach($payments as $payment)
+                        <tr>
+                            <th scope="row">{{ $payment->id }}</th>
+                            <td>{{ $payment->formatPrice() }}</td>
+                            <td>{{ $payment->getTypeName() }}</td>
+                            <td>
+                                <span class="badge bg-{{ $payment->statusColor() }}">
+                                    {{ trans('shop::admin.payments.status.'.$payment->status) }}
+                                </span>
+                            </td>
+                            <td>{{ $payment->transaction_id ?? trans('messages.unknown') }}</td>
+                            <td>{{ format_date($payment->created_at, true) }}</td>
+                        </tr>
+                    @endforeach
 
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
+
+    @if(! $purchases->isEmpty())
+        <div class="card mb-4">
+            <div class="card-body">
+                <h2 class="card-title">{{ trans('shop::messages.profile.purchases') }}</h2>
+
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead class="table-dark">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">{{ trans('shop::messages.fields.price') }}</th>
+                            <th scope="col">{{ trans('messages.fields.date') }}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        @foreach($payments as $payment)
+                            <tr>
+                                <th scope="row">{{ $payment->id }}</th>
+                                <td>{{ $payment->formatPrice() }}</td>
+                                <td>{{ format_date($payment->created_at, true) }}</td>
+                            </tr>
+                        @endforeach
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    @endif
 
     @if(! $subscriptions->isEmpty())
         <div class="card mb-4">

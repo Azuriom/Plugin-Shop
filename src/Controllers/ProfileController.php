@@ -15,20 +15,14 @@ class ProfileController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        $payments = collect();
-        $paymentsWithSiteMoney = collect();
-
-        if (use_site_money()) {
-            $paymentsWithSiteMoney = Payment::whereBelongsTo($user)
-                ->scopes(['notPending', 'withSiteMoney'])
-                ->latest()
-                ->get();
-        } else {
-            $payments = Payment::whereBelongsTo($user)
-                ->scopes(['notPending', 'withRealMoney'])
-                ->latest()
-                ->get();
-        }
+        $payments = Payment::whereBelongsTo($user)
+            ->scopes(['notPending', 'withRealMoney'])
+            ->latest()
+            ->get();
+        $purchases = Payment::whereBelongsTo($user)
+            ->withSiteMoney()
+            ->latest()
+            ->get();
 
         $subscriptions = Subscription::notPending()
             ->whereBelongsTo($user)
@@ -39,7 +33,7 @@ class ProfileController extends Controller
         return view('shop::profile.index', [
             'user' => $user,
             'payments' => $payments,
-            'paymentsWithSiteMoney' => $paymentsWithSiteMoney,
+            'purchases' => $purchases,
             'subscriptions' => $subscriptions,
             'giftCardCode' => null, // TODO remove unused variable, kept for compatibility
         ]);
