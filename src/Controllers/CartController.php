@@ -26,10 +26,15 @@ class CartController extends Controller
             $terms = new HtmlString(Str::between($markdown, '<p>', '</p>'));
         }
 
+        $cart = Cart::fromSession($request->session());
+
+        $userBalance = (auth()->check() && use_site_money()) ? auth()->user()->money : 0;
+
         return view('shop::cart.index', [
-            'cart' => Cart::fromSession($request->session()),
-            'terms' => $terms,
+            'cart'          => $cart,
+            'terms'         => $terms,
             'emailRequired' => auth()->check() && auth()->user()->email === null,
+            'userBalance'   => $userBalance,
         ]);
     }
 
@@ -76,41 +81,89 @@ class CartController extends Controller
     }
 
     /**
-     * Pay using the website money.
+     * AJAX — сохранить, сколько донат-валюты игрок хочет потратить.
+     * Вызывается ползунком на странице корзины.
+     */
+    public function setSiteMoney(Request $request)
+    {
+        if (! use_site_money()) {
+            return response()->json(['error' => 'Site money disabled'], 403);
+        }
+
+        $request->validate(['amount' => 'required|numeric|min:0']);
+
+        $cart = Cart::fromSession($request->session());
+
+        if ($cart->isEmpty()) {
+            return response()->json(['error' => 'Cart is empty'], 422);
+        }
+
+        $toSpend = min((float) $request->input('amount'), $request->user()->money, $cart->payableTotal());
+
+        $cart->setSiteMoneyAmount($toSpend);
+
+        return response()->json([
+            'site_money_amount' => $toSpend,
+            'remaining_to_pay'  => round(max($cart->payableTotal() - $toSpend, 0), 2),
+            'cart_total'        => round($cart->payableTotal(), 2),
+        ]);
+    }
+
+    /**
+     * Pay using the website money (full or partial).
+     *
+     * - Полная оплата балансом  → списываем и завершаем сразу.
+     * - Частичная               → сохраняем в сессии, ведём на шлюз.
+     * - use_site_money выключен → весь платёж через шлюз.
      */
     public function payment(Request $request)
     {
-        if (! use_site_money()) {
-            return to_route('shop.cart.index');
-        }
-
         $cart = Cart::fromSession($request->session());
 
         if ($cart->isEmpty()) {
             return to_route('shop.cart.index');
         }
 
-        $user = $request->user();
-        $total = $cart->payableTotal();
-
-        if (! $user->hasMoney($total)) {
-            return to_route('shop.cart.index')->with('error', trans('shop::messages.cart.errors.money'));
+        // use_site_money выключен — стандартный путь через шлюз
+        if (! use_site_money()) {
+            return to_route('shop.payments.payment');
         }
 
-        $user->removeMoney($total);
+        $user           = $request->user();
+        $total          = $cart->payableTotal();
+        $siteMoneyToUse = $cart->getSiteMoneyAmount();
 
-        try {
-            payment_manager()->buyPackages($cart);
-        } catch (Exception $e) {
-            report($e);
-
-            $user->addMoney($total);
-
-            return to_route('shop.cart.index')->with('error', trans('shop::messages.cart.errors.execute'));
+        // Проверяем реальный баланс
+        if ($siteMoneyToUse > 0 && ! $user->hasMoney($siteMoneyToUse)) {
+            return to_route('shop.cart.index')
+                ->with('error', trans('shop::messages.cart.errors.money'));
         }
 
-        $cart->destroy();
+        // Полная оплата балансом
+        if ($siteMoneyToUse >= $total) {
+            $user->removeMoney($total);
 
-        return to_route('shop.home')->with('success', trans('shop::messages.cart.success'));
+            try {
+                payment_manager()->buyPackages($cart);
+            } catch (Exception $e) {
+                report($e);
+                $user->addMoney($total);
+
+                return to_route('shop.cart.index')
+                    ->with('error', trans('shop::messages.cart.errors.execute'));
+            }
+
+            $cart->destroy();
+
+            return to_route('shop.home')
+                ->with('success', trans('shop::messages.cart.success'));
+        }
+
+        // Частичная — отправляем на шлюз, pending запомним в сессии
+        if ($siteMoneyToUse > 0) {
+            $request->session()->put('shop.pending_site_money', $siteMoneyToUse);
+        }
+
+        return to_route('shop.payments.payment');
     }
 }
