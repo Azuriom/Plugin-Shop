@@ -20,11 +20,20 @@ class PaymentController extends Controller
 
         $cart = Cart::fromSession($request->session());
 
-        // If the cart isn't empty and the total is 0, just complete
-        // the payment now as gateways won't accept null payment
-        if (! $cart->isEmpty() && $cart->payableTotal() < 0.1) {
-            PaymentManager::createPayment($cart, 0, currency(), 'free')->deliver();
+        // Считаем сколько идёт через шлюз (total минус pending баланс)
+        $pendingSiteMoney = (float) $request->session()->get('shop.pending_site_money', 0.0);
+        $gatewayTotal = $pendingSiteMoney > 0
+            ? max($cart->payableTotal() - $pendingSiteMoney, 0.0)
+            : $cart->payableAfterBalance();
 
+        // Если корзина не пуста, но платить через шлюз нечего — завершаем бесплатно
+        if (! $cart->isEmpty() && $gatewayTotal < 0.1) {
+            if ($pendingSiteMoney > 0 && $request->user()) {
+                $request->user()->removeMoney(min($pendingSiteMoney, $cart->payableTotal()));
+                $request->session()->forget('shop.pending_site_money');
+            }
+
+            PaymentManager::createPayment($cart, 0, currency(), 'free')->deliver();
             $cart->destroy();
 
             return to_route('shop.home')->with('success', trans('shop::messages.cart.success'));
@@ -35,18 +44,20 @@ class PaymentController extends Controller
             ->filter(fn (Gateway $gateway) => $gateway->isSupported())
             ->reject(fn (Gateway $gateway) => $gateway->paymentMethod()->hasFixedAmount());
 
-        // If there is only one payment gateway, redirect to it directly
+        // Если один шлюз — сразу перенаправляем
         if ($gateways->count() === 1) {
-            $gateway = $gateways->first();
-
-            return $gateway->paymentMethod()->startPayment($cart, $cart->payableTotal(), currency());
+            return $gateways->first()->paymentMethod()->startPayment($cart, $gatewayTotal, currency());
         }
 
-        return view('shop::payments.pay', ['gateways' => $gateways]);
+        return view('shop::payments.pay', [
+            'gateways'      => $gateways,
+            'gatewayTotal'  => $gatewayTotal,
+            'siteMoneyUsed' => $pendingSiteMoney > 0 ? $pendingSiteMoney : $cart->getSiteMoneyAmount(),
+        ]);
     }
 
     /**
-     * Start a new payment.
+     * Start a new payment via specific gateway.
      */
     public function pay(Request $request, Gateway $gateway)
     {
@@ -58,22 +69,36 @@ class PaymentController extends Controller
             return to_route('shop.cart.index');
         }
 
-        return $gateway->paymentMethod()->startPayment($cart, $cart->payableTotal(), currency());
+        $pendingSiteMoney = (float) $request->session()->get('shop.pending_site_money', 0.0);
+        $gatewayTotal = $pendingSiteMoney > 0
+            ? max($cart->payableTotal() - $pendingSiteMoney, 0.0)
+            : $cart->payableAfterBalance();
+
+        return $gateway->paymentMethod()->startPayment($cart, $gatewayTotal, currency());
     }
 
     public function success(Request $request, Gateway $gateway)
     {
+        // Списываем баланс только при успешной оплате через шлюз
+        $pendingSiteMoney = (float) $request->session()->get('shop.pending_site_money', 0.0);
+
+        if ($pendingSiteMoney > 0 && $request->user()) {
+            $cart = Cart::fromSession($request->session());
+            $request->user()->removeMoney(min($pendingSiteMoney, $cart->payableTotal()));
+            $request->session()->forget('shop.pending_site_money');
+        }
+
         $response = $gateway->paymentMethod()->success($request);
 
-        $cart = Cart::fromSession($request->session());
-
-        $cart->destroy();
+        Cart::fromSession($request->session())->destroy();
 
         return $response;
     }
 
     public function failure(Request $request, Gateway $gateway)
     {
+        // При ошибке баланс не трогаем — pending_site_money остаётся в сессии,
+        // пользователь может попробовать ещё раз.
         return $gateway->paymentMethod()->failure($request);
     }
 }
