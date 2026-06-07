@@ -88,6 +88,18 @@ return [
             'money' => 'You don\'t have enough money to make this purchase.',
             'execute' => 'An unexpected error occurred during payment, your purchase got refund.',
         ],
+
+        'balance' => [
+            'title' => 'Use site balance',
+            'your_balance' => 'Your balance',
+            'from_balance' => 'From balance',
+            'remaining' => 'Remaining',
+            'full_balance' => 'Full payment with balance — no gateway needed!',
+            'pay_with_balance' => 'Pay with balance',
+            'pay_remaining' => 'Pay remaining :amount',
+            'partial_gateway' => 'Pay via gateway: :amount',
+            'modal_from_balance' => 'From balance: :amount',
+        ],
     ],
 
     'coupons' => [
