@@ -11,6 +11,64 @@
         .cart-items tbody td {
             width: 15%;
         }
+
+        /* --- Balance Slider --- */
+        .balance-block {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px 24px;
+            margin-top: 20px;
+        }
+        .balance-block .balance-title {
+            font-weight: 700;
+            font-size: .95rem;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .balance-block .badge-balance {
+            background: rgba(255, 165, 0, 0.15);
+            color: #ffa500;
+            border: 1px solid rgba(255, 165, 0, 0.3);
+            border-radius: 20px;
+            padding: 3px 12px;
+            font-size: .82rem;
+            font-weight: 600;
+        }
+        .balance-block input[type=range] {
+            accent-color: #ffa500;
+            width: 100%;
+            cursor: pointer;
+        }
+        .balance-range-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: .78rem;
+            color: rgba(255,255,255,.4);
+            margin-top: 4px;
+        }
+        .balance-summary {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 14px;
+        }
+        .balance-summary .bs-item {
+            flex: 1;
+            background: rgba(255,255,255,.04);
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-size: .85rem;
+        }
+        .balance-summary .bs-item .bs-label {
+            color: rgba(255,255,255,.45);
+            margin-bottom: 3px;
+            font-size: .78rem;
+        }
+        .balance-summary .bs-item .bs-value { font-weight: 700; }
+        .bs-value.text-orange { color: #ffa500; }
     </style>
 @endpush
 
@@ -200,6 +258,50 @@
                 @endif
             </div>
 
+
+            {{-- ===== ПОЛЗУНОК БАЛАНСА ===== --}}
+            @if(use_site_money() && auth()->check() && !$cart->isEmpty() && $userBalance > 0)
+                @php
+                    $cartTotal    = $cart->payableTotal();
+                    $maxSpend     = min($userBalance, $cartTotal);
+                    $currentSpend = $cart->getSiteMoneyAmount();
+                    $remaining    = max($cartTotal - $currentSpend, 0);
+                @endphp
+
+                <div class="balance-block" id="balance-slider-wrap"
+                     data-set-url="{{ route('shop.cart.site-money') }}"
+                     data-csrf="{{ csrf_token() }}"
+                     data-cart-total="{{ $cartTotal }}">
+
+                    <div class="balance-title">
+                        <span><i class="bi bi-wallet2 me-2" style="color:#ffa500"></i>Использовать донат-валюту</span>
+                        <span class="badge-balance" id="bs-spend-badge">{{ shop_format_amount($currentSpend, true) }}</span>
+                    </div>
+
+                    <input type="range" id="balance-slider"
+                           min="0" max="{{ $maxSpend }}" step="1"
+                           value="{{ $currentSpend }}">
+
+                    <div class="balance-range-labels">
+                        <span>0</span>
+                        <span>Ваш баланс: <strong style="color:#ffa500">{{ shop_format_amount($userBalance, true) }}</strong></span>
+                        <span>{{ shop_format_amount($maxSpend, true) }}</span>
+                    </div>
+
+                    <div class="balance-summary">
+                        <div class="bs-item">
+                            <div class="bs-label">С баланса</div>
+                            <div class="bs-value text-orange" id="bs-from-balance">{{ shop_format_amount($currentSpend, true) }}</div>
+                        </div>
+                        <div class="bs-item">
+                            <div class="bs-label">Доплатить</div>
+                            <div class="bs-value" id="bs-remaining">{{ shop_format_amount($remaining) }}</div>
+                        </div>
+                    </div>
+                </div>
+            @endif
+            {{-- ===== конец ползунка ===== --}}
+
             <form @if(! use_site_money()) action="{{ route('shop.payments.payment') }}" @endif>
                 @if(! use_site_money())
                     <div class="d-flex justify-content-end">
@@ -243,7 +345,22 @@
                     </div>
 
                     <div class="modal-body">
-                        {{ trans('shop::messages.cart.confirm.price', ['price' => shop_format_amount($cart->payableTotal())]) }}
+                        @php
+                            $mTotal   = $cart->payableTotal();
+                            $mSpend   = $cart->getSiteMoneyAmount();
+                            $mRemain  = max($mTotal - $mSpend, 0);
+                            $mFull    = $mRemain < 0.01;
+                        @endphp
+                        @if($mSpend > 0)
+                            <p class="mb-1">С баланса: <strong style="color:#ffa500">{{ shop_format_amount($mSpend, true) }}</strong></p>
+                            @if($mFull)
+                                <p class="mb-0 text-success fw-bold">Полная оплата балансом — касса не нужна!</p>
+                            @else
+                                <p class="mb-0">Доплатить через кассу: <strong>{{ shop_format_amount($mRemain) }}</strong></p>
+                            @endif
+                        @else
+                            {{ trans('shop::messages.cart.confirm.price', ['price' => shop_format_amount($cart->payableTotal())]) }}
+                        @endif
                     </div>
 
                     <form class="modal-footer" method="POST" action="{{ route('shop.cart.payment') }}">
@@ -256,7 +373,7 @@
                                 {{ trans('messages.actions.cancel') }}
                             </button>
 
-                            <button class="btn btn-primary" type="submit">
+                            <button class="btn btn-primary" type="submit" id="confirm-pay-btn">
                                 {{ trans('shop::messages.cart.pay') }}
                             </button>
                         </div>
@@ -265,4 +382,60 @@
             </div>
         </div>
     @endif
+
+@push('footer-scripts')
+<script>
+(function () {
+    const wrap = document.getElementById('balance-slider-wrap');
+    if (!wrap) return;
+
+    const slider       = document.getElementById('balance-slider');
+    const badge        = document.getElementById('bs-spend-badge');
+    const fromBal      = document.getElementById('bs-from-balance');
+    const remainingEl  = document.getElementById('bs-remaining');
+    const confirmBtn   = document.getElementById('confirm-pay-btn');
+    const setUrl       = wrap.dataset.setUrl;
+    const csrf         = wrap.dataset.csrf;
+    const cartTotal    = parseFloat(wrap.dataset.cartTotal);
+    const moneyName    = @json(money_name(1));
+
+    function fmtBal(val)  { return val + ' ' + moneyName; }
+
+    // Простой форматтер для остатка (используем ту же валюту что и moneyName при use_site_money)
+    function fmtRemain(val) { return val + ' ' + moneyName; }
+
+    let timer = null;
+
+    slider.addEventListener('input', function () {
+        const spend = parseFloat(slider.value);
+        const rem   = Math.max(cartTotal - spend, 0).toFixed(2);
+        const full  = rem < 0.01;
+
+        badge.textContent       = fmtBal(spend);
+        fromBal.textContent     = fmtBal(spend);
+        remainingEl.textContent = fmtRemain(rem);
+
+        if (confirmBtn) {
+            if (full && spend > 0) {
+                confirmBtn.textContent = 'Оплатить балансом';
+            } else if (spend > 0) {
+                confirmBtn.textContent = 'Доплатить ' + fmtRemain(rem);
+            } else {
+                confirmBtn.textContent = '{{ trans("shop::messages.cart.pay") }}';
+            }
+        }
+
+        clearTimeout(timer);
+        timer = setTimeout(function () {
+            fetch(setUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrf, 'Accept': 'application/json' },
+                body: JSON.stringify({ amount: spend }),
+            }).catch(console.error);
+        }, 300);
+    });
+})();
+</script>
+@endpush
+
 @endsection
