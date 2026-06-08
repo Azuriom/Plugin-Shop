@@ -38,9 +38,9 @@ class Cart implements Arrayable
     private Collection $giftcards;
 
     /**
-     * The amount of site money (balance) the user wants to spend.
+     * The amount of site balance the user wants to spend on this cart.
      */
-    private float $siteMoneyAmount = 0.0;
+    private float $balanceAmount = 0.0;
 
     /**
      * Create a new cart instance.
@@ -248,29 +248,31 @@ class Cart implements Arrayable
             }, $this->total());
     }
 
-
     /**
-     * Get the amount that still needs to be paid via gateway after deducting site money.
+     * Get the amount that must be paid via an external payment gateway,
+     * after deducting the site balance portion chosen by the user.
      */
-    public function payableAfterBalance(): float
+    public function gatewayTotal(): float
     {
-        return max($this->payableTotal() - $this->siteMoneyAmount, 0.0);
+        return max($this->payableTotal() - $this->getBalanceAmount(), 0.0);
     }
 
     /**
-     * Get how much site money will be used (clamped to payableTotal).
+     * Get the confirmed site balance amount to spend (clamped to payableTotal).
      */
-    public function getSiteMoneyAmount(): float
+    public function getBalanceAmount(): float
     {
-        return min($this->siteMoneyAmount, $this->payableTotal());
+        return min($this->balanceAmount, $this->payableTotal());
     }
 
     /**
-     * Set how much site money the user wants to spend.
+     * Set how much site balance the user wants to spend.
+     * Value is clamped to [0, payableTotal].
      */
-    public function setSiteMoneyAmount(float $amount): void
+    public function setBalanceAmount(float $amount): void
     {
-        $this->siteMoneyAmount = max(0.0, min($amount, $this->payableTotal()));
+        $this->balanceAmount = max(0.0, min($amount, $this->payableTotal()));
+
         $this->save();
     }
 
@@ -399,7 +401,7 @@ class Cart implements Arrayable
             $this->giftcards = collect();
         }
 
-        $this->siteMoneyAmount = (float) ($content['site_money_amount'] ?? 0.0);
+        $this->balanceAmount = (float) ($content['balance_amount'] ?? 0.0);
 
         if (empty($content['items'])) {
             return;
@@ -445,7 +447,7 @@ class Cart implements Arrayable
             'items' => $this->items->toArray(),
             'coupons' => $this->coupons->pluck('code')->all(),
             'giftcards' => $this->giftcards->pluck('code')->all(),
-            'site_money_amount' => $this->siteMoneyAmount,
+            'balance_amount' => $this->balanceAmount,
         ];
     }
 }
