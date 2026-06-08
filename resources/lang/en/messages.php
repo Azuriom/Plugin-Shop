@@ -77,6 +77,13 @@ return [
         'back' => 'Back to shop',
         'total' => 'Total: :total',
         'payable_total' => 'Total to pay: :total',
+        'use_balance' => 'Use your balance',
+        'your_balance' => 'Your balance',
+        'from_balance' => 'From balance',
+        'via_gateway' => 'Via payment gateway',
+        'pay_with_balance' => 'Pay with balance',
+        'pay_remaining' => 'Pay remaining',
+        'fully_covered' => 'Fully covered by balance — no gateway payment needed!',
         'credit' => 'Credit',
 
         'confirm' => [
@@ -87,18 +94,6 @@ return [
         'errors' => [
             'money' => 'You don\'t have enough money to make this purchase.',
             'execute' => 'An unexpected error occurred during payment, your purchase got refund.',
-        ],
-
-        'balance' => [
-            'title' => 'Use site balance',
-            'your_balance' => 'Your balance',
-            'from_balance' => 'From balance',
-            'remaining' => 'Remaining',
-            'full_balance' => 'Full payment with balance — no gateway needed!',
-            'pay_with_balance' => 'Pay with balance',
-            'pay_remaining' => 'Pay remaining :amount',
-            'partial_gateway' => 'Pay via gateway: :amount',
-            'modal_from_balance' => 'From balance: :amount',
         ],
     ],
 
