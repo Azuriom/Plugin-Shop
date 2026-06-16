@@ -320,10 +320,10 @@ class Package extends Model implements Buyable
         $globalStart = optional($this->global_limit_period, fn ($period) => now()->sub($period));
         $noExpired = $this->limits_no_expired;
 
-        $user = $this->user_limit > 0
+        $user = $this->user_limit !== null
             ? $this->user_limit - $this->countUserPurchases($userStart, $noExpired)
             : 100;
-        $global = $this->global_limit > 0
+        $global = $this->global_limit !== null
             ? $this->global_limit - $this->countTotalPurchases($globalStart, $noExpired)
             : 100;
 

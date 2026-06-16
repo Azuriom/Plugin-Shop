@@ -39,7 +39,9 @@
                         </button>
                     </form>
                 @elseif($package->getMaxQuantity() < 1)
-                    {{ trans('shop::messages.packages.limit') }}
+                    <button class="btn btn-danger disabled" disabled>
+                        <i class="bi bi-x-circle"></i> Out of Stock
+                    </button>
                 @elseif(! $package->hasBoughtRequirements())
                     {{ trans('shop::messages.packages.requirements') }}
                 @else

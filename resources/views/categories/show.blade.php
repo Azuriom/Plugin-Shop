@@ -58,9 +58,15 @@
                                     {{ shop_format_amount($package->getPrice()) }}
                                 </h5>
 
-                                <a href="#" class="btn btn-primary" data-package-url="{{ route('shop.packages.show', $package) }}">
-                                    {{ trans('shop::messages.buy') }}
-                                </a>
+                                @if($package->getMaxQuantity() < 1)
+                                    <button class="btn btn-danger disabled" disabled>
+                                        <i class="bi bi-x-circle"></i> Out of Stock
+                                    </button>
+                                @else
+                                    <a href="#" class="btn btn-primary" data-package-url="{{ route('shop.packages.show', $package) }}">
+                                        {{ trans('shop::messages.buy') }}
+                                    </a>
+                                @endif
                             </div>
                         </div>
                     </div>
