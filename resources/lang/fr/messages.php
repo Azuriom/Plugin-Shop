@@ -124,6 +124,7 @@ return [
     ],
 
     'packages' => [
+        'unavailable' => 'Ce produit n\'est pas disponible',
         'limit' => 'Vous avez acheté le maximum possible pour cet article.',
         'requirements' => 'Vous n\'avez pas les pré-requis pour acheter cet article.',
         'cumulate' => 'Vous ne pouvez pas acheter ce produit avec un autre de la même catégorie dans le même achat.',

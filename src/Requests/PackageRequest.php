@@ -46,7 +46,7 @@ class PackageRequest extends FormRequest
             'billing_period' => ['required_if:billing_type,expiring,subscription', self::PERIOD_RULE],
             'user_limit' => ['nullable', 'integer', 'gt:0'],
             'user_limit_period' => ['nullable', self::PERIOD_RULE],
-            'global_limit' => ['nullable', 'integer', 'gt:0'],
+            'global_limit' => ['nullable', 'integer', 'min:0'],
             'global_limit_period' => ['nullable', self::PERIOD_RULE],
             'limits_no_expired' => ['filled', 'boolean'],
             'servers.*' => ['required', 'exists:servers,id'],
