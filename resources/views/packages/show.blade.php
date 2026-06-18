@@ -38,12 +38,12 @@
                             <i class="bi bi-cart-x"></i> {{ trans('messages.actions.remove') }}
                         </button>
                     </form>
+                @elseif($package->global_limit === 0)
+                    <i class="bi bi-x-circle"></i> {{ trans('shop::messages.packages.unavailable') }}
                 @elseif($package->getMaxQuantity() < 1)
-                    <button class="btn btn-danger disabled" disabled>
-                        <i class="bi bi-x-circle"></i> Out of Stock
-                    </button>
+                    <i class="bi bi-x-circle"></i> {{ trans('shop::messages.packages.limit') }}
                 @elseif(! $package->hasBoughtRequirements())
-                    {{ trans('shop::messages.packages.requirements') }}
+                    <i class="bi bi-x-circle"></i> {{ trans('shop::messages.packages.requirements') }}
                 @else
                     <form action="{{ route('shop.packages.buy', $package) }}" method="POST" class="row row-cols-lg-auto g-0 gy-2 align-items-center">
                         @csrf

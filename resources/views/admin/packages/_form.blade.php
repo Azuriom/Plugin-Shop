@@ -165,11 +165,12 @@
 </div>
 
 <div class="mb-3 form-check form-switch">
-    <input type="checkbox" class="form-check-input" id="userLimitSwitch" name="has_user_limit" data-bs-toggle="collapse" data-bs-target="#userLimit" @checked(old('user_limit', $package->user_limit ?? false))>
+    <input type="checkbox" class="form-check-input" id="userLimitSwitch" name="has_user_limit" data-bs-toggle="collapse"
+           data-bs-target="#userLimit" @checked(old('user_limit', $package->user_limit ?? null) !== null)>
     <label class="form-check-label" for="userLimitSwitch">{{ trans('shop::admin.packages.has_user_limit') }}</label>
 </div>
 
-<div id="userLimit" class="{{ old('user_limit', $package->user_limit ?? false) ? 'show' : 'collapse' }}">
+<div id="userLimit" class="{{ old('user_limit', $package->user_limit ?? null) !== null ? 'show' : 'collapse' }}">
     <div class="card mb-3">
         <div class="card-body row gx-3">
             <div class="mb-3 col-md-6">
@@ -212,11 +213,12 @@
 </div>
 
 <div class="mb-3 form-check form-switch">
-    <input type="checkbox" class="form-check-input" id="globalLimitSwitch" name="has_global_limit" data-bs-toggle="collapse" data-bs-target="#globalLimit" @checked(old('global_limit', $package->global_limit ?? false))>
+    <input type="checkbox" class="form-check-input" id="globalLimitSwitch" name="has_global_limit" data-bs-toggle="collapse"
+           data-bs-target="#globalLimit" @checked(old('global_limit', $package->global_limit ?? null) !== null)>
     <label class="form-check-label" for="globalLimitSwitch">{{ trans('shop::admin.packages.has_global_limit') }}</label>
 </div>
 
-<div id="globalLimit" class="{{ old('global_limit', $package->global_limit ?? false) ? 'show' : 'collapse' }}">
+<div id="globalLimit" class="{{ old('global_limit', $package->global_limit ?? null) !== null ? 'show' : 'collapse' }}">
     <div class="card mb-3">
         <div class="card-body row gx-3">
             <div class="mb-3 col-md-6">

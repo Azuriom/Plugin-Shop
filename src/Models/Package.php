@@ -312,7 +312,7 @@ class Package extends Model implements Buyable
 
     public function getMaxQuantity(): int
     {
-        if ($this->cumulativePurchasesBlocked()) {
+        if ($this->global_limit === 0 || $this->cumulativePurchasesBlocked()) {
             return 0;
         }
 
