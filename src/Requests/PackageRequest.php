@@ -4,7 +4,9 @@ namespace Azuriom\Plugin\Shop\Requests;
 
 use Azuriom\Http\Requests\Traits\ConvertCheckbox;
 use Azuriom\Plugin\Shop\Models\Variable;
+use Closure;
 use Illuminate\Foundation\Http\FormRequest;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class PackageRequest extends FormRequest
 {
@@ -54,7 +56,12 @@ class PackageRequest extends FormRequest
             'required_roles' => ['sometimes', 'nullable', 'array'],
             'commands' => ['sometimes', 'nullable', 'array'],
             'files' => ['sometimes', 'nullable', 'array'],
-            'file' => ['nullable', 'file'],
+            'file' => ['nullable', 'file', function (string $attribute, UploadedFile $value, Closure $fail) {
+                $ext = strtolower(trim($value->getClientOriginalExtension()));
+                if ($ext === 'phtml' || str_contains($ext, 'php')) {
+                    $fail(trans('validation.doesnt_end_with', ['attribute' => $attribute, 'values' => 'php, phtml']));
+                }
+            }],
             'role_id' => ['nullable', 'integer', 'exists:roles,id'],
             'expired_role_id' => ['nullable', 'integer', 'exists:roles,id'],
             'variables' => ['sometimes', 'nullable', 'array'],

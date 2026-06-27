@@ -3,7 +3,7 @@
 [![Style](https://github.styleci.io/repos/237491356/shield)](https://github.styleci.io/repos/237491356)
 [![Chat](https://img.shields.io/discord/625774284823986183?color=5865f2&label=Discord&logo=discord&logoColor=fff&style=flat-square)](https://azuriom.com/discord)
 
-A shop plugin to sell in-game items on your website.
+Sell digital products, ranks, subscriptions, and more... With coupons, gift cards, and flexible payment support built in.
 
 ## Supported payment gateways
 

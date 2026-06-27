@@ -78,10 +78,9 @@ class Giftcard extends Model
         }
 
         $total = $this->payments()->scopes('notPending')->sum('amount');
+        $balance = max($this->original_balance - $total, 0);
 
-        $this->update([
-            'balance' => max($this->original_balance - $total, 0),
-        ]);
+        $this->update(['balance' => round($balance, 2)]);
     }
 
     public function notifyUser(User $user): void

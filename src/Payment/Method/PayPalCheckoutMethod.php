@@ -10,6 +10,7 @@ use Azuriom\Plugin\Shop\Models\Subscription;
 use Azuriom\Plugin\Shop\Payment\PaymentMethod;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Response;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
@@ -393,7 +394,9 @@ class PayPalCheckoutMethod extends PaymentMethod
         } catch (JsonException $e) {
             Log::warning('Invalid PayPal webhook JSON.', ['error' => $e->getMessage()]);
 
-            return response()->json(['error' => 'Invalid PayPal webhook JSON.'], 400);
+            throw new HttpResponseException(
+                response()->json(['error' => 'Invalid PayPal webhook JSON.'], 400)
+            );
         }
 
         $response = $this->getClient()->post('/v1/notifications/verify-webhook-signature', [
@@ -409,7 +412,9 @@ class PayPalCheckoutMethod extends PaymentMethod
         if ($response->json('verification_status') !== 'SUCCESS') {
             Log::warning('Invalid PayPal webhook signature.');
 
-            return response()->json(['error' => 'Invalid PayPal webhook signature.'], 401);
+            throw new HttpResponseException(
+                response()->json(['error' => 'Invalid PayPal webhook signature.'], 401)
+            );
         }
 
         return $request->json('event_type');

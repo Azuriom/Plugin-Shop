@@ -121,6 +121,7 @@ class PaysafecardMethod extends PaymentMethod
             ];
         }
 
+        // Capture payment to ensure we process it only once (second time won't be success)
         $response = $this->prepareRequest()
             ->post("{$paymentId}/capture", ['id' => $paymentId]);
 

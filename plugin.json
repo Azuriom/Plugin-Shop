@@ -1,8 +1,8 @@
 {
     "id": "shop",
     "name": "Shop",
-    "description": "A shop plugin to sell in-game items on your website.",
-    "version": "1.2.23",
+    "description": "Sell digital products, ranks, subscriptions, and more... With coupons, gift cards, and flexible payment support built in.",
+    "version": "1.2.24",
     "url": "https://market.azuriom.com/resources/1",
     "authors": [
         "Azuriom"

@@ -128,7 +128,7 @@ class MollieMethod extends PaymentMethod
         $id = $request->input('id');
         $molliePayment = $this->mollieClient()->payments->get($id);
 
-        if ($molliePayment->metadata?->mode ?? '' === 'subscription_first') {
+        if (($molliePayment->metadata?->mode ?? '') === 'subscription_first') {
             $package = Package::findOrFail($molliePayment->metadata->package);
             $user = User::findOrFail($molliePayment->metadata->user);
 

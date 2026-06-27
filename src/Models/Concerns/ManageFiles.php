@@ -68,6 +68,6 @@ trait ManageFiles
 
     protected function filesDisk(): Filesystem
     {
-        return Storage::disk();
+        return Storage::disk(); // Uses default disk ('local' by default)
     }
 }
