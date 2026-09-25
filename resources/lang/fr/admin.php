@@ -9,6 +9,7 @@ return [
         'offers' => 'Offres',
         'coupons' => 'Codes promo',
         'giftcards' => 'Cartes cadeaux',
+        'tiers' => 'Paliers de récompenses',
         'discounts' => 'Réductions',
         'payments' => 'Paiements',
         'subscriptions' => 'Abonnements',
@@ -23,6 +24,7 @@ return [
         'gateways' => 'Gérer les moyens de paiements de la boutique',
         'promotions' => 'Gérer les offres et réductions de la boutique',
         'giftcards' => 'Gérer les cartes cadeaux de la boutique',
+        'tiers' => 'Gérer les paliers de récompenses de la boutique',
         'payments' => 'Ajouter et voir les paiements/achats et abonnements de la boutique',
     ],
 
@@ -297,6 +299,13 @@ return [
             'used' => 'Utilisation de la carte cadeau #:id (:amount)',
         ],
 
+        'shop-tiers' => [
+            'created' => 'Création du palier #:id',
+            'updated' => 'Mise à jour du palier #:id',
+            'deleted' => 'Suppression du palier #:id',
+            'reset' => 'A réinitialisé la progression de tous les paliers',
+        ],
+
         'settings' => 'Mise à jour des paramètres de la boutique',
     ],
 
@@ -310,4 +319,45 @@ return [
         'month_estimated' => 'Estimation des gains ce mois-ci',
     ],
 
+    'tiers' => [
+        'title' => 'Paliers de récompenses',
+        'create' => 'Ajouter un palier',
+        'edit' => 'Modifier le palier :tier',
+        'min_spend' => 'Montant cumulé requis',
+        'min_spend_info' => 'Montant total d\'achats nécessaire pour débloquer ce palier.',
+        'icon' => 'Icône ou Emoji',
+        'icon_info' => 'Vous pouvez utiliser un emoji (ex: 🔑, 🎁, 💎, 🔥) ou une classe <a href="https://icons.getbootstrap.com/" target="_blank" rel="noopener noreferrer">Bootstrap Icons</a> (ex: <code>bi bi-award</code>).',
+        'reward_type' => 'Type de récompense',
+        'unlocked_users_count' => ':count palier débloqué au total|:count paliers débloqués au total',
+        'types' => [
+            'commands' => 'Commandes en jeu',
+            'coupon' => 'Code promotionnel',
+            'giftcard' => 'Carte cadeau',
+            'money' => 'Argent du site',
+        ],
+        'coupon' => [
+            'discount' => 'Valeur de la promotion',
+            'duration' => 'Durée de validité (en jours)',
+            'duration_info' => 'Laisser vide pour un code sans date d\'expiration.',
+        ],
+        'giftcard' => [
+            'balance' => 'Solde de la carte cadeau',
+        ],
+        'money' => [
+            'amount' => 'Montant d\'argent du site',
+        ],
+        'commands' => [
+            'variables_info' => 'Variables disponibles : :variables.',
+        ],
+        'reset' => 'Réinitialiser la progression',
+        'reset_title' => 'Réinitialiser la progression des paliers',
+        'reset_confirm' => 'Êtes-vous sûr de vouloir réinitialiser la progression de tous les utilisateurs sur les paliers de récompenses ?',
+        'reset_warning' => 'Cette action remettra à zéro le compteur de dépenses de tous les utilisateurs pour les paliers et supprimera tous les paliers déjà débloqués. Les utilisateurs pourront à nouveau débloquer les récompenses avec leurs futurs achats.',
+        'reset_confirm_btn' => 'Confirmer la réinitialisation',
+        'reset_success' => 'La progression de tous les utilisateurs sur les paliers a été réinitialisée avec succès.',
+        'last_reset' => 'Dernière réinitialisation : :date',
+        'enable' => 'Activer ce palier',
+    ],
+
 ];
+

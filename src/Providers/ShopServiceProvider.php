@@ -14,6 +14,7 @@ use Azuriom\Plugin\Shop\Models\Gateway;
 use Azuriom\Plugin\Shop\Models\Giftcard;
 use Azuriom\Plugin\Shop\Models\Offer;
 use Azuriom\Plugin\Shop\Models\Package;
+use Azuriom\Plugin\Shop\Models\Tier;
 use Azuriom\Plugin\Shop\Observers\UserObserver;
 use Azuriom\Plugin\Shop\Payment\PaymentManager;
 use Azuriom\Plugin\Shop\View\Composers\ShopAdminDashboardComposer;
@@ -89,12 +90,14 @@ class ShopServiceProvider extends BasePluginServiceProvider
             'shop.promotions' => 'shop::admin.permissions.promotions',
             'shop.giftcards' => 'shop::admin.permissions.giftcards',
             'shop.payments' => 'shop::admin.permissions.payments',
+            'shop.tiers' => 'shop::admin.permissions.tiers',
         ]);
 
         ActionLog::registerLogModels([
             Offer::class,
             Package::class,
             Gateway::class,
+            Tier::class,
         ], 'shop::admin.logs');
 
         ActionLog::registerLogs([
@@ -108,6 +111,11 @@ class ShopServiceProvider extends BasePluginServiceProvider
                 'icon' => 'cart',
                 'color' => 'info',
                 'message' => 'shop::admin.logs.settings',
+            ],
+            'shop-tiers.reset' => [
+                'icon' => 'arrow-counterclockwise',
+                'color' => 'warning',
+                'message' => 'shop::admin.logs.shop-tiers.reset',
             ],
         ]);
 
@@ -178,6 +186,10 @@ class ShopServiceProvider extends BasePluginServiceProvider
                     'shop.admin.giftcards.index' => [
                         'name' => trans('shop::admin.nav.giftcards'),
                         'permission' => 'shop.giftcards',
+                    ],
+                    'shop.admin.tiers.index' => [
+                        'name' => trans('shop::admin.nav.tiers'),
+                        'permission' => 'shop.tiers',
                     ],
                     'shop.admin.variables.index' => [
                         'name' => trans('shop::admin.nav.variables'),
