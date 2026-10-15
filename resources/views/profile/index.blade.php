@@ -58,11 +58,11 @@
                         </thead>
                         <tbody>
 
-                        @foreach($payments as $payment)
+                        @foreach($purchases as $purchase)
                             <tr>
-                                <th scope="row">{{ $payment->id }}</th>
-                                <td>{{ $payment->formatPrice() }}</td>
-                                <td>{{ format_date($payment->created_at, true) }}</td>
+                                <th scope="row">{{ $purchase->id }}</th>
+                                <td>{{ $purchase->formatPrice() }}</td>
+                                <td>{{ format_date($purchase->created_at, true) }}</td>
                             </tr>
                         @endforeach
 
