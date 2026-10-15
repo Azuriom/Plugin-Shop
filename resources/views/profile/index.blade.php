@@ -58,7 +58,7 @@
                         </thead>
                         <tbody>
 
-                        @foreach($payments as $payment)
+                        @foreach($purchases as $payment)
                             <tr>
                                 <th scope="row">{{ $payment->id }}</th>
                                 <td>{{ $payment->formatPrice() }}</td>
