@@ -9,6 +9,7 @@ return [
         'offers' => 'Offers',
         'coupons' => 'Coupons',
         'giftcards' => 'Gift Cards',
+        'tiers' => 'Reward Tiers',
         'discounts' => 'Discounts',
         'payments' => 'Payments',
         'subscriptions' => 'Subscriptions',
@@ -23,6 +24,7 @@ return [
         'gateways' => 'Manage shop payment gateways',
         'promotions' => 'Manage shop coupons and discounts',
         'giftcards' => 'Manage shop gift cards',
+        'tiers' => 'Manage shop reward tiers',
         'payments' => 'Create and view shop payments/purchases and subscriptions',
     ],
 
@@ -297,6 +299,13 @@ return [
             'used' => 'Used giftcard #:id (:amount)',
         ],
 
+        'shop-tiers' => [
+            'created' => 'Created tier #:id',
+            'updated' => 'Updated tier #:id',
+            'deleted' => 'Deleted tier #:id',
+            'reset' => 'Reset progression for all tiers',
+        ],
+
         'settings' => 'Updated shop settings',
     ],
 
@@ -308,6 +317,46 @@ return [
         'estimated' => 'Estimated earnings',
         'month' => 'Payments during this month',
         'month_estimated' => 'Estimated earnings this month',
+    ],
+
+    'tiers' => [
+        'title' => 'Reward Tiers',
+        'create' => 'Add Tier',
+        'edit' => 'Edit tier :tier',
+        'min_spend' => 'Required Cumulative Spend',
+        'min_spend_info' => 'Total purchase amount required to unlock this tier.',
+        'icon' => 'Icon or Emoji',
+        'icon_info' => 'You can use an emoji (e.g. 🔑, 🎁, 💎, 🔥) or a <a href="https://icons.getbootstrap.com/" target="_blank" rel="noopener noreferrer">Bootstrap Icons</a> class (e.g. <code>bi bi-award</code>).',
+        'reward_type' => 'Reward Type',
+        'unlocked_users_count' => ':count tier unlocked in total|:count tiers unlocked in total',
+        'types' => [
+            'commands' => 'In-game commands',
+            'coupon' => 'Promo code',
+            'giftcard' => 'Gift card',
+            'money' => 'Site money',
+        ],
+        'coupon' => [
+            'discount' => 'Discount amount',
+            'duration' => 'Validity duration (in days)',
+            'duration_info' => 'Leave empty for a coupon with no expiration date.',
+        ],
+        'giftcard' => [
+            'balance' => 'Gift card balance',
+        ],
+        'money' => [
+            'amount' => 'Site money amount',
+        ],
+        'commands' => [
+            'variables_info' => 'Available variables: :variables.',
+        ],
+        'reset' => 'Reset Progression',
+        'reset_title' => 'Reset Tier Progression',
+        'reset_confirm' => 'Are you sure you want to reset the tier progression for all users?',
+        'reset_warning' => 'This action will reset the cumulative spending counter to 0 for all users and wipe unlocked tiers. Users will be able to unlock rewards again with future purchases.',
+        'reset_confirm_btn' => 'Confirm Reset',
+        'reset_success' => 'All users\' tier progression has been successfully reset.',
+        'last_reset' => 'Last reset: :date',
+        'enable' => 'Enable this tier',
     ],
 
 ];

@@ -71,6 +71,8 @@
     </a>
 @endif
 
+@include('shop::tiers._widget')
+
 @if($goal >= 0)
     <div class="card mb-4">
         <div class="card-header">

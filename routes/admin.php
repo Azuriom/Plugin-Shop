@@ -12,6 +12,7 @@ use Azuriom\Plugin\Shop\Controllers\Admin\PurchaseController;
 use Azuriom\Plugin\Shop\Controllers\Admin\SettingController;
 use Azuriom\Plugin\Shop\Controllers\Admin\StatisticsController;
 use Azuriom\Plugin\Shop\Controllers\Admin\SubscriptionController;
+use Azuriom\Plugin\Shop\Controllers\Admin\TierController;
 use Azuriom\Plugin\Shop\Controllers\Admin\VariableController;
 use Illuminate\Support\Facades\Route;
 
@@ -62,6 +63,12 @@ Route::middleware('can:shop.gateways')->group(function () {
 Route::middleware('can:shop.promotions')->group(function () {
     Route::resource('coupons', CouponController::class)->except('show');
     Route::resource('giftcards', GiftcardController::class)->except('show');
+});
+
+Route::middleware('can:shop.tiers')->group(function () {
+    Route::post('/tiers/positions', [TierController::class, 'updateOrder'])->name('tiers.positions');
+    Route::post('/tiers/reset', [TierController::class, 'resetAll'])->name('tiers.reset');
+    Route::resource('tiers', TierController::class)->except('show');
 });
 
 Route::resource('discounts', DiscountController::class)->middleware('can:shop.giftcards')->except('show');

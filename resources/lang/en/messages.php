@@ -152,4 +152,15 @@ return [
         'notification' => 'You received a giftcard, the code is :code (:balance).',
         'pending' => 'A payment has already started for this giftcard. Complete the payment or wait a few minutes.',
     ],
+
+    'tiers' => [
+        'title' => 'Rewards',
+        'remaining' => ':amount remaining for :tier',
+        'all_unlocked' => 'Congratulations, you unlocked all rewards!',
+        'unlocked_status' => 'Unlocked',
+        'locked_status' => 'Locked',
+        'unlocked' => 'Congratulations! You unlocked the :tier reward!',
+        'login_prompt' => 'Log in to track and unlock rewards',
+    ],
 ];
+

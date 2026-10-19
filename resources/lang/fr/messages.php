@@ -152,4 +152,15 @@ return [
         'notification' => 'Vous avez reçu une carte cadeau, son code est : :code (:balance).',
         'pending' => 'Un paiement est déjà en cours pour cette carte cadeau. Complétez le paiement ou attendez un peu.',
     ],
+
+    'tiers' => [
+        'title' => 'Récompenses',
+        'remaining' => 'Plus que :amount pour :tier',
+        'all_unlocked' => 'Félicitations, vous avez débloqué toutes les récompenses !',
+        'unlocked_status' => 'Débloqué',
+        'locked_status' => 'Verrouillé',
+        'unlocked' => 'Félicitations ! Vous avez débloqué la récompense :tier !',
+        'login_prompt' => 'Connectez-vous pour débloquer les récompenses',
+    ],
 ];
+

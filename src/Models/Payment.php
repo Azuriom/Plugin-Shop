@@ -151,6 +151,10 @@ class Payment extends Model
             event(new PaymentPaid($this));
         }
 
+        if ($this->user !== null) {
+            rescue(fn () => Tier::checkUserProgression($this->user));
+        }
+
         if (($webhookUrl = setting('shop.webhook')) !== null) {
             rescue(fn () => $this->createDiscordWebhook()->send($webhookUrl));
         }
