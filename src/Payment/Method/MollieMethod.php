@@ -14,6 +14,7 @@ use Mollie\Api\Exceptions\ApiException;
 use Mollie\Api\MollieApiClient;
 use Mollie\Api\Resources\Customer;
 use Mollie\Api\Resources\Payment as MolliePayment;
+use Mollie\Api\Types\PaymentStatus;
 
 class MollieMethod extends PaymentMethod
 {
@@ -109,14 +110,10 @@ class MollieMethod extends PaymentMethod
         try {
             $molliePayment = $this->mollieClient()->payments->get($payment->transaction_id);
 
-            if ($molliePayment === null) {
-                return to_route('shop.home')->with('error', trans('shop::messages.payment.error'));
-            }
-
             return match ($molliePayment->status) {
-                'pending' => to_route('shop.home')->with('success', trans('shop::messages.payment.pending')),
-                'paid' => to_route('shop.home')->with('success', trans('shop::messages.payment.success')),
-                'expired', 'failed' => to_route('shop.home')->with('error', trans('shop::messages.payment.error')),
+                PaymentStatus::Pending => to_route('shop.home')->with('success', trans('shop::messages.payment.pending')),
+                PaymentStatus::Paid => to_route('shop.home')->with('success', trans('shop::messages.payment.success')),
+                PaymentStatus::Expired, PaymentStatus::Failed => to_route('shop.home')->with('error', trans('shop::messages.payment.error')),
                 default => to_route('shop.home'),
             };
         } catch (ApiException $e) {
@@ -158,7 +155,8 @@ class MollieMethod extends PaymentMethod
         }
 
         if (! $molliePayment->isPaid()) {
-            if ($payment?->isPending() && in_array($molliePayment->status, ['failed', 'canceled', 'expired'], true)) {
+            if ($payment?->isPending()
+                && ($molliePayment->isFailed() || $molliePayment->isCanceled() || $molliePayment->isExpired())) {
                 $payment->update(['status' => 'error']);
             }
 

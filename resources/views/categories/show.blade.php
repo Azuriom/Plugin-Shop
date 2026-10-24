@@ -50,16 +50,22 @@
                             @endif
 
                             <div class="card-body">
+                                @php($isAvailable = $package->purchaseStatus()->isAvailable())
+
                                 <h4 class="card-title">{{ $package->name }}</h4>
                                 <h5 class="card-subtitle mb-3">
-                                    @if($package->isDiscounted())
-                                        <del class="small">{{ shop_format_amount($package->getOriginalPrice()) }}</del>
+                                    @if(! $isAvailable)
+                                        <span class="text-muted">{{ trans('shop::messages.packages.status_unavailable') }}</span>
+                                    @else
+                                        @if($package->isDiscounted())
+                                            <del class="small">{{ shop_format_amount($package->getOriginalPrice()) }}</del>
+                                        @endif
+                                        {{ shop_format_amount($package->getPrice()) }}
                                     @endif
-                                    {{ shop_format_amount($package->getPrice()) }}
                                 </h5>
 
-                                <a href="#" class="btn btn-primary" data-package-url="{{ route('shop.packages.show', $package) }}">
-                                    {{ trans('shop::messages.buy') }}
+                                <a href="#" class="btn {{ $isAvailable ? 'btn-primary' : 'btn-secondary' }}" data-package-url="{{ route('shop.packages.show', $package) }}">
+                                    {{ $isAvailable ? trans('shop::messages.buy') : trans('messages.actions.show') }}
                                 </a>
                             </div>
                         </div>

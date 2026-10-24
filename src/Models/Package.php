@@ -9,11 +9,13 @@ use Azuriom\Models\Traits\HasTablePrefix;
 use Azuriom\Models\Traits\Loggable;
 use Azuriom\Models\User;
 use Azuriom\Notifications\AlertNotification;
+use Azuriom\Plugin\Shop\Enums\PurchaseStatus;
 use Azuriom\Plugin\Shop\Events\PackageDelivered;
 use Azuriom\Plugin\Shop\Models\Concerns\Buyable;
 use Azuriom\Plugin\Shop\Models\Concerns\IsBuyable;
 use Azuriom\Plugin\Shop\Models\Concerns\ManageFiles;
 use Azuriom\Plugin\Shop\Models\User as ShopUser;
+use Azuriom\Plugin\Shop\Notifications\CodesDelivered;
 use Azuriom\Plugin\Shop\Notifications\FileDownload;
 use DateTime;
 use Illuminate\Database\Eloquent\Builder;
@@ -57,6 +59,7 @@ use Illuminate\Support\Str;
  * @property \Illuminate\Support\Collection|\Azuriom\Plugin\Shop\Models\Discount[] $discounts
  * @property \Illuminate\Support\Collection|\Azuriom\Plugin\Shop\Models\Variable[] $variables
  * @property \Illuminate\Support\Collection|\Azuriom\Plugin\Shop\Models\Subscription[] $subscriptions
+ * @property \Illuminate\Support\Collection|\Azuriom\Plugin\Shop\Models\PackageCode[] $codes
  *
  * @method static \Illuminate\Database\Eloquent\Builder enabled()
  */
@@ -108,6 +111,11 @@ class Package extends Model implements Buyable
 
     protected static function booted()
     {
+        // Codes already given are kept, as they still belong to the buyers
+        static::deleting(function (self $package) {
+            $package->codes()->scopes('available')->delete();
+        });
+
         static::deleted(function (self $package) {
             GatewayMetadata::whereMorphedTo('model', $package)->delete();
         });
@@ -146,6 +154,11 @@ class Package extends Model implements Buyable
         return $this->hasMany(Subscription::class);
     }
 
+    public function codes()
+    {
+        return $this->hasMany(PackageCode::class);
+    }
+
     public function getDescription(): string
     {
         return $this->short_description;
@@ -177,14 +190,13 @@ class Package extends Model implements Buyable
 
     public function isUserSubscribed(?User $user = null)
     {
-        if (! $this->isSubscription()) {
+        $user ??= shop_user();
+
+        if (! $this->isSubscription() || $user === null) {
             return false;
         }
 
-        return $this->subscriptions()
-            ->whereBelongsTo($user ?? shop_user())
-            ->scopes('active')
-            ->exists();
+        return ShopUser::activeSubscriptionPackages($user)->contains($this->id);
     }
 
     public function getPrice(): float
@@ -247,11 +259,10 @@ class Package extends Model implements Buyable
             return true;
         }
 
-        $packages = self::findMany($this->required_packages);
+        $missing = $this->required_packages->diff(ShopUser::currentUserPurchases()->pluck('buyable_id'));
 
-        return ! $packages->contains(function (self $package) {
-            return $package->countUserPurchases() < 1;
-        });
+        // Required packages that have been deleted are ignored
+        return $missing->isEmpty() || self::whereKey($missing)->doesntExist();
     }
 
     /**
@@ -278,7 +289,7 @@ class Package extends Model implements Buyable
     }
 
     /**
-     * Get the total purchases for this package for the current user.
+     * Get the total purchases for this package, for all users.
      */
     public function countTotalPurchases(?DateTime $start = null, bool $noExpired = false): int
     {
@@ -327,7 +338,58 @@ class Package extends Model implements Buyable
             ? $this->global_limit - $this->countTotalPurchases($globalStart, $noExpired)
             : 100;
 
-        return max(min($user, $global), 0);
+        return max(min($user, $global, $this->availableCodesCount() ?? 100), 0);
+    }
+
+    /**
+     * Get the number of codes that can still be given to buyers,
+     * or null if this package doesn't give codes.
+     */
+    public function availableCodesCount(): ?int
+    {
+        // Use the counts when they are already loaded, see scope 'withCodesCount'
+        $total = $this->hasAttribute('codes_count')
+            ? $this->codes_count : $this->codes()->count();
+
+        if ((int) $total === 0) {
+            return null;
+        }
+
+        return (int) ($this->hasAttribute('available_codes_count')
+            ? $this->available_codes_count : $this->codes()->scopes('available')->count());
+    }
+
+    /**
+     * Get whether the current user can purchase this package, or why it can't.
+     */
+    public function purchaseStatus(): PurchaseStatus
+    {
+        $user = shop_user();
+
+        if ($this->isSubscription()) {
+            if ($this->isUserSubscribed($user)) {
+                return PurchaseStatus::Subscribed;
+            }
+        } elseif ($this->global_limit === 0 || $this->availableCodesCount() === 0) {
+            return PurchaseStatus::Unavailable;
+        } elseif ($this->getMaxQuantity() < 1 || ($user !== null && $this->category->hasReachLimit($user))) {
+            return PurchaseStatus::Limit;
+        }
+
+        // Requirements depend on the user, so they are only checked once logged in
+        if ($user !== null && (! $this->hasBoughtRequirements() || ! $this->hasRequiredRole($user->role))) {
+            return PurchaseStatus::Requirements;
+        }
+
+        return PurchaseStatus::Available;
+    }
+
+    /**
+     * Add the given codes, to give one to each buyer.
+     */
+    public function addCodes(array $codes): void
+    {
+        $this->codes()->createMany(array_map(fn (string $code) => ['code' => $code], $codes));
     }
 
     public function isInCart(): bool
@@ -372,9 +434,43 @@ class Package extends Model implements Buyable
             }
         }
 
+        if (! $renewal) {
+            $this->sendCodes($item, $user);
+        }
+
         $this->sendFiles($user);
 
         event(new PackageDelivered($user, $this, $item->quantity));
+    }
+
+    public function sendCodes(PaymentItem $item, User $user): void
+    {
+        if (! $this->codes()->exists()) {
+            return;
+        }
+
+        $codes = $this->codes()
+            ->scopes('available')
+            ->orderBy('id')
+            ->limit($item->quantity)
+            ->get()
+            ->filter(fn (PackageCode $code) => $code->assignTo($item));
+
+        if ($codes->count() < $item->quantity) {
+            logger()->warning("[Shop] Not enough codes available for package #{$this->id} (payment item #{$item->id})");
+        }
+
+        if ($codes->isEmpty()) {
+            return;
+        }
+
+        (new AlertNotification(trans('shop::messages.packages.codes', [
+            'package' => $this->name,
+        ])))
+            ->link(route('shop.profile', [], false))
+            ->send($user);
+
+        rescue(fn () => $user->notify(new CodesDelivered($this, $codes->pluck('code')->all())));
     }
 
     public function sendFiles(User $user): void
@@ -405,6 +501,18 @@ class Package extends Model implements Buyable
         if (! $user->isAdmin()) {
             $user->role()->associate($this->expiredRole)->save();
         }
+    }
+
+    /**
+     * Scope a query to include the codes counts used by availableCodesCount(),
+     * to avoid queries for each package when displaying many packages.
+     */
+    public function scopeWithCodesCount(Builder $query): void
+    {
+        $query->withCount([
+            'codes',
+            'codes as available_codes_count' => fn (Builder $query) => $query->scopes('available'),
+        ]);
     }
 
     /**

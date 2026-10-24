@@ -20,6 +20,7 @@ return [
         'balance' => 'Balance',
         'category' => 'Category',
         'code' => 'Code',
+        'codes' => 'Codes',
         'commands' => 'Commands',
         'currency' => 'Currency',
         'discount' => 'Discount',
@@ -125,10 +126,12 @@ return [
 
     'packages' => [
         'unavailable' => 'This package is not available.',
+        'status_unavailable' => 'Unavailable',
         'limit' => 'You have purchased the maximum possible for this packages.',
         'requirements' => 'You don\'t have the requirements to purchase this package.',
         'cumulate' => 'You cannot buy this package with an other from the same category in the same purchase.',
         'file' => 'Click here to download the file :file',
+        'codes' => 'Your codes for :package are available on your profile.',
     ],
 
     'offers' => [
@@ -142,6 +145,7 @@ return [
         'payments' => 'Your payments',
         'purchases' => 'Your purchases',
         'subscriptions' => 'Your subscriptions',
+        'codes' => 'Your codes',
         'money' => 'Money: :balance',
     ],
 

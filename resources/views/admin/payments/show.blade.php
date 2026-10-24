@@ -73,6 +73,20 @@
                                 </ul>
                             </li>
                         @endif
+
+                        @if(! $payment->codes->isEmpty())
+                            <li>
+                                {{ trans('shop::messages.fields.codes') }}:
+
+                                <ul>
+                                    @foreach($payment->codes as $code)
+                                        <li>
+                                            <code>{{ $code->code }}</code> - {{ $code->paymentItem->name }}
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </li>
+                        @endif
                     </ul>
                 </div>
             </div>

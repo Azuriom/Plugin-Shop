@@ -1,3 +1,5 @@
+@use('Azuriom\Plugin\Shop\Enums\PurchaseStatus')
+
 <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
         <div class="modal-header">
@@ -16,20 +18,20 @@
             </span>
 
             @if($shopUser !== null)
-                @if($package->isSubscription())
-                    @if($package->isUserSubscribed($shopUser))
-                        <a href="{{ route('shop.profile') }}" class="btn btn-primary">
-                            {{ trans('shop::messages.actions.manage') }}
-                        </a>
-                    @else
-                        <form action="{{ route('shop.subscriptions.select', $package) }}" method="POST" class="form-inline">
-                            @csrf
+                @php($purchaseStatus = $package->purchaseStatus())
 
-                            <button type="submit" class="btn btn-primary">
-                                {{ trans('shop::messages.actions.subscribe') }}
-                            </button>
-                        </form>
-                    @endif
+                @if($purchaseStatus === PurchaseStatus::Subscribed)
+                    <a href="{{ route('shop.profile') }}" class="btn btn-primary">
+                        {{ trans('shop::messages.actions.manage') }}
+                    </a>
+                @elseif($package->isSubscription() && $purchaseStatus->isAvailable())
+                    <form action="{{ route('shop.subscriptions.select', $package) }}" method="POST" class="form-inline">
+                        @csrf
+
+                        <button type="submit" class="btn btn-primary">
+                            {{ trans('shop::messages.actions.subscribe') }}
+                        </button>
+                    </form>
                 @elseif($package->isInCart())
                     <form action="{{ route('shop.cart.remove', $package) }}" method="POST" class="form-inline">
                         @csrf
@@ -38,12 +40,8 @@
                             <i class="bi bi-cart-x"></i> {{ trans('messages.actions.remove') }}
                         </button>
                     </form>
-                @elseif($package->global_limit === 0)
-                    <i class="bi bi-x-circle"></i> {{ trans('shop::messages.packages.unavailable') }}
-                @elseif($package->getMaxQuantity() < 1)
-                    <i class="bi bi-x-circle"></i> {{ trans('shop::messages.packages.limit') }}
-                @elseif(! $package->hasBoughtRequirements())
-                    <i class="bi bi-x-circle"></i> {{ trans('shop::messages.packages.requirements') }}
+                @elseif(! $purchaseStatus->isAvailable())
+                    {{ $purchaseStatus->message() }}
                 @else
                     <form action="{{ route('shop.packages.buy', $package) }}" method="POST" class="row row-cols-lg-auto g-0 gy-2 align-items-center">
                         @csrf

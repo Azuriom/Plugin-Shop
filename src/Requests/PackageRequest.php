@@ -3,9 +3,11 @@
 namespace Azuriom\Plugin\Shop\Requests;
 
 use Azuriom\Http\Requests\Traits\ConvertCheckbox;
+use Azuriom\Plugin\Shop\Models\PackageCode;
 use Azuriom\Plugin\Shop\Models\Variable;
 use Closure;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class PackageRequest extends FormRequest
@@ -65,6 +67,8 @@ class PackageRequest extends FormRequest
             'role_id' => ['nullable', 'integer', 'exists:roles,id'],
             'expired_role_id' => ['nullable', 'integer', 'exists:roles,id'],
             'variables' => ['sometimes', 'nullable', 'array'],
+            'codes' => ['array'],
+            'codes.*' => ['string', 'max:255'],
             'money' => ['nullable', 'numeric', 'min:0'],
             'giftcard_balance' => $giftcardRules,
             'custom_price' => ['filled', 'boolean'],
@@ -95,6 +99,14 @@ class PackageRequest extends FormRequest
             $this->merge(['giftcard_balance' => 0]);
         }
 
+        // One code per line, ignoring empty lines and duplicates
+        $codes = collect(preg_split('/\R/', (string) $this->input('codes')))
+            ->map(fn (string $code) => trim($code))
+            ->filter(fn (string $code) => $code !== '')
+            ->unique();
+
+        $this->merge(['codes' => $codes->values()->all()]);
+
         $this->mergeIfMissing([
             'commands' => [],
             'files' => [],
@@ -108,6 +120,16 @@ class PackageRequest extends FormRequest
      */
     protected function passedValidation(): void
     {
+        $existingCodes = PackageCode::whereIn('code', $this->input('codes'))->pluck('code');
+
+        if (! $existingCodes->isEmpty()) {
+            throw ValidationException::withMessages([
+                'codes' => trans('shop::admin.packages.codes_exists', [
+                    'codes' => $existingCodes->take(10)->implode(', '),
+                ]),
+            ]);
+        }
+
         // Add variables used for servers, as a command cannot be executed without a server.
         $variables = collect($this->input('commands', []))->pluck('server')
             ->filter(fn ($server) => ! is_numeric($server))

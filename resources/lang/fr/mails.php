@@ -19,6 +19,11 @@ return [
         'balance' => 'Montant : :balance',
     ],
 
+    'codes' => [
+        'subject' => 'Vos codes',
+        'intro' => 'Merci pour votre achat ! Voici vos codes pour :package :',
+    ],
+
     'file' => [
         'subject' => 'Votre lien de téléchargement',
         'intro' => 'Merci :user pour votre achat! Le lien de téléchargement pour votre achat est disponible ci-dessous.',

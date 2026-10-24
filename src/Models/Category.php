@@ -89,14 +89,15 @@ class Category extends Model
             return false;
         }
 
-        return ShopUser::ofUser($user)
+        // Same for all the packages of the category
+        return once(fn () => ShopUser::ofUser($user)
             ->items()
             ->scopes('excludeExpired')
             ->whereHas('payment', fn (Builder $q) => $q->scopes('completed'))
             ->whereHasMorph('buyable', Package::class, function (Builder $query) {
                 $query->where('category_id', $this->id);
             })
-            ->exists();
+            ->exists());
     }
 
     /**

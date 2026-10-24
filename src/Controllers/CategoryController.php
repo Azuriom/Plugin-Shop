@@ -71,7 +71,7 @@ class CategoryController extends Controller
         $categories = $this->getCategories();
 
         $category->load(['packages' => function (Builder $query) {
-            $query->with('discounts')->scopes(['enabled']);
+            $query->with('discounts')->scopes(['enabled', 'withCodesCount']);
         }]);
 
         $subCategory = $category->categories->firstWhere('is_enabled', true);

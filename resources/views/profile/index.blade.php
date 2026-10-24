@@ -73,6 +73,37 @@
         </div>
     @endif
 
+    @if(! $codes->isEmpty())
+        <div class="card mb-4">
+            <div class="card-body">
+                <h2 class="card-title">{{ trans('shop::messages.profile.codes') }}</h2>
+
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead class="table-dark">
+                        <tr>
+                            <th scope="col">{{ trans('shop::messages.fields.package') }}</th>
+                            <th scope="col">{{ trans('shop::messages.fields.code') }}</th>
+                            <th scope="col">{{ trans('messages.fields.date') }}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        @foreach($codes as $code)
+                            <tr>
+                                <td>{{ $code->paymentItem->name }}</td>
+                                <td><code>{{ $code->code }}</code></td>
+                                <td>{{ format_date($code->assigned_at, true) }}</td>
+                            </tr>
+                        @endforeach
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    @endif
+
     @if(! $subscriptions->isEmpty())
         <div class="card mb-4">
             <div class="card-body">

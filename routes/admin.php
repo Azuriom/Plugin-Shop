@@ -38,6 +38,8 @@ Route::middleware('can:shop.packages')->group(function () {
     Route::post('/packages/update-order', [PackageController::class, 'updateOrder'])->name('packages.update-order');
     Route::post('/packages/{package}/duplicate',
         [PackageController::class, 'duplicate'])->name('packages.duplicate');
+    Route::delete('/packages/{package}/codes',
+        [PackageController::class, 'destroyCodes'])->name('packages.codes.destroy');
 });
 
 Route::middleware('can:shop.payments')->group(function () {

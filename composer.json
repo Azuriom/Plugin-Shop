@@ -12,17 +12,23 @@
         ]
     },
     "require": {
-        "php": ">=8.1",
+        "php": ">=8.2",
         "mercadopago/dx-php": "^3.0",
-        "mollie/mollie-api-php": "^v3.7.0",
+        "mollie/mollie-api-php": "^v4.0.0",
         "paymentwall/paymentwall-php": "^2.2",
-        "stripe/stripe-php": "^v20.0.0",
+        "stripe/stripe-php": "^v21.0.0",
         "xsolla/xsolla-sdk-php": "^4.1"
     },
     "replace": {
         "guzzlehttp/guzzle": "*",
+        "nyholm/psr7": "*",
+        "psr/http-client": "*",
+        "psr/http-factory": "*",
+        "psr/http-message": "*",
         "psr/log": "*",
-        "symfony/http-foundation": "*"
+        "symfony/http-foundation": "*",
+        "symfony/polyfill-mbstring": "*",
+        "symfony/var-dumper": "*"
     },
     "config": {
         "optimize-autoloader": true,

@@ -3,8 +3,10 @@
 namespace Azuriom\Plugin\Shop\Controllers;
 
 use Azuriom\Http\Controllers\Controller;
+use Azuriom\Plugin\Shop\Models\PackageCode;
 use Azuriom\Plugin\Shop\Models\Payment;
 use Azuriom\Plugin\Shop\Models\Subscription;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class ProfileController extends Controller
@@ -30,11 +32,17 @@ class ProfileController extends Controller
             ->latest()
             ->get();
 
+        $codes = PackageCode::whereHas('paymentItem.payment', fn (Builder $q) => $q->whereBelongsTo($user))
+            ->with('paymentItem')
+            ->latest('assigned_at')
+            ->get();
+
         return view('shop::profile.index', [
             'user' => $user,
             'payments' => $payments,
             'purchases' => $purchases,
             'subscriptions' => $subscriptions,
+            'codes' => $codes,
             'giftCardCode' => null, // TODO remove unused variable, kept for compatibility
         ]);
     }

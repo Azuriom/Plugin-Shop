@@ -19,6 +19,11 @@ return [
         'balance' => 'Balance: :balance',
     ],
 
+    'codes' => [
+        'subject' => 'Your codes',
+        'intro' => 'Thank you for your purchase! Here are your codes for :package:',
+    ],
+
     'file' => [
         'subject' => 'Your download link',
         'intro' => 'Thank you :user for your purchase! The download link for your purchase is available below.',

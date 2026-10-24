@@ -20,6 +20,7 @@ return [
         'balance' => 'Solde',
         'category' => 'Catégorie',
         'code' => 'Code',
+        'codes' => 'Codes',
         'commands' => 'Commandes',
         'currency' => 'Devise',
         'discount' => 'Promotion',
@@ -125,10 +126,12 @@ return [
 
     'packages' => [
         'unavailable' => 'Ce produit n\'est pas disponible',
+        'status_unavailable' => 'Indisponible',
         'limit' => 'Vous avez acheté le maximum possible pour cet article.',
         'requirements' => 'Vous n\'avez pas les pré-requis pour acheter cet article.',
         'cumulate' => 'Vous ne pouvez pas acheter ce produit avec un autre de la même catégorie dans le même achat.',
         'file' => 'Cliquez ici pour télécharger le fichier :file.',
+        'codes' => 'Vos codes pour :package sont disponibles sur votre profil.',
     ],
 
     'offers' => [
@@ -142,6 +145,7 @@ return [
         'payments' => 'Vos paiements',
         'purchases' => 'Vos achats',
         'subscriptions' => 'Vos abonnements',
+        'codes' => 'Vos codes',
         'money' => 'Argent : :balance',
     ],
 

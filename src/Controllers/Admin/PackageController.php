@@ -9,6 +9,7 @@ use Azuriom\Plugin\Shop\Models\Category;
 use Azuriom\Plugin\Shop\Models\Package;
 use Azuriom\Plugin\Shop\Models\Variable;
 use Azuriom\Plugin\Shop\Requests\PackageRequest;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 
@@ -120,7 +121,7 @@ class PackageController extends Controller
     public function store(PackageRequest $request)
     {
         $package = Package::create(Arr::except($request->validated(), [
-            'image', 'file', 'variables',
+            'image', 'file', 'variables', 'codes',
         ]));
 
         if ($request->hasFile('image')) {
@@ -132,6 +133,7 @@ class PackageController extends Controller
         }
 
         $package->variables()->sync($request->input('variables', []));
+        $package->addCodes($request->validated('codes'));
 
         return to_route('shop.admin.packages.index')
             ->with('success', trans('messages.status.success'));
@@ -147,6 +149,11 @@ class PackageController extends Controller
             ->pluck('name')
             ->mapWithKeys(fn (string $name) => [$name => '{'.$name.'}'])
             ->replace(Server::executable()->pluck('name', 'id'));
+
+        $package->loadCount([
+            'codes as available_codes_count' => fn (Builder $query) => $query->scopes('available'),
+            'codes as assigned_codes_count' => fn (Builder $query) => $query->whereNotNull('payment_item_id'),
+        ]);
 
         return view('shop::admin.packages.edit', [
             'package' => $package,
@@ -168,7 +175,7 @@ class PackageController extends Controller
         }
 
         $package->update(Arr::except($request->validated(), [
-            'image', 'file', 'variables',
+            'image', 'file', 'variables', 'codes',
         ]));
 
         if ($request->hasFile('file')) {
@@ -176,8 +183,20 @@ class PackageController extends Controller
         }
 
         $package->variables()->sync($request->input('variables', []));
+        $package->addCodes($request->validated('codes'));
 
         return to_route('shop.admin.packages.index')
+            ->with('success', trans('messages.status.success'));
+    }
+
+    /**
+     * Remove the codes of the package that have not been given to a buyer yet.
+     */
+    public function destroyCodes(Package $package)
+    {
+        $package->codes()->scopes('available')->delete();
+
+        return to_route('shop.admin.packages.edit', $package)
             ->with('success', trans('messages.status.success'));
     }
 

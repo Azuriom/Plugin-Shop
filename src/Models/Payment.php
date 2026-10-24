@@ -31,6 +31,7 @@ use Illuminate\Support\Facades\Cache;
  * @property \Illuminate\Support\Collection|\Azuriom\Plugin\Shop\Models\PaymentItem[] $items
  * @property \Illuminate\Support\Collection|\Azuriom\Plugin\Shop\Models\Coupon[] $coupons
  * @property \Illuminate\Support\Collection|\Azuriom\Plugin\Shop\Models\Giftcard[] $giftcards
+ * @property \Illuminate\Support\Collection|\Azuriom\Plugin\Shop\Models\PackageCode[] $codes
  * @property \Azuriom\Plugin\Shop\Models\Subscription|null $subscription
  *
  * @method static \Illuminate\Database\Eloquent\Builder completed()
@@ -99,6 +100,14 @@ class Payment extends Model
     public function items()
     {
         return $this->hasMany(PaymentItem::class)->inverse('payment');
+    }
+
+    /**
+     * Get the codes given with this payment.
+     */
+    public function codes()
+    {
+        return $this->hasManyThrough(PackageCode::class, PaymentItem::class);
     }
 
     /**

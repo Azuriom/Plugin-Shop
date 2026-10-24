@@ -4,6 +4,7 @@ namespace Azuriom\Plugin\Shop\Controllers;
 
 use Azuriom\Http\Controllers\Controller;
 use Azuriom\Models\User;
+use Azuriom\Plugin\Shop\Enums\PurchaseStatus;
 use Azuriom\Plugin\Shop\Models\Gateway;
 use Azuriom\Plugin\Shop\Models\Package;
 use Azuriom\Plugin\Shop\Models\Subscription;
@@ -17,13 +18,14 @@ class SubscriptionController extends Controller
         abort_if(! $package->isSubscription(), 403);
 
         $user = shop_user();
+        $status = $package->purchaseStatus();
 
-        if ($package->isUserSubscribed($user)) {
+        if ($status === PurchaseStatus::Subscribed) {
             return redirect()->route('shop.profile');
         }
 
-        if (! $package->hasBoughtRequirements() || ! $package->hasRequiredRole($user->role)) {
-            return redirect()->back()->with('error', trans('shop::messages.packages.requirements'));
+        if (! $status->isAvailable()) {
+            return redirect()->back()->with('error', $status->message());
         }
 
         if (use_site_money()) {

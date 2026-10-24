@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9c0fd894d24ce470cc2176156c9e1c6c",
+    "content-hash": "f26acf446454d2a64add0fb742d3ee18",
     "packages": [
         {
             "name": "composer/ca-bundle",
-            "version": "1.5.11",
+            "version": "1.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/ca-bundle.git",
-                "reference": "68ff39175e8e94a4bb1d259407ce51a6a60f09e6"
+                "reference": "2c99cf2e92516985dea4914812b93d9daf01cdd6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/ca-bundle/zipball/68ff39175e8e94a4bb1d259407ce51a6a60f09e6",
-                "reference": "68ff39175e8e94a4bb1d259407ce51a6a60f09e6",
+                "url": "https://api.github.com/repos/composer/ca-bundle/zipball/2c99cf2e92516985dea4914812b93d9daf01cdd6",
+                "reference": "2c99cf2e92516985dea4914812b93d9daf01cdd6",
                 "shasum": ""
             },
             "require": {
@@ -64,7 +64,7 @@
             "support": {
                 "irc": "irc://irc.freenode.org/composer",
                 "issues": "https://github.com/composer/ca-bundle/issues",
-                "source": "https://github.com/composer/ca-bundle/tree/1.5.11"
+                "source": "https://github.com/composer/ca-bundle/tree/1.6.0"
             },
             "funding": [
                 {
@@ -76,20 +76,20 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-03-30T09:16:10+00:00"
+            "time": "2026-10-20T20:14:05+00:00"
         },
         {
             "name": "mercadopago/dx-php",
-            "version": "v3.9.0",
+            "version": "3.16.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mercadopago/sdk-php.git",
-                "reference": "7eeafc66b90ffda3d49dba6d81aeacc43e8621b4"
+                "reference": "6138da3381549e4d0a5839440e6f0e35d1760e7a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mercadopago/sdk-php/zipball/7eeafc66b90ffda3d49dba6d81aeacc43e8621b4",
-                "reference": "7eeafc66b90ffda3d49dba6d81aeacc43e8621b4",
+                "url": "https://api.github.com/repos/mercadopago/sdk-php/zipball/6138da3381549e4d0a5839440e6f0e35d1760e7a",
+                "reference": "6138da3381549e4d0a5839440e6f0e35d1760e7a",
                 "shasum": ""
             },
             "require": {
@@ -97,8 +97,9 @@
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^3.22",
-                "phpunit/phpunit": "^10.2",
-                "squizlabs/php_codesniffer": "3.*"
+                "phpunit/phpunit": "^11.0",
+                "squizlabs/php_codesniffer": ">=3.13.6",
+                "symfony/console": "^7.0"
             },
             "type": "library",
             "autoload": {
@@ -113,22 +114,23 @@
             "description": "Mercado Pago PHP SDK",
             "homepage": "https://github.com/mercadopago/sdk-php",
             "support": {
-                "source": "https://github.com/mercadopago/sdk-php/tree/v3.9.0"
+                "issues": "https://github.com/mercadopago/sdk-php/issues",
+                "source": "https://github.com/mercadopago/sdk-php/tree/3.16.0"
             },
-            "time": "2026-04-17T17:41:52+00:00"
+            "time": "2026-08-27T18:14:23+00:00"
         },
         {
             "name": "mollie/mollie-api-php",
-            "version": "v3.11.0",
+            "version": "v4.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mollie/mollie-api-php.git",
-                "reference": "6c12186d53e9368b66d35da23c2b879c7a1c8616"
+                "reference": "265dfcb58339ec4fec726012ca40c672316bf8de"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mollie/mollie-api-php/zipball/6c12186d53e9368b66d35da23c2b879c7a1c8616",
-                "reference": "6c12186d53e9368b66d35da23c2b879c7a1c8616",
+                "url": "https://api.github.com/repos/mollie/mollie-api-php/zipball/265dfcb58339ec4fec726012ca40c672316bf8de",
+                "reference": "265dfcb58339ec4fec726012ca40c672316bf8de",
                 "shasum": ""
             },
             "require": {
@@ -137,17 +139,18 @@
                 "ext-json": "*",
                 "ext-openssl": "*",
                 "nyholm/psr7": "^1.8",
-                "php": "^7.4|^8.0",
+                "php": "^8.2",
                 "psr/http-client": "^1.0",
                 "psr/http-factory": "^1.1",
-                "psr/http-message": "^1.1|^2.0"
+                "psr/http-message": "^1.1|^2.0",
+                "symfony/var-dumper": "^5.4|^6.4|^7.2|^8.0"
             },
             "require-dev": {
-                "brianium/paratest": "^6.11",
                 "guzzlehttp/guzzle": "^7.6",
+                "laravel/pint": "1.30.4",
+                "pestphp/pest": "^3.0",
                 "phpstan/phpstan": "^2.0",
-                "phpunit/phpunit": "^9.6",
-                "symfony/var-dumper": "^5.4|^6.4|^7.2"
+                "phpunit/phpunit": "^11.5"
             },
             "suggest": {
                 "mollie/oauth2-mollie-php": "Use OAuth to authenticate with the Mollie API. This is needed for some endpoints. Visit https://docs.mollie.com/ for more information."
@@ -209,87 +212,9 @@
             ],
             "support": {
                 "issues": "https://github.com/mollie/mollie-api-php/issues",
-                "source": "https://github.com/mollie/mollie-api-php/tree/v3.11.0"
+                "source": "https://github.com/mollie/mollie-api-php/tree/v4.0.0"
             },
-            "time": "2026-05-06T16:15:18+00:00"
-        },
-        {
-            "name": "nyholm/psr7",
-            "version": "1.8.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Nyholm/psr7.git",
-                "reference": "a71f2b11690f4b24d099d6b16690a90ae14fc6f3"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Nyholm/psr7/zipball/a71f2b11690f4b24d099d6b16690a90ae14fc6f3",
-                "reference": "a71f2b11690f4b24d099d6b16690a90ae14fc6f3",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=7.2",
-                "psr/http-factory": "^1.0",
-                "psr/http-message": "^1.1 || ^2.0"
-            },
-            "provide": {
-                "php-http/message-factory-implementation": "1.0",
-                "psr/http-factory-implementation": "1.0",
-                "psr/http-message-implementation": "1.0"
-            },
-            "require-dev": {
-                "http-interop/http-factory-tests": "^0.9",
-                "php-http/message-factory": "^1.0",
-                "php-http/psr7-integration-tests": "^1.0",
-                "phpunit/phpunit": "^7.5 || ^8.5 || ^9.4",
-                "symfony/error-handler": "^4.4"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.8-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Nyholm\\Psr7\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Tobias Nyholm",
-                    "email": "tobias.nyholm@gmail.com"
-                },
-                {
-                    "name": "Martijn van der Ven",
-                    "email": "martijn@vanderven.se"
-                }
-            ],
-            "description": "A fast PHP7 implementation of PSR-7",
-            "homepage": "https://tnyholm.se",
-            "keywords": [
-                "psr-17",
-                "psr-7"
-            ],
-            "support": {
-                "issues": "https://github.com/Nyholm/psr7/issues",
-                "source": "https://github.com/Nyholm/psr7/tree/1.8.2"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/Zegnat",
-                    "type": "github"
-                },
-                {
-                    "url": "https://github.com/nyholm",
-                    "type": "github"
-                }
-            ],
-            "time": "2024-09-09T07:06:30+00:00"
+            "time": "2026-09-23T13:16:56+00:00"
         },
         {
             "name": "paymentwall/paymentwall-php",
@@ -349,177 +274,17 @@
             "time": "2023-10-18T08:04:20+00:00"
         },
         {
-            "name": "psr/http-client",
-            "version": "1.0.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/php-fig/http-client.git",
-                "reference": "bb5906edc1c324c9a05aa0873d40117941e5fa90"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/http-client/zipball/bb5906edc1c324c9a05aa0873d40117941e5fa90",
-                "reference": "bb5906edc1c324c9a05aa0873d40117941e5fa90",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.0 || ^8.0",
-                "psr/http-message": "^1.0 || ^2.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Psr\\Http\\Client\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "PHP-FIG",
-                    "homepage": "https://www.php-fig.org/"
-                }
-            ],
-            "description": "Common interface for HTTP clients",
-            "homepage": "https://github.com/php-fig/http-client",
-            "keywords": [
-                "http",
-                "http-client",
-                "psr",
-                "psr-18"
-            ],
-            "support": {
-                "source": "https://github.com/php-fig/http-client"
-            },
-            "time": "2023-09-23T14:17:50+00:00"
-        },
-        {
-            "name": "psr/http-factory",
-            "version": "1.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/php-fig/http-factory.git",
-                "reference": "2b4765fddfe3b508ac62f829e852b1501d3f6e8a"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/http-factory/zipball/2b4765fddfe3b508ac62f829e852b1501d3f6e8a",
-                "reference": "2b4765fddfe3b508ac62f829e852b1501d3f6e8a",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=7.1",
-                "psr/http-message": "^1.0 || ^2.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Psr\\Http\\Message\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "PHP-FIG",
-                    "homepage": "https://www.php-fig.org/"
-                }
-            ],
-            "description": "PSR-17: Common interfaces for PSR-7 HTTP message factories",
-            "keywords": [
-                "factory",
-                "http",
-                "message",
-                "psr",
-                "psr-17",
-                "psr-7",
-                "request",
-                "response"
-            ],
-            "support": {
-                "source": "https://github.com/php-fig/http-factory"
-            },
-            "time": "2024-04-15T12:06:14+00:00"
-        },
-        {
-            "name": "psr/http-message",
-            "version": "2.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/php-fig/http-message.git",
-                "reference": "402d35bcb92c70c026d1a6a9883f06b2ead23d71"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/http-message/zipball/402d35bcb92c70c026d1a6a9883f06b2ead23d71",
-                "reference": "402d35bcb92c70c026d1a6a9883f06b2ead23d71",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.2 || ^8.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Psr\\Http\\Message\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "PHP-FIG",
-                    "homepage": "https://www.php-fig.org/"
-                }
-            ],
-            "description": "Common interface for HTTP messages",
-            "homepage": "https://github.com/php-fig/http-message",
-            "keywords": [
-                "http",
-                "http-message",
-                "psr",
-                "psr-7",
-                "request",
-                "response"
-            ],
-            "support": {
-                "source": "https://github.com/php-fig/http-message/tree/2.0"
-            },
-            "time": "2023-04-04T09:54:51+00:00"
-        },
-        {
             "name": "stripe/stripe-php",
-            "version": "v20.1.0",
+            "version": "v21.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stripe/stripe-php.git",
-                "reference": "6d0ec5ffa0678a408d63163ace1453b35a85fb24"
+                "reference": "0d8b075e1a97d15c5324353a5277d0ea686ea525"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/6d0ec5ffa0678a408d63163ace1453b35a85fb24",
-                "reference": "6d0ec5ffa0678a408d63163ace1453b35a85fb24",
+                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/0d8b075e1a97d15c5324353a5277d0ea686ea525",
+                "reference": "0d8b075e1a97d15c5324353a5277d0ea686ea525",
                 "shasum": ""
             },
             "require": {
@@ -531,7 +296,7 @@
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "3.94.0",
                 "phpstan/phpstan": "^1.2",
-                "phpunit/phpunit": "^5.7 || ^9.0"
+                "phpunit/phpunit": "^8.0 || ^9.0"
             },
             "type": "library",
             "extra": {
@@ -566,9 +331,9 @@
             ],
             "support": {
                 "issues": "https://github.com/stripe/stripe-php/issues",
-                "source": "https://github.com/stripe/stripe-php/tree/v20.1.0"
+                "source": "https://github.com/stripe/stripe-php/tree/v21.3.2"
             },
-            "time": "2026-04-24T00:12:56+00:00"
+            "time": "2026-09-09T20:40:43+00:00"
         },
         {
             "name": "xsolla/xsolla-sdk-php",
@@ -634,7 +399,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=8.1"
+        "php": ">=8.2"
     },
     "platform-dev": {},
     "plugin-api-version": "2.9.0"

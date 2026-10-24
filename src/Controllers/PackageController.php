@@ -52,15 +52,12 @@ class PackageController extends Controller
             return app(SubscriptionController::class)->selectGateway($request, $package);
         }
 
-        $user = shop_user();
         $cart = Cart::fromSession($request->session());
 
-        if ($package->getMaxQuantity() < 1 || $package->category->hasReachLimit($user)) {
-            return redirect()->back()->with('error', trans('shop::messages.packages.limit'));
-        }
+        $status = $package->purchaseStatus();
 
-        if (! $package->hasBoughtRequirements() || ! $package->hasRequiredRole($user->role)) {
-            return redirect()->back()->with('error', trans('shop::messages.packages.requirements'));
+        if (! $status->isAvailable()) {
+            return redirect()->back()->with('error', $status->message());
         }
 
         if ($this->categoryCumulateError($cart, $package)) {

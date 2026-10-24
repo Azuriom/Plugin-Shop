@@ -35,6 +35,14 @@ class User extends BaseUser
             ->get());
     }
 
+    /**
+     * Get the IDs of the packages with an active subscription for the given user.
+     */
+    public static function activeSubscriptionPackages(BaseUser $user): Collection
+    {
+        return once(fn () => Subscription::whereBelongsTo($user)->scopes('active')->pluck('package_id'));
+    }
+
     public static function ofUser(BaseUser $baseUser): self
     {
         return (new self())->newFromBuilder($baseUser->getAttributes());

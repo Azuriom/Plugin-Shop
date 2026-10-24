@@ -348,6 +348,32 @@
     </div>
 </div>
 
+<div class="mb-3">
+    <label class="form-label" for="codesInput">{{ trans('shop::admin.packages.codes') }}</label>
+    <textarea class="form-control @error('codes*') is-invalid @enderror" id="codesInput" name="codes" rows="3" aria-describedby="codesInfo">{{ implode("\n", (array) old('codes', [])) }}</textarea>
+
+    @error('codes*')
+    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+    @enderror
+
+    <div id="codesInfo" class="form-text">
+        {{ trans('shop::admin.packages.codes_info') }}
+
+        @isset($package->available_codes_count)
+            {{ trans('shop::admin.packages.codes_stock', [
+                'available' => $package->available_codes_count,
+                'assigned' => $package->assigned_codes_count,
+            ]) }}
+        @endisset
+    </div>
+
+    @if(($package->available_codes_count ?? 0) > 0)
+        <a href="{{ route('shop.admin.packages.codes.destroy', $package) }}" class="btn btn-danger btn-sm mt-2" data-confirm="delete">
+            <i class="bi bi-trash"></i> {{ trans('shop::admin.packages.codes_delete') }}
+        </a>
+    @endif
+</div>
+
 <h2 class="h4">{{ trans('shop::messages.fields.commands') }}</h2>
 
 @if($servers->isEmpty())

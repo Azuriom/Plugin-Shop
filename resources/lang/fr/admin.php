@@ -97,6 +97,11 @@ return [
 
         'variables' => 'Variables personnalisées',
         'files' => 'Fichiers téléchargeables',
+        'codes' => 'Codes à donner (clés de licence, etc.)',
+        'codes_info' => 'Ajoutez un code par ligne, chaque code est donné à un seul acheteur. Une fois des codes ajoutés, le produit ne peut être acheté que tant que des codes sont disponibles.',
+        'codes_stock' => 'Disponibles : :available, donnés : :assigned.',
+        'codes_delete' => 'Supprimer les codes disponibles',
+        'codes_exists' => 'Ces codes existent déjà : :codes',
         'role' => 'Rôle à définir après l\'expiration du produit',
         'money' => 'Argent à donner à l\'utilisateur lors de l\'achat',
         'has_giftcard' => 'Créer une carte cadeau lors de l\'achat et la donner à l\'utilisateur',

@@ -97,6 +97,11 @@ return [
 
         'variables' => 'Custom variables',
         'files' => 'Downloadable files',
+        'codes' => 'Codes to give (license keys, etc.)',
+        'codes_info' => 'Add one code per line, each code is given to a single buyer. Once codes are added, the package can only be purchased while codes are available.',
+        'codes_stock' => 'Available: :available, given: :assigned.',
+        'codes_delete' => 'Delete available codes',
+        'codes_exists' => 'These codes already exist: :codes',
         'role' => 'Role to set when the package expires',
         'money' => 'Money to give to the user after purchase',
         'has_giftcard' => 'Create a giftcard after the purchase and give it to the user',
