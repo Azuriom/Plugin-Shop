@@ -13,14 +13,14 @@ class ShopViewComposer
      */
     public function compose(View $view): void
     {
-        if (Route::is('admin.*')) {
+        if (Route::is('admin.*', 'shop.admin.*')) {
             return;
         }
 
         $user = shop_user();
 
         $view->with([
-            'shopUser' => shop_user(),
+            'shopUser' => $user,
             'guestShopLogin' => ! use_site_money() && setting('shop.guest_purchases', false),
             'userHasPayments' => $user !== null && Payment::whereBelongsTo($user)->exists(),
         ]);

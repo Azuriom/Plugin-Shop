@@ -93,7 +93,7 @@ class Category extends Model
             ->items()
             ->scopes('excludeExpired')
             ->whereHas('payment', fn (Builder $q) => $q->scopes('completed'))
-            ->whereHas('buyable', function (Builder $query) {
+            ->whereHasMorph('buyable', Package::class, function (Builder $query) {
                 $query->where('category_id', $this->id);
             })
             ->exists();

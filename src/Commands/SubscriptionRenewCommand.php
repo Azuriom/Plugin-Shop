@@ -28,7 +28,9 @@ class SubscriptionRenewCommand extends Command
     {
         $this->info('Renewing subscriptions...');
 
-        $subscriptions = Subscription::waitingForRenewal()->get();
+        $subscriptions = Subscription::waitingForRenewal()
+            ->with(['user', 'package'])
+            ->get();
         $renewed = 0;
 
         foreach ($subscriptions as $subscription) {

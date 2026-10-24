@@ -13,6 +13,7 @@ class SubscriptionController extends Controller
 {
     public function selectGateway(Request $request, Package $package)
     {
+        abort_if(! $package->is_enabled, 404);
         abort_if(! $package->isSubscription(), 403);
 
         $user = shop_user();

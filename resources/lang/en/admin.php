@@ -119,7 +119,7 @@ return [
         'subscription_info' => 'Make sure your payment gateway supports subscriptions. When a subscription is created, the user will be charged the same price until the subscription is canceled (any discount active during the first payment will be applied to the next payments).',
         'expiring' => 'One-off payment with expiration',
         'expiring_info' => 'The product will be automatically removed after the specified period.',
-        'scheduler' => 'CRON tasks are not enabled, you must set them up to use subscriptions and expiring packages, see the <a href="https://azuriom.com/docs/installation" target="_blank" rel="noopener norefferer">documentation</a> for more information.',
+        'scheduler' => 'CRON tasks are not enabled, you must set them up to use subscriptions and expiring packages, see the <a href="https://azuriom.com/docs/installation" target="_blank" rel="noopener noreferrer">documentation</a> for more information.',
 
         'create_category' => 'Create category',
         'create_package' => 'Create package',
@@ -153,7 +153,7 @@ return [
 
         'current' => 'Current gateways',
         'add' => 'Add a new gateway',
-        'info' => 'If you are having problems with payments when using Cloudflare or a firewall, try following the steps in the <a href="https://azuriom.com/docs/faq" target="_blank" rel="noopener norefferer">FAQ</a>.',
+        'info' => 'If you are having problems with payments when using Cloudflare or a firewall, try following the steps in the <a href="https://azuriom.com/docs/faq" target="_blank" rel="noopener noreferrer">FAQ</a>.',
 
         'country' => 'Country',
         'sandbox' => 'Sandbox',
@@ -164,6 +164,7 @@ return [
         'secret-key' => 'Secret key',
         'endpoint-secret' => 'Signing Secret',
         'service-id' => 'Service ID',
+        'webhook-secret' => 'Webhook Secret',
         'client-id' => 'Client ID',
         'merchant-id' => 'Merchant ID',
         'project-id' => 'Project ID',
@@ -184,6 +185,8 @@ return [
         'skrill_secret' => 'Secret Word',
         'skrill_info' => 'The website ID and the Secret Word can be found in the Skrill dashboard under "Developer Settings".',
         'mercadopago' => 'The Mercado Pago credentials must be for the <strong>Checkout Pro</strong> integration.',
+        'mercadopago_webhook' => 'On the Mercado Pago dashboard, in your application, configure a webhook with URL <code>:url</code> and the <code>Payments</code> event, then copy its secret key here.',
+        'paysafecard_info' => 'The API key can be found in your paysafecard merchant account. Use the test environment only with a test API key.',
 
         'stripe_invoice' => 'Enable automatic invoice creation on Stripe',
 

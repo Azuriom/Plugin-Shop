@@ -17,6 +17,8 @@ class PackageController extends Controller
      */
     public function show(Package $package)
     {
+        abort_if(! $package->is_enabled, 404);
+
         $package->load(['category.packages', 'discounts']);
 
         return view('shop::packages.show', ['package' => $package]);

@@ -75,7 +75,7 @@
                                 <a href="{{ route('shop.admin.subscriptions.show', $subscription) }}" class="mx-1" title="{{ trans('messages.actions.show') }}" data-bs-toggle="tooltip"><i class="bi bi-eye"></i></a>
 
                                 @if($subscription->isActive() && ! $subscription->isCanceled())
-                                    <a href="{{ route('shop.admin.subscriptions.destroy', $subscription) }}" class="mx-1" title="{{ trans('shop::messages.actions.cancel') }}" data-bs-toggle="tooltip" data-confirm="delete"><i class="bi bi-x-circle"></i></a>
+                                    <a href="{{ route('shop.admin.subscriptions.destroy', $subscription) }}" class="mx-1" title="{{ trans('messages.actions.cancel') }}" data-bs-toggle="tooltip" data-confirm="delete"><i class="bi bi-x-circle"></i></a>
                                 @endif
                             </td>
                         </tr>

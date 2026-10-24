@@ -48,8 +48,8 @@ class SkrillMethod extends PaymentMethod
 
     public function startPayment(Cart $cart, float $amount, string $currency)
     {
-        $user = shop_user();
         $payment = $this->createPayment($cart, $amount, $currency);
+        $user = $payment->user;
         $locale = strtoupper(Str::before(app()->getLocale(), '_'));
 
         $response = Http::asForm()->post('https://pay.skrill.com', [
@@ -62,7 +62,7 @@ class SkrillMethod extends PaymentMethod
             'language' => in_array($locale, self::LANGUAGES, true) ? $locale : 'EN',
             'prepare_only' => 1,
             'website_id' => $this->gateway->data['website_id'],
-            'merchant_client_id' => $user?->id,
+            'merchant_client_id' => $user->id,
             'merchant_client_registration_date' => $user->created_at->toDateString(),
             'amount' => $amount,
             'currency' => $currency,
@@ -83,18 +83,33 @@ class SkrillMethod extends PaymentMethod
         $amount = $request->float('amount');
         $currency = $request->input('currency');
 
-        if ($currency !== $payment->currency || $amount < $payment->price) {
-            Log::warning("[Shop] Skrill - Invalid amount or currency for payment {$payment->id}");
-
-            return $this->invalidPayment($payment, $transactionId, 'Invalid amount or currency');
-        }
-
         if ($status === self::STATUS_CHARGEBACK) {
             return $this->processChargeback($payment);
         }
 
+        if ($currency !== $payment->currency || $amount < $payment->price) {
+            Log::warning("[Shop] Skrill - Invalid amount or currency for payment {$payment->id}");
+
+            return $payment->isPending()
+                ? $this->invalidPayment($payment, $transactionId, 'Invalid amount or currency')
+                : response()->noContent();
+        }
+
+        if ($status === self::STATUS_PENDING) {
+            return response()->noContent();
+        }
+
+        if (in_array($status, [self::STATUS_FAILED, self::STATUS_CANCELED], true)) {
+            // Do not overwrite a successful (or refunded) payment with a late callback.
+            return $payment->isPending()
+                ? $this->invalidPayment($payment, $transactionId, 'Invalid status: '.$status)
+                : response()->noContent();
+        }
+
         if ($status !== self::STATUS_PROCESSED) {
-            return $this->invalidPayment($payment, $transactionId, 'Invalid status: '.$status);
+            Log::warning("[Shop] Skrill - Unknown status {$status} for payment {$payment->id}");
+
+            return response()->json(['status' => false, 'message' => 'Unknown Skrill status'], 400);
         }
 
         return $this->processPayment($payment, $transactionId);
@@ -111,7 +126,9 @@ class SkrillMethod extends PaymentMethod
             $request->input('status'),
         ]);
 
-        return strtoupper(md5($signature)) === $request->input('md5sig');
+        $provided = $request->input('md5sig');
+
+        return is_string($provided) && hash_equals(strtoupper(md5($signature)), $provided);
     }
 
     public function view(): string

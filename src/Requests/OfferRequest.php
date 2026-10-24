@@ -14,7 +14,7 @@ class OfferRequest extends FormRequest
     /**
      * The attributes represented by checkboxes.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
+     * @var array<int, string>
      */
     protected array $checkboxes = [
         'is_enabled',

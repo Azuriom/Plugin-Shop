@@ -231,7 +231,7 @@ abstract class PaymentMethod
     /**
      * Mark the payment as chargebacked, and dispatch the necessary commands.
      */
-    protected function processChargeback(Payment $payment)
+    protected function processChargeback(?Payment $payment)
     {
         return $this->processRefund($payment, true);
     }
@@ -239,8 +239,15 @@ abstract class PaymentMethod
     /**
      * Mark the payment as refunded, and dispatch the necessary commands.
      */
-    protected function processRefund(Payment $payment, bool $isChargeback = false)
+    protected function processRefund(?Payment $payment, bool $isChargeback = false)
     {
+        if ($payment === null) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Unable to retrieve the payment',
+            ], 400);
+        }
+
         if ($payment->status === 'refunded' || $payment->status === 'chargeback') {
             return response()->json([
                 'status' => true,
@@ -274,6 +281,14 @@ abstract class PaymentMethod
     protected function errorResponse()
     {
         return to_route('shop.cart.index')->with('error', trans('shop::messages.payment.error'));
+    }
+
+    /**
+     * Get the email of the given user, only if they are actually logged in.
+     */
+    protected function getUserEmail(User $user): ?string
+    {
+        return $user->is(auth()->user()) ? $user->email : null;
     }
 
     protected function getPurchaseDescription(Payment|int $payment): string

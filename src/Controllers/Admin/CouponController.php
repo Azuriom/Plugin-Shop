@@ -15,7 +15,7 @@ class CouponController extends Controller
     public function index()
     {
         return view('shop::admin.coupons.index', [
-            'coupons' => Coupon::with('payments')->get(),
+            'coupons' => Coupon::all(),
         ]);
     }
 

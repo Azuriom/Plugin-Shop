@@ -51,7 +51,7 @@ class PaysafecardMethod extends PaymentMethod
             ],
             'notification_url' => str_replace('%id%', '{payment_id}', $notificationUrl),
             'customer' => [
-                'id' => shop_user()?->id(),
+                'id' => shop_user()?->id,
             ],
         ]);
 
@@ -103,7 +103,7 @@ class PaysafecardMethod extends PaymentMethod
 
             return [
                 'status' => false,
-                'message' => "Invalid payment response ({$response->status()}: {$response->json('message')}",
+                'message' => "Invalid payment response ({$response->status()}: {$response->json('message')})",
             ];
         }
 
@@ -175,7 +175,7 @@ class PaysafecardMethod extends PaymentMethod
 
     private function logInvalid(Response $response, string $message): void
     {
-        Log::warning("[Shop] Paysafecard - {$message} {$response->effectiveUri()} ({$response->status()}): {$response->json('message ')}");
+        Log::warning("[Shop] Paysafecard - {$message} {$response->effectiveUri()} ({$response->status()}): {$response->json('message')}");
     }
 
     public static function environments(): array

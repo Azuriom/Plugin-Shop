@@ -53,7 +53,7 @@
                                 <h4 class="card-title">{{ $package->name }}</h4>
                                 <h5 class="card-subtitle mb-3">
                                     @if($package->isDiscounted())
-                                        <del class="small">{{ $package->getOriginalPrice() }}</del>
+                                        <del class="small">{{ shop_format_amount($package->getOriginalPrice()) }}</del>
                                     @endif
                                     {{ shop_format_amount($package->getPrice()) }}
                                 </h5>

@@ -58,7 +58,7 @@ class PaymentItem extends Model
     protected static function booted(): void
     {
         static::creating(function (self $item) {
-            if ($item->buyable?->billing_period !== null) {
+            if ($item->buyable?->billing_type === 'expiring' && $item->buyable->billing_period !== null) {
                 $item->expires_at = $item->freshTimestamp()->add($item->buyable->billing_period);
             }
         });

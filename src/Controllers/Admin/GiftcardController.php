@@ -14,7 +14,7 @@ class GiftcardController extends Controller
      */
     public function index()
     {
-        $giftcards = Giftcard::with('payments')->get();
+        $giftcards = Giftcard::all();
 
         $giftcards->each(fn (Giftcard $card) => $card->refreshBalance());
 

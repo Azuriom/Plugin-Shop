@@ -119,7 +119,7 @@ return [
         'subscription_info' => 'Assurez vous que votre moyen de paiement supporte les abonnements. Une fois un abonnement créé, l\'utilisateur sera débité du même montant tant que l\'abonnement n\'est pas annulé (toute promotion active pour le premier paiement sera appliquée aux paiements suivants).',
         'expiring' => 'Paiement unique avec expiration',
         'expiring_info' => 'Le produit sera automatiquement supprimé après la période définie.',
-        'scheduler' => 'Les tâches CRON ne sont pas activées, vous devez les configurer pour utiliser les abonnements et les expirations, voir la <a href="https://azuriom.com/fr/docs/installation" target="_blank" rel="noopener norefferer">documentation</a> pour plus d\'informations.',
+        'scheduler' => 'Les tâches CRON ne sont pas activées, vous devez les configurer pour utiliser les abonnements et les expirations, voir la <a href="https://azuriom.com/fr/docs/installation" target="_blank" rel="noopener noreferrer">documentation</a> pour plus d\'informations.',
 
         'create_category' => 'Créer une catégorie',
         'create_package' => 'Créer un produit',
@@ -153,7 +153,7 @@ return [
 
         'current' => 'Moyen de paiement actuel',
         'add' => 'Ajout d\'un nouveau moyen de paiement',
-        'info' => 'Si vous avez des problèmes avec les paiements en utilisant Cloudflare ou un pare-feu, essayez de suivre les étapes indiquées dans la <a href="https://azuriom.com/docs/faq" target="_blank" rel="noopener norefferer">FAQ</a>.',
+        'info' => 'Si vous avez des problèmes avec les paiements en utilisant Cloudflare ou un pare-feu, essayez de suivre les étapes indiquées dans la <a href="https://azuriom.com/docs/faq" target="_blank" rel="noopener noreferrer">FAQ</a>.',
 
         'country' => 'Pays',
         'sandbox' => 'Sandbox',
@@ -164,6 +164,7 @@ return [
         'secret-key' => 'Clé Secrète',
         'endpoint-secret' => 'Clé Secrète de Signature',
         'service-id' => 'ID du Service',
+        'webhook-secret' => 'Clé Secrète du Webhook',
         'client-id' => 'ID du Client',
         'merchant-id' => 'ID du vendeur',
         'project-id' => 'ID du projet',
@@ -184,6 +185,8 @@ return [
         'skrill_secret' => 'Mot Secret',
         'skrill_info' => 'L\'ID du site et le mot secret sont disponibles sur le tableau de bord Skrill, dans l\'onglet "Developer Settings".',
         'mercadopago' => 'Les identifiants Mercado Pago doivent être pour l\'intégration <strong>Checkout Pro</strong>.',
+        'mercadopago_webhook' => 'Sur le tableau de bord Mercado Pago, dans votre application, configurez un webhook avec l\'URL <code>:url</code> et l\'événement <code>Payments</code>, puis copiez sa clé secrète ici.',
+        'paysafecard_info' => 'La clé API se trouve dans votre compte marchand paysafecard. Utilisez l\'environnement de test uniquement avec une clé API de test.',
 
         'stripe_invoice' => 'Activer la création automatique de facture sur Stripe',
 

@@ -10,7 +10,7 @@ class ShopAdminDashboardComposer extends AdminDashboardCardComposer
 {
     public function getCards()
     {
-        if (! Gate::allows('shop.admin')) {
+        if (! Gate::allows('shop.payments')) {
             return [];
         }
 

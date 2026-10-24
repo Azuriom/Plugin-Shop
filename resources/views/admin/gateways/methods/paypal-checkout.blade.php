@@ -48,6 +48,11 @@
 <div class="alert alert-info" role="alert">
     <i class="bi bi-info-circle"></i> @lang('shop::admin.gateways.paypal_checkout', [
         'url' => route('shop.payments.notification', 'paypal-checkout'),
-        'events' => 'BILLING.SUBSCRIPTION.ACTIVATED, CUSTOMER.DISPUTE.CREATED, PAYMENT.CAPTURE.REFUNDED, PAYMENT.CAPTURE.REVERSED, PAYMENT.SALE.COMPLETED',
+        'events' => implode(', ', [
+            'PAYMENT.CAPTURE.COMPLETED', 'PAYMENT.CAPTURE.REFUNDED', 'PAYMENT.CAPTURE.REVERSED',
+            'PAYMENT.SALE.COMPLETED', 'PAYMENT.SALE.REFUNDED', 'PAYMENT.SALE.REVERSED',
+            'BILLING.SUBSCRIPTION.CANCELLED', 'BILLING.SUBSCRIPTION.EXPIRED',
+            'CUSTOMER.DISPUTE.CREATED',
+        ]),
     ])
 </div>

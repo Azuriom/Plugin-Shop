@@ -9,6 +9,7 @@ use Azuriom\Plugin\Shop\Models\Payment;
 use Azuriom\Plugin\Shop\Models\Subscription;
 use Azuriom\Plugin\Shop\Payment\PaymentMethod;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Mollie\Api\Exceptions\ApiException;
 use Mollie\Api\MollieApiClient;
 use Mollie\Api\Resources\Customer;
@@ -39,7 +40,7 @@ class MollieMethod extends PaymentMethod
         $molliePayment = $this->mollieClient()->payments->create([
             'amount' => [
                 'currency' => $currency,
-                'value' => number_format($amount, 2),
+                'value' => number_format($amount, 2, '.', ''),
             ],
             'description' => $this->getPurchaseDescription($payment),
             'redirectUrl' => route('shop.payments.success', [
@@ -65,7 +66,7 @@ class MollieMethod extends PaymentMethod
         $molliePayment = $this->mollieClient()->payments->create([
             'amount' => [
                 'currency' => currency(),
-                'value' => number_format($package->price, 2),
+                'value' => number_format($package->price, 2, '.', ''),
             ],
             'description' => $this->getSubscriptionDescription($user, $package),
             'customerId' => $customer->id,
@@ -77,6 +78,8 @@ class MollieMethod extends PaymentMethod
                 'user' => $user->id,
                 'package' => $package->id,
                 'mode' => 'subscription_first',
+                // Freeze agreed subscription terms while the first payment is pending.
+                'interval' => $package->billing_period,
             ],
         ]);
 
@@ -126,31 +129,52 @@ class MollieMethod extends PaymentMethod
     public function notification(Request $request, ?string $paymentId)
     {
         $id = $request->input('id');
+
+        if (! is_string($id) || $id === '') {
+            return response()->json(['status' => 'invalid_payment_id'], 400);
+        }
+
         $molliePayment = $this->mollieClient()->payments->get($id);
 
-        if (($molliePayment->metadata?->mode ?? '') === 'subscription_first') {
+        $isFirst = ($molliePayment->metadata?->mode ?? '') === 'subscription_first';
+        $isRecurring = $molliePayment->subscriptionId !== null;
+        $payment = $isFirst || $isRecurring
+            ? Payment::where('gateway_type', $this->id)->firstWhere('transaction_id', $id)
+            : Payment::find($molliePayment->metadata?->order_id);
+
+        if ($payment !== null && ($payment->gateway_type !== $this->id || $payment->transaction_id !== $id)) {
+            return response()->json(['status' => 'payment_mismatch'], 400);
+        }
+
+        // Refund and chargeback notifications also apply to subscription payments.
+        if ($molliePayment->hasChargebacks()) {
+            return $payment !== null ? $this->processChargeback($payment) : response()->noContent();
+        }
+
+        // Do not revoke the entire order for a partial or still-pending refund.
+        if ($molliePayment->hasRefunds()
+            && $molliePayment->getAmountRefunded() >= (float) $molliePayment->amount->value) {
+            return $payment !== null ? $this->processRefund($payment) : response()->noContent();
+        }
+
+        if (! $molliePayment->isPaid()) {
+            if ($payment?->isPending() && in_array($molliePayment->status, ['failed', 'canceled', 'expired'], true)) {
+                $payment->update(['status' => 'error']);
+            }
+
+            // Failed, canceled and pending statuses are legitimate webhook deliveries.
+            return response()->noContent();
+        }
+
+        if ($isFirst) {
             $package = Package::findOrFail($molliePayment->metadata->package);
             $user = User::findOrFail($molliePayment->metadata->user);
 
             return $this->startMollieSubscription($molliePayment, $user, $package);
         }
 
-        if ($molliePayment->subscriptionId !== null) {
+        if ($isRecurring) {
             return $this->renewMollieSubscription($id, $molliePayment->subscriptionId);
-        }
-
-        $payment = Payment::find($molliePayment->metadata->order_id);
-
-        if ($molliePayment->hasChargebacks()) {
-            return $this->processChargeback($payment);
-        }
-
-        if ($molliePayment->hasRefunds()) {
-            return $this->processRefund($payment);
-        }
-
-        if (! $molliePayment->isPaid()) {
-            return response()->json(['status' => false, 'message' => 'Invalid Mollie payment status'], 400);
         }
 
         return $this->processPayment($payment);
@@ -158,18 +182,35 @@ class MollieMethod extends PaymentMethod
 
     protected function startMollieSubscription(MolliePayment $payment, User $user, Package $package)
     {
-        $subscription = $this->mollieClient()->subscriptions->createForId($payment->customerId, [
+        $existing = Payment::where('gateway_type', $this->id)
+            ->where('transaction_id', $payment->id)
+            ->whereNotNull('subscription_id')
+            ->first();
+
+        if ($existing !== null) {
+            return response()->json(['status' => 'duplicate_id']);
+        }
+
+        $amount = (float) $payment->amount->value;
+        $currency = $payment->amount->currency;
+        $interval = $payment->metadata?->interval ?? $package->billing_period;
+
+        // Mollie also deduplicates concurrent creation requests with this key.
+        $client = $this->mollieClient();
+        $client->setIdempotencyKey('shop-mollie-sub-'.$payment->id);
+        $subscription = $client->subscriptions->createForId($payment->customerId, [
             'amount' => [
-                'currency' => currency(),
-                'value' => number_format($package->price, 2),
+                'currency' => $currency,
+                'value' => $payment->amount->value,
             ],
-            'interval' => $package->billing_period,
-            'startDate' => now()->add($package->billing_period)->toDateString(),
+            'interval' => $interval,
+            'startDate' => now()->add($interval)->toDateString(),
             'description' => $this->getSubscriptionDescription($user, $package),
             'webhookUrl' => route('shop.payments.notification', ['gateway' => $this->id]),
+            'metadata' => ['initial_payment_id' => $payment->id],
         ]);
 
-        $sub = $this->createSubscription($user, $package, $subscription->id);
+        $sub = $this->createSubscription($user, $package, $subscription->id, $amount, $currency);
 
         return $this->renewSubscription($sub, $payment->id, true);
     }
@@ -210,11 +251,11 @@ class MollieMethod extends PaymentMethod
     protected function findOrCreateCustomer(User $user): Customer
     {
         $customer = $this->findCustomer($user);
-        $data = [
+        $data = Arr::whereNotNull([
             'name' => $user->name,
-            'email' => $user->email,
+            'email' => $this->getUserEmail($user),
             'metadata' => ['user_id' => $user->id],
-        ];
+        ]);
 
         if ($customer !== null) {
             $this->mollieClient()->customers->update($customer->id, $data);

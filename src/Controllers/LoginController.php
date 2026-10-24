@@ -30,6 +30,7 @@ class LoginController extends Controller
     public function logout(Request $request)
     {
         $request->session()->remove('shop.user');
+        $request->session()->remove('shop.cart');
 
         return redirect()->back();
     }

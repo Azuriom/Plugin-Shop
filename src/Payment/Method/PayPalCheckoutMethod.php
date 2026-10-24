@@ -46,17 +46,8 @@ class PayPalCheckoutMethod extends PaymentMethod
     {
         $payment = $this->createPayment($cart, $amount, $currency);
 
-        $items = $cart->itemsPrice()->map(fn (array $data) => [
-            'name' => $data['item']->name(),
-            'quantity' => $data['item']->quantity,
-            'description' => $data['item']->buyable()->getDescription(),
-            'category' => 'DIGITAL_GOODS',
-            'unit_amount' => [
-                'currency_code' => $currency,
-                'value' => number_format($data['unit_price'], 2),
-            ],
-        ]);
-
+        // Use the final shop total. PayPal itemization requires a matching amount
+        // breakdown, which is not reliable here with gift cards and discounts.
         $response = $this->getClient()->post('/v2/checkout/orders', [
             'intent' => 'CAPTURE',
             'purchase_units' => [
@@ -65,11 +56,10 @@ class PayPalCheckoutMethod extends PaymentMethod
                     'description' => $this->getPurchaseDescription($payment),
                     'amount' => [
                         'currency_code' => $currency,
-                        'value' => number_format($amount, 2),
+                        'value' => number_format($amount, 2, '.', ''),
                     ],
                 ],
             ],
-            'items' => $items,
             'payment_source' => [
                 'card' => [
                     'experience_context' => [
@@ -107,19 +97,18 @@ class PayPalCheckoutMethod extends PaymentMethod
     public function startSubscription(User $user, Package $package)
     {
         $planId = $this->findOrCreatePlan($package);
+        $email = $this->getUserEmail($user);
 
-        $response = $this->getClient()->post('/v1/billing/subscriptions', [
+        $response = $this->getClient()->post('/v1/billing/subscriptions', Arr::whereNotNull([
             'custom_id' => $user->id.'|'.$package->id,
             'plan_id' => $planId,
-            'subscriber' => [
-                'email_address' => $user->email,
-            ],
+            'subscriber' => $email !== null ? ['email_address' => $email] : null,
             'application_context' => [
                 'shipping_preference' => 'NO_SHIPPING',
                 'return_url' => route('shop.payments.success', $this->id),
                 'cancel_url' => route('shop.cart.index'),
             ],
-        ]);
+        ]));
 
         $links = collect($response->json('links'));
 
@@ -144,17 +133,16 @@ class PayPalCheckoutMethod extends PaymentMethod
         $type = $this->verifyPayPalWebhook($request);
 
         if ($type === 'BILLING.SUBSCRIPTION.ACTIVATED') {
-            [$userId, $packageId] = explode('|', $request->json('resource.custom_id'));
-            $subscriptionId = $request->json('resource.id');
+            $ids = $this->parseSubscriptionCustomId($request->json('resource.custom_id'));
 
-            // If the subscription was created after the first payment, process it now
-            $paymentId = Cache::pull('shop.paypal.subscription.'.$subscriptionId);
-
-            if ($paymentId !== null) {
-                return $this->createPayPalSubscription($userId, $packageId, $subscriptionId, $paymentId);
+            if ($ids === null) {
+                return response()->noContent();
             }
 
-            // Wait for the first payment to process the subscription
+            [$userId, $packageId] = $ids;
+            $subscriptionId = $request->json('resource.id');
+
+            // Activation is not proof of payment. Wait for PAYMENT.SALE.COMPLETED.
             Log::info('Waiting payment for PayPal subscription '.$subscriptionId.', for user '.$userId.' and package '.$packageId);
 
             return response()->json(['status' => 'subscription_pending']);
@@ -164,74 +152,230 @@ class PayPalCheckoutMethod extends PaymentMethod
             $subscriptionId = $request->json('resource.billing_agreement_id');
             $paymentId = $request->json('resource.id');
 
+            if (! is_string($subscriptionId) || ! is_string($paymentId)) {
+                return response()->json(['status' => 'invalid_subscription_sale'], 400);
+            }
+
             $subscription = Subscription::firstWhere('subscription_id', $subscriptionId);
 
             if ($subscription !== null) {
-                return $this->renewSubscription($subscription, $paymentId);
+                return $this->renewSubscription($subscription, $paymentId, ! $subscription->payments()->exists());
             }
 
             $response = $this->getClient()->get('/v1/billing/subscriptions/'.$subscriptionId);
-            [$userId, $packageId] = explode('|', $response->json('custom_id'));
+            $ids = $this->parseSubscriptionCustomId($response->json('custom_id'));
+
+            if ($ids === null) {
+                Log::info('Unknown PayPal subscription: '.$subscriptionId);
+
+                return response()->noContent();
+            }
+
+            [$userId, $packageId] = $ids;
 
             return $this->createPayPalSubscription($userId, $packageId, $subscriptionId, $paymentId);
         }
 
-        if ($type === 'CUSTOMER.DISPUTE.CREATED') {
-            foreach ($request->json('resource.disputed_transactions') as $dispute) {
-                $transactionId = Arr::get($dispute, 'seller_transaction_id');
-                $payment = Payment::firstWhere('transaction_id', $transactionId);
+        if ($type === 'PAYMENT.CAPTURE.COMPLETED') {
+            $orderId = $request->json('resource.supplementary_data.related_ids.order_id');
 
-                $this->processChargeback($payment);
+            if ($orderId !== null) {
+                $this->reconcilePayPalOrder($orderId);
             }
+
+            // Always acknowledge, as orders not created by the shop will never be processed
+            return response()->noContent();
+        }
+
+        if (in_array($type, ['BILLING.SUBSCRIPTION.CANCELLED', 'BILLING.SUBSCRIPTION.EXPIRED'], true)) {
+            $subscription = Subscription::firstWhere('subscription_id', $request->json('resource.id'));
+
+            if ($subscription !== null && $subscription->status !== 'expired') {
+                // Preserve remaining paid access; expiration jobs enforce ends_at.
+                $subscription->update(['status' => 'canceled']);
+            }
+
+            return response()->noContent();
+        }
+
+        if (in_array($type, ['PAYMENT.SALE.REFUNDED', 'PAYMENT.SALE.REVERSED'], true)) {
+            $payment = null;
+
+            // Depending on the event, the resource ID may identify the refund
+            // rather than the original sale. Prefer the original sale ID when present.
+            foreach (['resource.sale_id', 'resource.id'] as $path) {
+                $saleId = $request->json($path);
+
+                if ($saleId !== null) {
+                    $payment = Payment::where('gateway_type', $this->id)
+                        ->firstWhere('transaction_id', $saleId);
+                }
+
+                if ($payment !== null) {
+                    break;
+                }
+            }
+
+            if ($payment === null) {
+                Log::warning('Unable to match PayPal subscription refund/reversal to a sale.');
+
+                return response()->noContent();
+            }
+
+            if ($type === 'PAYMENT.SALE.REVERSED') {
+                return $this->processChargeback($payment);
+            }
+
+            $refunded = $request->json('resource.total_refunded_amount.value')
+                ?? $request->json('resource.amount.total');
+
+            return $this->isFullRefund($payment, $refunded)
+                ? $this->processRefund($payment)
+                : response()->noContent();
+        }
+
+        if ($type === 'CUSTOMER.DISPUTE.CREATED') {
+            return $this->processPayPalDispute($request->json('resource') ?? []);
         }
 
         if ($type === 'PAYMENT.CAPTURE.REFUNDED' || $type === 'PAYMENT.CAPTURE.REVERSED') {
             $links = collect($request->json('resource.links'));
-            $transactionId = Str::afterLast(Arr::get($links->firstWhere('rel', 'up'), 'href'), '/');
-            $payment = Payment::firstWhere('transaction_id', $transactionId);
+            $upUrl = Arr::get($links->firstWhere('rel', 'up'), 'href');
+            $transactionId = $request->json('resource.supplementary_data.related_ids.capture_id')
+                ?? ($upUrl !== null ? Str::afterLast($upUrl, '/') : null);
+            $payment = $transactionId !== null
+                ? Payment::where('gateway_type', $this->id)->firstWhere('transaction_id', $transactionId)
+                : null;
 
-            return $this->processRefund($payment);
+            if ($payment === null) {
+                Log::warning('Unable to match PayPal capture refund/reversal to a payment.');
+
+                return response()->noContent();
+            }
+
+            if ($type === 'PAYMENT.CAPTURE.REVERSED') {
+                return $this->processChargeback($payment);
+            }
+
+            $refunded = $request->json('resource.seller_payable_breakdown.total_refunded_amount.value')
+                ?? $request->json('resource.amount.value');
+
+            return $this->isFullRefund($payment, $refunded)
+                ? $this->processRefund($payment)
+                : response()->noContent();
         }
 
         return response()->json(['status' => 'ok']);
     }
 
+    /**
+     * Handle a new dispute (inquiries included) by revoking the purchase.
+     * The outcome of disputes is left to the admin.
+     */
+    protected function processPayPalDispute(array $dispute)
+    {
+        foreach (Arr::get($dispute, 'disputed_transactions') ?? [] as $transaction) {
+            $transactionId = Arr::get($transaction, 'seller_transaction_id');
+            $payment = is_string($transactionId)
+                ? Payment::where('gateway_type', $this->id)->firstWhere('transaction_id', $transactionId)
+                : null;
+
+            if ($payment !== null) {
+                $this->processChargeback($payment);
+            }
+        }
+
+        return response()->noContent();
+    }
+
     protected function createPayPalSubscription(string $userId, string $packageId, string $subscription, string $payment)
     {
-        $user = User::find($userId);
-        $package = Package::find($packageId);
+        $existing = Subscription::firstWhere('subscription_id', $subscription);
+
+        if ($existing !== null) {
+            return $this->renewSubscription($existing, $payment, ! $existing->payments()->exists());
+        }
+
+        $user = User::findOrFail($userId);
+        $package = Package::findOrFail($packageId);
         $subscription = $this->createSubscription($user, $package, $subscription);
 
         return $this->renewSubscription($subscription, $payment, true);
     }
 
-    protected function capturePayPalOrder(string $paymentId)
+    protected function capturePayPalOrder(string $orderId)
     {
-        // Seems like the PayPal API does not accept an empty body for the capture request
-        $response = $this->getClient(false)->post('/v2/checkout/orders/'.$paymentId.'/capture', ['' => 0]);
+        $payment = Payment::where('gateway_type', $this->id)
+            ->firstWhere('transaction_id', $orderId);
 
-        if ($response->status() === 422) {
-            $payment = Payment::firstWhere('transaction_id', $paymentId);
-
-            logger()->warning('[Shop] Unexpected response from PayPal API: '.$response->body());
-
-            return $payment !== null
-                ? $this->invalidPayment($payment, $paymentId, 'Invalid PayPal order')
-                : response()->json(['message' => 'Invalid PayPal order']);
+        // After a capture we store the capture ID, so a duplicate client callback
+        // must be reconciled against the remote order rather than captured again.
+        if ($payment === null || ! $payment->isPending()) {
+            return $this->reconcilePayPalOrder($orderId);
         }
 
-        $status = $response->throw()->json('status');
+        // PayPal retries a capture safely when this ID is reused for the same order
+        // (PayPal API does not accept an empty body for the capture request)
+        $response = $this->getClient(false)
+            ->withHeaders(['PayPal-Request-Id' => 'shop-capture-'.$orderId])
+            ->post('/v2/checkout/orders/'.$orderId.'/capture', ['' => 0]);
 
-        if ($status === 'COMPLETED' && $response->json('purchase_units.0.payments.captures.0.status') === 'COMPLETED') {
-            $payment = Payment::firstWhere('transaction_id', $paymentId);
-            $transactionId = $response->json('purchase_units.0.payments.captures.0.id');
+        if ($response->status() === 422) {
+            // This can also mean the order was already captured, not that it failed.
+            $order = $this->getClient()->get('/v2/checkout/orders/'.$orderId);
 
-            $payment->update(['transaction_id' => $transactionId]);
+            if ($order->json('status') === 'COMPLETED') {
+                return $this->reconcilePayPalOrder($orderId, $order);
+            }
 
+            // Preserve INSTRUMENT_DECLINED so the SDK can restart the approval flow.
+            return response()->json($response->json());
+        }
+
+        $response->throw();
+
+        return $this->reconcilePayPalOrder($orderId, $response);
+    }
+
+    protected function reconcilePayPalOrder(string $orderId, ?Response $order = null)
+    {
+        $order ??= $this->getClient()->get('/v2/checkout/orders/'.$orderId);
+        $referenceId = $order->json('purchase_units.0.reference_id');
+        $captureId = $order->json('purchase_units.0.payments.captures.0.id');
+
+        $payment = Payment::find($referenceId);
+
+        if ($payment === null || $payment->gateway_type !== $this->id
+            || ! in_array($payment->transaction_id, [$orderId, $captureId], true)) {
+            return response()->json(['message' => 'Unknown PayPal order'], 400);
+        }
+
+        if ($order->json('status') !== 'COMPLETED'
+            || $order->json('purchase_units.0.payments.captures.0.status') !== 'COMPLETED') {
+            return response()->json(['status' => 'payment_pending']);
+        }
+
+        if ($payment->isPending()) {
+            $payment->update(['transaction_id' => $captureId]);
             $this->processPayment($payment);
         }
 
-        return response()->json($response->json());
+        return response()->json($order->json());
+    }
+
+    /**
+     * Get the user and package IDs from the custom ID of a subscription created by the shop.
+     */
+    private function parseSubscriptionCustomId(mixed $customId): ?array
+    {
+        return is_string($customId) && substr_count($customId, '|') === 1
+            ? explode('|', $customId)
+            : null;
+    }
+
+    private function isFullRefund(Payment $payment, mixed $refundedAmount): bool
+    {
+        return is_numeric($refundedAmount) && round((float) $refundedAmount, 2) >= round($payment->price, 2);
     }
 
     /**
@@ -289,7 +433,7 @@ class PayPalCheckoutMethod extends PaymentMethod
                         'total_cycles' => 0,
                         'pricing_scheme' => [
                             'fixed_price' => [
-                                'value' => number_format($package->price, 2),
+                                'value' => number_format($package->price, 2, '.', ''),
                                 'currency_code' => currency(),
                             ],
                         ],

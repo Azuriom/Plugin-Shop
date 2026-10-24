@@ -61,7 +61,7 @@ Route::middleware('can:shop.gateways')->group(function () {
 
 Route::middleware('can:shop.promotions')->group(function () {
     Route::resource('coupons', CouponController::class)->except('show');
-    Route::resource('giftcards', GiftcardController::class)->except('show');
+    Route::resource('discounts', DiscountController::class)->except('show');
 });
 
-Route::resource('discounts', DiscountController::class)->middleware('can:shop.giftcards')->except('show');
+Route::resource('giftcards', GiftcardController::class)->middleware('can:shop.giftcards')->except('show');

@@ -35,7 +35,7 @@ Route::prefix('packages/{package}')->name('packages.')->middleware('shop.auth')-
     Route::post('/buy', [PackageController::class, 'buy'])->name('buy');
     Route::get('/options', [PackageController::class, 'showVariables'])->name('buy.options');
     Route::post('/options', [PackageController::class, 'buy'])->name('variables');
-    Route::get('/files/{file}', [PackageController::class, 'downloadFile'])->name('file');
+    Route::get('/files/{file}', [PackageController::class, 'downloadFile'])->middleware('auth')->name('file');
 });
 
 Route::prefix('offers')->name('offers.')->middleware('verified')->group(function () {

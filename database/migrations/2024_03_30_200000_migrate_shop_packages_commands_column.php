@@ -26,8 +26,10 @@ return new class extends Migration
                     continue;
                 }
 
+                $commands = array_values($commands);
+
                 if (array_key_exists('commands', $commands[0])) {
-                    return;
+                    continue;
                 }
 
                 foreach ($commands as &$command) {
@@ -36,7 +38,7 @@ return new class extends Migration
                 }
 
                 DB::table('shop_packages')->where('id', $package->id)->update([
-                    'commands' => $commands,
+                    'commands' => json_encode($commands),
                 ]);
             } catch (JsonException) {
                 // ignore invalid JSON

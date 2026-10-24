@@ -55,12 +55,12 @@ class CartController extends Controller
         foreach ($request->input('quantities', []) as $id => $quantity) {
             $item = $cart->getById($id);
 
-            if ($item !== null && $quantity > 0) {
-                $item->setQuantity($quantity);
+            if ($item !== null && (int) $quantity > 0) {
+                $item->setQuantity((int) $quantity);
             }
-
-            $cart->save();
         }
+
+        $cart->save();
 
         return to_route('shop.cart.index');
     }

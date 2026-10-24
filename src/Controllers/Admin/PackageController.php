@@ -87,7 +87,9 @@ class PackageController extends Controller
     {
         $replicate = $package->replicate();
 
-        $replicate->fill(['image' => null])->save();
+        // Files are not copied as they would be deleted along with either package
+        $replicate->fill(['image' => null, 'files' => null])->save();
+        $replicate->variables()->sync($package->variables);
 
         return to_route('shop.admin.packages.edit', ['package' => $replicate]);
     }

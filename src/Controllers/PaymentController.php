@@ -20,6 +20,10 @@ class PaymentController extends Controller
 
         $cart = Cart::fromSession($request->session());
 
+        if ($cart->isEmpty()) {
+            return to_route('shop.cart.index');
+        }
+
         // If the cart isn't empty and the total is 0, just complete
         // the payment now as gateways won't accept null payment
         if (! $cart->isEmpty() && $cart->payableTotal() < 0.1) {

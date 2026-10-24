@@ -37,7 +37,7 @@ class OfferController extends Controller
     {
         abort_if(! $gateway->is_enabled, 403);
 
-        $gateway->load('offers');
+        $gateway->load(['offers' => fn ($query) => $query->where('is_enabled', true)]);
 
         if ($gateway->paymentMethod()->hasFixedAmount()) {
             return $gateway->paymentMethod()->startPayment(Cart::createEmpty(), 0, currency());
@@ -52,6 +52,7 @@ class OfferController extends Controller
     public function pay(Offer $offer, Gateway $gateway)
     {
         abort_if(! $gateway->is_enabled || ! $offer->is_enabled, 403);
+        abort_if(! $gateway->offers()->whereKey($offer->id)->exists(), 403);
 
         $cart = Cart::createEmpty();
 

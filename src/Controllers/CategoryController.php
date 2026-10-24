@@ -66,16 +66,20 @@ class CategoryController extends Controller
      */
     public function show(Request $request, Category $category)
     {
+        abort_if(! $category->is_enabled, 404);
+
         $categories = $this->getCategories();
 
         $category->load(['packages' => function (Builder $query) {
             $query->with('discounts')->scopes(['enabled']);
         }]);
 
-        if ($category->packages->isEmpty() && ! $category->categories->isEmpty()) {
+        $subCategory = $category->categories->firstWhere('is_enabled', true);
+
+        if ($subCategory !== null && $category->packages->isEmpty()) {
             $request->session()->reflash(); // Keep status messages after redirection
 
-            return to_route('shop.categories.show', $category->categories->first());
+            return to_route('shop.categories.show', $subCategory);
         }
 
         return view('shop::categories.show', [

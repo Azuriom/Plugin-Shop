@@ -38,13 +38,16 @@ class XsollaMethod extends PaymentMethod
         $projectId = $this->gateway->data['project-id'];
         $payment = $this->createPayment($cart, $amount, $currency);
 
-        // Their PHP SDK need casts everywhere...
+        // Xsolla PHP SDK need casts everywhere...
         $tokenRequest = new TokenRequest((int) $projectId, (string) $payment->user->id);
-        $tokenRequest->setUserEmail($payment->user->mail)
-            ->setUserName($payment->user->name)
+        $tokenRequest->setUserName($payment->user->name)
             ->setExternalPaymentId((string) $payment->id)
             ->setSandboxMode($sandbox)
             ->setPurchase($amount, $currency);
+
+        if (($email = $this->getUserEmail($payment->user)) !== null) {
+            $tokenRequest->setUserEmail($email);
+        }
 
         $xsollaClient = XsollaClient::factory([
             'merchant_id' => $this->gateway->data['merchant-id'],
@@ -104,7 +107,7 @@ class XsollaMethod extends PaymentMethod
         /** @var \Xsolla\SDK\Webhook\Message\PaymentMessage $message */
         $payment = Payment::find($message->getExternalPaymentId());
 
-        if ($payment === null) {
+        if ($payment === null || $payment->gateway_type !== $this->id) {
             throw new InvalidInvoiceException('Unknown payment id: '.$message->getExternalPaymentId());
         }
 

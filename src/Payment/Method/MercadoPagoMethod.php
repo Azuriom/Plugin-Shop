@@ -49,7 +49,7 @@ class MercadoPagoMethod extends PaymentMethod
                     ],
                 ],
                 'payer' => [
-                    'email' => $payment->user->email,
+                    'email' => $this->getUserEmail($payment->user),
                 ],
                 'back_urls' => [
                     'success' => route('shop.payments.success', $this->id),
@@ -77,36 +77,39 @@ class MercadoPagoMethod extends PaymentMethod
     public function notification(Request $request, ?string $paymentId)
     {
         $this->setupConfig();
-        $id = $request->input('data.id');
+        // PHP normalizes dots in query-string keys to underscores
+        $id = $request->query('data_id') ?? $request->input('data.id');
 
         try {
-            if (! $request->hasHeader('X-Request-ID') || ! $request->hasHeader('X-Signature')) {
-                return response()->json(['error' => 'Invalid webhook signature.'], 400);
-            }
-
             if ($id === null || $request->input('type') !== 'payment') {
                 return response()->noContent();
             }
 
-            $mercadoPayment = (new PaymentClient())->get($id);
-            $payment = Payment::findOrFail($mercadoPayment->external_reference);
+            if (! $this->verifySignature($request, (string) $id)) {
+                return response()->json(['error' => 'Invalid webhook signature.'], 401);
+            }
 
-            if ($payment === null) {
+            $mercadoPayment = (new PaymentClient())->get($id);
+            $payment = Payment::find($mercadoPayment->external_reference);
+
+            if ($payment === null || $payment->gateway_type !== $this->id) {
                 logger()->warning('[Shop] Payment not found for Mercado Pago payment '.$id);
 
                 return response()->json(['error' => 'Payment not found'], 404);
             }
 
-            if (in_array($mercadoPayment->status, ['cancelled', 'pending', 'in_process'])) {
+            // Individual failed attempts will not necessarily end Checkout Pro preferences,
+            // and mediations are like inquiries: a refund or chargeback may follow.
+            if (in_array($mercadoPayment->status, ['cancelled', 'pending', 'authorized', 'in_process', 'in_mediation', 'rejected'], true)) {
                 return response()->json(['status' => 'ok']);
+            }
+
+            if ($mercadoPayment->status === 'charged_back') {
+                return $this->processChargeback($payment);
             }
 
             if ($mercadoPayment->status === 'refunded') {
                 return $this->processRefund($payment);
-            }
-
-            if ($mercadoPayment->status === 'rejected') {
-                return $this->invalidPayment($payment, $mercadoPayment->id, 'Rejected payment');
             }
 
             if ($mercadoPayment->status !== 'approved') {
@@ -134,7 +137,42 @@ class MercadoPagoMethod extends PaymentMethod
     {
         return [
             'key' => ['required', 'string'],
+            'webhook-secret' => ['required', 'string'],
         ];
+    }
+
+    private function verifySignature(Request $request, string $paymentId): bool
+    {
+        $signature = $request->header('X-Signature');
+        $requestId = $request->header('X-Request-ID');
+
+        if (! is_string($signature) || ! is_string($requestId) || $requestId === '') {
+            return false;
+        }
+
+        $secret = $this->gateway->data['webhook-secret'] ?? null;
+
+        if ($secret === null) {
+            return true; // For backwards compatibility
+        }
+
+        $parts = [];
+        foreach (explode(',', $signature) as $part) {
+            $pair = explode('=', trim($part), 2);
+            if (count($pair) === 2) {
+                $parts[$pair[0]] = $pair[1];
+            }
+        }
+
+        if (empty($parts['ts']) || empty($parts['v1'])) {
+            return false;
+        }
+
+        // Mercado Pago signs this manifest, using lowercase data.id when alphanumeric.
+        $manifest = 'id:'.strtolower($paymentId).';request-id:'.$requestId.';ts:'.$parts['ts'].';';
+        $expected = hash_hmac('sha256', $manifest, $secret);
+
+        return hash_equals($expected, $parts['v1']);
     }
 
     private function setupConfig(): void

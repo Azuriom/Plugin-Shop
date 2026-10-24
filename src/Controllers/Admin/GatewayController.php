@@ -51,11 +51,11 @@ class GatewayController extends Controller
             'gateways' => ['required', 'array'],
         ]);
 
-        $roles = $request->input('gateways');
+        $gateways = $request->input('gateways');
 
         $position = 1;
 
-        foreach ($roles as $id) {
+        foreach ($gateways as $id) {
             Gateway::whereKey($id)->update(['position' => $position++]);
         }
 
@@ -128,7 +128,7 @@ class GatewayController extends Controller
     public function destroy(Gateway $gateway)
     {
         if (Subscription::active()->where('gateway_type', $gateway->type)->exists()) {
-            return to_route('shop.admin.packages.index')
+            return to_route('shop.admin.gateways.index')
                 ->with('error', trans('shop::admin.subscriptions.error'));
         }
 

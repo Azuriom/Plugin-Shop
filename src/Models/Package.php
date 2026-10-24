@@ -359,15 +359,17 @@ class Package extends Model implements Buyable
                 ? $this->giftcard_balance
                 : $item->price;
 
-            $giftcard = Giftcard::create([
-                'code' => Giftcard::randomCode(),
-                'balance' => $balance,
-                'original_balance' => $balance,
-                'start_at' => now(),
-                'expire_at' => now()->addYear(),
-            ]);
+            for ($i = 0; $i < $item->quantity; $i++) {
+                $giftcard = Giftcard::create([
+                    'code' => Giftcard::randomCode(),
+                    'balance' => $balance,
+                    'original_balance' => $balance,
+                    'start_at' => now(),
+                    'expire_at' => now()->addYear(),
+                ]);
 
-            $giftcard->notifyUser($user);
+                $giftcard->notifyUser($user);
+            }
         }
 
         $this->sendFiles($user);

@@ -202,6 +202,17 @@
 
             <form @if(! use_site_money()) action="{{ route('shop.payments.payment') }}" @endif>
                 @if(! use_site_money())
+                    @if($emailRequired)
+                        <div class="mb-3 ms-md-auto col-md-4">
+                            <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email"
+                                   value="{{ old('email') }}" placeholder="{{ trans('auth.email') }}" aria-label="{{ trans('auth.email') }}" required>
+
+                            @error('email')
+                            <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                            @enderror
+                        </div>
+                    @endif
+
                     <div class="d-flex justify-content-end">
                         @include('shop::cart._terms', ['terms' => $terms])
                     </div>
@@ -217,11 +228,6 @@
                             {{ trans('shop::messages.buy') }}
                         </button>
                     @else
-                        @if($emailRequired)
-                            <input type="email" class="form-group @error('email') is-invalid @enderror" id="email" name="email"
-                                   value="{{ old('email') }}" placeholder="{{ trans('auth.email') }}" required>
-                        @endif
-
                         <button type="submit" class="btn btn-primary ms-auto">
                             <i class="bi bi-cart-check"></i> {{ trans('shop::messages.cart.checkout') }}
                         </button>

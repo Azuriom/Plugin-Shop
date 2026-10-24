@@ -47,7 +47,7 @@ class PaymentWallMethod extends PaymentMethod
                 ),
             ],
             [
-                'email' => $user->email,
+                'email' => $this->getUserEmail($user),
                 'customer[username]' => $user->name,
                 'history[registration_date]' => $user->created_at->timestamp,
                 'success_url' => route('shop.payments.success', $this->id),

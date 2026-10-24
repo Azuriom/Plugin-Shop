@@ -41,7 +41,8 @@ class DiscountController extends Controller
 
         $discount->packages()->sync($request->input('packages'));
 
-        return to_route('shop.admin.discounts.index')->with('success', 'Discount created');
+        return to_route('shop.admin.discounts.index')
+            ->with('success', trans('messages.status.success'));
     }
 
     /**
@@ -67,7 +68,8 @@ class DiscountController extends Controller
 
         $discount->packages()->sync($request->input('packages'));
 
-        return to_route('shop.admin.discounts.index')->with('success', 'Discount updated');
+        return to_route('shop.admin.discounts.index')
+            ->with('success', trans('messages.status.success'));
     }
 
     /**
@@ -79,6 +81,7 @@ class DiscountController extends Controller
     {
         $discount->delete();
 
-        return to_route('shop.admin.discounts.index')->with('success', 'Discount deleted');
+        return to_route('shop.admin.discounts.index')
+            ->with('success', trans('messages.status.success'));
     }
 }

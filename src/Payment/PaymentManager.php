@@ -86,11 +86,11 @@ class PaymentManager
             'currency' => 'XXX',
         ]);
 
-        foreach ($cart->content() as $item) {
+        foreach ($cart->itemsPrice() as ['item' => $item, 'unit_price' => $price]) {
             $payment->items()
                 ->make([
                     'name' => $item->name(),
-                    'price' => $item->price(),
+                    'price' => round($price, 2),
                     'quantity' => $item->quantity,
                     'variables' => $item->variables,
                 ])
@@ -114,11 +114,11 @@ class PaymentManager
             'transaction_id' => $paymentId,
         ]);
 
-        foreach ($cart->content() as $item) {
+        foreach ($cart->itemsPrice() as ['item' => $item, 'unit_price' => $price]) {
             $payment->items()
                 ->make([
                     'name' => $item->name(),
-                    'price' => $item->price(),
+                    'price' => round($price, 2),
                     'quantity' => $item->quantity,
                     'variables' => $item->variables,
                 ])

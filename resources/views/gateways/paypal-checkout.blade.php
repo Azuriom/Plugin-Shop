@@ -66,7 +66,7 @@
                         }
 
                         if (errorDetail) { // (2) Other non-recoverable errors
-                            throw new Error(`${errorDetail.description} (${orderData.debug_id})`);
+                            throw new Error(`${errorDetail.description} (${response.data.debug_id})`);
                         }
 
                         actions.redirect('{{ $successUrl }}'); // (3) Successful transaction

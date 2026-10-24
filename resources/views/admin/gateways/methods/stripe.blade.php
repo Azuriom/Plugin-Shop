@@ -38,7 +38,8 @@
     <i class="bi bi-info-circle"></i> @lang('shop::admin.gateways.stripe_info', [
         'url' => route('shop.payments.notification', 'stripe'),
         'events' => implode(', ', [
-            'checkout.session.completed', 'invoice.paid', 'customer.subscription.created', 'customer.subscription.updated', 'customer.subscription.deleted',
+            'checkout.session.completed', 'checkout.session.async_payment_succeeded', 'invoice.paid', 'customer.subscription.deleted',
+            'charge.refunded', 'charge.dispute.created',
         ])
     ])
 </div>

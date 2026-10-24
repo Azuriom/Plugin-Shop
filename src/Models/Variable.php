@@ -52,7 +52,7 @@ class Variable extends Model
     ];
 
     /**
-     * Get the packages on which this coupon code is effective.
+     * Get the packages that use this variable.
      */
     public function packages()
     {

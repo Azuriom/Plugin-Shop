@@ -86,7 +86,7 @@ class Payment extends Model
     }
 
     /**
-     * Get the category of this package.
+     * Get the user who made this payment.
      */
     public function user()
     {
@@ -239,6 +239,10 @@ class Payment extends Model
             ->footer('Azuriom v'.Azuriom::version())
             ->timestamp(now());
 
+        if (! $full) {
+            return $embed;
+        }
+
         foreach ($this->items as $item) {
             $name = $item->name;
             $quantity = $item->quantity > 1 ? " (x{$item->quantity})" : '';
@@ -255,9 +259,7 @@ class Payment extends Model
                 }
             }
 
-            if ($full) {
-                $embed->addField($name.$quantity, implode("\n", $lines), true);
-            }
+            $embed->addField($name.$quantity, implode("\n", $lines), true);
         }
 
         return $embed;
