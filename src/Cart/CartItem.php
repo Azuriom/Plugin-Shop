@@ -108,7 +108,30 @@ class CartItem implements Arrayable
 
     public function originalPrice(): float
     {
-        return $this->userPrice ?? $this->buyable->getPrice();
+        if ($this->userPrice !== null) {
+            return $this->userPrice;
+        }
+
+        // The selected options of dropdown variables can change the price
+        if ($this->buyable instanceof Package && ! empty($this->variables)) {
+            return $this->buyable->getPriceWithVariables($this->variables);
+        }
+
+        return $this->buyable->getPrice();
+    }
+
+    /**
+     * Get the unit price change of each selected variable option (before coupons), by variable name.
+     *
+     * @return array<string, float>
+     */
+    public function variablesPrices(): array
+    {
+        if ($this->userPrice !== null || ! $this->buyable instanceof Package || empty($this->variables)) {
+            return [];
+        }
+
+        return $this->buyable->getVariablesPrices($this->variables);
     }
 
     public function price(): float

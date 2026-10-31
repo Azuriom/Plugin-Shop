@@ -57,6 +57,9 @@
                                 @foreach($variable->dropdownOptions() as $option)
                                     <option value="{{ $option['value'] }}" @selected(old($variable->name) === $option['value'])>
                                         {{ $option['name'] }}
+                                        @if($priceChange = $variable->formatPriceChange($option))
+                                            ({{ $priceChange }})
+                                        @endif
                                     </option>
                                 @endforeach
                             </select>

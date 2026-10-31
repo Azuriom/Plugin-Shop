@@ -93,6 +93,7 @@ class PaymentManager
                     'price' => round($price, 2),
                     'quantity' => $item->quantity,
                     'variables' => $item->variables,
+                    'variables_prices' => $item->variablesPrices() ?: null,
                 ])
                 ->buyable()
                 ->associate($item->buyable())
@@ -121,6 +122,7 @@ class PaymentManager
                     'price' => round($price, 2),
                     'quantity' => $item->quantity,
                     'variables' => $item->variables,
+                    'variables_prices' => $item->variablesPrices() ?: null,
                 ])
                 ->buyable()->associate($item->buyable())
                 ->save();

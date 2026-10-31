@@ -266,6 +266,8 @@ return [
         'name' => 'Le nom interne de la variable, ne peut pas être modifié après la création.',
         'required' => 'Est-ce que cette variable doit être remplie par l\'utilisateur ?',
         'options' => 'Options',
+        'price_change' => 'Modification du prix',
+        'price_info' => 'Lorsqu\'une option est sélectionnée, sa modification du prix (un pourcentage du prix du produit, ou un montant fixe) est ajoutée au prix, et les valeurs négatives le diminuent. Les modifications de plusieurs options s\'additionnent. Elles ne s\'appliquent pas aux produits dont le prix est choisi par l\'utilisateur.',
 
         'min' => 'Longueur Minimale',
         'max' => 'Longueur Maximale',

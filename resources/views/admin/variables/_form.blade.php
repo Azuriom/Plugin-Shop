@@ -43,17 +43,29 @@
     <h3>{{ trans('shop::admin.variables.options') }}</h3>
 
     <div v-for="(option, i) in options" class="row gx-3">
-        <div class="mb-3 col-md-6">
+        <div class="mb-3 col-md-4">
             <label class="form-label" :for="'optionNameInput' + i">{{ trans('messages.fields.name') }}</label>
 
             <input type="text" class="form-control" :id="'optionNameInput' + i" :name="`options[${i}][name]`" v-model.trim="option.name" required>
         </div>
 
-        <div class="mb-3 col-md-6">
+        <div class="mb-3 col-md-4">
             <label class="form-label" :for="'optionValueInput' + i">{{ trans('messages.fields.value') }}</label>
 
+            <input type="text" class="form-control" :id="'optionValueInput' + i" :name="`options[${i}][value]`" v-model.trim="option.value" required>
+        </div>
+
+        <div class="mb-3 col-md-4">
+            <label class="form-label" :for="'optionPriceInput' + i">{{ trans('shop::admin.variables.price_change') }}</label>
+
             <div class="input-group">
-                <input type="text" class="form-control" :id="'optionValueInput' + i" :name="`options[${i}][value]`" v-model.trim="option.value" required>
+                <input type="number" step="0.01" class="form-control" :id="'optionPriceInput' + i" :name="`options[${i}][price_change]`" v-model="option.price_change" placeholder="0">
+                <div class="input-group-append">
+                    <select class="form-select" :name="`options[${i}][is_fixed]`" v-model="option.is_fixed" aria-label="{{ trans('shop::admin.variables.price_change') }}">
+                        <option value="0">%</option>
+                        <option value="1">{{ shop_active_currency() }}</option>
+                    </select>
+                </div>
 
                 <button type="button" v-if="options.length > 1" class="btn btn-danger" @click="options.splice(i, 1)" title="{{ trans('messages.actions.delete') }}">
                     <i class="bi bi-x-lg"></i>
@@ -62,7 +74,9 @@
         </div>
     </div>
 
-    <button type="button" @click="options.push({ name: '', value: '' })" class="btn btn-sm btn-success">
+    <div class="form-text mb-2">{{ trans('shop::admin.variables.price_info') }}</div>
+
+    <button type="button" @click="options.push({ name: '', value: '', price_change: '', is_fixed: '0' })" class="btn btn-sm btn-success">
         <i class="bi bi-plus-lg"></i> {{ trans('messages.actions.add') }}
     </button>
 </div>
@@ -147,7 +161,12 @@
 
 @push('footer-scripts')
     <script>
-        const shopVariableOptions = @json(old('options', $variable->options ?? [['name' => '', 'value' => '']]));
+        // Fill the price change of options saved before it existed (server options are only IDs)
+        const shopVariableOptions = @json(old('options', $variable->options ?? [['name' => '', 'value' => '']]))
+            .map((option) => typeof option !== 'object' ? option : {
+                ...option,
+                is_fixed: option.is_fixed ? '1' : '0',
+            });
         const variableFilter = '{{ old('filter', Arr::get($variable->validation ?? [], 'filter')) }}';
     </script>
 @endpush

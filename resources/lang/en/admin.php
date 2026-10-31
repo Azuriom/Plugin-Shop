@@ -266,6 +266,8 @@ return [
         'name' => 'The internal name of the variable, cannot be changed after creation.',
         'required' => 'Should this variable be required?',
         'options' => 'Options',
+        'price_change' => 'Price change',
+        'price_info' => 'When an option is selected, its price change (a percentage of the package price, or a fixed amount) is added to the price, and negative values decrease it. The changes of several options add up. They don\'t apply to packages with a price chosen by the user.',
 
         'min' => 'Minimum Length',
         'max' => 'Maximum Length',

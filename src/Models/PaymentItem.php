@@ -17,6 +17,7 @@ use Illuminate\Support\Arr;
  * @property int $quantity
  * @property string $buyable_type
  * @property array $variables
+ * @property array|null $variables_prices
  * @property int $buyable_id
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
@@ -41,7 +42,7 @@ class PaymentItem extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'name', 'price', 'quantity', 'variables', 'expires_at',
+        'name', 'price', 'quantity', 'variables', 'variables_prices', 'expires_at',
     ];
 
     /**
@@ -52,6 +53,7 @@ class PaymentItem extends Model
     protected $casts = [
         'price' => 'float',
         'variables' => 'array',
+        'variables_prices' => 'array',
         'expires_at' => 'datetime',
     ];
 
@@ -96,9 +98,28 @@ class PaymentItem extends Model
 
     public function formatPrice(): string
     {
+        return $this->formatAmount($this->price);
+    }
+
+    /**
+     * Get the unit price change of the option selected for the given variable to display it, e.g. "+$0.50".
+     */
+    public function formatVariablePrice(string $variable): ?string
+    {
+        $change = $this->variables_prices[$variable] ?? null;
+
+        if (! $change) {
+            return null;
+        }
+
+        return ($change > 0 ? '+' : '-').$this->formatAmount(abs($change));
+    }
+
+    protected function formatAmount(float $amount): string
+    {
         return $this->payment->isWithSiteMoney()
-            ? shop_format_amount($this->price, true)
-            : Currencies::formatAmount($this->price, $this->payment->currency);
+            ? shop_format_amount($amount, true)
+            : Currencies::formatAmount($amount, $this->payment->currency);
     }
 
     public function replaceVariables(string $content): string

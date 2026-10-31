@@ -35,6 +35,12 @@ class VariableRequest extends FormRequest
             'description' => ['required', 'string', 'max:200'],
             'type' => ['required', 'string', Rule::in(Variable::TYPES)],
             'options' => ['nullable', 'required_if:type,dropdown,server', 'array'],
+            ...($this->input('type') === 'dropdown' ? [
+                'options.*.name' => ['required', 'string'],
+                'options.*.value' => ['required', 'string'],
+                'options.*.price_change' => ['nullable', 'numeric'],
+                'options.*.is_fixed' => ['nullable', 'boolean'],
+            ] : []),
             'min' => ['sometimes', 'nullable', 'integer', 'min:0', 'max:100'],
             'max' => ['sometimes', 'nullable', 'integer', 'min:0', 'max:100'],
             'filter' => ['sometimes', 'nullable', 'in:alpha,alpha_num,regex'],

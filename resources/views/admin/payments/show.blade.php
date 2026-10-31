@@ -147,6 +147,7 @@
                                 <th scope="col">{{ trans('shop::messages.fields.package') }}</th>
                                 <th scope="col">{{ trans('messages.fields.name') }}</th>
                                 <th scope="col">{{ trans('messages.fields.value') }}</th>
+                                <th scope="col">{{ trans('shop::admin.variables.price_change') }}</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -157,6 +158,7 @@
                                         <th scope="row">{{ $item->name }}</th>
                                         <td>{{ $key }}</td>
                                         <td>{{ $value }}</td>
+                                        <td>{{ $item->formatVariablePrice($key) }}</td>
                                     </tr>
                                 @endforeach
                             @endforeach

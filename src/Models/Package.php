@@ -316,6 +316,39 @@ class Package extends Model implements Buyable
         return $totalPurchases;
     }
 
+    /**
+     * Get the price with the price changes of the selected dropdown options added together.
+     *
+     * @param  array<string, string>  $selectedValues  the value selected by the user, by variable name
+     */
+    public function getPriceWithVariables(array $selectedValues): float
+    {
+        $changes = $this->getVariablesPrices($selectedValues);
+
+        return round(max($this->getPrice() + array_sum($changes), 0), 2);
+    }
+
+    /**
+     * Get the price change of each selected dropdown option, by variable name.
+     * Variables without a selected option or price change are excluded.
+     *
+     * @param  array<string, string>  $selectedValues  the value selected by the user, by variable name
+     * @return array<string, float>
+     */
+    public function getVariablesPrices(array $selectedValues): array
+    {
+        $price = $this->getPrice();
+
+        return $this->variables
+            ->mapWithKeys(function (Variable $variable) use ($selectedValues, $price) {
+                $option = $variable->selectedOption($selectedValues[$variable->name] ?? null);
+
+                return [$variable->name => $option !== null ? $variable->priceChange($option, $price) : 0.0];
+            })
+            ->filter()
+            ->all();
+    }
+
     public function getOriginalPrice(): float
     {
         return $this->price;

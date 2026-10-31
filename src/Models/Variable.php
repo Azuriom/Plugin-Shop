@@ -97,4 +97,42 @@ class Variable extends Model
 
         return $this->options ?? [];
     }
+
+    /**
+     * Get the dropdown option with the given value, if any.
+     */
+    public function selectedOption(?string $selectedValue): ?array
+    {
+        if ($this->type !== 'dropdown' || $selectedValue === null) {
+            return null;
+        }
+
+        return Arr::first($this->options ?? [], fn (array $option) => $option['value'] === $selectedValue);
+    }
+
+    /**
+     * Get the price change of a dropdown option.
+     */
+    public function priceChange(array $option, float $price): float
+    {
+        $change = (float) ($option['price_change'] ?? 0);
+
+        return round(($option['is_fixed'] ?? false) ? $change : $price * $change / 100, 2);
+    }
+
+    /**
+     * Get the price change of a dropdown option to display it.
+     */
+    public function formatPriceChange(array $option): ?string
+    {
+        $change = (float) ($option['price_change'] ?? 0);
+
+        if ($change === 0.0) {
+            return null;
+        }
+
+        $value = ($option['is_fixed'] ?? false) ? shop_format_amount(abs($change)) : abs($change).'%';
+
+        return ($change > 0 ? '+' : '-').$value;
+    }
 }
