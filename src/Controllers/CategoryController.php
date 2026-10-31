@@ -4,6 +4,7 @@ namespace Azuriom\Plugin\Shop\Controllers;
 
 use Azuriom\Http\Controllers\Controller;
 use Azuriom\Plugin\Shop\Models\Category;
+use Azuriom\Plugin\Shop\Models\GoalTier;
 use Azuriom\Plugin\Shop\Models\Payment;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -32,7 +33,7 @@ class CategoryController extends Controller
             'category' => null,
             'categories' => $categories,
             'displayHome' => true,
-            'goal' => $this->getMonthGoal(),
+            ...GoalTier::sidebarData(),
             'topCustomer' => $this->getTopCustomer(),
             'recentPayments' => $this->getRecentPayments(),
             'displaySidebarAmount' => setting('shop.display_amount', true),
@@ -54,7 +55,7 @@ class CategoryController extends Controller
             'category' => null,
             'categories' => $this->getCategories(),
             'displayHome' => setting('shop.home.enabled', true),
-            'goal' => $this->getMonthGoal(),
+            ...GoalTier::sidebarData(),
             'topCustomer' => $this->getTopCustomer(),
             'recentPayments' => $this->getRecentPayments(),
             'displaySidebarAmount' => setting('shop.display_amount', true),
@@ -86,24 +87,11 @@ class CategoryController extends Controller
             'category' => $category,
             'categories' => $categories,
             'displayHome' => setting('shop.home.enabled', true),
-            'goal' => $this->getMonthGoal(),
+            ...GoalTier::sidebarData(),
             'topCustomer' => $this->getTopCustomer(),
             'recentPayments' => $this->getRecentPayments(),
             'displaySidebarAmount' => setting('shop.display_amount', true),
         ]);
-    }
-
-    protected function getMonthGoal(): float
-    {
-        if (! setting('shop.month_goal')) {
-            return -1;
-        }
-
-        $total = Payment::scopes(['completed', 'withRealMoney'])
-            ->where('created_at', '>', now()->startOfMonth())
-            ->sum('price');
-
-        return round(($total / setting('shop.month_goal')) * 100, 2);
     }
 
     protected function getRecentPayments(): ?Collection
@@ -129,9 +117,8 @@ class CategoryController extends Controller
 
         $column = Payment::query()->getGrammar()->wrap('price');
 
-        return Payment::scopes(['completed', 'withRealMoney'])
+        return Payment::scopes(['completed', 'withRealMoney', 'currentMonth'])
             ->select(['user_id', DB::raw("sum({$column}) as price")])
-            ->where('created_at', '>', now()->startOfMonth())
             ->where('price', '>', 0)
             ->groupBy('user_id')
             ->orderByDesc('price')

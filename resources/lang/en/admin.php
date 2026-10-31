@@ -10,6 +10,7 @@ return [
         'coupons' => 'Coupons',
         'giftcards' => 'Gift Cards',
         'discounts' => 'Discounts',
+        'goals' => 'Monthly goal',
         'payments' => 'Payments',
         'subscriptions' => 'Subscriptions',
         'variables' => 'Variables',
@@ -83,6 +84,25 @@ return [
         'active' => 'Active',
         'enable' => 'Enable the discount',
         'restricted' => 'Restrict this discount to certain roles only',
+    ],
+
+    'goals' => [
+        'title' => 'Monthly goal',
+        'edit' => 'Edit goal tier :tier',
+        'create' => 'Create goal tier',
+
+        'info' => 'The monthly goal progresses with the payments made with real money during the month. When a tier is reached, every user who made a payment this month before it was reached receives the tier rewards.',
+        'total' => 'Total this month: :total',
+        'amount' => 'Amount to reach',
+        'amount_info' => 'The total this month is :total, a tier with a lower amount will be reached on the next payment.',
+        'reached' => 'Reached this month',
+        'rewards' => 'Rewards',
+        'rewards_info' => 'Rewards given to each participant when this tier is reached. A tier without rewards is only displayed as a milestone.',
+        'money' => 'Money to give',
+        'giftcard_balance' => 'Gift card balance (valid for one year)',
+        'completions' => 'Completion history',
+        'reached_at' => 'Reached at',
+        'participants' => 'Participants',
     ],
 
     'packages' => [
@@ -248,6 +268,7 @@ return [
         'recent_payments' => 'Recent payments limit to display in sidebar (set to 0 to disable)',
         'display_amount' => 'Display amount spend in recent payments and top customer',
         'top_customer' => 'Display top monthly customer in sidebar',
+        'goal_display_amount' => 'Display the monthly goal amounts in sidebar (otherwise only the progress percentage is displayed)',
         'guest_purchases' => 'Allow users to make a purchase without being logged in',
         'guest_purchases_info' => 'When enabled, users can make guest purchases by logging in with their username.',
 
@@ -301,6 +322,12 @@ return [
             'created' => 'Created offer #:id',
             'updated' => 'Updated offer #:id',
             'deleted' => 'Deleted offer #:id',
+        ],
+
+        'shop-goal-tiers' => [
+            'created' => 'Created goal tier #:id',
+            'updated' => 'Updated goal tier #:id',
+            'deleted' => 'Deleted goal tier #:id',
         ],
 
         'shop-giftcards' => [

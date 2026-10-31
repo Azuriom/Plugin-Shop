@@ -56,6 +56,11 @@ return [
     'goal' => [
         'title' => 'Goal of the month',
         'progress' => ':count% completed',
+        'progress_tier' => ':progress% towards :tier',
+        'remaining' => ':amount remaining for :tier',
+        'completed' => 'All the tiers have been reached, thanks to everyone!',
+        'reached' => 'Reached',
+        'notification' => 'The goal tier :tier has been reached, thank you for your participation! Your rewards have been delivered.',
     ],
 
     'recent' => [

@@ -3,6 +3,7 @@
 namespace Azuriom\Plugin\Shop\Controllers\Api;
 
 use Azuriom\Models\User;
+use Azuriom\Plugin\Shop\Models\GoalTier;
 use Azuriom\Plugin\Shop\Models\Payment;
 use Illuminate\Support\Facades\DB;
 
@@ -20,13 +21,18 @@ class ShopController
 
     protected function monthGoal(): array
     {
-        $current = Payment::scopes(['completed', 'withRealMoney'])
-            ->where('created_at', '>', now()->startOfMonth())
-            ->sum('price');
+        $tiers = GoalTier::with('currentCompletion')->orderBy('amount')->get();
 
         return [
-            'progress' => round($current, 2),
-            'total' => (float) (setting('shop.month_goal') ?? 0),
+            'progress' => round(Payment::currentMonthTotal(), 2),
+            'total' => (float) ($tiers->last()?->amount ?? 0),
+            'tiers' => $tiers->map(fn (GoalTier $tier) => [
+                'id' => $tier->id,
+                'name' => $tier->name,
+                'icon' => $tier->icon,
+                'amount' => $tier->amount,
+                'reached' => $tier->isReached(),
+            ])->all(),
         ];
     }
 
@@ -50,10 +56,9 @@ class ShopController
     {
         $column = Payment::query()->getGrammar()->wrap('price');
 
-        return Payment::scopes(['completed', 'withRealMoney'])
+        return Payment::scopes(['completed', 'withRealMoney', 'currentMonth'])
             ->select(['user_id', DB::raw("sum({$column}) as price")])
             ->with('user')
-            ->where('created_at', '>', now()->startOfMonth())
             ->where('price', '>', 0)
             ->groupBy('user_id')
             ->orderByDesc('price')

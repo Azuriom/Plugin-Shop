@@ -56,6 +56,11 @@ return [
     'goal' => [
         'title' => 'Objectif du mois',
         'progress' => ':count% complété|:count% complétés',
+        'progress_tier' => ':progress% vers :tier',
+        'remaining' => ':amount restants pour :tier',
+        'completed' => 'Tous les paliers ont été atteints, merci à tous !',
+        'reached' => 'Atteint',
+        'notification' => 'Le palier :tier de l\'objectif du mois a été atteint, merci pour votre participation ! Vos récompenses ont été livrées.',
     ],
 
     'recent' => [

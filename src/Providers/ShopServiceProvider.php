@@ -9,9 +9,12 @@ use Azuriom\Models\Permission;
 use Azuriom\Models\User;
 use Azuriom\Plugin\Shop\Commands\PaymentExpireCommand;
 use Azuriom\Plugin\Shop\Commands\SubscriptionRenewCommand;
+use Azuriom\Plugin\Shop\Events\PaymentPaid;
+use Azuriom\Plugin\Shop\Listeners\CompleteGoalTiers;
 use Azuriom\Plugin\Shop\Middleware\ShopAuthentification;
 use Azuriom\Plugin\Shop\Models\Gateway;
 use Azuriom\Plugin\Shop\Models\Giftcard;
+use Azuriom\Plugin\Shop\Models\GoalTier;
 use Azuriom\Plugin\Shop\Models\Offer;
 use Azuriom\Plugin\Shop\Models\Package;
 use Azuriom\Plugin\Shop\Observers\UserObserver;
@@ -21,6 +24,7 @@ use Azuriom\Plugin\Shop\View\Composers\ShopAdminUserComposer;
 use Azuriom\Plugin\Shop\View\Composers\ShopViewComposer;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\View;
 
 class ShopServiceProvider extends BasePluginServiceProvider
@@ -95,6 +99,7 @@ class ShopServiceProvider extends BasePluginServiceProvider
             Offer::class,
             Package::class,
             Gateway::class,
+            GoalTier::class,
         ], 'shop::admin.logs');
 
         ActionLog::registerLogs([
@@ -112,6 +117,8 @@ class ShopServiceProvider extends BasePluginServiceProvider
         ]);
 
         User::observe(UserObserver::class);
+
+        Event::listen(PaymentPaid::class, CompleteGoalTiers::class);
     }
 
     /**
@@ -178,6 +185,10 @@ class ShopServiceProvider extends BasePluginServiceProvider
                     'shop.admin.giftcards.index' => [
                         'name' => trans('shop::admin.nav.giftcards'),
                         'permission' => 'shop.giftcards',
+                    ],
+                    'shop.admin.goals.index' => [
+                        'name' => trans('shop::admin.nav.goals'),
+                        'permission' => 'shop.settings',
                     ],
                     'shop.admin.variables.index' => [
                         'name' => trans('shop::admin.nav.variables'),

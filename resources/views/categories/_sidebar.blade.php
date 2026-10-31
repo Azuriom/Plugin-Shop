@@ -71,20 +71,59 @@
     </a>
 @endif
 
-@if($goal >= 0)
+@if(! $goalTiers->isEmpty())
+    @php($nextTier = $goalTiers->first(fn ($tier) => ! $tier->isReached()))
+    @php($progress = $nextTier?->progress($goalTotal) ?? 100)
+
     <div class="card mb-4">
-        <div class="card-header">
-            <i class="bi bi-graph-up"></i> {{ trans('shop::messages.goal.title') }}
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <span><i class="bi bi-graph-up"></i> {{ trans('shop::messages.goal.title') }}</span>
+
+            @if($goalTiers->count() > 1)
+                <span class="badge bg-primary rounded-pill">
+                    {{ $goalTiers->filter->isReached()->count() }}/{{ $goalTiers->count() }}
+                </span>
+            @endif
         </div>
         <div class="card-body">
             <div class="progress mb-1">
-                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="{{ $goal }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ min($goal, 100) }}%"></div>
+                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="{{ $progress }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ $progress }}%"></div>
             </div>
 
             <p class="card-text text-center">
-                {{ trans_choice('shop::messages.goal.progress', $goal) }}
+                @if($nextTier === null)
+                    {{ trans('shop::messages.goal.completed') }}
+                @elseif($displayGoalAmount)
+                    {{ trans('shop::messages.goal.remaining', ['amount' => $nextTier->formatRemaining($goalTotal), 'tier' => $nextTier->name]) }}
+                @else
+                    {{ trans('shop::messages.goal.progress_tier', ['progress' => $progress, 'tier' => $nextTier->name]) }}
+                @endif
             </p>
         </div>
+
+        <ul class="list-group list-group-flush">
+            @foreach($goalTiers as $tier)
+                <li class="list-group-item d-flex align-items-center">
+                    @if($tier->icon)
+                        <i class="{{ $tier->icon }} me-2"></i>
+                    @endif
+
+                    <div class="flex-grow-1">
+                        <span class="fw-bold">{{ $tier->name }}</span>
+
+                        @if($displayGoalAmount)
+                            <div class="small">{{ $tier->formatAmount() }}</div>
+                        @endif
+                    </div>
+
+                    @if($tier->isReached())
+                        <i class="bi bi-check-circle-fill text-success" title="{{ trans('shop::messages.goal.reached') }}"></i>
+                    @else
+                        <i class="bi bi-lock-fill text-body-secondary"></i>
+                    @endif
+                </li>
+            @endforeach
+        </ul>
     </div>
 @endif
 

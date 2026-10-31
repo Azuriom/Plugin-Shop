@@ -10,6 +10,7 @@ return [
         'coupons' => 'Codes promo',
         'giftcards' => 'Cartes cadeaux',
         'discounts' => 'Réductions',
+        'goals' => 'Objectif du mois',
         'payments' => 'Paiements',
         'subscriptions' => 'Abonnements',
         'variables' => 'Variables',
@@ -83,6 +84,25 @@ return [
         'active' => 'Active',
         'enable' => 'Activer cette réduction',
         'restricted' => 'Limiter cette réduction à certains rôles uniquement',
+    ],
+
+    'goals' => [
+        'title' => 'Objectif du mois',
+        'edit' => 'Édition du palier :tier',
+        'create' => 'Création d\'un palier',
+
+        'info' => 'L\'objectif du mois progresse avec les paiements en argent réel effectués durant le mois. Lorsqu\'un palier est atteint, chaque utilisateur ayant effectué un paiement ce mois-ci avant qu\'il soit atteint reçoit les récompenses du palier.',
+        'total' => 'Total ce mois-ci : :total',
+        'amount' => 'Montant à atteindre',
+        'amount_info' => 'Le total ce mois-ci est de :total, un palier avec un montant inférieur sera atteint au prochain paiement.',
+        'reached' => 'Atteint ce mois-ci',
+        'rewards' => 'Récompenses',
+        'rewards_info' => 'Récompenses données à chaque participant lorsque ce palier est atteint. Un palier sans récompense est seulement affiché comme une étape.',
+        'money' => 'Argent à donner',
+        'giftcard_balance' => 'Montant de la carte cadeau (valable un an)',
+        'completions' => 'Historique',
+        'reached_at' => 'Atteint le',
+        'participants' => 'Participants',
     ],
 
     'packages' => [
@@ -248,6 +268,7 @@ return [
         'recent_payments' => 'Limite de paiements récents à afficher dans la barre latérale',
         'display_amount' => 'Afficher le montant dans les paiements récents et meilleur acheteur',
         'top_customer' => 'Afficher le meilleur acheteur du mois dans la barre latérale',
+        'goal_display_amount' => 'Afficher les montants de l\'objectif du mois dans la barre latérale (sinon seul le pourcentage de progression est affiché)',
         'guest_purchases' => 'Permettre les utilisateurs à faire des achats sans se connecter.',
         'guest_purchases_info' => 'Les utilisateurs peuvent alors faire des achats en tant qu\'invité en indiquant leur nom d\'utilisateur.',
 
@@ -301,6 +322,12 @@ return [
             'created' => 'Création de l\'offre #:id',
             'updated' => 'Mise à jour de l\'offre #:id',
             'deleted' => 'Suppression l\'offre #:id',
+        ],
+
+        'shop-goal-tiers' => [
+            'created' => 'Création du palier #:id',
+            'updated' => 'Mise à jour du palier #:id',
+            'deleted' => 'Suppression du palier #:id',
         ],
 
         'shop-giftcards' => [

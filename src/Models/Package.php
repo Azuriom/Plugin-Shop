@@ -3,7 +3,6 @@
 namespace Azuriom\Plugin\Shop\Models;
 
 use Azuriom\Models\Role;
-use Azuriom\Models\Server;
 use Azuriom\Models\Traits\HasImage;
 use Azuriom\Models\Traits\HasTablePrefix;
 use Azuriom\Models\Traits\Loggable;
@@ -12,6 +11,7 @@ use Azuriom\Notifications\AlertNotification;
 use Azuriom\Plugin\Shop\Enums\PurchaseStatus;
 use Azuriom\Plugin\Shop\Events\PackageDelivered;
 use Azuriom\Plugin\Shop\Models\Concerns\Buyable;
+use Azuriom\Plugin\Shop\Models\Concerns\DispatchCommands;
 use Azuriom\Plugin\Shop\Models\Concerns\IsBuyable;
 use Azuriom\Plugin\Shop\Models\Concerns\ManageFiles;
 use Azuriom\Plugin\Shop\Models\User as ShopUser;
@@ -65,6 +65,7 @@ use Illuminate\Support\Str;
  */
 class Package extends Model implements Buyable
 {
+    use DispatchCommands;
     use HasImage;
     use HasTablePrefix;
     use IsBuyable;
@@ -455,15 +456,7 @@ class Package extends Model implements Buyable
                 : $item->price;
 
             for ($i = 0; $i < $item->quantity; $i++) {
-                $giftcard = Giftcard::create([
-                    'code' => Giftcard::randomCode(),
-                    'balance' => $balance,
-                    'original_balance' => $balance,
-                    'start_at' => now(),
-                    'expire_at' => now()->addYear(),
-                ]);
-
-                $giftcard->notifyUser($user);
+                Giftcard::generate($balance)->notifyUser($user);
             }
         }
 
@@ -558,9 +551,7 @@ class Package extends Model implements Buyable
 
     public function dispatchCommands(string $trigger, PaymentItem $item): void
     {
-        $user = $item->payment->user;
-
-        $serverCommands = collect($this->commands)
+        $commands = collect($this->commands)
             ->merge(($json = setting('shop.commands')) ? json_decode($json, true) : [])
             ->filter(fn (mixed $command) => is_array($command))
             ->filter(fn (array $command) => $command['trigger'] === $trigger)
@@ -571,44 +562,22 @@ class Package extends Model implements Buyable
                     $command['server'] = Arr::get($item->variables ?? [], $server);
                 }
 
+                $times = ($command['ignore_quantity'] ?? false) ? 1 : $item->quantity;
+
+                $command['commands'] = collect(array_fill(0, $times, $command['commands']))
+                    ->flatten()
+                    ->map(fn (string $command) => str_replace([
+                        '{quantity}', '{package_id}', '{package_name}', '{price}', '{transaction_id}',
+                    ], [
+                        $item->quantity, $this->id, $this->name, $item->price, $item->payment->transaction_id,
+                    ], $command))
+                    ->map(fn (string $command) => $item->replaceVariables($command))
+                    ->all();
+
                 return $command;
             })
             ->filter(fn (array $command) => $command['server'] !== null);
 
-        $servers = Server::findMany($serverCommands->pluck('server')->unique());
-
-        foreach ($servers as $server) {
-            $commands = $serverCommands->where('server', $server->id);
-
-            $onlineCommands = $this->mapCommands($commands, true, $item);
-            $offlineCommands = $this->mapCommands($commands, false, $item);
-
-            if (! empty($onlineCommands)) {
-                $server->bridge()->sendCommands($onlineCommands, $user, true);
-            }
-
-            if (! empty($offlineCommands)) {
-                $server->bridge()->sendCommands($offlineCommands, $user, false);
-            }
-        }
-    }
-
-    protected function mapCommands(Collection $commands, bool $onlineOnly, PaymentItem $item): array
-    {
-        return $commands->filter(fn (array $command) => ((bool) $command['require_online']) === $onlineOnly)
-            ->flatMap(function (array $command) use ($item) {
-                $ignoreQuantity = $command['ignore_quantity'] ?? false;
-
-                return $ignoreQuantity ? [$command] : array_fill(0, $item->quantity, $command);
-            })
-            ->pluck('commands')
-            ->flatten()
-            ->map(fn (string $command) => str_replace([
-                '{quantity}', '{package_id}', '{package_name}', '{price}', '{transaction_id}',
-            ], [
-                $item->quantity, $this->id, $this->name, $item->price, $item->payment->transaction_id,
-            ], $command))
-            ->map(fn (string $command) => $item->replaceVariables($command))
-            ->all();
+        $this->sendServerCommands($commands, $item->payment->user);
     }
 }

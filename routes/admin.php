@@ -5,6 +5,7 @@ use Azuriom\Plugin\Shop\Controllers\Admin\CouponController;
 use Azuriom\Plugin\Shop\Controllers\Admin\DiscountController;
 use Azuriom\Plugin\Shop\Controllers\Admin\GatewayController;
 use Azuriom\Plugin\Shop\Controllers\Admin\GiftcardController;
+use Azuriom\Plugin\Shop\Controllers\Admin\GoalController;
 use Azuriom\Plugin\Shop\Controllers\Admin\OfferController;
 use Azuriom\Plugin\Shop\Controllers\Admin\PackageController;
 use Azuriom\Plugin\Shop\Controllers\Admin\PaymentController;
@@ -29,6 +30,8 @@ Route::middleware('can:shop.settings')->prefix('settings')->group(function () {
     Route::get('/', [SettingController::class, 'show'])->name('settings');
     Route::post('/', [SettingController::class, 'save'])->name('settings.save');
 });
+
+Route::resource('goals', GoalController::class)->middleware('can:shop.settings')->except('show');
 
 Route::middleware('can:shop.packages')->group(function () {
     Route::resource('packages', PackageController::class)->except('show');

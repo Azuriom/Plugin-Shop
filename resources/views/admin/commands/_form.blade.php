@@ -2,19 +2,21 @@
     <div class="card" v-for="(command, i) in shopCommands">
         <div class="card-body">
             <div class="row gx-3">
-                <div class="mb-3 col-md-6">
-                    <label class="form-label" :for="'triggerSelect' + i">{{ trans('shop::admin.commands.trigger') }}</label>
+                @isset($commandTriggers)
+                    <div class="mb-3 col-md-6">
+                        <label class="form-label" :for="'triggerSelect' + i">{{ trans('shop::admin.commands.trigger') }}</label>
 
-                    <select class="form-select" :id="'triggerSelect' + i" :name="`commands[${i}][trigger]`" v-model="command.trigger" required>
-                        @foreach($commandTriggers as $trigger)
-                            <option value="{{ $trigger }}">
-                                {{ trans('shop::admin.commands.triggers.'.$trigger) }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
+                        <select class="form-select" :id="'triggerSelect' + i" :name="`commands[${i}][trigger]`" v-model="command.trigger" required>
+                            @foreach($commandTriggers as $trigger)
+                                <option value="{{ $trigger }}">
+                                    {{ trans('shop::admin.commands.triggers.'.$trigger) }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                @endisset
 
-                <div class="mb-3 col-md-6">
+                <div class="mb-3 {{ isset($commandTriggers) ? 'col-md-6' : 'col-12' }}">
                     <label class="form-label" :for="'onlineCheck' + i">{{ trans('shop::admin.commands.condition') }}</label>
 
                     <select class="form-select" :id="'onlineCheck' + i" :name="`commands[${i}][require_online]`" v-model="command.require_online" required>
@@ -72,17 +74,19 @@
 
             <div class="form-text mb-3">
                 @lang('shop::admin.packages.command', [
-                    'placeholders' => '<code>'.implode('</code>, <code>', [
+                    'placeholders' => '<code>'.implode('</code>, <code>', $commandPlaceholders ?? [
                         '{quantity}', '{package_id}', '{package_name}', '{price}', '{transaction_id}',
                     ]).'</code>',
                 ])
             </div>
 
-            <div class="mb-3 form-check form-switch">
-                <input type="checkbox" class="form-check-input" :id="'applyQuantitySwitch' + i"
-                       :name="`commands[${i}][ignore_quantity]`" v-model.lazy="command.ignore_quantity" :checked="command.ignore_quantity" :value="1">
-                <label class="form-check-label" :for="'applyQuantitySwitch' + i">@lang('shop::admin.packages.ignore_quantity')</label>
-            </div>
+            @isset($commandTriggers)
+                <div class="mb-3 form-check form-switch">
+                    <input type="checkbox" class="form-check-input" :id="'applyQuantitySwitch' + i"
+                           :name="`commands[${i}][ignore_quantity]`" v-model.lazy="command.ignore_quantity" :checked="command.ignore_quantity" :value="1">
+                    <label class="form-check-label" :for="'applyQuantitySwitch' + i">@lang('shop::admin.packages.ignore_quantity')</label>
+                </div>
+            @endisset
         </div>
     </div>
 

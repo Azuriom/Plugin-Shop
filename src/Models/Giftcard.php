@@ -85,12 +85,17 @@ class Giftcard extends Model
 
     public function notifyUser(User $user): void
     {
-        (new AlertNotification(trans('shop::messages.giftcards.notification', [
-            'balance' => shop_format_amount($this->balance),
-            'code' => $this->code,
-        ])))->send($user);
+        $this->createAlert()->send($user);
 
         rescue(fn () => $user->notify(new GiftcardPurchased($this)));
+    }
+
+    public function createAlert(): AlertNotification
+    {
+        return new AlertNotification(trans('shop::messages.giftcards.notification', [
+            'balance' => shop_format_amount($this->balance),
+            'code' => $this->code,
+        ]));
     }
 
     /**
@@ -104,6 +109,20 @@ class Giftcard extends Model
                 $query->where('expire_at', '>', now())
                     ->orWhereNull('expire_at');
             });
+    }
+
+    /**
+     * Create a new gift card with a random code, valid for one year.
+     */
+    public static function generate(float $balance): self
+    {
+        return self::create([
+            'code' => self::randomCode(),
+            'balance' => $balance,
+            'original_balance' => $balance,
+            'start_at' => now(),
+            'expire_at' => now()->addYear(),
+        ]);
     }
 
     public static function randomCode(): string

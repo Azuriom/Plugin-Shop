@@ -39,6 +39,7 @@ use Illuminate\Support\Facades\Cache;
  * @method static \Illuminate\Database\Eloquent\Builder notPending()
  * @method static \Illuminate\Database\Eloquent\Builder withSiteMoney()
  * @method static \Illuminate\Database\Eloquent\Builder withRealMoney()
+ * @method static \Illuminate\Database\Eloquent\Builder currentMonth()
  */
 class Payment extends Model
 {
@@ -329,6 +330,19 @@ class Payment extends Model
     public function scopeWithRealMoney(Builder $query): void
     {
         $query->whereNot('gateway_type', 'azuriom');
+    }
+
+    public function scopeCurrentMonth(Builder $query): void
+    {
+        $query->where('created_at', '>', now()->startOfMonth());
+    }
+
+    /**
+     * Get the total of the completed real money payments of the current month.
+     */
+    public static function currentMonthTotal(): float
+    {
+        return (float) self::scopes(['completed', 'withRealMoney', 'currentMonth'])->sum('price');
     }
 
     public static function purgePendingPayments(): void

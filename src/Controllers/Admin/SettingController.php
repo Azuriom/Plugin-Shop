@@ -24,10 +24,10 @@ class SettingController extends Controller
         return view('shop::admin.settings', [
             'currencies' => Currencies::all(),
             'currentCurrency' => setting('currency', 'USD'),
-            'goal' => (int) setting('shop.month_goal', 0),
             'topCustomer' => setting('shop.top_customer', false),
             'recentPayments' => (int) setting('shop.recent_payments', 0),
             'displayAmount' => setting('shop.display_amount', true),
+            'goalDisplayAmount' => setting('shop.goals.display_amount', false),
             'commands' => $commands ? json_decode($commands) : [],
             'commandTriggers' => Package::COMMAND_TRIGGERS,
             'servers' => Server::executable()->pluck('name', 'id'),
@@ -48,7 +48,6 @@ class SettingController extends Controller
     {
         $data = $this->validate($request, [
             'currency' => ['required', Rule::in(Currencies::codes())],
-            'goal' => ['nullable', 'integer', 'min:0'],
             'webhook' => ['nullable', 'url:http,https'],
             'commands' => ['sometimes', 'nullable', 'array'],
             'terms' => ['required_with:terms_required', 'nullable', 'string'],
@@ -60,10 +59,10 @@ class SettingController extends Controller
             ...Arr::only($data, 'currency'),
             'shop.use_site_money' => $request->filled('use_site_money'),
             'shop.guest_purchases' => $request->filled('guest_purchases'),
-            'shop.month_goal' => $request->input('goal'),
             'shop.recent_payments' => $request->input('recent_payments'),
             'shop.top_customer' => $request->filled('top_customer'),
             'shop.display_amount' => $request->filled('display_amount'),
+            'shop.goals.display_amount' => $request->filled('goal_display_amount'),
             'shop.webhook' => $request->input('webhook'),
             'shop.home' => $request->input('home_message'),
             'shop.home.enabled' => $request->filled('enable_home'),
