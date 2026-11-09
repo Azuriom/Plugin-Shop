@@ -204,6 +204,12 @@ class Package extends Model implements Buyable
     {
         $role = shop_user()?->role;
 
+        $price = $this->price;
+
+        if (! $this->isSubscription()) {
+            $price -= $this->getCumulatedPurchasesTotal();
+        }
+
         $price = $this->discounts
             ->where('is_global', false)
             ->merge(Discount::getGlobalDiscounts())
@@ -211,11 +217,7 @@ class Package extends Model implements Buyable
             ->filter(fn (Discount $discount) => $discount->activeForRole($role))
             ->reduce(function ($result, Discount $discount) {
                 return $result - ($discount->discount / 100) * $result;
-            }, $this->price);
-
-        if (! $this->isSubscription()) {
-            $price -= $this->getCumulatedPurchasesTotal();
-        }
+            }, max($price, 0));
 
         return round(max($price, 0), 2);
     }
