@@ -211,18 +211,14 @@ class Package extends Model implements Buyable
             ->filter(fn (Discount $discount) => $discount->activeForRole($role))
             ->reduce(function ($result, Discount $discount) {
                 return $result - ($discount->discount / 100) * $result;
-            }, $this->price);
-
-        if (! $this->isSubscription()) {
-            $price -= $this->getCumulatedPurchasesTotal();
-        }
+            }, max($this->price - $this->getCumulatedPurchasesTotal(), 0));
 
         return round(max($price, 0), 2);
     }
 
     protected function getCumulatedPurchasesTotal(): float
     {
-        if (! $this->category->cumulate_purchases) {
+        if (! $this->category->cumulate_purchases || $this->isSubscription()) {
             return 0;
         }
 
